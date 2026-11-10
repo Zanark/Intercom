@@ -16,6 +16,7 @@ Tasks:
   [ ] Qualify audio/device/provider failures and resource use with the live graph.
   [ ] Compare priority profiles under load and verify saved/default settings.
   [ ] Define tray close, explicit exit, sleep/resume and task ownership behavior.
+  [ ] Inject crash/storage failures at dispatch, outcome and playback boundaries.
   [ ] Verify retention/deletion, credential boundaries and notification recovery.
   [ ] Document supported limits, recovery instructions and separate release gates.
 
@@ -28,9 +29,13 @@ Acceptance criteria:
   Speed-first behavior remains correct under load; quality/accuracy trade-offs
   and profile-switch boundaries are measured rather than assumed.
   No autostart, service activation, commit, release or deployment is implied.
+  Distinguish agent-reported/unverified completion from qualified success;
+  DB migration failure and microphone loss never create empty success fallbacks.
 
 Completion evidence:
   None. Qualification depends on a separately authorized implemented ic-06.
 
 Completion log:
   2026-11-10 - Added future qualification scope under architecture-only authority.
+  2026-11-10 - Expanded failure matrix from documented runtime semantics;
+    no fault injection, soak, privacy or lifecycle qualification has run.

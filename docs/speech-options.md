@@ -37,6 +37,14 @@ A Copilot subscription does not establish entitlement to a separate speech API.
 
 ## 3. Recommended evaluation, not a provider choice
 
+The concrete first candidate is a native sherpa-onnx worker for local keyword
+spotting, streaming ASR/VAD and one compatible TTS voice. Compare whisper.cpp
+only where multilingual/name accuracy warrants an ASR challenger; compare
+GPT-Live client delegation for the natural full-duplex cloud experience.
+See [technology decisions](technology-decisions.md) for language/model/license
+gates and [qualification](performance-and-qualification.md) for test evidence.
+No exact model or voice has been selected.
+
 Keep a provider-neutral chained boundary as the baseline. Compare it with the
 delegated cloud voice route rather than claiming modular ASR/TTS will feel
 identical to a native speech-to-speech conversation. Keep the local wake and
@@ -85,10 +93,26 @@ conversation duration and usage are chosen. Local inference trades API cost
 for hardware/power/maintenance; cloud voice and Copilot work are separate costs.
 Keep an explicit speech budget and session timeout if cloud is selected.
 
+### Native audio and full-duplex boundary
+
+The proposed worker uses Windows capture/playback APIs, not PCM through React.
+Microsoft's AEC reference-control interface starts at Windows build 22621 and
+depends on the endpoint. `E_NOINTERFACE` means controllable render-reference
+AEC is unavailable; it does not prove that no endpoint AEC exists.
+Successful API calls also do not establish acoustic quality. Speakers,
+Bluetooth/default-device changes, self-wake and interruption need real tests.
+A labelled headset/half-duplex fallback is not full-duplex qualification.
+
+For GPT-Live client delegation, metadata does not contain the user's complete
+request. Keep bounded transcript/task state, wait for a finalized approved
+intent and correlate delegation/job IDs. Spoken commentary is paraphrased:
+appending it is not proof the user heard it or that a task succeeded.
+
 ## 5. Primary references
 
 - [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx): documents local ASR, TTS,
-  keyword spotting and VAD; Windows and JavaScript/Node support.
+  keyword spotting and VAD; Windows and native Rust/C/C++ APIs as well as other
+  bindings. Supported bindings do not qualify a particular model/runtime pair.
 - [whisper.cpp](https://github.com/ggml-org/whisper.cpp): documents Windows,
   CPU/GPU ASR, model resource examples and quantization; not a full voice stack.
 - [Voice architectures](https://developers.openai.com/api/docs/guides/voice-agents):
@@ -99,5 +123,9 @@ Keep an explicit speech budget and session timeout if cloud is selected.
   client delegation and independent backend work.
 - [API data controls](https://developers.openai.com/api/docs/guides/your-data):
   retention is endpoint/account-specific, not synonymous with no training.
+- [Windows AEC control](https://learn.microsoft.com/en-us/windows/win32/api/audioclient/nn-audioclient-iacousticechocancellationcontrol):
+  OS floor and endpoint-dependent render-reference support.
+- [GPT-Live delegation](https://developers.openai.com/api/docs/guides/live-delegation):
+  client-owned context/backend, delegation correlation and speech semantics.
 
 No source establishes that a particular configuration works in Intercom yet.

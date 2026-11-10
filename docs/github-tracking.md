@@ -6,8 +6,11 @@ The owner explicitly approved a dedicated GitHub Project and linked issues
 during project initialization on 2026-11-10. Repository: `Zanark/Intercom`
 (public). Only the public-safe numbered workstreams are mirrored.
 
-No commit, push, deployment, scheduler, Actions workflow, remote secret,
-permission change, or publication of private continuity is authorized.
+Tracking authority does not authorize commits, pushes, deployment, scheduling,
+Actions workflows, remote secrets, permission changes or private-continuity
+publication. The owner subsequently requested the initial documentation push;
+commit `3e2693cf2875af96f728e56a5066c7065aecaf93` was pushed to main.
+That completed request is not standing authority to push later research.
 
 ## Source of truth and operation
 
@@ -134,6 +137,13 @@ baselines matched. Independent read-back again verified full description
 equality and unchanged issue/item identities and statuses. The hashes below
 include that clarification; no new issue, runtime or permission was introduced.
 
+The deep-research reconciliation compared all six saved bodies/states/stages
+again, updated only the existing ic-02 and ic-04 through ic-07 descriptions, and
+independently read back complete bodies, backlinks, identities, status option
+IDs, visibility and membership. All six original mappings and stages remain
+unchanged. The baselines below now include that research; no new issue/item,
+application runtime, commit or research push was created.
+
 ### Managed-body conflict baselines
 
 Compute SHA-256 over UTF-8 body text after converting CRLF to LF and stripping
@@ -146,12 +156,12 @@ exact read-back; never refresh them merely to hide a remote edit.
 | Workstream | Verified remote body SHA-256 |
 |---|---|
 | ic-01 | `562ceaadaa676dcfb47fa40fa79c77ddc9dbce059965142c48b18082d66c9788` |
-| ic-02 | `7f1ddb2753d15f50bd76db241b0b4d319b25590e57a4535f04561f4916af4c0a` |
-| ic-04 | `f6bf01a094e2f7994b85d703896ab180853403e078198684befbc6649d7708de` |
-| ic-05 | `2059e6aceac094ac900de7b4421772645528fff123012d0146c50bd2130dde91` |
-| ic-06 | `0afa28af87577653a642ee6a5d739f185b96c5704b363b97bb1a653e91ad661b` |
-| ic-07 | `98b6f0569657df03d2cd9f1716692a1d221dc2f240937a5b8c3d6523a634f70a` |
+| ic-02 | `f9581c4b3e6a80a0d16cca8740d0b89c482571bb9c1e6b088bcd63817debf3bd` |
+| ic-04 | `1a2f2956f36974c36920e6ef1c43d4c00a8a3414e7a23d52f8e3ac4e1719b1ec` |
+| ic-05 | `f192573f2f7f70630ba8f0e1ad79567be32787b071563bf75779fa0322069519` |
+| ic-06 | `6d97e1061d23a572caa38e1cb0d835343c6779cc61a8eb30cae917210bb4b4a2` |
+| ic-07 | `072c0916f6106438b8f32e2ae02415645056015a3049f36f12ec4cfca281fe33` |
 
-Both reconciliations used the same saved issue/item identities on
+These reconciliations used the same saved issue/item identities on
 read-back and confirmed no duplicates. Automated retry, reopening, and conflict
 tests are not claimed because no sync runtime was introduced.

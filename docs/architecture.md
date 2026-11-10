@@ -11,12 +11,18 @@ The [product brief](product-brief.md) owns confirmed requirements.
 processing priorities. Accuracy remains important. This is a product contract,
 not a claim that the proposed architecture already meets a performance target.
 
-Recommend Windows-first Electron, TypeScript, React, and Three.js: a desktop
-host for process/audio lifecycles and a renderer compatible with the inspected
-CareerOS visual approach. Electron's runtime footprint is a trade-off; Tauri
-is a smaller-shell alternative but requires a different native bridge.
-Neither stack nor a speech/routing model is selected. Prove Agency integration
-before making the shell decision depend on an unverified API.
+The deeper research recommends Windows-first **Tauri 2 + Rust**, with React,
+TypeScript and Three.js in the WebView, a native audio worker and SQLite for
+durable jobs. This supersedes the earlier provisional Electron recommendation;
+Electron remains a fallback, not a disproven alternative. Avoiding a bundled
+browser runtime is not proof of lower end-to-end voice latency.
+
+See [technology decisions](technology-decisions.md) for choices, alternatives
+and reversal gates, [runtime contracts](runtime-contracts.md) for process/IPC,
+identity and failure semantics, [qualification](performance-and-qualification.md)
+for measurements, and [primary evidence](research-sources.md) for source limits.
+No stack/provider is owner-approved or runtime-qualified. Prove existing Agency
+integration before making the shell depend on an unverified control interface.
 
 ### Processing profiles
 
@@ -40,6 +46,8 @@ one passive event stream per connection, cached stable graph geometry and
 adaptive decorative detail. Do not warm heavyweight models continuously or
 poll agents to make the UI appear responsive. Qualify startup/idle cost as well
 as active latency; avoid graph/audio/model competition on the same hardware.
+While listening is enabled, measure the trade-off of keeping only the selected
+speech bundle warm; do not interpret this as a ban on useful model residency.
 
 All profiles retain correct session identity, ambiguity clarification, required
 permissions and minimum task verification. Never turn partial transcripts into
@@ -65,8 +73,11 @@ are compared on the same scenarios and target hardware.
 
 These are logical boundaries, not a requirement for eight separate processes.
 Keep audio inference and rendering off the process that owns job state.
-If Electron is selected, isolate the renderer, disable Node integration there,
-validate narrow IPC operations, and keep remote content out of the privileged UI.
+For the Tauri candidate, explicitly constrain custom commands and plugin
+capabilities, validate narrow host operations, and keep remote content out of
+the privileged UI. A capability file alone does not constrain every registered
+custom command. If Electron is selected instead, isolate the renderer, disable
+Node integration there and retain the same host-authority contract.
 
 ## 3. Voice and routing flow
 
@@ -151,8 +162,14 @@ received
   -> queued
   -> dispatching
   -> running <-> awaiting-user
-  -> succeeded / failed / cancelled / outcome-unknown
+  -> verifying
+  -> succeeded / finished-unverified / failed / cancelled / outcome-unknown
 ```
+
+The [runtime contract](runtime-contracts.md) expands approval, cancellation,
+handoff and crash transitions. `finished-unverified` means the agent reported
+completion without the required independent acceptance evidence; it is not
+qualified success or an unknown transport outcome.
 
 Subscribe once per actual connection, normalize events, and release resources
 on termination. A passive stream reader is still observation, but it does not

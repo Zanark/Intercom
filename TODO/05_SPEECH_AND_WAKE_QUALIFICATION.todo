@@ -17,6 +17,7 @@ Tasks:
   [ ] Measure wake/recognition errors, response timing and concurrent resources.
   [ ] Qualify speed-first defaults and compare selectable processing priorities.
   [ ] Test echo, speech interruption, device loss and offline behavior.
+  [ ] Qualify Windows endpoint AEC and label any half-duplex fallback honestly.
   [ ] Record human listening results and an explicit provider/privacy decision.
 
 Acceptance criteria:
@@ -28,10 +29,15 @@ Acceptance criteria:
   Results and selected contracts inform ic-02 before desktop implementation.
   Performance/speed is evaluated first; error rates and useful-response latency
   are reported together, not just time to a generic acknowledgment.
+  Native binding support is not exact model/license/device qualification.
 
 Completion evidence:
   None. docs/speech-options.md contains research, not downloads or audio tests.
   No speech engine, voice, provider, target hardware or numeric budget selected.
+  Candidate picks and reproducible evidence plan are in
+  docs/technology-decisions.md and docs/performance-and-qualification.md.
 
 Completion log:
   2026-11-10 - Planned after the user requested research of both speech approaches.
+  2026-11-10 - Deepened native/cloud shortlist, audio/AEC and measurement gates;
+    no capture, model download, cloud test or human listening performed.

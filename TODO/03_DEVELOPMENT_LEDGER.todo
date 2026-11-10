@@ -82,3 +82,37 @@ Completion log:
     Evidence: same #2/#4/#5/#6 bodies updated after all six saved baselines
       matched; final independent read verifies complete descriptions, unchanged
       issue-backed items/stages and all backlinks. No duplicate tracking created.
+  2026-11-10 - Initial project documentation committed and pushed on request.
+      Action: staged only 17 intended public files and pushed main.
+      Evidence: 3e2693cf2875af96f728e56a5066c7065aecaf93; origin/main matched
+        local HEAD and the worktree was clean after publication.
+      Limit: this publishes documentation, not an application or release.
+  2026-11-10 - Deeper architecture and technology research recorded locally.
+      Action: inspected primary desktop/native-speech/protocol/cloud/storage
+        references and installed resume/permission documentation.
+      Effect: recommend Tauri 2/Rust with React/TypeScript/Three.js, native audio
+        and SQLite; retain Electron as a fallback and explain the revision.
+      Mechanism: separate policy/job authority from UI/audio, constrain IPC,
+        bind identities/approvals, preserve uncertain dispatch and distinguish
+        qualified success from agent-reported completion. Expand roadmap packages
+        and reproducible useful-answer/resource/quality measurements.
+      Evidence: technology-decisions, runtime-contracts,
+        performance-and-qualification and research-sources under docs.
+      Limit: no measured winner, approved stack/model, app, dependency install,
+        microphone/model/API test, live Agency proof or new publication.
+      Next: conflict-check existing tracking, persist owned continuity and refresh
+        Context Mesh; runtime work remains separately gated.
+  2026-11-10 - Deep-research documentation and tracking reconciled.
+      Action: reconciled lifecycle/evidence levels, replay limitations, explicit
+        durable SQLite policy and navigation across the design documents.
+      Evidence: eight TODO schemas, six unique acyclic workstreams, 45 local
+        documentation links; diagrams authored but not rendered/visually reviewed.
+      Tracking: all six prior remote body/state/stage/identity baselines matched.
+        Updated only #2 through #6 descriptions; independent full read-back
+        verified all bodies, backlinks, original issue/item/status IDs, states,
+        private Project and sole linked repository. #1 remains unchanged.
+      Effect: docs/github-tracking.md records the new verified body hashes.
+      Limit: live Agency/AEC/provider/device behavior remains unqualified;
+        public documentation changes are local and uncommitted.
+      Next: finish owned-store/zmem persistence and checked mesh publication;
+        implementation or a later push needs its own authority.

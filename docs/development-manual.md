@@ -21,6 +21,11 @@ for this initial documentation-only repository.
 |---|---|
 | `README.md` | Honest product stage and entry points |
 | `docs/product-brief.md` | Confirmed direction, undecided requirements, first-slice gate |
+| `docs/architecture.md` | Component overview and invariant boundaries |
+| `docs/technology-decisions.md` | Candidate stack, alternatives and reversal gates |
+| `docs/runtime-contracts.md` | Proposed IPC, routing, jobs, lifecycle and failure contracts |
+| `docs/performance-and-qualification.md` | Speed-first profiles and evidence plan |
+| `docs/research-sources.md` | Primary-source claims and qualification limits |
 | `AGENTS.md` | Contributor and agent execution boundaries |
 | `TODO/00_INDEX.todo` | Stable workstream navigation and status |
 | Numbered workstreams | Bounded tasks, dependencies, acceptance and evidence |

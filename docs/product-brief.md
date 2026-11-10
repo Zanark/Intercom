@@ -34,8 +34,9 @@ interchangeable identities.
   default. Provide options to choose what to prioritize; processing quality
   and accuracy remain important.
 
-These are user requirements, not implemented features. Windows-first
-Electron + React/Three.js is a recommendation, not an accepted stack decision.
+These are user requirements, not implemented features. The deeper engineering
+recommendation is Windows-first Tauri 2/Rust + React/TypeScript/Three.js,
+superseding provisional Electron. It is not an accepted or qualified stack.
 Speed/performance, Balanced and Accuracy are proposed profile labels; only the
 speed-first default and ability to select priorities are confirmed.
 
@@ -59,6 +60,11 @@ See [architecture](architecture.md), [speech options](speech-options.md), and
 [roadmap](roadmap.md) for proposed contracts and measurable gates. Screen capture,
 OS-wide automation, unrestricted tools, auto-start, and public deployment are
 not implied by the voice-assistant request.
+
+The [technology register](technology-decisions.md) records concrete candidates,
+alternatives and reversal gates. The [runtime contract](runtime-contracts.md)
+and [performance plan](performance-and-qualification.md) make pending behavior
+and qualification explicit without authorizing execution.
 
 ## First implementation gate
 

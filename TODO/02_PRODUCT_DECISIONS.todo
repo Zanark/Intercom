@@ -17,6 +17,8 @@ Tasks:
   [x] Record proposed success/failure scenarios and qualification criteria.
   [x] Record gated future workstreams for Agency, speech, desktop and reliability.
   [x] Record performance/speed as top priority/default and selectable priorities.
+  [x] Record deep primary-source technology research and explicit reversal gates.
+  [x] Define runtime/IPC/job/recovery contracts and dependency-driven packages.
   [ ] Finalize resource thresholds and decisions from ic-04/ic-05 receipts.
   [ ] Qualify profile settings and timing/accuracy budgets; labels remain proposed.
 
@@ -40,6 +42,13 @@ Completion evidence:
   User subsequently confirmed performance/speed first and default, with options
   to select priorities. Accuracy remains important; no profile is implemented.
   No implementation, accepted stack/provider, or live connector proof exists.
+  Deeper research recommends Tauri 2/Rust + React/TypeScript/Three.js,
+  native sherpa audio and SQLite; Electron is retained as a fallback.
+  docs/technology-decisions.md and docs/research-sources.md explain rationale
+  and evidence limits. docs/runtime-contracts.md and
+  docs/performance-and-qualification.md define proposed behavior and gates.
+  Windows endpoint AEC, resumed permissions and actual existing-session control
+  remain explicit qualification risks, not completed proofs.
 
 Completion log:
   2026-11-10 - Created as unstarted follow-on work, not an approved feature list.
@@ -49,3 +58,7 @@ Completion log:
     Agency feasibility, speech selection and the remaining product decisions.
   2026-11-10 - Added explicit speed/performance default and selectable priorities;
     no numerical targets, model settings or provider choices invented.
+  2026-11-10 - Continued architecture research at the owner's request; revised
+    the provisional shell recommendation, defined concrete native/UI/storage
+    candidates, runtime contracts, performance evidence and detailed roadmap.
+    No app, dependency install, model download, audio or agent test performed.

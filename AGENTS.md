@@ -23,11 +23,15 @@ Sibling context stores are read-only.
 - Performance and speed are the top product priority and default processing
   profile. Provide selectable priorities; keep correct targets, permission
   enforcement and truthful outcomes invariant across profiles.
-- No programming language, UI framework, agent provider, operating-system
-  support matrix, or application architecture has been selected.
+- Tauri 2/Rust + React/TypeScript/Three.js is the current engineering
+  recommendation, superseding provisional Electron; none is owner-approved
+  or runtime-qualified. Speech models and OS/device support remain gated.
 - Do not infer integrations or features from the project name.
 - Read `docs/architecture.md`, `docs/speech-options.md`, and `docs/roadmap.md`
   before future implementation. Proposed technology is not user approval.
+- Read `docs/technology-decisions.md`, `docs/runtime-contracts.md` and
+  `docs/performance-and-qualification.md` for the detailed candidate contract;
+  `docs/research-sources.md` distinguishes upstream from installed evidence.
 - Do not substitute a new SDK session for an existing Agency session and call
   the integration proven. Do not show guessed retrieval activity as observed.
 

@@ -8,11 +8,13 @@ Dependencies: ic-02, ic-04, ic-05
 
 Purpose:
   Implement the bounded desktop experience only after separate authorization
-  and qualification. Electron/React/Three.js remains a stack recommendation.
+  and qualification. Tauri 2/Rust + React/TypeScript/Three.js is now the
+  engineering candidate, superseding provisional Electron, not owner approval.
 
 Tasks:
   [ ] Obtain implementation authority and finalize stack/dependency choices.
   [ ] Build an isolated desktop host, audio controls and selected speech pipeline.
+  [ ] Constrain native commands and implement versioned bounded IPC contracts.
   [ ] Add selectable priorities with Speed/performance default and saved choice.
   [ ] Route finalized utterances with explicit context/session identity.
   [ ] Implement terminal handoff and approved background dispatch.
@@ -30,9 +32,13 @@ Acceptance criteria:
   Human voice/visual acceptance is recorded separately from automated checks.
   Profile changes apply at a request boundary without changing running jobs,
   permissions or approved providers; default performance meets agreed budgets.
+  Host authority, request/outbox transactions and snapshot resynchronization
+  follow docs/runtime-contracts.md; browser mocks are not native-app evidence.
 
 Completion evidence:
   None. No application, dependency manifest, runtime, preview or installer exists.
 
 Completion log:
   2026-11-10 - Recorded as gated future work, not authorized implementation.
+  2026-11-10 - Reconciled the researched shell recommendation and native boundary;
+    current deliverables remain documents, not a scaffold or runtime.

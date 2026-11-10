@@ -14,10 +14,19 @@ priorities. Accuracy remains important; these controls are planned, not built.
 Agency-first integration are confirmed requirements. No application, selected
 speech provider, approved desktop stack, or proven live-session connector exists.
 
+**Engineering recommendation:** Tauri 2 + Rust host, React/TypeScript + Three.js
+UI, native local-speech worker and SQLite jobs. This revises the initial
+Electron recommendation; hardware measurements and Agency/speech proof still
+gate selection.
+
 ## Start here
 
 - [Product brief and open decisions](docs/product-brief.md)
 - [Architecture and integration boundaries](docs/architecture.md)
+- [Technology picks, alternatives and reversal gates](docs/technology-decisions.md)
+- [Runtime, IPC, routing and recovery contracts](docs/runtime-contracts.md)
+- [Performance profiles and qualification plan](docs/performance-and-qualification.md)
+- [Primary-source research evidence](docs/research-sources.md)
 - [Local and cloud speech comparison](docs/speech-options.md)
 - [Phased roadmap and implementation gates](docs/roadmap.md)
 - [Development manual](docs/development-manual.md)

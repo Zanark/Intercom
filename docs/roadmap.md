@@ -9,6 +9,9 @@ provider access, agent execution, service activation, commits or deployment.
 Confirmed product intent is in the [brief](product-brief.md); component and
 event contracts are in [architecture](architecture.md); speech choices remain
 open in [speech options](speech-options.md).
+The concrete candidate is in [technology decisions](technology-decisions.md);
+[runtime contracts](runtime-contracts.md) and
+[performance qualification](performance-and-qualification.md) define its gates.
 
 Performance/speed is the top priority and default. Selectable processing
 priorities are required; proposed Speed/performance, Balanced and Accuracy
@@ -28,6 +31,49 @@ correct targeting, permission enforcement and honest outcome reporting.
 ic-04 and ic-05 depend on the completed foundation, not on final product
 selection: their findings inform ic-02. ic-06 depends on all three.
 ic-07 depends on ic-06. This avoids a product-definition/feasibility cycle.
+
+## Dependency-driven development packages
+
+These are bounded packages inside the existing workstreams, not additional
+issue identities, implementation authority or calendar commitments.
+
+| Package / owner | Deliverable after authorization | Stop / exit evidence |
+|---|---|---|
+| A. Contract freeze / ic-02 | Approve initial OS/hardware/languages, privacy, permissions, listening/exit policy and test budgets; accept or revise the candidate stack | Decision register distinguishes accepted, proposed and blocked items. Final selection waits for B/C. |
+| B1. Connector harness / ic-04 | Pure fixtures and fake-process adapter; exact runtime/transport identity, frames, approvals and event correlation | Negative tests pass without any real prompt, catalog crawl or service activation. |
+| B2. Existing-session proof / ic-04 | Separately authorized disposable existing Agency session; configuration including effective permission policy; one bounded task | Evidence for dormant resume AND live attachment separately. If live control is unsupported, report a blocking product gap; no replacement SDK session. |
+| B3. Handoff and recovery / ic-04 | Supported terminal ownership transfer, busy handling, cancellation, lost acknowledgment and read-only reconciliation | No competing writer, incidental daemon or blind redispatch. Capability receipt names unsupported cases. |
+| C1. Native audio/wake / ic-05 | One capture/playback worker, local phrase, VAD, bounded buffers and device recovery | False/missed wake evidence, no ambient upload, AEC/reference-control and open-speaker limitations recorded. |
+| C2. Speech and dialogue / ic-05 | One language-compatible local bundle and one consented cloud challenger; constrained intent adapter | Model/license/data receipts, same-scenario useful latency plus errors/cost; human voice and interruption assessment. |
+| C3. Profile decision / ic-05 and ic-02 | Choose actual settings, warm-residency policy and approved resource thresholds | Speed default has measured behavior; Balanced/Accuracy do not imply unmeasured quality. No hidden provider failover. |
+| D1. Host and durable core / ic-06 | Narrow Tauri commands/channels, job reducer, DB owner and notification outbox | Isolation, schema/migration/storage failure tests; no generic frontend shell access or production test driver. |
+| D2. Mesh UI / ic-06 | Sanitized snapshot adapter, stable sphere, activity reducer, accessible list and reduced-motion mode | Malformed/stale mesh and WebGL loss handled; no guessed reads; graph load does not interrupt audio. |
+| D3. First real loop / ic-06 | Wake to correct existing session, background task or handoff, continued conversation and grounded spoken outcome | First-slice scenario below passes on disposable data; human acceptance stays separate. |
+| E1. Crash/lifecycle / ic-07 | Fault injection at each dispatch/outbox boundary, lock/sleep/quit, device/network failure | Unknown outcomes remain unknown; no process/session theft; replay cannot repeat side effects. |
+| E2. Soak/resource qualification / ic-07 | Long wake/echo run and realistic voice/graph/agent contention | Report all failures, timing tails, full process-tree resources and actual supported limits. |
+| E3. Release proposal / ic-07 | Document signing, WebView2/model distribution, clean install/update/uninstall and data policy | Readiness report only; publication/autostart/installation requires separate approval. |
+
+B and C can be qualified independently once authorized. Their receipts complete
+the open choices in A. D begins only after ic-02/ic-04/ic-05 pass and the owner
+authorizes implementation; reliability assertions are not postponed merely
+because E contains broader fault injection.
+
+The proposed source layout is a frontend, one Rust host, one native audio
+worker, transport adapters and contract fixtures. No scaffolding is created by
+this roadmap. Keep schema/identity/state reducers independent of Tauri/audio
+so they can be tested without microphone, provider or installed Agency access.
+
+## Decision receipts that unlock implementation
+
+| Receipt | Required contents |
+|---|---|
+| Agency | Exact installed versions, launch provenance, effective permissions, same target identity/workspace, negotiated capabilities, event/approval/cancel/handoff evidence and unsupported limits |
+| Speech | Device/OS/audio route, language/phrase, model/voice hashes and licenses, cloud endpoint/account policy, timings/errors/resources, full-duplex evidence and human preference |
+| Product | Accepted stack/profiles, approved roots, retention/cloud consent, confirmation tiers, lifecycle, budgets and first-slice acceptance checks |
+
+No phase completes because a diagram parses or an issue description matches.
+Use [primary evidence](research-sources.md) to distinguish documented support
+from the installed/consented proof these receipts require.
 
 ## Proposed first end-to-end scenario
 

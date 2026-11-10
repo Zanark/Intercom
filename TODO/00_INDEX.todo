@@ -27,8 +27,12 @@ Completion evidence:
   ic-02 records the architecture-only voice/wake/Agency/3D-mesh requirements.
   ic-04/ic-05 qualification informs remaining ic-02 decisions before ic-06.
   Future roadmap work is not permission to build, capture audio or run agents.
+  Deep research records technology alternatives, runtime contracts and
+  performance evidence in docs; recommendation is not selection/qualification.
 
 Completion log:
   2026-11-10 - Established index. Future additions keep existing numbers stable.
   2026-11-10 - Closed ic-01; retained ic-02 as NOT_STARTED.
   2026-11-10 - Began ic-02 and added gated qualification/implementation roadmap.
+  2026-11-10 - Expanded ic-02 research and dependent proof criteria; no new
+    workstream identities or changed completion statuses.
