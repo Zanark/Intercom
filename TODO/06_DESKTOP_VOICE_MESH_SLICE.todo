@@ -21,7 +21,7 @@ Tasks:
   [x] Verify native transparency/restoration, idle/minimized behavior and WebGL loss.
   [x] Add saved microphone choice, explicit brief checks and visible access/device errors.
   [x] Package and verify an unsigned Windows x64 portable EXE on disposable profiles.
-  [ ] Publish the requested prototype prerelease and independently verify its assets.
+  [x] Publish the requested prototype prerelease and independently verify its assets.
   [ ] Finalize the product stack/dependencies from the live qualification receipts.
   [ ] Build an isolated desktop host, audio controls and selected speech pipeline.
   [ ] Constrain native commands and implement versioned bounded IPC contracts.
@@ -63,7 +63,11 @@ Completion evidence:
   itself separately passes startup, ASAR UI, microphone check and floating
   restoration. Its inspected archive has seven runtime files; notices included,
   private stores/profiles/credentials/tests excluded. EXE is unsigned, x64 only.
-  Prerelease publication is pending. No continuous microphone input, wake word,
+  Published v0.1.0-prototype.1 (nondraft prerelease), source
+  6cfa26fd1d89934f21ba6311bc86037be84fca4c. Independent public download matches
+  EXE SHA-256 29b7282e592331dfb849143be9e2b9e5a1c4799d7b6415c8aa39607b046953f0;
+  the uploaded checksum text also matches. README links the actual download.
+  No continuous microphone input, wake word,
   mesh import, Agency session, terminal dispatch, durable jobs, installer or
   human acceptance. Live criteria remain open.
   Known limits: lazy 3D chunk warning; moderate minimatch development-tool
@@ -82,3 +86,7 @@ Completion log:
     Implemented explicit selection/brief checks, packaged the unsigned portable
     candidate and verified fake-device behavior plus the actual portable launcher.
     No physical microphone, speech recognition or existing Agency session tested.
+  2026-11-11 - Committed/pushed the verified source/tag and published the requested
+    unsigned Windows x64 prerelease with EXE and SHA256SUMS.txt. Independently
+    verified nondraft/prerelease flags, uploaded asset metadata/digests, exact
+    source tag and downloaded public bytes. Full live-loop criteria remain open.

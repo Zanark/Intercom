@@ -25,11 +25,12 @@ gate selection.
 ## Run the prototype
 
 The Windows x64 portable EXE is an **unsigned prototype**, not an installer.
-See [GitHub releases](https://github.com/Zanark/Intercom/releases) for published
-downloads. Windows may show an unknown-publisher/SmartScreen warning; verify
+[Download the prototype EXE](https://github.com/Zanark/Intercom/releases/download/v0.1.0-prototype.1/Intercom-Prototype-0.1.0-prototype.1-win-x64.exe)
+from the [verified prerelease](https://github.com/Zanark/Intercom/releases/tag/v0.1.0-prototype.1).
+Windows may show an unknown-publisher/SmartScreen warning; verify
 the release checksum and follow your device's security policy.
 
-Local candidate:
+Local EXE:
 `C:\devdesk\homedesk\Intercom\release\Intercom-Prototype-0.1.0-prototype.1-win-x64.exe`
 No Node.js installation is needed to run the EXE. First launch extracts the
 bundled Electron runtime; startup speed has not been benchmarked.

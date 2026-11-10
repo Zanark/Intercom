@@ -24,6 +24,13 @@ per-scenario timers; the initial development download had exceeded one timer.
 
 ## Windows portable EXE
 
+Published [v0.1.0-prototype.1](https://github.com/Zanark/Intercom/releases/tag/v0.1.0-prototype.1)
+is a nondraft prerelease from source commit
+`6cfa26fd1d89934f21ba6311bc86037be84fca4c`. Its public EXE was downloaded
+independently and matched SHA-256
+`29b7282e592331dfb849143be9e2b9e5a1c4799d7b6415c8aa39607b046953f0`.
+The published checksum file also matched the local receipt.
+
 `npm run package:win` builds a Windows x64 portable EXE using pinned
 electron-builder 26.18.0, without automatically publishing anything:
 

@@ -178,3 +178,27 @@ Completion log:
         Prerelease upload and remote asset verification are pending.
       Next: commit/push this verified candidate, publish the requested prerelease,
         verify source tag/assets, then reconcile existing tracking and continuity.
+  2026-11-11 - Requested prototype prerelease published and independently verified.
+      Action: committed 34 intended public source/docs/assets/lock files as
+        6cfa26fd1d89934f21ba6311bc86037be84fca4c using approved Zanark identity
+        and session trailers. Atomically pushed main and v0.1.0-prototype.1.
+        Published the unsigned EXE and SHA256SUMS.txt to a nondraft prerelease.
+      Evidence: GitHub API confirms prerelease=true, draft=false, both assets
+        uploaded and the tag resolving to that exact source commit. Independent
+        public downloads match local EXE SHA-256
+        29b7282e592331dfb849143be9e2b9e5a1c4799d7b6415c8aa39607b046953f0
+        and checksum text. Removed only the two verification download copies.
+      Release: https://github.com/Zanark/Intercom/releases/tag/v0.1.0-prototype.1
+      Limit: public prototype publication, not integrated-product readiness,
+        signed publisher identity or human voice/visual acceptance.
+      Next: reconcile the same #2/#5 descriptions with no status/identity changes,
+        commit the publication receipts and persist owned continuity.
+  2026-11-11 - Release tracking reconciled without conflicts or new items.
+      Action: compared all six saved issue-body/state/stage/identity baselines,
+        then updated only existing #2/#5 descriptions from local workstreams.
+      Evidence: independent full GraphQL read-back matched all six complete
+        bodies, backlinks, original issue/item IDs, status option IDs, private
+        Project visibility and sole repository link. Updated the two managed
+        conflict hashes in docs/github-tracking.md only after verification.
+      Limit: #5 remains In Progress; the published fixture does not complete
+        actual voice/Agency qualification or product acceptance.

@@ -30,7 +30,8 @@ Completion evidence:
   ic-06 has an authorized, locally verified early Electron fixture UI;
   it does not waive live prerequisites or authorize continuous audio/agent access.
   A later request authorizes microphone selection/brief device checks and an
-  unsigned Windows portable prerelease; the candidate EXE is locally verified.
+  unsigned Windows portable prerelease. v0.1.0-prototype.1 is published, nondraft;
+  its source tag and independently downloaded EXE/checksum are verified.
   Deep research records technology alternatives, runtime contracts and
   performance evidence in docs; recommendation is not selection/qualification.
 

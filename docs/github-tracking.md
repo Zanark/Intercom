@@ -160,6 +160,15 @@ states/status option IDs, private visibility and sole repository linkage.
 remain OPEN/Todo. The early fixture UI does not complete the live voice/Agency
 criteria or waive #5's dependencies. Hashes below now include this milestone.
 
+The 2026-11-11 release reconciliation again matched all six prior baselines
+before updating only the existing #2/#5 descriptions for microphone choice,
+packaging and verified prerelease publication. Independent full-body read-back
+verified all six descriptions, backlinks, original issue/item identities,
+states/stages, private Project visibility and sole repository membership.
+No stage changed and no issue/item was created; #5 remains In Progress because
+its integrated voice/Agency acceptance criteria remain open. The hashes below
+now include this release receipt.
+
 ### Managed-body conflict baselines
 
 Compute SHA-256 over UTF-8 body text after converting CRLF to LF and stripping
@@ -172,10 +181,10 @@ exact read-back; never refresh them merely to hide a remote edit.
 | Workstream | Verified remote body SHA-256 |
 |---|---|
 | ic-01 | `562ceaadaa676dcfb47fa40fa79c77ddc9dbce059965142c48b18082d66c9788` |
-| ic-02 | `c6023d0c20f7667d65a2f671af36409db6f94ce302e6f25a4c7363fe83b2bb7f` |
+| ic-02 | `6c2a4a2f4c45690014addcb1d43f20a05b46423e171738f0acf7f61334b3ec56` |
 | ic-04 | `1a2f2956f36974c36920e6ef1c43d4c00a8a3414e7a23d52f8e3ac4e1719b1ec` |
 | ic-05 | `f192573f2f7f70630ba8f0e1ad79567be32787b071563bf75779fa0322069519` |
-| ic-06 | `d6444261728b44cfd83a9cc107d9f94d72bf0f9e011db9b58f78d3cabe346c15` |
+| ic-06 | `d0af8e3fc7b13861b8ed8335d60aa22ee7c2bd6faefb02e85ef7a01872e36a98` |
 | ic-07 | `072c0916f6106438b8f32e2ae02415645056015a3049f36f12ec4cfca281fe33` |
 
 These reconciliations used the same saved issue/item identities on

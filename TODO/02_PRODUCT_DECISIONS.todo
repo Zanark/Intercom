@@ -57,7 +57,7 @@ Completion evidence:
   docs/prototype.md separates the implemented synthetic desktop UI, transparent
   Floating Mesh and rendering profiles from the unimplemented integrated loop.
   The owner additionally requested an EXE prerelease and microphone selection.
-  An unsigned Windows x64 portable candidate and saved input picker now exist;
+  An unsigned Windows x64 portable prerelease and saved input picker now exist;
   device checks do not select a speech provider or implement speech recognition.
 
 Completion log:
@@ -75,3 +75,6 @@ Completion log:
   2026-11-10 - Owner authorized the early fixture-only ic-06 sub-slice and chose
     Electron for the prototype. Final stack/privacy/provider/resource decisions
     and all live qualification gates remain open.
+  2026-11-11 - Published the separately requested unsigned prototype prerelease
+    with microphone selection/brief checks. Remote flags, tagged source and
+    downloaded EXE/checksum bytes verified; no voice/provider qualification.
