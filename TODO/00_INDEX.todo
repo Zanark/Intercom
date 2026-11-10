@@ -1,0 +1,34 @@
+Intercom workstream index
+
+Status: ACTIVE
+Milestone: Voice/mesh architecture, qualification, then authorized implementation
+Dependencies: None
+
+Purpose:
+  Keep stable navigation and truthful status for numbered workstreams.
+
+Tasks:
+  ic-01 | DONE | 01_PROJECT_FOUNDATION.todo
+  ic-02 | IN_PROGRESS | 02_PRODUCT_DECISIONS.todo
+  ic-04 | NOT_STARTED | 04_AGENCY_CONNECTOR_PROOF.todo
+  ic-05 | NOT_STARTED | 05_SPEECH_AND_WAKE_QUALIFICATION.todo
+  ic-06 | NOT_STARTED | 06_DESKTOP_VOICE_MESH_SLICE.todo
+  ic-07 | NOT_STARTED | 07_RELIABILITY_AND_LIFECYCLE.todo
+  History | ACTIVE | 03_DEVELOPMENT_LEDGER.todo
+
+Acceptance criteria:
+  Every actual workstream retains the eight required fields and a stable ID.
+  Issues and Project items track actual workstreams, not this index or ledger.
+
+Completion evidence:
+  ic-01 foundation is complete locally; Project 13 tracks six issue-backed items.
+  #1 is CLOSED/COMPLETED/Done; #2 OPEN/In Progress; #3 through #6 OPEN/Todo.
+  Full mirrored bodies, states/stages, backlinks and exact inventory read back.
+  ic-02 records the architecture-only voice/wake/Agency/3D-mesh requirements.
+  ic-04/ic-05 qualification informs remaining ic-02 decisions before ic-06.
+  Future roadmap work is not permission to build, capture audio or run agents.
+
+Completion log:
+  2026-11-10 - Established index. Future additions keep existing numbers stable.
+  2026-11-10 - Closed ic-01; retained ic-02 as NOT_STARTED.
+  2026-11-10 - Began ic-02 and added gated qualification/implementation roadmap.

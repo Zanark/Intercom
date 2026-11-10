@@ -1,0 +1,52 @@
+Intercom project foundation
+
+Workstream ID: ic-01
+GitHub issue: https://github.com/Zanark/Intercom/issues/1
+Status: DONE
+Milestone: A resumable, documented, issue-backed project foundation
+Dependencies: None
+
+Purpose:
+  Establish the development system without inventing a stack or claiming an app.
+  Keep public engineering documentation separate from private session continuity.
+
+Tasks:
+  [x] Inspect repository, working tree, and existing tracking.
+  [x] Adopt contributor rules and a repository-specific development manual.
+  [x] Create numbered workstreams, index, product brief, and development ledger.
+  [x] Register owned context continuity and publish a checked mesh refresh.
+  [x] Create and verify dedicated Project, issues, statuses, and local backlinks.
+  [x] Reconcile setup evidence and completion state.
+
+Acceptance criteria:
+  Documentation identifies the current product stage and unresolved decisions.
+  Workstreams preserve all eight fields, stable IDs, and real dependencies.
+  The owned private store is ignored by Git and discovered by Context Mesh.
+  Each actual workstream has one issue and one item on the dedicated Project.
+  Issue body/state, Project status, and local backlink agree with the workstream.
+  No application stack, runtime, scheduler, commit, push, or deployment is added.
+
+Completion evidence:
+  Initial repository: README.md only; clean working tree at 68385a3.
+  Authorized GitHub identity: Zanark; repository public with ADMIN permission.
+  Baseline inventory: zero issues and no linked Project.
+  Repository-specific manual, contributor rules, product brief, and ledger exist.
+  Four TODO files retain all eight fields; seven local documentation links and
+    two issue backlinks passed structural checks.
+  git check-ignore confirms private continuity, local scratch, and .env exclusion.
+  Checked Context Mesh build discovers Intercom as ctx-fd7ec571abba among 40
+    contexts, publishes digest/index/dashboard, and reports no archived replies.
+  Dedicated private Project: https://github.com/users/Zanark/projects/13.
+  Independent remote read confirms #1 CLOSED/COMPLETED with Project Done;
+    #2 OPEN with Project Todo. Both items contain the actual repository issues.
+  Managed descriptions are mirrored from these public-safe workstream sources;
+    final body baselines and read-back receipt live in docs/github-tracking.md.
+  No application build or test suite exists; no runtime validation is claimed.
+  Human acceptance and product implementation are not claimed.
+
+Completion log:
+  2026-11-10 - Owner requested new-project setup, context refresh, and manual adoption.
+  2026-11-10 - Owner separately approved dedicated GitHub Project and linked issues.
+  2026-11-10 - Authored bounded foundation and registered owned continuity.
+  2026-11-10 - Verified dedicated Project/items, local backlinks, and issue states.
+  2026-11-10 - Completed local foundation; no commit, push, or deployment.

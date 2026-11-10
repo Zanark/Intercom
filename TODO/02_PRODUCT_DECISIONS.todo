@@ -1,0 +1,51 @@
+Intercom product decisions and first vertical slice
+
+Workstream ID: ic-02
+GitHub issue: https://github.com/Zanark/Intercom/issues/2
+Status: IN_PROGRESS
+Milestone: An explicit implementable first-slice contract
+Dependencies: ic-01
+
+Purpose:
+  Turn the stated desktop/local-agent direction into a bounded implementation
+  contract without assuming features, permissions, providers, or a framework.
+
+Tasks:
+  [x] Define the first user workflow, inputs, outputs, and exclusions.
+  [ ] Select initial OS, desktop stack, and supported local-agent interface.
+  [ ] Define data access, storage, network use, confirmations, and cancellation.
+  [x] Record proposed success/failure scenarios and qualification criteria.
+  [x] Record gated future workstreams for Agency, speech, desktop and reliability.
+  [x] Record performance/speed as top priority/default and selectable priorities.
+  [ ] Finalize resource thresholds and decisions from ic-04/ic-05 receipts.
+  [ ] Qualify profile settings and timing/accuracy budgets; labels remain proposed.
+
+Acceptance criteria:
+  The product brief distinguishes approved decisions from proposals.
+  One first-slice workflow has observable success and failure outcomes.
+  Agent access and side effects require explicit authority and visible controls.
+  Stack and integration decisions include rationale and verified interface evidence.
+  No real private-data access or agent execution is needed merely to define scope.
+  Current documentation-only authorization is preserved; roadmap is not execution.
+  Default performance profile and selectable priorities preserve target/permission
+  correctness; latency results are not substituted for processing accuracy.
+
+Completion evidence:
+  User selected architecture/roadmap only, wake-word activation, existing Agency
+  sessions first, and local/cloud speech research before selection.
+  docs/architecture.md records proposed components, telemetry and outcome semantics.
+  docs/speech-options.md compares sourced candidates without claiming voice tests.
+  docs/roadmap.md defines phase gates and the first end-to-end scenario.
+  CareerOS graph source and installed Agency/Copilot help inspected read-only.
+  User subsequently confirmed performance/speed first and default, with options
+  to select priorities. Accuracy remains important; no profile is implemented.
+  No implementation, accepted stack/provider, or live connector proof exists.
+
+Completion log:
+  2026-11-10 - Created as unstarted follow-on work, not an approved feature list.
+  2026-11-10 - Began product definition from explicit voice/mesh requirements.
+    User requested documentation before building. Recorded future qualification
+    workstreams now; actual implementation remains gated on separate authority,
+    Agency feasibility, speech selection and the remaining product decisions.
+  2026-11-10 - Added explicit speed/performance default and selectable priorities;
+    no numerical targets, model settings or provider choices invented.

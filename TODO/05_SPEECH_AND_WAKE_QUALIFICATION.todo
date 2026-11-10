@@ -1,0 +1,37 @@
+Intercom local/cloud speech and wake-word qualification
+
+Workstream ID: ic-05
+GitHub issue: https://github.com/Zanark/Intercom/issues/4
+Status: NOT_STARTED
+Milestone: Evidence-backed speech selection and wake conversation contract
+Dependencies: ic-01
+
+Purpose:
+  Compare local and cloud speech before selection and qualify local wake-only
+  standby. No microphone capture or provider use is authorized by this roadmap.
+
+Tasks:
+  [ ] Select test hardware, languages, phrase, datasets and resource/latency budgets.
+  [ ] Obtain audio/provider consent and choose one viable local/cloud candidate.
+  [ ] Verify exact model/voice licenses, packaging and provider data/cost terms.
+  [ ] Measure wake/recognition errors, response timing and concurrent resources.
+  [ ] Qualify speed-first defaults and compare selectable processing priorities.
+  [ ] Test echo, speech interruption, device loss and offline behavior.
+  [ ] Record human listening results and an explicit provider/privacy decision.
+
+Acceptance criteria:
+  Same-scenario comparison distinguishes facts, measurements and user preference.
+  Wake standby stays local; the chosen phrase and timeout are documented.
+  No silent cloud failover or raw-audio persistence by default.
+  Voice activity detection is not represented as echo cancellation/authentication.
+  Local speech is not misrepresented as fully offline Copilot execution.
+  Results and selected contracts inform ic-02 before desktop implementation.
+  Performance/speed is evaluated first; error rates and useful-response latency
+  are reported together, not just time to a generic acknowledgment.
+
+Completion evidence:
+  None. docs/speech-options.md contains research, not downloads or audio tests.
+  No speech engine, voice, provider, target hardware or numeric budget selected.
+
+Completion log:
+  2026-11-10 - Planned after the user requested research of both speech approaches.

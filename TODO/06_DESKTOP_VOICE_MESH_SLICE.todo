@@ -1,0 +1,38 @@
+Intercom first desktop voice and context-mesh slice
+
+Workstream ID: ic-06
+GitHub issue: https://github.com/Zanark/Intercom/issues/5
+Status: NOT_STARTED
+Milestone: One observable voice-to-existing-session-to-spoken-result loop
+Dependencies: ic-02, ic-04, ic-05
+
+Purpose:
+  Implement the bounded desktop experience only after separate authorization
+  and qualification. Electron/React/Three.js remains a stack recommendation.
+
+Tasks:
+  [ ] Obtain implementation authority and finalize stack/dependency choices.
+  [ ] Build an isolated desktop host, audio controls and selected speech pipeline.
+  [ ] Add selectable priorities with Speed/performance default and saved choice.
+  [ ] Route finalized utterances with explicit context/session identity.
+  [ ] Implement terminal handoff and approved background dispatch.
+  [ ] Render a spherical mesh with observed activity and unknown-coverage states.
+  [ ] Persist job outcomes and deliver accurate notifications/spoken summaries.
+  [ ] Cover ambiguity, permission, failure, cancellation and accessible fallback.
+  [ ] Document actual build/test/launch commands and remaining evidence limits.
+
+Acceptance criteria:
+  The docs/roadmap.md first-slice scenario passes on disposable test data.
+  Voice remains available while a request runs without model-based status polling.
+  No fabricated reads, false completion, unrestricted tools or duplicate dispatch.
+  Playback interruption is separate from task cancellation.
+  Proposed runtime isolation is demonstrated, not inferred from different paths.
+  Human voice/visual acceptance is recorded separately from automated checks.
+  Profile changes apply at a request boundary without changing running jobs,
+  permissions or approved providers; default performance meets agreed budgets.
+
+Completion evidence:
+  None. No application, dependency manifest, runtime, preview or installer exists.
+
+Completion log:
+  2026-11-10 - Recorded as gated future work, not authorized implementation.

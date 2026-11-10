@@ -1,0 +1,157 @@
+# GitHub tracking adoption
+
+## Authorized scope
+
+The owner explicitly approved a dedicated GitHub Project and linked issues
+during project initialization on 2026-11-10. Repository: `Zanark/Intercom`
+(public). Only the public-safe numbered workstreams are mirrored.
+
+No commit, push, deployment, scheduler, Actions workflow, remote secret,
+permission change, or publication of private continuity is authorized.
+
+## Source of truth and operation
+
+Local numbered `.todo` files own descriptions, tasks, dependencies, criteria,
+evidence, and completion. Each has a stable `Workstream ID` and `GitHub issue`
+backlink. Mirror that source in the issue body after a stable HTML marker:
+`<!-- intercom-workstream:ic-01 -->` or the corresponding ID.
+
+This adoption is **agent-driven manual reconciliation**, not an automatic
+synchronizer. No daemon or repository-local sync runtime is installed.
+On an authorized workstream update:
+
+1. Read the local file, its linked issue, and its Project item.
+2. Check saved mapping and existing markers before creating anything.
+3. Compare the normalized body hash with the saved baseline below. Stop on
+   unexpected issue-body edits or unexplained state changes. Preserve
+   human comments; never silently overwrite conflicting content.
+4. Update the managed issue description from the public-safe workstream,
+   excluding the self-referential `GitHub issue` line.
+5. Reconcile issue state and actual Project status separately.
+6. Read back body, state, Project membership/status, and local backlink.
+7. Record partial success explicitly and reuse saved IDs on retry.
+
+Preview before creating a workstream issue. A failed/uncertain read is not an
+empty inventory. Do not delete issues/items or recreate a missing mapping
+without reconciling its stable marker. Remote board movement does not rewrite
+local status. New remote writes need applicable authority.
+
+## Status mapping
+
+Use the Project's discovered built-in status options, recorded in the mapping
+below; do not guess option IDs.
+
+| Local status | Issue | Project stage |
+|---|---|---|
+| NOT_STARTED | Open | Todo |
+| IN_PROGRESS | Open | In Progress |
+| BLOCKED | Open, blocker retained in body | Todo unless already actively underway |
+| DONE | Closed / completed | Done |
+
+Reopening a workstream reopens the same issue. Cancellation/supersession needs
+an explicit decision and must not be reported as completed.
+
+## Initial inventory and preview
+
+Observed baseline: zero repository issues, no linked Project, and no existing
+owner Project named Intercom. Existing unrelated Projects remain untouched.
+
+- Include `ic-01`: repository foundation and continuity; initially active.
+- Include `ic-02`: product decisions and first-slice definition; not started.
+- Exclude `00_INDEX.todo`: navigation, not a feature issue.
+- Exclude `03_DEVELOPMENT_LEDGER.todo`: perpetual history, not a feature issue.
+- Never include `.agent-context`, raw chats, secrets, or private evidence.
+
+### Voice-assistant roadmap preview (2026-11-10)
+
+The existing tracking authorization covers these public-safe workstream
+descriptions, not runtime execution or publication of private research:
+
+- Update existing `ic-02` / #2 to IN_PROGRESS / Open / In Progress.
+- Add `ic-04`: existing Agency connector qualification; NOT_STARTED / Open / Todo.
+- Add `ic-05`: speech and wake qualification; NOT_STARTED / Open / Todo.
+- Add `ic-06`: gated desktop voice/mesh slice; NOT_STARTED / Open / Todo.
+- Add `ic-07`: gated reliability/lifecycle qualification; NOT_STARTED / Open / Todo.
+- Keep `ic-01` / #1 unchanged. Continue excluding index, ledger, private
+  continuity, audio, session catalog/transcripts and installation receipts.
+
+Workstream IDs and file numbers stay stable; issue numbers are independent.
+Before mutation, verify the existing two body hashes/states and Project stages,
+inventory markers to prevent duplicate creation, then read back the final six
+issue-backed mappings. The preview itself is not a completion receipt.
+
+## Credentials
+
+Use the shared manual's reviewed `scripts/with_github_token.py` runner with
+trusted `gh` commands. Never inspect, print, copy, or package its local `.env`,
+and never replace global authentication. This external runner is not a bundled
+Intercom dependency or a synchronizer; without it, provision authorized access
+locally without putting credentials in chat.
+
+## Verified mapping
+
+Dedicated owner Project: https://github.com/users/Zanark/projects/13,
+title **Intercom**, private visibility. It is linked to `Zanark/Intercom`.
+Repository issues remain public; the private board is not a private-content
+upload boundary.
+
+| Workstream | Local source | Issue | Project item ID |
+|---|---|---|---|
+| ic-01 | `TODO/01_PROJECT_FOUNDATION.todo` | [#1](https://github.com/Zanark/Intercom/issues/1) | `PVTI_lAHOAe2wCs4BrBRezhHi_ko` |
+| ic-02 | `TODO/02_PRODUCT_DECISIONS.todo` | [#2](https://github.com/Zanark/Intercom/issues/2) | `PVTI_lAHOAe2wCs4BrBRezhHi_lg` |
+| ic-04 | `TODO/04_AGENCY_CONNECTOR_PROOF.todo` | [#3](https://github.com/Zanark/Intercom/issues/3) | `PVTI_lAHOAe2wCs4BrBRezhHjXoI` |
+| ic-05 | `TODO/05_SPEECH_AND_WAKE_QUALIFICATION.todo` | [#4](https://github.com/Zanark/Intercom/issues/4) | `PVTI_lAHOAe2wCs4BrBRezhHjXsM` |
+| ic-06 | `TODO/06_DESKTOP_VOICE_MESH_SLICE.todo` | [#5](https://github.com/Zanark/Intercom/issues/5) | `PVTI_lAHOAe2wCs4BrBRezhHjXxs` |
+| ic-07 | `TODO/07_RELIABILITY_AND_LIFECYCLE.todo` | [#6](https://github.com/Zanark/Intercom/issues/6) | `PVTI_lAHOAe2wCs4BrBRezhHjX3c` |
+
+Project node: `PVT_kwHOAe2wCs4BrBRe`.
+Status field: `PVTSSF_lAHOAe2wCs4BrBRezhpVzH8`.
+Discovered options: Todo `f75ad846`, In Progress `47fc9ee4`, Done `98236657`.
+Issue nodes: ic-01 `I_kwDOVph7S88AAAABeBr3Dw`;
+ic-02 `I_kwDOVph7S88AAAABeBr5IA`;
+ic-04 `I_kwDOVph7S88AAAABeCG3oA`;
+ic-05 `I_kwDOVph7S88AAAABeCG83g`;
+ic-06 `I_kwDOVph7S88AAAABeCHBXg`;
+ic-07 `I_kwDOVph7S88AAAABeCHHsQ`.
+
+Initial foundation reconciliation on 2026-11-10 verified exactly two issues
+and issue-backed items: ic-01 CLOSED / COMPLETED / Done and ic-02 OPEN / Todo.
+Both original descriptions were compared before the foundation completion
+update; ic-02 required no mutation at that stage.
+
+The later voice-roadmap reconciliation verified those saved body hashes,
+states, stages and identities before writing. It updated the same ic-02 issue
+to OPEN / In Progress and created ic-04 through ic-07 as OPEN / Todo.
+Independent full GraphQL read-back verifies exactly six issues, six unique
+issue-backed items, exact local description equality, all six backlinks,
+states/status option IDs, private Project visibility, and the sole repository
+link. ic-01's body and completion state remain unchanged. No background sync,
+hosted automation, private session output, or audio was published.
+
+The subsequent speed-first/selectable-priority clarification updated the same
+ic-02, ic-05, ic-06 and ic-07 issues after all six prior body/state/stage
+baselines matched. Independent read-back again verified full description
+equality and unchanged issue/item identities and statuses. The hashes below
+include that clarification; no new issue, runtime or permission was introduced.
+
+### Managed-body conflict baselines
+
+Compute SHA-256 over UTF-8 body text after converting CRLF to LF and stripping
+trailing whitespace only. The HTML identity marker is included. Local projection
+excludes only the `GitHub issue:` line. Before an update, compare the actual
+remote body against this saved baseline, then separately compare the new local
+projection. Update these hashes only after an authorized conflict-free write and
+exact read-back; never refresh them merely to hide a remote edit.
+
+| Workstream | Verified remote body SHA-256 |
+|---|---|
+| ic-01 | `562ceaadaa676dcfb47fa40fa79c77ddc9dbce059965142c48b18082d66c9788` |
+| ic-02 | `7f1ddb2753d15f50bd76db241b0b4d319b25590e57a4535f04561f4916af4c0a` |
+| ic-04 | `f6bf01a094e2f7994b85d703896ab180853403e078198684befbc6649d7708de` |
+| ic-05 | `2059e6aceac094ac900de7b4421772645528fff123012d0146c50bd2130dde91` |
+| ic-06 | `0afa28af87577653a642ee6a5d739f185b96c5704b363b97bb1a653e91ad661b` |
+| ic-07 | `98b6f0569657df03d2cd9f1716692a1d221dc2f240937a5b8c3d6523a634f70a` |
+
+Both reconciliations used the same saved issue/item identities on
+read-back and confirmed no duplicates. Automated retry, reopening, and conflict
+tests are not claimed because no sync runtime was introduced.

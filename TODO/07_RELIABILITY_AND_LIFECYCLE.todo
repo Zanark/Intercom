@@ -1,0 +1,36 @@
+Intercom reliability and lifecycle qualification
+
+Workstream ID: ic-07
+GitHub issue: https://github.com/Zanark/Intercom/issues/6
+Status: NOT_STARTED
+Milestone: Recoverable background jobs and safe desktop/audio lifecycle
+Dependencies: ic-06
+
+Purpose:
+  Qualify failure and lifecycle behavior after the first slice, without treating
+  a successful demo as a production-ready or publishable assistant.
+
+Tasks:
+  [ ] Test restart/reconnect, lost acknowledgment and duplicate/out-of-order events.
+  [ ] Verify per-session serialization and shared-workspace conflict handling.
+  [ ] Qualify audio/device/provider failures and resource use with the live graph.
+  [ ] Compare priority profiles under load and verify saved/default settings.
+  [ ] Define tray close, explicit exit, sleep/resume and task ownership behavior.
+  [ ] Verify retention/deletion, credential boundaries and notification recovery.
+  [ ] Document supported limits, recovery instructions and separate release gates.
+
+Acceptance criteria:
+  Uncertain dispatch is never blindly retried and no false done is spoken.
+  Recovery preserves receipts without claiming exactly-once audible delivery.
+  User-owned sessions/processes and unsaved work remain protected.
+  Only identified Intercom-owned processes can be stopped by cleanup.
+  Privacy/resource targets are measured on the selected configuration.
+  Speed-first behavior remains correct under load; quality/accuracy trade-offs
+  and profile-switch boundaries are measured rather than assumed.
+  No autostart, service activation, commit, release or deployment is implied.
+
+Completion evidence:
+  None. Qualification depends on a separately authorized implemented ic-06.
+
+Completion log:
+  2026-11-10 - Added future qualification scope under architecture-only authority.

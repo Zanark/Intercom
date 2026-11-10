@@ -1,0 +1,34 @@
+Intercom existing Agency session connector qualification
+
+Workstream ID: ic-04
+GitHub issue: https://github.com/Zanark/Intercom/issues/3
+Status: NOT_STARTED
+Milestone: Proven capability for the actual existing Agency session
+Dependencies: ic-01
+
+Purpose:
+  Validate the essential integration before building a voice/desktop shell
+  around an assumed API. Current scope authorizes documentation only.
+
+Tasks:
+  [ ] Obtain authority and designate disposable sessions/workspaces for testing.
+  [ ] Discover sessions with source/capability/active-state distinctions.
+  [ ] Qualify active attach and dormant resume separately; preserve launch policy.
+  [ ] Prove request identity, structured events, approvals and terminal handoff.
+  [ ] Exercise failure, busy state, cancellation and uncertain dispatch.
+  [ ] Record a versioned capability receipt and feed findings into ic-02.
+
+Acceptance criteria:
+  The target is an existing Agency session, not a silently substituted SDK session.
+  Same identity/workspace and relevant configuration are verified.
+  Unsupported active attachment is an explicit limitation, not a successful proof.
+  One dispatch yields attributable events/outcome without agent-prompt polling.
+  No competing writer, blanket permission grant or unapproved service activation.
+  Human approval and technical qualification remain distinct.
+
+Completion evidence:
+  None. Help inspection supports research only; no runtime connector test ran.
+  See docs/architecture.md and docs/roadmap.md for the proposed proof boundary.
+
+Completion log:
+  2026-11-10 - Planned under documentation-only scope; execution not authorized.

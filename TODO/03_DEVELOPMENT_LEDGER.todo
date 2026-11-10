@@ -1,0 +1,84 @@
+Intercom development ledger
+
+Status: ACTIVE
+Milestone: Continuous public-safe development history
+Dependencies: None
+
+Purpose:
+  Preserve actions, effects, rationale, mechanisms, evidence, and next consequences.
+  This perpetual ledger is excluded from workstream-to-issue mapping.
+
+Tasks:
+  Append significant development entries without rewriting prior evidence.
+
+Acceptance criteria:
+  Entries distinguish plans, implementation, technical evidence, human acceptance,
+  and publication. Private continuity, credentials, and raw chats stay excluded.
+
+Completion evidence:
+  This ledger is ongoing, not a finite feature deliverable.
+
+Completion log:
+  2026-11-10 - Project foundation authored.
+    Action: inspected the clean repository and adopted the development manual.
+    Effect: project entry points, contributor rules, product brief, and numbered
+      workstreams now exist.
+    Why: the original README states direction but not implementation decisions.
+    Mechanism: separate product facts, workstream contracts, public history,
+      remote tracking policy, and ignored private context.
+    Evidence: initial README-only tree at 68385a3; no issues or linked Project.
+    Limit: no app, selected stack, executable, build/test suite, or deployment.
+    Next: verify remote tracking and context registration before closing ic-01.
+  2026-11-10 - Foundation and tracking completed locally.
+    Action: registered owned context, created private Intercom Project 13,
+      mirrored both workstreams as issues, and added issue-backed Project items.
+    Effect: ic-01 is complete; ic-02 remains unstarted.
+    Why: resumability and explicit product decisions prevent speculative setup
+      from being mistaken for an implemented assistant.
+    Mechanism: stable workstream IDs, local backlinks, actual discovered status
+      options, manual conflict-aware reconciliation, and checked mesh publication.
+    Evidence: four eight-field TODOs, two backlinks, seven local links; Git ignores
+      private context; mesh build discovers 40 contexts including Intercom;
+      remote #1 CLOSED/COMPLETED/Done and #2 OPEN/Todo independently read back.
+    Limit: no automatic sync runtime, application build, user acceptance,
+      commit, push, release, or deployment.
+    Next: define the product workflow and first vertical slice under ic-02.
+  2026-11-10 - Voice/mesh architecture and qualification roadmap recorded.
+    Action: captured spoken assistant requirements and explicit scope choices;
+      inspected CareerOS graph source, installed Agency/Copilot help, mesh schema,
+      public SDK docs and local/cloud speech references.
+    Effect: ic-02 is IN_PROGRESS; ic-04 through ic-07 are gated future work.
+    Why: existing Agency sessions and trustworthy completion matter more than
+      a visually convincing shell around an unverified connector.
+    Mechanism: separate wake/dialogue, session routing, connector, durable jobs,
+      evidence-backed graph activity and completion speech; compare speech before
+      choosing a provider. Keep context topology distinct from live telemetry.
+    Evidence: docs/product-brief.md, docs/architecture.md, docs/speech-options.md
+      and docs/roadmap.md distinguish user choices, proposals and unproven behavior.
+    Limit: user chose documentation only. No app, selected stack/provider, audio
+      capture, model download, session dispatch, live attachment or quality claim.
+    Next: reconcile tracking and continuity; wait for separately authorized
+      Agency/speech qualification before implementation.
+  2026-11-10 - Voice-roadmap tracking reconciled.
+    Action: checked previous normalized body hashes/states before updating #2
+      and creating #3 through #6 from public-safe workstream projections.
+    Effect: all six workstreams have actual issue-backed Project items/backlinks.
+    Evidence: independent full remote read verifies bodies, states/status IDs,
+      six issues/items, private Project visibility and sole repository link;
+      original #1 is unchanged. docs/github-tracking.md records final mappings
+      and read-back hashes. Eight TODO schemas and acyclic dependencies checked.
+    Limit: manual reconciliation, not a sync service; no runtime qualification.
+    Next: persist the design milestone and refresh owned Context Mesh continuity.
+  2026-11-10 - Processing priority requirement clarified.
+    Action: recorded performance/speed as the top priority and default, with
+      selectable priorities; accuracy remains important.
+    Effect: design, speech comparison and future qualification/slice criteria
+      now include profiles, useful-response latency and resource/error budgets.
+    Mechanism: propose Speed/performance, Balanced and Accuracy modes, persist
+      the selected mode and apply changes only at request boundaries. Exact
+      labels, engine settings and numerical targets remain unqualified.
+    Limit: no implementation or performance claim; permissions, correct targeting,
+      cloud consent and truthful completion remain mandatory in every profile.
+    Evidence: same #2/#4/#5/#6 bodies updated after all six saved baselines
+      matched; final independent read verifies complete descriptions, unchanged
+      issue-backed items/stages and all backlinks. No duplicate tracking created.

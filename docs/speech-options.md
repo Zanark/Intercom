@@ -1,0 +1,103 @@
+# Speech options: research before selection
+
+**Decision pending.** The user requested both local and cloud research before
+choosing. No microphone capture, provider account, audio upload, model download
+or listening-quality comparison occurred. Sources checked 2026-11-10;
+availability, pricing and data terms must be rechecked at selection.
+
+**Product priority:** performance/speed first and default, with user-selectable
+priorities. Neither local nor cloud speech is presumed faster without evidence.
+
+## 1. Common wake-word contract
+
+Recommend a local keyword detector while explicitly enabled, even if the
+conversation uses cloud speech. Open one conversation after the wake phrase,
+permit follow-up turns, then return to standby on sleep/timeout.
+The phrase, timeout, language coverage and activation thresholds remain open.
+Standby must not stream audio to a provider. Wake detection is not authentication.
+
+Separate keyword spotting, voice activity detection, end-of-turn detection,
+speech recognition, intent interpretation, synthesis and echo control.
+One library supporting several stages does not establish a working hands-free
+conversation. Recognizing "stop speaking" must not imply "cancel all jobs."
+
+## 2. Options and trade-offs
+
+| Option | Evidence-backed candidate | Benefits | Costs and qualification risks |
+|---|---|---|---|
+| Local chained speech | sherpa-onnx keyword spotting, streaming ASR, VAD and TTS; whisper.cpp as an ASR comparison | Audio can stay on-device; independently replace stages; no metered speech API per turn. | Model downloads/licenses, native packaging, CPU/GPU/RAM competition, pronunciation and turn-taking need target-machine evaluation. Whisper ASR alone supplies neither TTS nor wake handling. |
+| Cloud chained speech | Hosted transcription + separately generated speech, with the Agency connector remaining the task backend | Inspectable transcript/permission boundary; swap speech providers without changing session routing. | Audio/text leave the device; separate credentials, network latency, request cost and retention terms; natural timing/interruptions are application work. |
+| Cloud realtime speech-to-speech | OpenAI Realtime API as one documented example | Integrated audio conversation and tool events, streaming speech and interruption support. | Hosted model/data/cost dependency; voice model must not become an unrestricted second coding agent; bridge tools need strict validation and approval. |
+| Cloud voice with delegated backend | OpenAI GPT-Live client delegation as a documented example | Explicitly separates a live conversation from an application-owned existing backend. Conceptually close to Intercom. | Documentation is not an Agency connector; verify account/model availability, protocol fit, duration-based voice cost plus backend charges, privacy and interruption behavior. |
+
+Local speech does not mean the whole system is offline: Agency/Copilot may use
+hosted models and tools. Cloud speech does not automatically improve accuracy,
+naturalness or latency on this machine; those are measurements, not assumptions.
+A Copilot subscription does not establish entitlement to a separate speech API.
+
+## 3. Recommended evaluation, not a provider choice
+
+Keep a provider-neutral chained boundary as the baseline. Compare it with the
+delegated cloud voice route rather than claiming modular ASR/TTS will feel
+identical to a native speech-to-speech conversation. Keep the local wake and
+request/permission/job contracts independent of the voice provider.
+
+Evaluate one viable local bundle and one viable cloud configuration using the
+same consented or synthetic utterances, audio devices and request scenarios:
+
+- Project/session names, technical words, dates, corrections, ambiguous targets,
+  pauses mid-sentence, background sound and assistant playback.
+- Required spoken languages and code-switching, once the user selects them.
+- Wake false positives per hour, missed wakes, idle resource use and the
+  maximum standby buffer. Never use a wake benchmark as speaker authentication.
+- End-of-speech to first useful audible response, median/p95; measure a quick
+  acknowledgment separately from the actual answer.
+- Recognition/intent errors, spoken intelligibility and naturalness through
+  human listening. Text output does not establish voice quality.
+- Playback interruption, echo-induced self-wakes, device loss, offline/cloud
+  outage, quota exhaustion, cleanup and long-running background job behavior.
+- CPU/GPU/RAM with the 3D view and a coding agent running concurrently.
+  Agree target hardware and budgets before setting numerical pass limits.
+- Default speed-profile startup, standby, wake and useful-response latency
+  first, then compare proposed Balanced/Accuracy settings against the same
+  scenarios. Report quality regressions as well as any speed improvement.
+
+Report setup/download size, licensing of code AND exact model/voice artifacts,
+measured resources, usage accounting and a dated provider-data receipt.
+Do not infer model licensing from the wrapper library. Do not download several
+large models or record the user merely to prepare this paper comparison.
+
+## 4. Privacy and cost differences
+
+Local mode proposes volatile audio only; transcripts still need an explicit
+retention decision. In cloud mode, enumerate audio, transcript, prompt and tool
+result transmission separately. Send minimum result summaries, not the entire
+Context Mesh/private session history. No silent fallback uploads.
+
+OpenAI's API data-controls documentation says API data is not used for training
+by default absent opt-in, but that is not zero retention. Abuse monitoring and
+endpoint-specific application-state policies still apply; special retention
+controls require eligibility/approval. Check the actual chosen endpoint and
+account, not a generic promise.
+
+Do not quote a dollar estimate before provider/model, region, expected active
+conversation duration and usage are chosen. Local inference trades API cost
+for hardware/power/maintenance; cloud voice and Copilot work are separate costs.
+Keep an explicit speech budget and session timeout if cloud is selected.
+
+## 5. Primary references
+
+- [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx): documents local ASR, TTS,
+  keyword spotting and VAD; Windows and JavaScript/Node support.
+- [whisper.cpp](https://github.com/ggml-org/whisper.cpp): documents Windows,
+  CPU/GPU ASR, model resource examples and quantization; not a full voice stack.
+- [Voice architectures](https://developers.openai.com/api/docs/guides/voice-agents):
+  chained, realtime and delegated approaches, including evaluation dimensions.
+- [Realtime API](https://developers.openai.com/api/docs/guides/realtime):
+  WebRTC/WebSocket, audio interaction and trusted credential handling.
+- [GPT-Live](https://developers.openai.com/api/docs/guides/live):
+  client delegation and independent backend work.
+- [API data controls](https://developers.openai.com/api/docs/guides/your-data):
+  retention is endpoint/account-specific, not synonymous with no training.
+
+No source establishes that a particular configuration works in Intercom yet.
