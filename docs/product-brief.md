@@ -23,7 +23,14 @@ interchangeable identities.
 
 ## Confirmed scope choices
 
-- **Current deliverable:** document architecture and roadmap; do not build yet.
+- **Current deliverable:** after pushing the research, build a fixture-only
+  desktop prototype. The owner approved Electron for that prototype, not a
+  final product stack or live integration.
+- **Floating Mesh:** a mesh-only mode with native transparent background, so
+  the graph can appear to float on the desktop.
+- **Prototype distribution and microphone choice:** publish an unsigned Windows
+  portable EXE prerelease; allow explicit input selection and brief device
+  checks, without enabling wake word, transcription or cloud audio.
 - **Activation:** always available, but require a wake word before each
   conversation. The phrase and conversation timeout are not chosen.
 - **Integration priority:** existing Agency sessions are essential; prove that
@@ -34,7 +41,8 @@ interchangeable identities.
   default. Provide options to choose what to prioritize; processing quality
   and accuracy remain important.
 
-These are user requirements, not implemented features. The deeper engineering
+These remain product requirements; the [prototype](prototype.md) implements
+only the labelled synthetic UI subset. The deeper engineering
 recommendation is Windows-first Tauri 2/Rust + React/TypeScript/Three.js,
 superseding provisional Electron. It is not an accepted or qualified stack.
 Speed/performance, Balanced and Accuracy are proposed profile labels; only the
@@ -68,14 +76,17 @@ and qualification explicit without authorizing execution.
 
 ## First implementation gate
 
-The roadmap records separate future qualification workstreams without
-authorizing their execution. First prove existing-Agency-session integration
+The owner separately authorized an early fixture-only sub-slice in ic-06.
+This exception does not authorize or complete the qualification workstreams.
+Before the real integrated loop, prove existing-Agency-session integration
 in `ic-04`; compare speech in `ic-05`; finish the open decisions in `ic-02`;
 only then authorize the desktop slice in `ic-06`. Use an explicitly designated
 disposable session/workspace for real connector tests, not the user's active work.
 
 ## Current evidence limits
 
-No UI, executable, installer, agent invocation, privacy qualification,
-performance measurement, or user acceptance exists for the product yet.
-There is no launch command at this stage.
+A packaged Electron UI now exists; `npm start` also builds and launches it. Its graph
+and session activity are synthetic. Microphone selection/checks do not implement
+the voice pipeline. No installer, live agent invocation,
+speech/device qualification, product performance measurements or human
+acceptance is claimed.

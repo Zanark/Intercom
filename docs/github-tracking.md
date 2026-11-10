@@ -10,7 +10,14 @@ Tracking authority does not authorize commits, pushes, deployment, scheduling,
 Actions workflows, remote secrets, permission changes or private-continuity
 publication. The owner subsequently requested the initial documentation push;
 commit `3e2693cf2875af96f728e56a5066c7065aecaf93` was pushed to main.
-That completed request is not standing authority to push later research.
+The later explicit research-push request completed as
+`20632243c38ae4a2689ffbdb676a2d70ff1c4a96`, independently verified on main.
+Neither completed request was standing authority to publish later prototype work.
+The owner's subsequent explicit EXE-release request now authorizes committing/
+pushing this prototype and publishing its unsigned Windows prerelease; the
+microphone request authorizes input choice and brief device checks only.
+Publication and asset receipts are recorded after independent verification,
+not inferred from the packaging command.
 
 ## Source of truth and operation
 
@@ -144,6 +151,15 @@ IDs, visibility and membership. All six original mappings and stages remain
 unchanged. The baselines below now include that research; no new issue/item,
 application runtime, commit or research push was created.
 
+The separately authorized prototype reconciliation checked all six research
+baselines before writing. It updated only #2 and #5 descriptions and moved
+the **existing** #5 Project item to In Progress. Independent full read-back
+verified all six complete bodies, original issue/item identities, backlinks,
+states/status option IDs, private visibility and sole repository linkage.
+#1 remains CLOSED/COMPLETED/Done; #2 and #5 are OPEN/In Progress; #3, #4 and #6
+remain OPEN/Todo. The early fixture UI does not complete the live voice/Agency
+criteria or waive #5's dependencies. Hashes below now include this milestone.
+
 ### Managed-body conflict baselines
 
 Compute SHA-256 over UTF-8 body text after converting CRLF to LF and stripping
@@ -156,10 +172,10 @@ exact read-back; never refresh them merely to hide a remote edit.
 | Workstream | Verified remote body SHA-256 |
 |---|---|
 | ic-01 | `562ceaadaa676dcfb47fa40fa79c77ddc9dbce059965142c48b18082d66c9788` |
-| ic-02 | `f9581c4b3e6a80a0d16cca8740d0b89c482571bb9c1e6b088bcd63817debf3bd` |
+| ic-02 | `c6023d0c20f7667d65a2f671af36409db6f94ce302e6f25a4c7363fe83b2bb7f` |
 | ic-04 | `1a2f2956f36974c36920e6ef1c43d4c00a8a3414e7a23d52f8e3ac4e1719b1ec` |
 | ic-05 | `f192573f2f7f70630ba8f0e1ad79567be32787b071563bf75779fa0322069519` |
-| ic-06 | `6d97e1061d23a572caa38e1cb0d835343c6779cc61a8eb30cae917210bb4b4a2` |
+| ic-06 | `d6444261728b44cfd83a9cc107d9f94d72bf0f9e011db9b58f78d3cabe346c15` |
 | ic-07 | `072c0916f6106438b8f32e2ae02415645056015a3049f36f12ec4cfca281fe33` |
 
 These reconciliations used the same saved issue/item identities on

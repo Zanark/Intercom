@@ -28,7 +28,10 @@ Acceptance criteria:
   Agent access and side effects require explicit authority and visible controls.
   Stack and integration decisions include rationale and verified interface evidence.
   No real private-data access or agent execution is needed merely to define scope.
-  Current documentation-only authorization is preserved; roadmap is not execution.
+  Scope remains explicit: the owner authorized an early fixture-only prototype;
+  roadmap items still do not authorize continuous microphone/provider/agent
+  execution. Later explicit selection/check and prototype-release authority
+  does not waive those boundaries.
   Default performance profile and selectable priorities preserve target/permission
   correctness; latency results are not substituted for processing accuracy.
 
@@ -40,8 +43,10 @@ Completion evidence:
   docs/roadmap.md defines phase gates and the first end-to-end scenario.
   CareerOS graph source and installed Agency/Copilot help inspected read-only.
   User subsequently confirmed performance/speed first and default, with options
-  to select priorities. Accuracy remains important; no profile is implemented.
-  No implementation, accepted stack/provider, or live connector proof exists.
+  to select priorities. Accuracy remains important; actual inference/speech
+  profile settings remain unqualified.
+  The owner subsequently authorized a fixture prototype and approved Electron
+  for it. No final product-stack/provider or live connector proof exists.
   Deeper research recommends Tauri 2/Rust + React/TypeScript/Three.js,
   native sherpa audio and SQLite; Electron is retained as a fallback.
   docs/technology-decisions.md and docs/research-sources.md explain rationale
@@ -49,6 +54,11 @@ Completion evidence:
   docs/performance-and-qualification.md define proposed behavior and gates.
   Windows endpoint AEC, resumed permissions and actual existing-session control
   remain explicit qualification risks, not completed proofs.
+  docs/prototype.md separates the implemented synthetic desktop UI, transparent
+  Floating Mesh and rendering profiles from the unimplemented integrated loop.
+  The owner additionally requested an EXE prerelease and microphone selection.
+  An unsigned Windows x64 portable candidate and saved input picker now exist;
+  device checks do not select a speech provider or implement speech recognition.
 
 Completion log:
   2026-11-10 - Created as unstarted follow-on work, not an approved feature list.
@@ -62,3 +72,6 @@ Completion log:
     the provisional shell recommendation, defined concrete native/UI/storage
     candidates, runtime contracts, performance evidence and detailed roadmap.
     No app, dependency install, model download, audio or agent test performed.
+  2026-11-10 - Owner authorized the early fixture-only ic-06 sub-slice and chose
+    Electron for the prototype. Final stack/privacy/provider/resource decisions
+    and all live qualification gates remain open.

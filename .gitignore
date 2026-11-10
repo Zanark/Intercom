@@ -5,3 +5,7 @@
 !.env.example
 __pycache__/
 *.py[cod]
+node_modules/
+dist/
+coverage/
+release/

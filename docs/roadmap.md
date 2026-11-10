@@ -2,9 +2,13 @@
 
 ## Current authorization
 
-Architecture and roadmap only. The following workstreams describe future work;
-creating TODOs/issues does not authorize implementation, microphone use,
-provider access, agent execution, service activation, commits or deployment.
+The owner requested the research push and then a prototype, and explicitly
+approved Electron for that early prototype. Its [fixture-only UI](prototype.md)
+is an authorized ic-06 sub-slice before the live integration prerequisites.
+The later request authorizes an unsigned Windows prototype prerelease and
+explicit microphone-device selection/brief checks. These exceptions do not
+waive ic-02/ic-04/ic-05, authorize continuous listening/provider/agent access,
+or grant production deployment.
 
 Confirmed product intent is in the [brief](product-brief.md); component and
 event contracts are in [architecture](architecture.md); speech choices remain
@@ -25,12 +29,13 @@ correct targeting, permission enforcement and honest outcome reporting.
 | 0. Define | ic-02, in progress | This design is recorded. Remaining stack, privacy, permission and provider decisions are explicit; finalize them from the two qualification receipts below before app implementation. |
 | 1. Prove Agency | ic-04, not started | On a separately authorized disposable session, discover/identify the existing Agency session, preserve configuration, dispatch once, observe the right outcome, and demonstrate handoff/approval/cancellation limits. Active attachment and dormant resume reported separately. |
 | 2. Choose speech | ic-05, not started | Same-scenario local/cloud comparison, local wake proof, measured timing/resources, human listening, model licenses and explicit provider/privacy selection. Can proceed independently of ic-04 after authorization. |
-| 3. First desktop slice | ic-06, not started | Wake, speak, clarify if needed, select one real Agency session, hand off or run an authorized task, display evidence-backed graph activity, and deliver an accurate spoken outcome. |
+| 3. First desktop slice | ic-06, in progress (early fixture UI only) | Wake, speak, clarify if needed, select one real Agency session, hand off or run an authorized task, display evidence-backed graph activity, and deliver an accurate spoken outcome. |
 | 4. Reliability | ic-07, not started | Restart/reconnect, uncertain dispatch, duplicate events, competing sessions/workspaces, audio/device failure and lifecycle behavior qualified without stealing the user's session. No release is implied. |
 
 ic-04 and ic-05 depend on the completed foundation, not on final product
 selection: their findings inform ic-02. ic-06 depends on all three.
-ic-07 depends on ic-06. This avoids a product-definition/feasibility cycle.
+ic-07 depends on ic-06. The early fixture UI is the explicit exception, not
+evidence that these prerequisites passed.
 
 ## Dependency-driven development packages
 
@@ -55,7 +60,8 @@ issue identities, implementation authority or calendar commitments.
 
 B and C can be qualified independently once authorized. Their receipts complete
 the open choices in A. D begins only after ic-02/ic-04/ic-05 pass and the owner
-authorizes implementation; reliability assertions are not postponed merely
+authorizes real integration; the authorized fixture UI is not that proof.
+Reliability assertions are not postponed merely
 because E contains broader fault injection.
 
 The proposed source layout is a frontend, one Rust host, one native audio

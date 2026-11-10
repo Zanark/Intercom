@@ -13,7 +13,10 @@ but do not establish a framework, provider, feature catalogue, or working app.
 Selected modes are project foundation, numbered workstreams, causal development
 history, GitHub tracking, and private context continuity. A technical book,
 source atlas, PDF pipeline, media production, and deployment are not needed
-for this initial documentation-only repository.
+for the initial documentation-only setup. The owner subsequently authorized
+a bounded Electron fixture prototype; real voice/Agency integration remains gated.
+The later request separately authorizes an unsigned Windows prototype release
+and explicit microphone-device checks, not continuous listening or providers.
 
 ## 2. Canonical artifacts
 
@@ -26,6 +29,7 @@ for this initial documentation-only repository.
 | `docs/runtime-contracts.md` | Proposed IPC, routing, jobs, lifecycle and failure contracts |
 | `docs/performance-and-qualification.md` | Speed-first profiles and evidence plan |
 | `docs/research-sources.md` | Primary-source claims and qualification limits |
+| `docs/prototype.md` | Actual desktop prototype controls, code mechanisms and limits |
 | `AGENTS.md` | Contributor and agent execution boundaries |
 | `TODO/00_INDEX.todo` | Stable workstream navigation and status |
 | Numbered workstreams | Bounded tasks, dependencies, acceptance and evidence |
@@ -59,8 +63,9 @@ surface errors, and add focused checks for the behavior changed.
 
 For documentation-only setup, review meaning, navigation, status consistency,
 tracking read-back, and privacy boundaries. There is no application build or
-test suite to run yet. The first implementation must document exact supported
-build/test/launch commands and their prerequisites.
+test suite was present at initialization. The prototype now uses `npm run lint`,
+`npm run build`, `npm test` and `npm run test:desktop`; `npm start` builds and
+launches the desktop app. See [the prototype guide](prototype.md).
 
 Record action, immediate effect, rationale, mechanism, evidence, and next
 consequence in the ledger. Preserve failed attempts and superseded decisions
@@ -82,8 +87,10 @@ source inventories, actual output review, and separate publication clearance.
 
 ## 6. User-instance protection
 
-No application runtime has been created or launched by this setup. Do not infer
-that unrelated desktop processes belong to this project.
+The initial setup created no runtime. Prototype tests now launch their own
+Electron windows with disposable profiles, synthetic media devices, no physical microphone, private mesh import,
+network backend or agent access. Do not infer that unrelated desktop processes
+belong to this project.
 
 Before future runtime changes, identify protected and candidate build paths,
 process ownership, profiles, mutable state, backends, and exclusive resources.

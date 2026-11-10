@@ -8,16 +8,66 @@ Its proposed visual surface is a 3D Context Mesh sphere: active context and
 session paths light up while other relationships remain dimly visible.
 
 **Top priority:** speed/performance by default, with selectable processing
-priorities. Accuracy remains important; these controls are planned, not built.
+priorities. The prototype saves the selection and bounds graph rendering;
+speech/inference profile settings remain unqualified.
 
-**Stage:** architecture and roadmap only, as requested. Wake-word activation and
-Agency-first integration are confirmed requirements. No application, selected
-speech provider, approved desktop stack, or proven live-session connector exists.
+**Stage:** runnable, fixture-only desktop prototype. The owner approved Electron
+for this early UI experiment, including a real transparent Floating Mesh mode.
+It includes a saved microphone-device picker with explicit, brief device checks.
+Wake word, speech recognition, real Context Mesh imports and Agency integration
+are not connected. Synthetic activity is explicitly labelled.
 
 **Engineering recommendation:** Tauri 2 + Rust host, React/TypeScript + Three.js
 UI, native local-speech worker and SQLite jobs. This revises the initial
 Electron recommendation; hardware measurements and Agency/speech proof still
 gate selection.
+
+## Run the prototype
+
+The Windows x64 portable EXE is an **unsigned prototype**, not an installer.
+See [GitHub releases](https://github.com/Zanark/Intercom/releases) for published
+downloads. Windows may show an unknown-publisher/SmartScreen warning; verify
+the release checksum and follow your device's security policy.
+
+Local candidate:
+`C:\devdesk\homedesk\Intercom\release\Intercom-Prototype-0.1.0-prototype.1-win-x64.exe`
+No Node.js installation is needed to run the EXE. First launch extracts the
+bundled Electron runtime; startup speed has not been benchmarked.
+
+From `C:\devdesk\homedesk\Intercom` in PowerShell, with Node.js/npm installed:
+
+```powershell
+npm ci
+npm start
+```
+
+Click **Floating mesh** to hide the panels and window background. Drag the
+upper cap of the mesh to move the window. Hover near its bottom to restore
+the workspace or pin it above other windows. **Escape** restores the workspace;
+**Ctrl+Shift+M** toggles modes while Intercom has focus.
+
+Try **Simulate voice request**, confirm the synthetic target, and watch the
+demo route light up. No real session or terminal starts. Optional result
+speech uses only an available local system voice; it is off by default.
+
+Under **Microphone device**, click **Load microphones**, choose a device, then
+use **Test selected** to check that exact input. Each action briefly opens a
+microphone and immediately stops its tracks; no recording is saved or uploaded.
+The choice survives restart, but never starts listening automatically.
+
+See the [prototype guide](docs/prototype.md) for controls, architecture,
+performance behavior, checks and limitations.
+
+![Intercom synthetic desktop workspace](docs/assets/prototype-workspace.png)
+
+Actual prototype capture: synthetic contexts surround the spherical mesh;
+the right panel exposes microphone selection and explicitly demo-only activity.
+
+![Intercom mesh-only mode with transparent background](docs/assets/prototype-floating.png)
+
+Actual floating-mode capture: the surrounding pixels are transparent, not a
+black desktop background. Hover controls are hidden in this capture; no live
+context reads are represented.
 
 ## Start here
 
@@ -36,17 +86,18 @@ gate selection.
 - [Contributor and agent instructions](AGENTS.md)
 - [Intercom GitHub Project](https://github.com/users/Zanark/projects/13)
 
-The repository uses numbered, evidence-backed workstreams. Product requirements
-and the first vertical slice must be defined before introducing a framework or
-dependencies. There are currently no application build, test, or launch commands.
+The repository uses numbered, evidence-backed workstreams. The owner authorized
+this early fixture-only sub-slice without waiving live connector/speech gates.
+The full voice-to-existing-session loop is not implemented.
 
 ## Development boundaries
 
 Local agent execution does not guarantee offline model processing. Speech
-privacy, permissions, retention, cancellation, and confirmation have proposed
-contracts, not implemented protections. Do not capture audio, start an agent,
-enable session-control services, or build the application under the current
-documentation-only authorization.
+privacy, permissions, retention, cancellation, and confirmation retain proposed
+product contracts. The prototype allows only its own main-frame audio device
+checks; camera/other browser permissions and renderer network requests remain
+denied. It is not the researched durable job/voice runtime. Continuous capture,
+providers, agents and session-control services still need separate authority.
 
 Private session continuity lives in the Git-ignored `.agent-context` directory;
 it is not part of public documentation or release packages.

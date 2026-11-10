@@ -116,3 +116,65 @@ Completion log:
         public documentation changes are local and uncommitted.
       Next: finish owned-store/zmem persistence and checked mesh publication;
         implementation or a later push needs its own authority.
+  2026-11-10 - Research snapshot committed and pushed on explicit request.
+      Action: staged only 19 public research files, used the owner-approved
+        Zanark noreply author/committer identity and authenticated HTTPS helper.
+      Evidence: 20632243c38ae4a2689ffbdb676a2d70ff1c4a96; independent GitHub
+        main-ref read matched the new local commit.
+      Limit: research publication only; no prototype existed at this snapshot.
+  2026-11-10 - Early desktop prototype implemented and verified locally.
+      Action: owner approved Electron for the prototype and requested mesh-only
+        desktop transparency. Built the fixture UI with React/TypeScript/Three.js.
+      Effect: a native transparent floating mesh, reversible workspace, explicit
+        demo routing/confirmation, saved profile selection and honest outcomes.
+      Mechanism: narrow sandboxed preload bridge; fixed sphere slots/instancing;
+        lazy 3D module; on-demand idle rendering, native/browser hidden pause;
+        sequence-bound terminal-state reducer; optional local system speech.
+      Evidence: lint/type/build pass, seven unit cases and four actual Electron
+        scenarios pass. Native captures verify transparent corner pixels and
+        visible graph pixels; full/floating images visually inspected.
+      Corrections: first Electron download exceeded the first test timeout;
+        the installed binary then launched. Replaced nonexistent transparency
+        getter assertions with native pixel capture. Added renderer shortcut
+        fallback for injected keyboard events and native minimized-state
+        propagation because browser document.hidden did not change in that test.
+      Limit: no microphone/wake/ASR/live mesh/Agency/durable jobs or human audio
+        acceptance. Three.js lazy chunk warning and development minimatch
+        advisory remain documented; production audit was rate-limited.
+        Prototype source/build are local, not pushed or released.
+      Next: reconcile the same workstream issues/Project identities, persist
+        owned continuity and refresh Context Mesh; real integration needs proof.
+  2026-11-10 - Prototype workstream/tracking reconciliation completed.
+      Action: compared all six saved research body/state/stage/identity baselines.
+        Updated only #2/#5 descriptions and moved the original #5 item to
+        In Progress; no new workstream, issue or Project item.
+      Evidence: independent full read-back verified all six bodies, original
+        mappings, backlinks, states/stages, visibility and repository linkage.
+        Updated the public conflict hashes only after that verification.
+      Effect: ic-06 IN_PROGRESS truthfully reflects the early fixture subset;
+        all actual integrated-loop acceptance and prerequisites remain open.
+      Limit: prototype publication/release and human acceptance are not claimed.
+  2026-11-11 - Microphone picker and Windows portable candidate verified.
+      Action: owner explicitly requested a published prototype EXE and input-device
+        choice. Added saved selection, explicit brief audio-only checks, exact
+        device constraints, hotplug handling and visible access/storage errors.
+      Mechanism: own-frame host permission checks deny camera/other permissions;
+        every acquired stream stops in finally. No startup listening, recorder,
+        ASR, provider, physical-mic automation or session dispatch was added.
+      Evidence: lint/type/build and seven unit cases pass; all six native
+        scenarios pass against the packaged executable. The portable launcher
+        independently opens its ASAR UI and passes microphone/floating checks
+        with a disposable profile and fake media devices, then exits.
+        Inspected ASAR has seven runtime files; React/React DOM/Scheduler/Three
+        and Electron/Chromium notices included. Private stores, profiles,
+        credentials, test artifacts and node_modules are not in the archive.
+      Artifact: unsigned Windows x64 portable EXE, 110374894 bytes, SHA-256
+        29b7282e592331dfb849143be9e2b9e5a1c4799d7b6415c8aa39607b046953f0.
+      Corrections: awaited device loading before hotplug injection and scoped
+        microphone status locators to avoid the independent mesh-loading status.
+        Fixed a PowerShell command separator before packaged verification.
+      Limit: default Electron icon, first-run extraction, no measured startup/
+        resource budgets, physical-device/voice acceptance, installer or signing.
+        Prerelease upload and remote asset verification are pending.
+      Next: commit/push this verified candidate, publish the requested prerelease,
+        verify source tag/assets, then reconcile existing tracking and continuity.

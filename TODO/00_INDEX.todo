@@ -12,7 +12,7 @@ Tasks:
   ic-02 | IN_PROGRESS | 02_PRODUCT_DECISIONS.todo
   ic-04 | NOT_STARTED | 04_AGENCY_CONNECTOR_PROOF.todo
   ic-05 | NOT_STARTED | 05_SPEECH_AND_WAKE_QUALIFICATION.todo
-  ic-06 | NOT_STARTED | 06_DESKTOP_VOICE_MESH_SLICE.todo
+  ic-06 | IN_PROGRESS | 06_DESKTOP_VOICE_MESH_SLICE.todo
   ic-07 | NOT_STARTED | 07_RELIABILITY_AND_LIFECYCLE.todo
   History | ACTIVE | 03_DEVELOPMENT_LEDGER.todo
 
@@ -22,11 +22,15 @@ Acceptance criteria:
 
 Completion evidence:
   ic-01 foundation is complete locally; Project 13 tracks six issue-backed items.
-  #1 is CLOSED/COMPLETED/Done; #2 OPEN/In Progress; #3 through #6 OPEN/Todo.
-  Full mirrored bodies, states/stages, backlinks and exact inventory read back.
-  ic-02 records the architecture-only voice/wake/Agency/3D-mesh requirements.
+  Verified read-back: #1 CLOSED/COMPLETED/Done; #2 and #5 OPEN/In Progress;
+  #3, #4 and #6 OPEN/Todo. Fresh conflict check and independent complete-body
+  verification preserve all six original issue/item mappings and backlinks.
+  ic-02 records the voice/wake/Agency/3D-mesh requirements and prototype exception.
   ic-04/ic-05 qualification informs remaining ic-02 decisions before ic-06.
-  Future roadmap work is not permission to build, capture audio or run agents.
+  ic-06 has an authorized, locally verified early Electron fixture UI;
+  it does not waive live prerequisites or authorize continuous audio/agent access.
+  A later request authorizes microphone selection/brief device checks and an
+  unsigned Windows portable prerelease; the candidate EXE is locally verified.
   Deep research records technology alternatives, runtime contracts and
   performance evidence in docs; recommendation is not selection/qualification.
 
@@ -36,3 +40,7 @@ Completion log:
   2026-11-10 - Began ic-02 and added gated qualification/implementation roadmap.
   2026-11-10 - Expanded ic-02 research and dependent proof criteria; no new
     workstream identities or changed completion statuses.
+  2026-11-10 - Began the separately authorized fixture-only ic-06 prototype;
+    all Agency/speech/reliability qualification work remains unstarted.
+    Updated only the existing #2/#5 descriptions and #5 Project stage after
+    all six research baselines matched; independent full read-back succeeded.

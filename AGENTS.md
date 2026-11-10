@@ -15,7 +15,12 @@ Sibling context stores are read-only.
 
 - This is a voice-first desktop assistant coordinating existing Agency/Copilot
   sessions, with a spherical 3D Context Mesh activity display.
-- Current user scope is architecture and roadmap only: do not build yet.
+- The owner authorized a bounded desktop prototype after the research push.
+  Electron is approved for this prototype only. The later request authorizes
+  an unsigned Windows prototype prerelease and microphone-device selection/
+  brief checks, not continuous capture, ASR, providers, mesh imports or Agency.
+- Implement Floating Mesh as native window transparency plus a transparent
+  renderer, not a black browser page. Keep movement and restoration accessible.
 - Wake-word activation before each conversation is selected; continuous
   unconditionally active transcription is not.
 - Existing Agency sessions are essential; validate that connector first.
@@ -24,8 +29,8 @@ Sibling context stores are read-only.
   profile. Provide selectable priorities; keep correct targets, permission
   enforcement and truthful outcomes invariant across profiles.
 - Tauri 2/Rust + React/TypeScript/Three.js is the current engineering
-  recommendation, superseding provisional Electron; none is owner-approved
-  or runtime-qualified. Speech models and OS/device support remain gated.
+  product recommendation. Electron is the approved fixture-prototype host,
+  not a qualified performance winner. Speech and OS/device support remain gated.
 - Do not infer integrations or features from the project name.
 - Read `docs/architecture.md`, `docs/speech-options.md`, and `docs/roadmap.md`
   before future implementation. Proposed technology is not user approval.
@@ -54,8 +59,10 @@ not feature issues.
 
 Distinguish planned, implemented, technically verified, human accepted, and
 published. Never fabricate build commands, test results, approval, or deployment.
-No application tests/build tooling exist at initialization; introduce the
-smallest appropriate checks with the first implementation.
+Use `npm run lint`, `npm run build`, `npm test` and `npm run test:desktop`
+for the prototype. Desktop tests launch only disposable app profiles.
+Use `npm run package:win` for the unsigned portable build. Tests use synthetic
+Chromium media devices, never the user's physical microphone.
 
 Keep the README honest about the current product. Explain actual architecture,
 algorithms, and design principles as implementation appears; do not generate

@@ -5,6 +5,14 @@ documentation-only design, not installed dependencies, measured winners or
 owner acceptance. Evidence identifiers refer to [primary sources](research-sources.md).
 The [runtime contracts](runtime-contracts.md) define how these parts fit together.
 
+**Subsequent prototype decision:** the owner approved Electron for the first
+fixture-only desktop prototype, including transparent Floating Mesh mode.
+Rust was not installed in the current environment. This avoids a system
+toolchain install for the UI experiment; it does not demonstrate Electron's
+performance superiority or replace the product recommendation below.
+Actual prototype dependencies are pinned in `package-lock.json`; see the
+[prototype guide](prototype.md) for implemented scope and limits.
+
 ## 1. Recommended baseline
 
 | Layer | Pick for the first qualification candidate | Why / remaining gate |

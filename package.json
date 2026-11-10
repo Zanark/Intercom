@@ -1,0 +1,64 @@
+{
+  "name": "intercom-prototype",
+  "version": "0.1.0-prototype.1",
+  "private": true,
+  "description": "Fixture-only voice-workspace and transparent desktop mesh prototype",
+  "author": "Zanark",
+  "license": "UNLICENSED",
+  "repository": "https://github.com/Zanark/Intercom.git",
+  "type": "module",
+  "main": "desktop/main.cjs",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc --noEmit && vite build",
+    "start": "npm run build && electron .",
+    "desktop": "electron .",
+    "test": "vitest run",
+    "test:desktop": "node -p \"require('electron')\" && playwright test",
+    "test:portable": "node tests\\portable-smoke.cjs",
+    "package:win": "npm run build && electron-builder --win portable --x64 --publish never",
+    "lint": "eslint . --max-warnings 0"
+  },
+  "dependencies": {
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "three": "0.187.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@playwright/test": "1.64.1",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@types/three": "0.187.0",
+    "@vitejs/plugin-react": "6.2.1",
+    "electron": "45.2.1",
+    "electron-builder": "26.18.0",
+    "eslint": "10.14.0",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "globals": "17.14.0",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.72.1",
+    "vite": "8.3.5",
+    "vitest": "5.1.0"
+  },
+  "build": {
+    "appId": "io.github.zanark.intercom.prototype",
+    "productName": "Intercom Prototype",
+    "asar": true,
+    "npmRebuild": false,
+    "directories": { "output": "release" },
+    "files": ["dist/**/*", "desktop/*.cjs", "package.json", "!node_modules/**/*"],
+    "extraFiles": [
+      { "from": "node_modules/react/LICENSE", "to": "licenses/react.txt" },
+      { "from": "node_modules/react-dom/LICENSE", "to": "licenses/react-dom.txt" },
+      { "from": "node_modules/scheduler/LICENSE", "to": "licenses/scheduler.txt" },
+      { "from": "node_modules/three/LICENSE", "to": "licenses/three.txt" }
+    ],
+    "win": {
+      "target": "portable",
+      "executableName": "IntercomPrototype",
+      "signAndEditExecutable": false,
+      "artifactName": "Intercom-Prototype-${version}-win-${arch}.${ext}"
+    }
+  }
+}

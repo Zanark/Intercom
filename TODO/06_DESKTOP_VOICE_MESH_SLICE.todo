@@ -2,20 +2,30 @@ Intercom first desktop voice and context-mesh slice
 
 Workstream ID: ic-06
 GitHub issue: https://github.com/Zanark/Intercom/issues/5
-Status: NOT_STARTED
+Status: IN_PROGRESS
 Milestone: One observable voice-to-existing-session-to-spoken-result loop
 Dependencies: ic-02, ic-04, ic-05
 
 Purpose:
   Implement the bounded desktop experience only after separate authorization
   and qualification. Tauri 2/Rust + React/TypeScript/Three.js is now the
-  engineering candidate, superseding provisional Electron, not owner approval.
+  product candidate. The owner separately authorized an early fixture-only
+  Electron UI, including transparent Floating Mesh, before the live prerequisites.
+  Dependencies remain required for the real voice-to-existing-session loop.
 
 Tasks:
-  [ ] Obtain implementation authority and finalize stack/dependency choices.
+  [x] Obtain authority and explicit Electron selection for the fixture prototype.
+  [x] Build the isolated synthetic UI and real transparent Floating Mesh mode.
+  [x] Add saved profile selection, request snapshots and bounded graph rendering.
+  [x] Add explicit demo confirmation, ambiguity, cancellation and honest outcomes.
+  [x] Verify native transparency/restoration, idle/minimized behavior and WebGL loss.
+  [x] Add saved microphone choice, explicit brief checks and visible access/device errors.
+  [x] Package and verify an unsigned Windows x64 portable EXE on disposable profiles.
+  [ ] Publish the requested prototype prerelease and independently verify its assets.
+  [ ] Finalize the product stack/dependencies from the live qualification receipts.
   [ ] Build an isolated desktop host, audio controls and selected speech pipeline.
   [ ] Constrain native commands and implement versioned bounded IPC contracts.
-  [ ] Add selectable priorities with Speed/performance default and saved choice.
+  [ ] Connect qualified inference/speech settings to the selectable profiles.
   [ ] Route finalized utterances with explicit context/session identity.
   [ ] Implement terminal handoff and approved background dispatch.
   [ ] Render a spherical mesh with observed activity and unknown-coverage states.
@@ -36,9 +46,39 @@ Acceptance criteria:
   follow docs/runtime-contracts.md; browser mocks are not native-app evidence.
 
 Completion evidence:
-  None. No application, dependency manifest, runtime, preview or installer exists.
+  Fixture sub-slice: Electron 45.2.1, React/TypeScript/Vite and Three.js; exact
+  dependency lock, local build and launch commands in README/docs/prototype.md.
+  npm run lint and npm run build pass; seven Vitest cases and six Playwright
+  desktop scenarios pass. Actual Electron captures have alpha-zero corner
+  pixels and visible mesh pixels; both workspace/floating screenshots inspected.
+  Mode toggling, original bounds, hover/keyboard restoration, pinning, sandbox/
+  context isolation, narrow preload actions, profile snapshots/persistence,
+  explicit targets, terminal cancellation, honest completion, WebGL loss and
+  idle/minimized frame scheduling are covered using disposable profiles.
+  Native minimize/show events supplement browser visibility for rendering pause.
+  Local system-voice output is optional/off by default; no listening assessment.
+  Added exact-device selection/persistence, immediate track cleanup, camera
+  denial, missing-device and access/enumeration failure checks using fake media.
+  All six scenarios pass against the packaged executable. The portable EXE
+  itself separately passes startup, ASAR UI, microphone check and floating
+  restoration. Its inspected archive has seven runtime files; notices included,
+  private stores/profiles/credentials/tests excluded. EXE is unsigned, x64 only.
+  Prerelease publication is pending. No continuous microphone input, wake word,
+  mesh import, Agency session, terminal dispatch, durable jobs, installer or
+  human acceptance. Live criteria remain open.
+  Known limits: lazy 3D chunk warning; moderate minimatch development-tool
+  advisory; production-only dependency audit rate-limited. No clean audit claim.
 
 Completion log:
   2026-11-10 - Recorded as gated future work, not authorized implementation.
   2026-11-10 - Reconciled the researched shell recommendation and native boundary;
     current deliverables remain documents, not a scaffold or runtime.
+  2026-11-10 - Owner requested a prototype after the research push and explicitly
+    selected Electron instead of installing native Rust prerequisites.
+    Implemented and locally verified the early synthetic UI, including native
+    transparent mesh-only mode. This is not completion of the full workstream
+    or evidence that ic-02/ic-04/ic-05 prerequisites passed.
+  2026-11-10 - Owner requested a published prototype EXE and microphone choice.
+    Implemented explicit selection/brief checks, packaged the unsigned portable
+    candidate and verified fake-device behavior plus the actual portable launcher.
+    No physical microphone, speech recognition or existing Agency session tested.
