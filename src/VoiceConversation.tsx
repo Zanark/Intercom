@@ -120,7 +120,10 @@ export function VoiceConversation({ onRecordingChange, onWorkRequest }: {
       const result = await window.intercom!.transcribeVoice(id, wave);
       if (active.current !== id) return;
       setText(result.text);
-      if (autoSend && canSend) await send(result.text, id);
+      if (result.reviewRequired) setWarning(result.text.length > 1000
+        ? `Recognized ${result.text.length} characters. The request limit is 1,000; shorten the transcript below before sending. Nothing was sent.`
+        : 'Windows English (US) recognition has low confidence. Your transcript is preserved below; review or edit it, then send explicitly. Nothing was sent.');
+      if (autoSend && canSend && !result.reviewRequired) await send(result.text, id);
     } catch (reason) { if (active.current === id) setError(report(reason)); }
     finally { if (active.current === id) { active.current = null; setPhase('idle'); } }
   }
@@ -189,13 +192,14 @@ export function VoiceConversation({ onRecordingChange, onWorkRequest }: {
     <form onSubmit={(event) => {
       event.preventDefault();
       if (active.current || (delivery === 'chat' && !connected) || !text.trim()) return;
+      if (text.trim().length > 1000) { setError('Shorten the transcript to 1,000 characters or fewer before sending. Nothing was sent.'); return; }
       const id = crypto.randomUUID(); active.current = id; setError(''); setWarning(''); setAnswer('');
       void send(text.trim(), id).catch((reason: unknown) => { if (active.current === id) setError(report(reason)); })
         .finally(() => { if (active.current === id) { active.current = null; setPhase('idle'); } });
     }}>
       <label htmlFor="voice-transcript">Transcript / typed fallback</label>
       <textarea id="voice-transcript" maxLength={1000} value={text} disabled={busy} onChange={(event) => setText(event.target.value)} placeholder="Try: Say hello world." />
-      <button className="quiet-button" disabled={busy || (delivery === 'chat' && !connected) || !text.trim()} type="submit">{delivery === 'chat' ? 'Send text to Copilot' : 'Prepare work from text'}</button>
+      <button className="quiet-button" disabled={busy || (delivery === 'chat' && !connected) || !text.trim() || text.trim().length > 1000} type="submit">{delivery === 'chat' ? 'Send text to Copilot' : 'Prepare work from text'}</button>
     </form>
     <label className="voice-toggle"><input type="checkbox" checked={voice} onChange={(event) => { setVoice(event.target.checked); if (!event.target.checked) void stopSpeech().catch((reason: unknown) => setWarning(report(reason))); }} />Speak progress and responses (local Windows voice)</label>
     <button className="quiet-button" disabled={!speaking} onClick={() => void stopSpeech().catch((reason: unknown) => setWarning(report(reason)))}>Stop voice playback</button>

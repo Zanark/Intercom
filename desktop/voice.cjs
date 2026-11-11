@@ -208,9 +208,11 @@ class VoiceHost {
     const input = waveBytes(audio);
     return this.exclusive(id, async (work) => {
       const result = JSON.parse(await this.process(work, 'powershell.exe', await this.speechCommand(), { input, mode: 'recognize' }));
-      if (typeof result.text !== 'string' || !result.text.trim() || result.text.length > 1000 ||
-          !Number.isFinite(result.confidence) || result.confidence < 0.35) throw new Error('Speech was unclear or too long. Nothing was sent. Try again or type the request.');
-      return result;
+      if (typeof result?.text !== 'string' || !result.text.trim()) throw new Error('No English (US) speech was recognized. Nothing was sent. Check the input meter and try again.');
+      if (result.text.length > 10000) throw new Error('Recognition returned more than 10,000 characters, exceeding the supported transcript size. Nothing was sent.');
+      if (!Number.isFinite(result.confidence) || result.confidence < 0 || result.confidence > 1) throw new Error('Local recognition returned an invalid confidence score. Nothing was sent.');
+      const text = result.text.trim();
+      return { text, confidence: result.confidence, reviewRequired: result.confidence < 0.35 || text.length > 1000 };
     });
   }
 

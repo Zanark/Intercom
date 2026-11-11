@@ -14,6 +14,16 @@ priorities. Neither local nor cloud speech is presumed faster without evidence.
 
 ## Prototype voice profiles and the required future engine
 
+Recognition and speaking-voice settings are independent. In the .9 candidate,
+Windows en-US recognition below 0.35 confidence returns editable text marked
+for explicit review, never automatic dispatch or work preparation. Confidence
+remains the minimum across recognized phrases; the threshold is not lowered.
+Transcripts over the 1,000-character request limit are retained up to a bounded
+10,000-character result, but require manual shortening. Nothing is silently
+truncated or split. Empty text and invalid confidence produce distinct errors.
+This recovers uncertain results; it does not qualify human recognition accuracy
+or introduce another recognition language/provider.
+
 The owner selected **installed local voices for the prototype**, but made
 **arbitrary voice identity, timbre and emotional style mandatory future
 requirements**, not optional polish. Those richer controls are not supplied

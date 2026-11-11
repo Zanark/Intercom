@@ -48,7 +48,7 @@ interface Window {
     deleteVoiceProfile(id: string): Promise<SpeakingProfiles>;
     previewVoice(text: string, profile: SpeakingProfile): Promise<void>;
     configureVoiceSession(id: string, sessionId: string): Promise<{ sessionId: string; workspace: string }>;
-    transcribeVoice(id: string, wave: ArrayBuffer): Promise<{ text: string; confidence: number }>;
+    transcribeVoice(id: string, wave: ArrayBuffer): Promise<{ text: string; confidence: number; reviewRequired: boolean }>;
     sendVoicePrompt(id: string, text: string): Promise<{ requestId: string; sessionId: string; text: string; warning?: string }>;
     cancelVoice(id: string): Promise<void>;
     speakVoice(text: string): Promise<void>;

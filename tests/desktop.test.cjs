@@ -594,7 +594,8 @@ test('microphone denial and enumeration failure are visible and acquired tracks 
   expect(await page.evaluate(() => window.__microphoneTracks.every((track) => track.readyState === 'ended'))).toBe(true);
 });
 
-  async function prepareVoiceMock({ delayed = false, recognitionError = false, connect = true } = {}) {
+  async function prepareVoiceMock({ delayed = false, recognitionError = false, connect = true,
+    recognition = { text: 'Say hello world.', confidence: 0.9, reviewRequired: false } } = {}) {
     await page.getByRole('button', { name: 'Use live voice', exact: true }).click();
     await application.evaluate(({ ipcMain }, options) => {
       globalThis.__voiceReceipt = { sent: [], recordings: [], cancelled: [] };
@@ -604,7 +605,7 @@ test('microphone denial and enumeration failure are visible and acquired tracks 
         if (options.recognitionError) throw new Error('No English speech was recognized.');
         const view = new DataView(buffer);
         globalThis.__voiceReceipt.recordings.push({ id, bytes: buffer.byteLength, rate: view.getUint32(24, true), pcm: view.getUint16(20, true) });
-        return { text: 'Say hello world.', confidence: 0.9 };
+        return options.recognition;
       });
       ipcMain.handle('voice:send', (event, id, text) => {
         globalThis.__voiceReceipt.sent.push({ id, text });
@@ -615,7 +616,7 @@ test('microphone denial and enumeration failure are visible and acquired tracks 
       ipcMain.handle('voice:cancel', (_event, id) => { globalThis.__voiceReceipt.cancelled.push(id); });
       ipcMain.handle('voice:speak', () => {});
       ipcMain.handle('voice:stop-speech', () => {});
-    }, { delayed, recognitionError });
+    }, { delayed, recognitionError, recognition });
     await page.getByLabel('Speak progress and responses (local Windows voice)').uncheck();
     if (connect) {
       await page.getByLabel('Existing session ID', { exact: true }).fill('11111111-1111-4111-8111-111111111111');
@@ -669,6 +670,53 @@ test('selected microphone records and transcribes without a connected session, p
   await page.getByRole('button', { name: 'Send text to Copilot', exact: true }).click();
   await expect(page.locator('.live-result')).toContainText('Hello world.');
   expect(await application.evaluate(() => globalThis.__voiceReceipt.sent.map((entry) => entry.text))).toEqual(['Say hello world.']);
+});
+
+for (const delivery of ['chat', 'background', 'terminal']) {
+  test(`low-confidence speech in ${delivery} is retained for review and never automatically sent`, async () => {
+    await prepareVoiceMock({ connect: delivery === 'chat',
+      recognition: { text: 'Please review these uncertain words.', confidence: 0.2, reviewRequired: true } });
+    await page.getByLabel('Voice request destination').selectOption(delivery);
+    await page.getByRole('button', { name: 'Speak', exact: true }).click();
+    await expect(page.getByRole('button', { name: 'Stop & send', exact: true })).toBeVisible();
+    await page.waitForTimeout(650);
+    await page.getByRole('button', { name: 'Stop & send', exact: true }).click();
+    await expect(page.getByLabel('Transcript / typed fallback')).toHaveValue('Please review these uncertain words.');
+    await expect(page.getByRole('alert')).toContainText('low confidence');
+    const send = page.getByRole('button', { name: delivery === 'chat' ? 'Send text to Copilot' : 'Prepare work from text', exact: true });
+    await expect(send).toBeEnabled();
+    expect(await application.evaluate(() => globalThis.__voiceReceipt.sent)).toEqual([]);
+    await expect(page.getByLabel('Confirmed task', { exact: true })).toHaveValue('');
+    await page.getByLabel('Transcript / typed fallback').fill('Corrected request.');
+    await send.click();
+    if (delivery === 'chat') {
+      await expect(page.locator('.live-result')).toContainText('Hello world.');
+      expect(await application.evaluate(() => globalThis.__voiceReceipt.sent.map((entry) => entry.text))).toEqual(['Corrected request.']);
+    } else {
+      await expect(page.getByLabel('Confirmed task', { exact: true })).toHaveValue('Corrected request.');
+      expect(await application.evaluate(() => globalThis.__voiceReceipt.sent)).toEqual([]);
+      await expect(page.getByRole('region', { name: 'Real work confirmation' })).toHaveCount(0);
+    }
+  });
+}
+
+test('over-limit speech stays intact and cannot be sent until explicitly shortened', async () => {
+  const text = 'A longer recognized request. '.repeat(50);
+  await prepareVoiceMock({ recognition: { text, confidence: 0.9, reviewRequired: true } });
+  await page.getByRole('button', { name: 'Speak', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Stop & send', exact: true })).toBeVisible();
+  await page.waitForTimeout(650);
+  await page.getByRole('button', { name: 'Stop & send', exact: true }).click();
+  await expect(page.getByLabel('Transcript / typed fallback')).toHaveValue(text);
+  await expect(page.getByRole('alert')).toContainText('shorten the transcript');
+  await expect(page.getByRole('button', { name: 'Send text to Copilot', exact: true })).toBeDisabled();
+  expect(await application.evaluate(() => globalThis.__voiceReceipt.sent)).toEqual([]);
+  await page.getByLabel('Transcript / typed fallback').fill('Shortened request.');
+  await expect(page.getByRole('button', { name: 'Send text to Copilot', exact: true })).toBeEnabled();
+  expect(await application.evaluate(() => globalThis.__voiceReceipt.sent)).toEqual([]);
+  await page.getByRole('button', { name: 'Send text to Copilot', exact: true }).click();
+  await expect(page.locator('.live-result')).toContainText('Hello world.');
+  expect(await application.evaluate(() => globalThis.__voiceReceipt.sent.map((entry) => entry.text))).toEqual(['Shortened request.']);
 });
 
 test('microphone recording denial without a session stays visible and allows a clean retry', async () => {

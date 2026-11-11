@@ -1,5 +1,39 @@
 # Desktop prototype
 
+## Local recognition-review candidate: 0.1.0-prototype.9
+
+Unsigned Windows x64 portable:
+`C:\devdesk\homedesk\Intercom\release\recognition-review-candidate\Intercom-Prototype-0.1.0-prototype.9-win-x64.exe`
+
+110,678,507 bytes; SHA-256:
+`d3afca6b3f9a828538959f1f7c1ae23f69d747b72278657f8aeb5bf48689e402`.
+The sibling `SHA256SUMS.txt` records the checksum. This separate local candidate
+includes the .8 microphone fix; neither an already-running instance nor the
+published .7 release is updated automatically.
+
+The previous "Speech was unclear or too long" error combined different causes
+and discarded reviewable text. Recognition below 0.35 confidence now retains the
+transcript with an explicit review warning, never automatically sending chat
+or preparing background/terminal work. Review/edit, then click **Send text to
+Copilot** or **Prepare work from text**. Work still requires its separate exact
+target/task confirmation. A transcript over 1,000 characters is retained, but
+must be shortened manually before sending; nothing is truncated or split.
+Results are bounded at 10,000 characters. Missing speech and invalid confidence
+have distinct errors. The English-US recognizer, minimum-phrase confidence and
+threshold are unchanged: this improves recovery, not recognition accuracy.
+The owner's reported message alone does not establish which condition occurred.
+
+Lint/type/build, 17 native voice cases and eight focused packaged desktop cases
+pass. The latter cover low-confidence review in all three destinations,
+over-limit retention/manual shortening, session-independent recording, normal
+connected capture, failure and explicit review/cleanup. Native tests include
+synthetic English recognition; UI backend dispatch is mocked. Actual portable
+startup passes synthetic capture/meter/cancellation, real mesh, voice-profile
+persistence and window controls. All 16 runtime files/metadata match source;
+notices/private exclusions pass. Earlier .4-.8 artifacts remain unchanged.
+No live Copilot prompt, audible preview, user-app restart or new public release.
+Physical FDUCE/human speech and listening acceptance remain open.
+
 ## Local microphone-fix candidate: 0.1.0-prototype.8
 
 Unsigned Windows x64 portable:

@@ -58,6 +58,9 @@ Tasks:
   [x] Allow microphone recording/transcription independently of session connection.
   [x] Retain disconnected transcripts, guard sending and truthfully label stopping.
   [x] Verify a separate .8 microphone-fix EXE without replacing running/.7 builds.
+  [x] Preserve uncertain recognition for explicit review in every destination.
+  [x] Retain over-limit transcripts, block dispatch and require manual shortening.
+  [x] Qualify a separate .9 review candidate without replacing .7/.8 or user app.
   [ ] Add the required future arbitrary identity, timbre and emotional-style engine.
   [ ] Qualify native permission prompting on a target without saved grants.
   [ ] Qualify manual terminal opening and any future acknowledged automatic handoff.
@@ -275,7 +278,30 @@ Completion evidence:
   private stores/tests excluded. .4/.5/.6/.7 artifacts preserved. Physical
   FDUCE/human speech remains unqualified. No live prompt, release or app restart.
 
+  Recognition-review sub-slice: the prior combined confidence/length error
+  discarded recognized text. Confidence below 0.35 now preserves editable text
+  and requires explicit send/preparation in chat, background and terminal modes.
+  Over-1000-character text stays intact up to a bounded 10000-character result;
+  sending remains blocked until manually shortened. Missing speech, oversized
+  results and invalid confidence have distinct errors. No truncation, splitting,
+  lower threshold, confidence averaging or recognition-language/provider change.
+  Lint/type/build, 17 native voice cases and eight focused packaged desktop cases
+  pass, including all three destinations and normal capture/review/failure.
+  Actual portable startup verifies synthetic microphone signal/cancel, real
+  mesh, voice-profile persistence and native window/graph controls.
+  Local unsigned .9: release\recognition-review-candidate,
+  Intercom-Prototype-0.1.0-prototype.9-win-x64.exe, 110678507 bytes, SHA-256
+  d3afca6b3f9a828538959f1f7c1ae23f69d747b72278657f8aeb5bf48689e402.
+  Sixteen runtime files/metadata match source; notices/private exclusions and
+  earlier .4-.8 artifact hashes pass. The reported error alone does not identify
+  the owner's rejection cause. Recovery is improved, not ASR accuracy.
+  Physical FDUCE/human acceptance remains open. Published .7 and user's app
+  untouched; no real prompt, audible preview, new release or provider download.
+
 Completion log:
+  2026-11-11 - Preserved uncertain/over-limit recognition for explicit review,
+    retaining automatic-dispatch safeguards. Qualified separate .9 portable
+    and all three destinations; no replacement of the user's running build.
   2026-11-11 - Fixed session-gated Speak and retained local transcripts until
     explicit dispatch. Qualified a separate .8 portable candidate, preserving
     the published .7 artifact and user-owned running instance.

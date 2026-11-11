@@ -19,6 +19,27 @@ Completion evidence:
   This ledger is ongoing, not a finite feature deliverable.
 
 Completion log:
+  2026-11-11 - Recovered uncertain and over-limit speech instead of discarding it.
+    Cause: the generic host error combined empty text, length and confidence
+      rejection. The owner's message does not establish which condition occurred.
+    Action: retain low-confidence text for explicit review in every destination;
+      preserve over-limit text up to 10000 characters and require shortening to
+      1000 before sending. Distinct missing/invalid/oversized-result errors.
+      Keep the existing .35 threshold, conservative minimum phrase confidence,
+      English-US recognizer and separate work confirmation. No silent splitting.
+    Evidence: lint/type/build, 17 native voice cases and eight focused packaged
+      cases pass; low-confidence chat/background/terminal never auto-dispatch or
+      auto-prepare work. Explicit corrected text sends once or only populates
+      the unconfirmed task. Actual portable synthetic capture/cancel, real mesh,
+      voice persistence and window controls pass. Sixteen runtime files/metadata,
+      notices/private exclusions and .4-.8 preservation hashes verified.
+    Artifact: local unsigned .9 under release\recognition-review-candidate;
+      110678507 bytes, SHA-256
+      d3afca6b3f9a828538959f1f7c1ae23f69d747b72278657f8aeb5bf48689e402.
+    Limits: recovery, not improved recognition accuracy. Physical FDUCE/human
+      listening unverified; no live prompt, audible preview, provider download,
+      new release or interference with the user's existing application.
+    Next: user elects the corrected candidate and reviews actual human input.
   2026-11-11 - Fixed microphone recording incorrectly gated by chat connection.
     Cause: the Speak button inherited !connected although native transcription
       has no session dependency. A successful device-access test therefore left

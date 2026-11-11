@@ -70,6 +70,35 @@ test('bounds and validates canonical PCM audio before starting recognition', () 
   assert.throws(() => waveBytes(stereo), /mono/);
   assert.throws(() => waveBytes(wave(Buffer.alloc(16000 * 2 * 62))), /one-minute/);
 });
+test('recognition preserves uncertain text for review without relaxing automatic-send confidence', async () => {
+  const host = new VoiceHost(os.tmpdir(), () => {});
+  for (const confidence of [0, 0.349, 0.35, 0.9]) {
+    host.process = async () => JSON.stringify({ text: '  Review this recognized request.  ', confidence });
+    assert.deepEqual(await host.transcribe(id, wave()), {
+      text: 'Review this recognized request.', confidence, reviewRequired: confidence < 0.35,
+    });
+  }
+});
+test('recognition retains a full over-limit transcript for shortening instead of discarding or splitting it', async () => {
+  const host = new VoiceHost(os.tmpdir(), () => {});
+  const text = 'x'.repeat(1001);
+  host.process = async () => JSON.stringify({ text, confidence: 0.9 });
+  assert.deepEqual(await host.transcribe(id, wave()), { text, confidence: 0.9, reviewRequired: true });
+  host.process = async () => JSON.stringify({ text: 'x'.repeat(10001), confidence: 0.9 });
+  await assert.rejects(host.transcribe(id, wave()), /supported transcript size/);
+});
+test('recognition distinguishes missing speech and invalid confidence from reviewable uncertainty', async () => {
+  const host = new VoiceHost(os.tmpdir(), () => {});
+  for (const result of [null, { text: ' ', confidence: 0.9 }]) {
+    host.process = async () => JSON.stringify(result);
+    await assert.rejects(host.transcribe(id, wave()), /No English \(US\) speech/);
+  }
+  for (const confidence of [null, -0.1, 1.1, '0.9']) {
+    host.process = async () => JSON.stringify({ text: 'A request.', confidence });
+    await assert.rejects(host.transcribe(id, wave()), /invalid confidence/);
+  }
+  assert.equal(host.work, null);
+});
 test('duplicate host work is rejected and cancellation does not affect a different request', async () => {
   const host = new VoiceHost(os.tmpdir(), () => {});
   let release;

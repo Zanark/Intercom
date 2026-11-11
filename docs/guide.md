@@ -94,7 +94,7 @@ open node label first (source checkout), otherwise restores the workspace;
 Hover reveals graph zoom/reset controls too. Returning from a maximized
 workspace restores maximization and retains its previous normal-window bounds.
 
-**Local .8 candidate/current checkout:** click **Load microphones**, select FDUCE
+**Local .8 and newer candidates/current checkout:** click **Load microphones**, select FDUCE
 (or your preferred input), optionally **Test selected**, then **Speak**. The meter
 shows the selected input while recording. No Copilot connection is needed for
 recording or local transcription. Click **Stop & transcribe** to retain an
@@ -112,6 +112,15 @@ or credentials ship in the EXE. Subsequent recordings with a connected session
 and automatic sending enabled use **Stop & send** and read the returned answer.
 Disable automatic sending to review/edit before sending. Typed fallback remains
 available.
+
+**Local .9 candidate/current checkout:** low-confidence recognition preserves
+the transcript for review instead of discarding it. Nothing is automatically
+sent or proposed in any destination; review/edit, then explicitly send or prepare
+work. Transcripts over 1,000 characters remain intact but must be shortened
+before sending. There is no automatic truncation or splitting. Empty recognition
+still gives a distinct error. This improves recovery, not recognition accuracy;
+the engine remains Windows English (US), regardless of the speaking-voice profile.
+See the [separate recognition-review candidate](prototype.md#local-recognition-review-candidate-010-prototype9).
 
 English (US) Windows speech recognition and an installed English voice are
 required; nothing is downloaded. Audio stays in memory and is not uploaded.

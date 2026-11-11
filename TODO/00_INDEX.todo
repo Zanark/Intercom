@@ -88,7 +88,15 @@ Completion evidence:
   cancellation pass using synthetic input. Published .7 and user app untouched.
   Broader physical-device/human/performance criteria remain open.
 
+  ic-06 recognition-review fix retains low-confidence and over-limit text,
+  requires explicit review/shortening and prevents automatic dispatch/work
+  preparation in every destination. Separate unsigned .9 candidate passes
+  native, focused packaged and actual portable checks; .7/.8 remain unchanged.
+  Recognition accuracy and physical FDUCE/human acceptance remain unqualified.
+
 Completion log:
+  2026-11-11 - Recorded bounded speech-result recovery and separate .9 candidate;
+    no new recognition provider, public release or user-instance restart.
   2026-11-11 - Recorded the session-independent microphone fix and local .8
     candidate in ic-06; no release or running-instance replacement.
   2026-11-11 - Recorded the bounded node-inspection source milestone in ic-06;
