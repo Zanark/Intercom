@@ -19,6 +19,28 @@ Completion evidence:
   This ledger is ongoing, not a finite feature deliverable.
 
 Completion log:
+  2026-11-11 - Prototype .7 published on explicit owner request.
+    Action: reviewed/staged 56 intended public files, committed with verified
+      Zanark identity and required trailers, atomically pushed main/new tag,
+      uploaded a draft and published only after both asset digests matched.
+    Source: 3147d492574980f6c89cc8e9a32920efb859f253;
+      annotated tag v0.1.0-prototype.7 remains at this qualified source.
+    Release: https://github.com/Zanark/Intercom/releases/tag/v0.1.0-prototype.7
+      release ID 441082947; published 2026-11-11T00:17:46Z;
+      independently confirmed nondraft/prerelease flags.
+    Artifact: Intercom-Prototype-0.1.0-prototype.7-win-x64.exe,
+      asset ID 733479974, 110684564 bytes, SHA-256
+      2ce4c5d70bdbfd29de7304462a3f0449e73ab2c79ff5617ea76448d00413df03.
+      SHA256SUMS.txt asset ID 733479769, 115 bytes, SHA-256
+      070bc2ba1a9a2b83cc9f1db6b1f36c1c0816f50e047a26a665d51c96b599405c.
+    Evidence: anonymous public EXE/checksum downloads match the qualified local
+      bytes. Prior .1 release ID, asset IDs, sizes and digests remain unchanged.
+      Runtime/source archive qualification was repeated before committing;
+      documentation-only release receipts require no runtime rebuild.
+    Limits: unsigned; no new real Copilot prompt, audible test, user-app switch
+      or claim of human/device/permission/speed acceptance. ic-06 stays open.
+    Next: user acceptance and existing product gates; retain separate source-tag
+      and post-publication receipt commits, without moving the release tag.
   2026-11-11 - Extensible local voice profiles qualified.
     Action: added named installed-voice profiles, gender/culture selection,
       pitch/rate/volume, unsaved preview, save/use/rename/duplicate and deletion.

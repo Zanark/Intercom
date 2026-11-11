@@ -11,6 +11,15 @@ Size: 110,684,564 bytes. SHA-256:
 The sibling `SHA256SUMS.txt` records the checksum. Prior .1/.2/.3/.4/.5/.6 builds
 remain untouched; the .7 release serves this exact qualified package.
 
+Publication verified on 2026-11-11: release ID `441082947`, nondraft/prerelease,
+published `2026-11-11T00:17:46Z`. The annotated tag points to source
+`3147d492574980f6c89cc8e9a32920efb859f253`. EXE asset `733479974` and checksum
+asset `733479769` were independently downloaded anonymously; both match the
+qualified local bytes. The 115-byte checksum file has SHA-256
+`070bc2ba1a9a2b83cc9f1db6b1f36c1c0816f50e047a26a665d51c96b599405c`.
+The .1 release/asset IDs, sizes and digests remain unchanged. The source tag
+stays fixed; the subsequent main-branch receipt commit records publication.
+
 The .7 changes add persistent customizable installed-voice profiles and an
 extensible synthesis-provider boundary. The .6 floating movement/sizing and .5
 graph navigation/maximize controls remain available. The .4

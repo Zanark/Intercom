@@ -65,9 +65,13 @@ Completion evidence:
   draft preview and atomic persistence, with a cancellable provider boundary.
   Richer arbitrary identity/timbre/emotion remain mandatory future requirements.
   All 17 packaged cases and actual portable startup/profile persistence pass.
-  Prior builds remain preserved; .7 is unsigned/local/unpublished.
+  Prior builds remain preserved. The unsigned .7 prerelease is now published
+  from source 3147d492574980f6c89cc8e9a32920efb859f253; independent anonymous
+  downloads match the qualified EXE/checksum. Broader acceptance stays open.
 
 Completion log:
+  2026-11-11 - Published requested v0.1.0-prototype.7 with EXE/checksum, verified
+    public bytes and preserved .1 release identities/digests; ic-06 stays open.
   2026-11-11 - Recorded customizable voice profiles, engine boundary and separate
     .7 qualification in ic-06; retained open rich-speech/product acceptance gates.
   2026-11-11 - Recorded visible floating movement/sizing and separate .6

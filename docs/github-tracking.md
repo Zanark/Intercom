@@ -213,7 +213,7 @@ exact read-back; never refresh them merely to hide a remote edit.
 | ic-02 | `5052eecad889f461eb541ff12f429241b6bd07b07712979d34d409aae20e3866` |
 | ic-04 | `5bdd0a9f6e12305f519617ed05d0614e44bdf8a464c2fb4a4a8b69b467abfd20` |
 | ic-05 | `e134e21309fa9c29ff867363f542a00447b02914479b99c23ced0300fa2f2e75` |
-| ic-06 | `5c8346c4e088dfeb7f4a5b271089331bd6f11a88eb90b808c3bc4bb0c100cd34` |
+| ic-06 | `8af42eee8e72f106a960eed8cef72f3ac3bdf3d81cc5576d340a7693c8189184` |
 | ic-07 | `072c0916f6106438b8f32e2ae02415645056015a3049f36f12ec4cfca281fe33` |
 
 These reconciliations used the same saved issue/item identities on
@@ -226,3 +226,11 @@ verified all six identities, backlinks, issue states, Project statuses/membershi
 and private visibility. No new issue/item, state/stage change or publication.
 Local installed voices and native/profile checks are implemented; the required
 richer synthesis engine and human/performance acceptance remain explicitly open.
+
+The subsequent owner-authorized .7 publication reconciliation matched all six
+voice-profile baselines before updating only existing #5's description with the
+verified source/tag, release and anonymous-download receipts. Independent
+complete-body read-back verified all six backlinks, issue/item identities,
+states, Project stages/membership and private visibility. No new issue/item or
+completion/state change. The release tag remains at the qualified source;
+the separate receipt-doc commit does not move it or replace either release.
