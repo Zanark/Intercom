@@ -38,15 +38,19 @@ jobs:
       - name: Lint
         run: npm run lint
       - name: Type-check and build
+        id: build
         run: npm run build
       - name: Renderer and domain tests
         run: npm test
       - name: Native voice tests
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: npm run test:voice
       - name: Mesh and work host tests
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: npm run test:host
       - name: Disposable Electron desktop tests
         id: desktop
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: npm run test:desktop
       - name: Upload synthetic desktop failure evidence
         if: failure() && steps.desktop.outcome == 'failure'

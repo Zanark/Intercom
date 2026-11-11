@@ -19,6 +19,17 @@ Completion evidence:
   This ledger is ongoing, not a finite feature deliverable.
 
 Completion log:
+  2026-11-12 - Observed the first published Windows CI run, 43079370607,
+    at source 22bb5b4d41628c664b8c9d9df3a6cdd53559f9cd.
+    Locked installation, lint/build and renderer tests pass; native voice
+    integration fails because synthesized "Please" becomes "police".
+    Sixteen of 17 native tests pass; installed synthesis voices are present.
+    Host/desktop suites were skipped by normal fail-fast step conditions.
+    Added build-success/cancellation guards so independent suites still run
+    after another suite fails, without suppressing failures, changing audio,
+    skipping tests or relaxing recognition assertions. This exposes the
+    published recognizer's limitation, not acceptance of the local rebuild.
+    Run: https://github.com/Zanark/Intercom/actions/runs/43079370607
   2026-11-11 - Owner requested restoring the logo microphone's rising/falling
     fill with transparency. Retained the smooth material and glowing waves;
     cleared the unfilled capsule instead of using an opaque second pigment.

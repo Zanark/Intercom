@@ -225,7 +225,7 @@ exact read-back; never refresh them merely to hide a remote edit.
 | ic-02 | `5fa92bc3e1d2f20a27fc5306664d4e4d599e704f8fc64208323afb19a9c894f6` |
 | ic-04 | `ac026513ad44f8548d9e3670037d5efcb2e94c9287728bf781e9f5e48efefd82` |
 | ic-05 | `01e29950e11e9e7ad3928d05a8363244955ea95c7ec68e952b57fbb644043e4c` |
-| ic-06 | `f59247d28659f7661b0f1a5409b1eac07a3446471579cf5a494aab63eac16c08` |
+| ic-06 | `677f7a77fff9d150f54d3055b66b66d761e21e4028bdaf4a5e3f6cb6bbb1ccb5` |
 | ic-07 | `072c0916f6106438b8f32e2ae02415645056015a3049f36f12ec4cfca281fe33` |
 
 The final README refinement reconciliation matched all six saved baselines,

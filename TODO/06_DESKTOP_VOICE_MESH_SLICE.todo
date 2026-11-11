@@ -117,6 +117,14 @@ Acceptance criteria:
   follow docs/architecture/runtime-contracts.md; browser mocks are not native-app evidence.
 
 Completion evidence:
+  Initial hosted run 43079370607 at 22bb5b4d passes locked installation,
+  lint/build and renderer tests, but fails native recognition: synthesized
+  "Please" becomes "police" (16/17 native cases pass). Installed voices are
+  present; this is not a missing-engine claim. Host/desktop were skipped.
+  Independent suites now run after earlier test failures when the build
+  succeeded, unless cancelled. All failed assertions still fail the job;
+  no speech input, expectation, retry or skip is changed to obtain green CI.
+  https://github.com/Zanark/Intercom/actions/runs/43079370607
   Owner correction restores the logo's rising/falling fill while retaining
   its smooth violet/seafoam material and glowing waves. The unfilled capsule
   is transparent; earlier rim-only/no-fill descriptions are superseded.

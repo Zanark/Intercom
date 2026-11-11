@@ -21,6 +21,11 @@ Acceptance criteria:
   Issues and Project items track actual workstreams, not this index or ledger.
 
 Completion evidence:
+  Initial hosted Test run 43079370607 correctly fails native recognition:
+  synthetic "Please" is transcribed as "police"; 16/17 native cases pass.
+  Hosted lint/build and renderer tests pass. Independent native/host/desktop
+  suites now continue after earlier suite failures if the build succeeded;
+  failure remains a failed job, never continue-on-error or a relaxed assertion.
   The logo's rising/falling fill is restored, with smooth color and a
   transparent unfilled capsule. Inspiration uses borderless floating-image
   HTML rather than a table; older rim-only/table descriptions are superseded.

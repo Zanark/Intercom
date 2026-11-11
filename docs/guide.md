@@ -311,6 +311,12 @@ It does not run live smoke scripts, real sessions, physical microphones,
 packaging, releases or deployment. Hosted results are separate from human
 speech quality, hardware acceptance and the unfinished local rebuild.
 
+After a successful build, independent native/host/desktop suites still run
+if an earlier test suite fails; cancellation stops them. Failures are not
+ignored. The first hosted run found a real recognition mismatch (`Please`
+became `police`), despite passing local synthetic checks; its speech assertion
+is retained rather than weakening the suite to obtain a green badge.
+
 For isolated packaging while a retained release is in use, choose a separate
 ignored output rather than replacing it:
 
