@@ -34,14 +34,24 @@
 </p>
 
 <p align="center">
-  <sub>GUI recordings below use the current source, fictional contexts and synthetic audio, not the published .12 build or speech-quality evidence. Each has a reduced-motion still.</sub>
+  <sub>GUI demos below show the current source, not published .12 or speech-quality evidence. Contexts are fictional; audio input is synthetic. Each has a reduced-motion still.</sub>
+</p>
+
+<p align="center">
+  <a href="docs/guide.md#readme-artwork">
+    <picture>
+      <source media="(prefers-reduced-motion: reduce)" srcset="docs/assets/readme/intercom-speaking-bubble.png" />
+      <img src="docs/assets/readme/intercom-speaking-bubble.gif" alt="The actual glass microphone: soft reflections smoothly change direction across three axes while synthetic speech creates centre-out water refraction. The icon and rim stay steady; audio never steers the rotation. Silent preview, not speech-quality evidence." width="560" />
+    </picture>
+  </a>
+  <br /><sub>Smooth glass in motion. Your input ripples through its reflections, not its rotation. <a href="docs/assets/readme/intercom-speaking-bubble.png">Reduced-motion still</a> · Synthetic local speech; silent GIF.</sub>
 </p>
 
 <p align="center">
   <a href="docs/guide.md#run-the-prototype">
     <picture>
       <source media="(prefers-reduced-motion: reduce)" srcset="docs/assets/readme/readme-voices.png" />
-      <img src="docs/assets/readme/readme-voices.gif" alt="Recorded source GUI: switch between speaking-voice and tuning tabs and adjust pitch and speed. Fictional contexts; no speech playback." width="960" />
+      <img src="docs/assets/readme/readme-voices.gif" alt="Current source GUI with the animated glass-bubble microphone: switch between speaking-voice and tuning tabs and adjust pitch and speed. Fictional contexts; no speech playback." width="960" />
     </picture>
   </a>
   <br /><sub><a href="docs/assets/readme/readme-voices.png">Voice settings still</a></sub>
@@ -51,7 +61,7 @@
   <a href="docs/prototype/prototype.md">
     <picture>
       <source media="(prefers-reduced-motion: reduce)" srcset="docs/assets/readme/readme-workspace.png" />
-      <img src="docs/assets/readme/readme-workspace.gif" alt="Recorded source GUI: orbit, drift and zoom through a mesh of fictional contexts. No real session work is dispatched." width="960" />
+      <img src="docs/assets/readme/readme-workspace.gif" alt="Current source GUI with the glass-bubble microphone: orbit, drift and zoom through a dense globe of fictional contexts. No real session work is dispatched." width="960" />
     </picture>
   </a>
   <br /><sub><a href="docs/assets/readme/readme-workspace.png">Workspace still</a></sub>
@@ -61,7 +71,7 @@
   <a href="docs/guide.md#readme-artwork">
     <picture>
       <source media="(prefers-reduced-motion: reduce)" srcset="docs/assets/readme/readme-floating.png" />
-      <img src="docs/assets/readme/readme-floating.gif" alt="Recorded transparent Floating Mesh: a dense globe of warm coral, amber and violet nodes over owner-supplied sea-glass wallpaper. Open and collapse the dock; the microphone stays accessible. Staged composite, not a desktop recording." width="960" />
+      <img src="docs/assets/readme/readme-floating.gif" alt="Current transparent Floating Mesh: a dense globe of warm coral, amber and violet nodes over owner-supplied sea-glass wallpaper. Open and collapse the dock; the smaller glass-bubble microphone stays accessible. Staged composite, not a desktop recording." width="960" />
     </picture>
   </a>
   <br /><sub><a href="docs/assets/readme/readme-floating.png">Floating Mesh still</a> · Owner-supplied wallpaper; actual transparent GUI capture, staged composite.</sub>
@@ -71,7 +81,7 @@
   <a href="docs/guide.md#readme-artwork">
     <picture>
       <source media="(prefers-reduced-motion: reduce)" srcset="docs/assets/readme/readme-microphone.png" />
-      <img src="docs/assets/readme/readme-microphone.gif" alt="Recorded source GUI: synthetic microphone input drives the glass microphone fill and symmetric live waves. No physical microphone, transcription, playback or agent dispatch." width="960" />
+      <img src="docs/assets/readme/readme-microphone.gif" alt="Current source GUI: synthetic input drives glass-surface water refraction, microphone fill and symmetric live waves. Soft glass reflections rotate independently beneath fixed lighting. No physical microphone, transcription, playback or agent dispatch." width="960" />
     </picture>
   </a>
   <br /><sub><a href="docs/assets/readme/readme-microphone.png">Microphone still</a></sub>
@@ -86,5 +96,5 @@ remain unqualified. Local multilingual Whisper uses explicit prepared-folder
 setup and integrity checks, without silent Windows/CPU fallback. An 8 kHz
 synthetic example confused session "Y" with "why": speech accuracy is not
 accepted. Installer and portable GPU qualification remain unfinished. The
-running/published .12 is unchanged; the implementation and qualification notes
+published .12 build is unchanged; the implementation and qualification notes
 remain local and are not included in this README/media update.

@@ -3,6 +3,7 @@
 import math
 import random
 import argparse
+import json
 from functools import lru_cache
 from pathlib import Path
 
@@ -390,6 +391,60 @@ def staged_desktop():
         return ImageOps.fit(source.convert("RGBA"), (1240, 820), Image.Resampling.LANCZOS)
 
 
+def save_gui_animation(name, frames, frame_duration):
+    if not ImageChops.difference(frames[0].convert("RGB"), frames[len(frames) // 2].convert("RGB")).getbbox():
+        raise ValueError(f"{name}: GUI capture has no motion.")
+    frames[0].save(
+        ASSETS / f"{name}.gif", save_all=True, append_images=frames[1:],
+        duration=frame_duration, loop=0, disposal=1, optimize=True,
+    )
+    with Image.open(ASSETS / f"{name}.gif") as result:
+        if result.n_frames < 2 or result.info.get("loop") != 0:
+            raise ValueError(f"{name}: encoded GIF is not animated and looping.")
+        duration = 0
+        for frame in range(result.n_frames):
+            result.seek(frame)
+            expected = frames[duration // frame_duration].convert("RGB")
+            if ImageChops.difference(result.convert("RGB"), expected).getbbox():
+                raise ValueError(f"{name}: delta encoding changed frame {frame}.")
+            duration += result.info["duration"]
+        if duration != len(frames) * frame_duration:
+            raise ValueError(f"{name}: incorrect GIF playback duration.")
+        result.seek(0)
+        result.convert("RGBA").save(ASSETS / f"{name}.png", optimize=True)
+        print(f"{name}: {result.n_frames} frames, {result.size}, {duration}ms, "
+              f"{(ASSETS / f'{name}.gif').stat().st_size:,} bytes")
+
+
+def render_bubble_gallery(directory):
+    paths = sorted(directory.glob("*.png"))
+    receipt = json.loads((directory.parent / "receipt.json").read_text(encoding="utf-8"))
+    count = receipt["bubble"]["frames"]
+    speaking = receipt["bubble"].get("mode") == "speaking"
+    frame_duration = receipt["bubble"]["durationMs"] / count
+    if len(paths) != count or frame_duration != 50:
+        raise ValueError(f"bubble: expected {count} samples at 50ms, found {len(paths)}")
+    frames = []
+    for source in paths:
+        with Image.open(source) as raw:
+            if raw.size != (252, 252):
+                raise ValueError(f"Bubble close-up must use the 3x capture: {raw.size}")
+            crop = raw.convert("RGB")
+        frame = Image.new("RGB", (560, 560), "#0c151c")
+        draw = ImageDraw.Draw(frame)
+        draw.text((34, 20), "intercom.", font=font(30, True), fill="#ccede0")
+        draw.text((34, 530), "Mic in use | synthetic local speech" if speaking else "Smooth 3D glass | actual app control",
+                  font=font(15), fill="#a2c2b8")
+        frame.paste(crop.resize((420, 420), Image.Resampling.LANCZOS), (70, 90))
+        frames.append(frame)
+    samples = Image.new("RGB", (560 * 5, 560))
+    for column, index in enumerate([int(count * i / 5) for i in range(5)]):
+        samples.paste(frames[index], (column * 560, 0))
+    palette = samples.quantize(colors=256)
+    indexed = [frame.quantize(palette=palette, dither=Image.Dither.NONE) for frame in frames]
+    save_gui_animation("intercom-speaking-bubble" if speaking else "readme-bubble", indexed, 50)
+
+
 def render_gui_galleries(directory):
     scenes = (
         ("voices", "A voice that fits your workflow.",
@@ -428,29 +483,8 @@ def render_gui_galleries(directory):
         palette = samples.quantize(colors=256, method=Image.Quantize.MEDIANCUT)
         frames = [compose(source).convert("RGB").quantize(palette=palette, dither=Image.Dither.NONE)
                   for source in paths]
-        if not ImageChops.difference(frames[0].convert("RGB"), frames[30].convert("RGB")).getbbox():
-            raise ValueError(f"{scene}: GUI capture has no motion.")
-        name = f"readme-{scene}"
-        frames[0].save(
-            ASSETS / f"{name}.gif", save_all=True, append_images=frames[1:],
-            duration=100, loop=0, disposal=1, optimize=True,
-        )
-        with Image.open(ASSETS / f"{name}.gif") as result:
-            if result.n_frames < 2 or result.info.get("loop") != 0:
-                raise ValueError(f"{scene}: encoded GIF is not animated and looping.")
-            duration = 0
-            for frame in range(result.n_frames):
-                result.seek(frame)
-                expected = frames[duration // 100].convert("RGB")
-                if ImageChops.difference(result.convert("RGB"), expected).getbbox():
-                    raise ValueError(f"{scene}: delta encoding changed frame {frame}.")
-                duration += result.info["duration"]
-            if duration != 6000:
-                raise ValueError(f"{scene}: incorrect GIF playback duration.")
-            result.seek(0)
-            result.convert("RGBA").save(ASSETS / f"{name}.png", optimize=True)
-            print(f"{name}: {result.n_frames} frames, {result.size}, {duration}ms, "
-                  f"{(ASSETS / f'{name}.gif').stat().st_size:,} bytes")
+        save_gui_animation(f"readme-{scene}", frames, 100)
+    render_bubble_gallery(directory / "bubble")
 
 
 def render_logo():
@@ -524,9 +558,17 @@ def main():
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--gui-frames", type=Path, help="Encode disposable Electron GUI captures instead of branding.")
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument("--gui-frames", type=Path, help="Encode disposable Electron GUI captures instead of branding.")
+    mode.add_argument("--bubble-frames", type=Path, help="Encode only a captured bubble preview.")
+    parser.add_argument("--output-dir", type=Path, help="Override the artwork output directory for local previews.")
     arguments = parser.parse_args()
+    if arguments.output_dir:
+        ASSETS = arguments.output_dir.resolve()
+        ASSETS.mkdir(parents=True, exist_ok=True)
     if arguments.gui_frames:
         render_gui_galleries(arguments.gui_frames)
+    elif arguments.bubble_frames:
+        render_bubble_gallery(arguments.bubble_frames)
     else:
         main()

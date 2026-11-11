@@ -82,7 +82,7 @@ test('minimal glass settings fit their categories, retain drafts and support key
   await expect(page.getByLabel('Microphone device', { exact: true })).toBeHidden();
   await expect(page.getByLabel('Processing priority', { exact: true })).toBeHidden();
   expect(await page.locator('.record-button').innerText()).toBe('');
-  expect(await page.locator('.voice-surface').evaluate((element) => [...element.querySelectorAll('p,span')].every((item) => item.closest('.sr-only') || item.getAttribute('aria-hidden') === 'true'))).toBe(true);
+  expect(await page.locator('.voice-surface').evaluate((element) => [...element.querySelectorAll('p,span')].every((item) => item.closest('.sr-only, [aria-hidden="true"]')))).toBe(true);
   await expectReachableCenteredMicrophone();
   const tabs = page.getByRole('tablist', { name: 'Workspace settings', exact: true });
   await tabs.getByRole('tab', { name: 'Talk', exact: true }).focus();
@@ -859,6 +859,59 @@ test('floating microphone stays outside the collapsed dock, preserves selected d
   expect(await application.evaluate(() => globalThis.__voiceReceipt.recordings.length)).toBe(1);
 });
 
+test('glass bubble surface spins beneath fixed lighting only while visible with full motion', async () => {
+  await prepareVoiceMock({ connect: false });
+  const caustic = page.locator('.mic-film');
+  const lighting = () => page.locator('.mic-shell').evaluate((button) => ({
+    highlight: getComputedStyle(button, '::before').backgroundImage,
+    highlightTransform: getComputedStyle(button, '::before').transform,
+    shading: getComputedStyle(button, '::after').backgroundImage,
+    shadingTransform: getComputedStyle(button, '::after').transform,
+    icon: getComputedStyle(button.querySelector('svg')).transform,
+  }));
+  const fixedLighting = await lighting();
+  const transform = () => caustic.evaluate((element) => getComputedStyle(element).transform);
+  const initial = await transform();
+  await expect.poll(transform).not.toBe(initial);
+  expect(await transform()).toMatch(/^matrix3d\(/);
+  await expect(caustic).toHaveCSS('transform-style', 'preserve-3d');
+  await expect(caustic.locator('.mic-reflection')).toHaveCount(6);
+  expect(await page.locator('.mic-caustic').count()).toBe(0);
+  expect(await lighting()).toEqual(fixedLighting);
+  expect(await page.locator('.record-button').evaluate((button) => button.getAnimations({ subtree: true }).length)).toBe(1);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect.poll(() => caustic.evaluate((element) => element.getAnimations().length)).toBe(0);
+  const still = await transform();
+  await page.waitForTimeout(150);
+  expect(await transform()).toBe(still);
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.evaluate(() => {
+    Object.defineProperty(document, 'hidden', { value: true, configurable: true });
+    document.dispatchEvent(new Event('visibilitychange'));
+  });
+  await expect.poll(() => caustic.evaluate((element) => element.getAnimations()[0]?.playState)).toBe('paused');
+  const hidden = await transform();
+  await page.waitForTimeout(150);
+  expect(await transform()).toBe(hidden);
+  await page.evaluate(() => { delete document.hidden; document.dispatchEvent(new Event('visibilitychange')); });
+  await expect.poll(() => caustic.evaluate((element) => element.getAnimations()[0]?.playState)).toBe('running');
+  await application.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].webContents.send('window:state', {
+    floating: false, onTop: false, maximized: false, paused: true, floatingSize: null,
+  }));
+  await expect.poll(() => caustic.evaluate((element) => element.getAnimations()[0]?.playState)).toBe('paused');
+  const paused = await transform();
+  await page.waitForTimeout(150);
+  expect(await transform()).toBe(paused);
+  await application.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].webContents.send('window:state', {
+    floating: false, onTop: false, maximized: false, paused: false, floatingSize: null,
+  }));
+  await expect.poll(transform).not.toBe(paused);
+  await page.getByRole('button', { name: 'Floating mesh', exact: true }).click();
+  await expect.poll(() => page.locator('.record-button').evaluate((button) => button.getAnimations({ subtree: true }).length)).toBe(1);
+  await expectReachableCenteredMicrophone();
+  expect(await application.evaluate(() => globalThis.__voiceReceipt.sent)).toEqual([]);
+});
+
 test('microphone waves mirror live input, respect reduced motion and stop without affecting capture', async () => {
   await prepareVoiceMock({ connect: false });
   await application.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].setSize(1200, 800));
@@ -875,17 +928,48 @@ test('microphone waves mirror live input, respect reduced motion and stop withou
     };
   });
   const waves = page.locator('.voice-waves');
+  const glow = page.locator('.mic-input-glow');
+  const shell = page.locator('.mic-shell');
+  const waterSurface = page.locator('.mic-water-surface');
+  const ripples = page.locator('.mic-ripples');
+  const rippleState = () => ripples.evaluate((element) => ({
+    active: element.dataset.active === 'true',
+    strength: Number(element.dataset.strength || 0),
+    frames: Number(element.dataset.frames || 0),
+    map: element.querySelector('feImage').getAttribute('href'),
+  }));
+  const refracting = async () => (await rippleState()).active;
+  const pulse = () => shell.evaluate((element) => {
+    const bubble = element.getBoundingClientRect();
+    const button = element.closest('button').getBoundingClientRect();
+    return {
+      scale: new DOMMatrix(getComputedStyle(element).transform).a,
+      x: bubble.x + bubble.width / 2 - button.x - button.width / 2,
+      y: bubble.y + bubble.height / 2 - button.y - button.height / 2,
+    };
+  });
   await expect(waves).toHaveCount(0);
+  await expect(glow).toHaveCSS('opacity', '0');
+  expect(await page.locator('.record-button').evaluate((button) => button.getAnimations({ subtree: true }).length)).toBe(1);
+  await page.screenshot({ path: test.info().outputPath('glass-bubble-idle.png') });
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.getByRole('button', { name: 'Speak', exact: true }).click();
   await expect(waves).toBeVisible();
   await expect.poll(() => page.getByRole('meter').evaluate((element) => element.value)).toBe(0);
   const silent = await waves.evaluate((canvas) => canvas.toDataURL());
+  const silentGlow = await glow.evaluate((element) => Number(getComputedStyle(element).opacity));
+  await expect(shell).toHaveCSS('transform', 'none');
+  await expect(glow).toHaveCSS('transform', 'none');
+  expect(await refracting()).toBe(false);
+  await expect(waterSurface).toHaveCSS('filter', 'none');
   await page.waitForTimeout(250);
   expect(await waves.evaluate((canvas) => canvas.toDataURL())).toBe(silent);
   await page.evaluate(() => { window.__waveGain.gain.value = 1; });
   await expect.poll(() => page.getByRole('meter').evaluate((element) => element.value)).toBeGreaterThan(0.01);
   await expect.poll(() => page.locator('.mic-level').evaluate((rect) => Number(rect.getAttribute('height')))).toBeGreaterThan(1);
+  await expect.poll(() => glow.evaluate((element) => Number(getComputedStyle(element).opacity))).toBeGreaterThan(silentGlow + .2);
+  await expect(shell).toHaveCSS('transform', 'none');
+  expect(await refracting()).toBe(false);
   expect(await waves.evaluate((canvas) => canvas.toDataURL())).not.toBe(silent);
   const symmetry = await waves.evaluate((canvas) => {
     const { width, height } = canvas;
@@ -906,17 +990,115 @@ test('microphone waves mirror live input, respect reduced motion and stop withou
   const moving = await waves.evaluate((canvas) => canvas.toDataURL());
   await page.waitForTimeout(250);
   expect(await waves.evaluate((canvas) => canvas.toDataURL())).not.toBe(moving);
+  await page.evaluate(() => { window.__waveGain.gain.value = 0; });
+  await expect.poll(() => page.getByRole('meter').evaluate((element) => element.value)).toBe(0);
+  await expect.poll(refracting).toBe(false);
+  await expect(waterSurface).toHaveCSS('filter', 'none');
+  const rotationStart = await page.locator('.mic-film').evaluate((element) => {
+    const animation = element.getAnimations()[0];
+    window.__rippleRotation = animation;
+    return Number(animation.currentTime);
+  });
+  await page.evaluate(() => { window.__waveGain.gain.value = .35; });
+  await expect.poll(refracting).toBe(true);
+  const soft = await rippleState();
+  expect(soft.strength).toBeGreaterThan(.025);
+  expect(soft.map).toMatch(/^data:image\/png;base64,/);
+  await expect.poll(async () => (await rippleState()).map).not.toBe(soft.map);
+  await expect(waterSurface).not.toHaveCSS('filter', 'none');
+  await expect(shell).toHaveCSS('filter', 'none');
+  await expect(shell.locator(':scope > svg')).toHaveCSS('transform', 'none');
+  await expect(page.locator('.mic-ripple')).toHaveCount(0);
+  expect(await ripples.locator('feDisplacementMap').getAttribute('in')).toBe('SourceGraphic');
+  await page.evaluate(() => { window.__waveGain.gain.value = 10; });
+  await expect.poll(() => page.getByRole('meter').evaluate((element) => Number(element.getAttribute('value')))).toBeGreaterThan(.15);
+  await page.waitForTimeout(1250);
+  expect(await refracting()).toBe(true);
+  expect((await rippleState()).frames).toBeGreaterThan(soft.frames + 5);
+  expect((await rippleState()).strength).toBe(1);
+  await page.evaluate(() => { window.__waveGain.gain.value = 1; });
+  await expect.poll(async () => (await rippleState()).strength).toBeGreaterThan(soft.strength + .1);
+  expect(await page.locator('.mic-film').evaluate((element) => {
+    const animation = element.getAnimations()[0];
+    return { same: animation === window.__rippleRotation, state: animation.playState, time: Number(animation.currentTime) };
+  })).toEqual({ same: true, state: 'running', time: expect.any(Number) });
+  expect(await page.locator('.mic-film').evaluate((element) => Number(element.getAnimations()[0].currentTime))).toBeGreaterThan(rotationStart);
+  const loudPulse = await pulse();
+  expect(loudPulse.scale).toBeCloseTo(1, 3);
+  expect(Math.abs(loudPulse.x)).toBeLessThan(.5);
+  expect(Math.abs(loudPulse.y)).toBeLessThan(.5);
+  const glowCentre = await glow.evaluate((element) => {
+    const glow = element.getBoundingClientRect();
+    const button = element.closest('button').getBoundingClientRect();
+    return {
+      x: glow.x + glow.width / 2 - button.x - button.width / 2,
+      y: glow.y + glow.height / 2 - button.y - button.height / 2,
+    };
+  });
+  expect(Math.abs(glowCentre.x)).toBeLessThan(.5);
+  expect(Math.abs(glowCentre.y)).toBeLessThan(.5);
+  expect(await page.locator('.record-button').evaluate((button) => button.offsetWidth)).toBe(60);
+  // Hold the existing glass pose and map while comparing actual filtered pixels.
+  await page.evaluate(() => {
+    window.__rippleRotation.pause();
+    const map = document.querySelector('.mic-ripples feImage');
+    const write = map.setAttribute;
+    map.setAttribute = function (name, value) { if (name !== 'href') write.call(this, name, value); };
+    const light = document.querySelector('.mic-water-light').getContext('2d');
+    const paint = light.putImageData;
+    light.putImageData = () => {};
+    const glow = document.querySelector('.mic-input-glow');
+    glow.style.opacity = getComputedStyle(glow).opacity;
+    document.querySelector('.mic-level').style.visibility = 'hidden';
+    window.__restoreWaterMap = () => {
+      map.setAttribute = write;
+      light.putImageData = paint;
+      glow.style.removeProperty('opacity');
+      document.querySelector('.mic-level').style.removeProperty('visibility');
+    };
+  });
+  const refracted = await shell.screenshot();
+  await waterSurface.evaluate((element) => { element.style.filter = 'none'; });
+  const flat = await shell.screenshot();
+  await waterSurface.evaluate((element) => { element.style.removeProperty('filter'); });
+  const changedPixels = await application.evaluate(({ nativeImage }, [before, after]) => {
+    const wet = nativeImage.createFromBuffer(Buffer.from(before, 'base64')).toBitmap();
+    const dry = nativeImage.createFromBuffer(Buffer.from(after, 'base64')).toBitmap();
+    let changed = 0;
+    for (let i = 0; i < wet.length; i += 4) {
+      if (Math.abs(wet[i] - dry[i]) + Math.abs(wet[i + 1] - dry[i + 1]) + Math.abs(wet[i + 2] - dry[i + 2]) > 15) changed++;
+    }
+    return changed;
+  }, [refracted.toString('base64'), flat.toString('base64')]);
+  expect(changedPixels).toBeGreaterThan(20);
+  await page.evaluate(() => { window.__restoreWaterMap(); window.__rippleRotation.play(); });
   await page.screenshot({ path: test.info().outputPath('glass-microphone-waves.png') });
+  await application.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].webContents.send('window:state', {
+    floating: false, onTop: false, maximized: false, paused: true, floatingSize: null,
+  }));
+  await expect.poll(refracting).toBe(false);
+  await expect(waterSurface).toHaveCSS('filter', 'none');
+  const pausedFrames = (await rippleState()).frames;
+  await page.waitForTimeout(250);
+  expect((await rippleState()).frames).toBe(pausedFrames);
+  await application.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].webContents.send('window:state', {
+    floating: false, onTop: false, maximized: false, paused: false, floatingSize: null,
+  }));
+  await expect.poll(refracting).toBe(true);
   await page.evaluate(() => {
     Object.defineProperty(document, 'hidden', { value: true, configurable: true });
     document.dispatchEvent(new Event('visibilitychange'));
   });
+  await expect(shell).toHaveCSS('transform', 'none');
+  await expect.poll(refracting).toBe(false);
+  await expect(waterSurface).toHaveCSS('filter', 'none');
   const hidden = await waves.evaluate((canvas) => canvas.toDataURL());
   await page.waitForTimeout(200);
   expect(await waves.evaluate((canvas) => canvas.toDataURL())).toBe(hidden);
   await page.evaluate(() => { delete document.hidden; document.dispatchEvent(new Event('visibilitychange')); });
   await page.getByRole('button', { name: 'Floating mesh', exact: true }).click();
   await expect(waves).toBeVisible();
+  await expect.poll(refracting).toBe(true);
   await expectReachableCenteredMicrophone();
   await page.screenshot({ path: test.info().outputPath('floating-microphone-waves.png'), omitBackground: true });
   expect(await waves.evaluate((canvas) => {
@@ -929,6 +1111,10 @@ test('microphone waves mirror live input, respect reduced motion and stop withou
   await page.getByRole('button', { name: 'Conversation and transcript', exact: true }).click();
   await page.getByRole('button', { name: 'Cancel recording', exact: true }).click();
   await expect(waves).toHaveCount(0);
+  await expect(glow).toHaveCSS('opacity', '0');
+  expect(await refracting()).toBe(false);
+  await expect(waterSurface).toHaveCSS('filter', 'none');
+  await expect.poll(async () => (await pulse()).scale).toBeLessThan(1.001);
   expect(await page.evaluate(() => window.__waveStream.getTracks().every((track) => track.readyState === 'ended'))).toBe(true);
   expect(await application.evaluate(() => globalThis.__voiceReceipt.sent)).toEqual([]);
 });

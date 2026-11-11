@@ -21,6 +21,13 @@ Acceptance criteria:
   Issues and Project items track actual workstreams, not this index or ledger.
 
 Completion evidence:
+  ic-06: owner accepted the thread-free, smooth three-axis glass microphone
+  and independent centre-out water refraction; requested scoped source push.
+  Exact publication-source lint/build, five focused unit cases and three
+  hidden disposable desktop cases pass. Four application GIF/still pairs
+  are refreshed, with an additional approved synthetic-speaking showcase.
+  Existing .12, branding, human speech and unfinished controller gates stay
+  separate; ic-06 remains IN_PROGRESS.
   Initial hosted Test run 43079370607 correctly fails native recognition:
   synthetic "Please" is transcribed as "police"; 16/17 native cases pass.
   Hosted lint/build and renderer tests pass. Independent native/host/desktop

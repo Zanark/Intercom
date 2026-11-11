@@ -1,9 +1,11 @@
-import { useCallback, useEffect, useId, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useRef, useState, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import { Recording } from '../voice/recording';
 import { MicrophonePicker } from './MicrophonePicker';
 import { VoiceProfiles } from './VoiceProfiles';
 import { VoiceWaves } from './VoiceWaves';
+import { GlassBubble } from './GlassBubble';
+import { MicRipples } from './MicRipples';
 import type { SettingsTab } from './SettingsTabs';
 
 type Phase = 'idle' | 'connecting' | 'opening' | 'listening' | 'transcribing' | 'checking' | 'running';
@@ -12,6 +14,11 @@ const labels: Record<Phase, string> = {
   opening: 'Opening your selected microphone...', listening: 'Listening - click Stop & send when finished',
   transcribing: 'Transcribing locally...', checking: 'Checking session ownership...', running: 'Copilot is responding...',
 };
+
+function subscribeToVisibility(onChange: () => void) {
+  document.addEventListener('visibilitychange', onChange);
+  return () => document.removeEventListener('visibilitychange', onChange);
+}
 
 export function VoiceConversation({ onRecordingChange, onWorkRequest, floating, paused, controlsHost, tab, advancedGeneral, onOpenTab, panelOpen, setPanelOpen }: {
   onRecordingChange: (recording: boolean) => void;
@@ -31,7 +38,10 @@ export function VoiceConversation({ onRecordingChange, onWorkRequest, floating, 
   const [checkingMic, setCheckingMic] = useState(false);
   const [phase, setPhase] = useState<Phase>('idle');
   const [level, setLevel] = useState(0);
+  const documentHidden = useSyncExternalStore(subscribeToVisibility, () => document.hidden);
+  const glassSurface = useRef<HTMLSpanElement>(null);
   const microphoneFill = useId();
+  const microphoneMaterial = useId();
   const inputLevel = Math.min(1, Math.max(0, level / 0.15));
   const [text, setText] = useState('');
   const [answer, setAnswer] = useState('');
@@ -256,7 +266,7 @@ export function VoiceConversation({ onRecordingChange, onWorkRequest, floating, 
       <label className="voice-toggle"><input type="checkbox" checked={autoSend} disabled={busy} onChange={(event) => setAutoSend(event.target.checked)} />Send recognized text automatically after stopping</label>
       <small>Only clear, in-limit speech. Uncertain speech always waits for review. Work still requires a separate target and task confirmation.</small>
     </div>
-  </section>{controlsHost && createPortal(<div className="live-controls" role="group" aria-label="Always available microphone">
+  </section>{controlsHost && createPortal(<div className="live-controls" data-paused={paused || documentHidden} role="group" aria-label="Always available microphone">
       <VoiceWaves active={phase === 'listening'} level={level} paused={paused} />
       <div className="voice-status sr-only">
         <p role="status">{checkingMic ? 'Checking microphone...' : phase === 'idle' ? 'Click Speak to talk' : labels[phase]}</p>
@@ -267,12 +277,26 @@ export function VoiceConversation({ onRecordingChange, onWorkRequest, floating, 
         aria-label={phase === 'listening' ? stopLabel : busy ? 'Cancel request' : 'Speak'}
         title={phase === 'listening' ? stopLabel : busy ? 'Cancel request' : 'Speak'}
         onClick={() => { if (phase === 'listening' && active.current) void finishRecording(active.current); else if (busy) void cancel(); else void startRecording(); }}>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
-          <defs><clipPath id={microphoneFill}><rect x="9" y="3" width="6" height="12" rx="3" /></clipPath></defs>
+        <span className="mic-shell" aria-hidden="true">
+        <span className="mic-optics">
+          <span className="mic-water-surface" ref={glassSurface}>
+          <GlassBubble paused={paused || documentHidden} />
+          <span className="mic-input-glow" />
+          </span>
+          <MicRipples active={phase === 'listening'} level={inputLevel} paused={paused || documentHidden} target={glassSurface} />
+        </span>
+        <svg viewBox="0 0 24 24" fill="none" stroke={`url(#${microphoneMaterial})`} strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
+          <defs>
+            <clipPath id={microphoneFill}><rect x="9" y="3" width="6" height="12" rx="3" /></clipPath>
+            <linearGradient id={microphoneMaterial} x1="5" y1="3" x2="19" y2="22" gradientUnits="userSpaceOnUse">
+              <stop stopColor="#f4eaff" /><stop offset=".48" stopColor="#d2c0ff" /><stop offset="1" stopColor="#a1ffe0" />
+            </linearGradient>
+          </defs>
           {phase === 'listening' && <rect className="mic-level" clipPath={`url(#${microphoneFill})`} x="9" y={15 - inputLevel * 12} width="6" height={inputLevel * 12} fill="currentColor" stroke="none" />}
           <rect x="9" y="3" width="6" height="12" rx="3" /><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3M8 22h8" />
         </svg>
         {busy && !recording && <span className="mic-busy" aria-hidden="true" />}
+        </span>
       </button>
     </div>, controlsHost)}</>;
 }

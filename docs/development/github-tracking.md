@@ -225,8 +225,17 @@ exact read-back; never refresh them merely to hide a remote edit.
 | ic-02 | `5fa92bc3e1d2f20a27fc5306664d4e4d599e704f8fc64208323afb19a9c894f6` |
 | ic-04 | `ac026513ad44f8548d9e3670037d5efcb2e94c9287728bf781e9f5e48efefd82` |
 | ic-05 | `01e29950e11e9e7ad3928d05a8363244955ea95c7ec68e952b57fbb644043e4c` |
-| ic-06 | `677f7a77fff9d150f54d3055b66b66d761e21e4028bdaf4a5e3f6cb6bbb1ccb5` |
+| ic-06 | `89348962316ac7e1783ae10d506a78d5c76e617469a9dc014c04fd6baa6f6385` |
 | ic-07 | `072c0916f6106438b8f32e2ae02415645056015a3049f36f12ec4cfca281fe33` |
+
+The approved glass/water publication matched all six saved body/state/Project
+baselines before updating only #5 with the reviewed visual-only workstream
+projection. Full independent readback verified all six bodies and unchanged
+issue/item identities, private Project membership and stages; #5 remains
+OPEN / In Progress. Owner visual acceptance, exact-source checks and five
+refreshed GIF/still pairs are recorded separately from human speech or release
+qualification. Unfinished speech/controller drafts remain outside this public
+projection. Earlier media milestones below are historical.
 
 The final README refinement reconciliation matched all six saved baselines,
 then updated only #5 with the short inspiration/larger photo, smooth unbanded

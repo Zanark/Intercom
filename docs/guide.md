@@ -399,11 +399,35 @@ The Intercom artwork is original, not a copied Teams icon.
 
 The README offers a still image when the renderer supports the reduced-motion
 media query. You can also [open the still directly](assets/readme/readme-logo-still.png).
-All four README GUI panels are now six-second recordings of the current
+All four README GUI panels are six-second recordings of the current
 source renderer: voice/tuning tabs, mesh orbit/zoom, the floating dock, and
 input-reactive microphone waves. Each has a reduced-motion PNG and a direct
 still link. Historical screenshots remain evidence in this guide; they are
 not substituted into the new recordings.
+
+The owner-approved microphone is subtle glass without inner threads or an
+opaque rainbow texture. Six soft reflection patches follow one seeded,
+32-second three-axis Web Animation with smooth direction changes. The icon,
+rim and 60/34px controls remain steady. Reduced motion removes rotation;
+document/native pause suspends it. This is an optical approximation, not
+physical ray tracing or a hardware performance qualification.
+
+Existing measured input independently disturbs the centre of a local 64x64
+damped height/velocity field. Its finite-difference wave propagation and
+surface slopes produce SVG sampling offsets and transparent directional
+light/shade on the glass reflections only. No circle outlines or shell
+expansion; input never restarts or steers rotation. Drops are bounded to one
+per 240ms, painting to 30fps and numerical steps to 90Hz with 100ms maximum
+catch-up. Silence fades/clears the effect within 1.6 seconds; hidden/native
+pause, reduced motion and cancellation clear the filter, buffers and loop.
+The [owner's jQuery-ripples reference](https://www.jqueryscript.net/demo/jQuery-Plugin-For-Water-Ripple-Animation-ripples/)
+informed the mechanism, not imported code: no jQuery, new dependency,
+remote runtime resource, WebGL scene or additional audio stream is used.
+
+The new silent speaking close-up captures actual Recording/RMS from offline
+synthetic Windows speech, not injected UI levels or a physical microphone.
+It is a 560x560, 280-frame/14-second GIF with a reduced-motion still.
+Its nominal 50ms real-time samples are not a performance benchmark.
 
 The captures use an isolated build, disposable profile, 48 fictional contexts
 and 144 structural connections for a denser globe. This density applies only to
@@ -448,6 +472,21 @@ Re-record the GUI gallery using the installed development dependencies:
 npm run build -- --outDir .local\readme-capture\app\dist
 node .\tools\docs\capture_readme.cjs
 ```
+
+Refresh the approved speaking showcase in the README assets:
+
+```powershell
+npm run build -- --outDir .local\water-refraction-capture\app\dist
+node .\tools\docs\capture_readme.cjs --readme-speaking
+```
+
+`--bubble-speaking` instead keeps the GIF/still private under
+`.local\water-refraction-capture`. `--bubble-only` captures the independent
+32-second idle glass loop under `.local\readme-capture`. The full GUI command
+also generates that idle pair; only the selected speaking pair is embedded.
+Both previews use 3x CDP crops with asserted 252px source dimensions.
+Every decoded output frame and its complete duration are checked against
+the palette-indexed source. A preview is not human speech qualification.
 
 The capture tool launches only its copied, hidden documentation host, refuses
 changed host-patching assumptions, blocks transcription/playback/session

@@ -150,19 +150,35 @@ h2 { font-size: 12px; font-weight: 400; color: #90a0a9; margin: 10px 0 0; }
 .voice-surface { grid-column: 1 / -1; grid-row: 3; z-index: 8; display: flex; align-items: center; justify-content: center; background: radial-gradient(ellipse at 50% 100%, #85dec508, transparent 55%); padding: 8px 12px; }
 .live-controls { position: relative; display: flex; align-items: center; justify-content: center; }
 .voice-waves { position: absolute; width: min(94vw, 1000px); height: 88px; left: 50%; top: 50%; transform: translate(-50%, -50%); pointer-events: none; }
-.live-controls .record-button { position: relative; isolation: isolate; overflow: hidden; display: grid; place-items: center; padding: 0; width: 60px; height: 60px; border-radius: 50%; border: 1px solid #d4fff044; color: #c4f8e6; background: linear-gradient(145deg, #aee8da30, #263b485c); box-shadow: inset 0 1px 1px #ffffff38, inset 0 -3px 10px #0003, 0 8px 24px #0005, 0 0 22px #85dec513; backdrop-filter: blur(12px); transition: border-color 120ms, box-shadow 120ms; }
-.record-button:hover { border-color: #c4ffe5aa; box-shadow: inset 0 1px #ffffff38, 0 8px 24px #0005, 0 0 25px #85dec530; }
+.live-controls .record-button { --glass-radius: 25px; position: relative; overflow: visible; display: grid; place-items: center; padding: 0; width: 60px; height: 60px; border-radius: 50%; border: 0; color: #e4fff5; background: none; box-shadow: none; }
+.mic-shell { position: absolute; inset: 0; isolation: isolate; display: grid; place-items: center; border-radius: inherit; border: 1px solid #d6f5f47a; background: radial-gradient(ellipse at 28% 16%, #fff8df80, transparent 30%), radial-gradient(ellipse at 82% 72%, #b4a1f566, transparent 36%), radial-gradient(ellipse at 19% 80%, #a4ffe64d, transparent 35%), radial-gradient(circle at 48% 44%, #12283145 28%, #08141ccc 66%, #b5efde8c 90%, #f8fff8c4); box-shadow: inset 1px 1px 2px #f4fff59c, inset -1px -2px 4px #bdece875, 0 4px 12px #0005, 0 0 16px #75dec533; transform: scale(1); transform-origin: center; transition: transform 110ms ease-out, border-color 120ms, box-shadow 120ms; pointer-events: none; }
+.live-controls .record-button:hover .mic-shell { border-color: #edfffbd9; box-shadow: inset 1px 1px 2px #f4fff5b3, inset -1px -2px 4px #bdece88c, 0 4px 12px #0005, 0 0 18px #98e9d759; }
 .record-button:active { transform: translateY(1px); }
-.record-button::before { content: ""; position: absolute; z-index: -1; bottom: 0; left: 0; right: 0; height: 0; background: linear-gradient(#85dec525, #85dec55c); }
-.record-button::after { content: ""; position: absolute; inset: 3px 5px 48%; border-radius: 50%; background: linear-gradient(160deg, #edfff533, #d6fff003); pointer-events: none; }
-.record-button[aria-pressed="true"]::before { height: calc(12% + var(--input-level, 0) * 88%); }
+.mic-shell::before { content: ""; position: absolute; z-index: -1; inset: 0; border-radius: inherit; background: conic-gradient(from 25deg, #b6eaff66, #c0a3ff88 16%, #f4ecbaaa 29%, #b1ffe6bb 44%, #b6a0fa88 59%, #f7e5a5bb 73%, #dcfff577 87%, #b6eaff66); mask-image: radial-gradient(circle, transparent 59%, #000 74%); pointer-events: none; }
+.mic-shell::after { content: ""; position: absolute; z-index: 0; inset: 0; border-radius: inherit; background: radial-gradient(ellipse at 28% 12%, #fff8df38, transparent 42%); pointer-events: none; }
+.mic-optics { position: absolute; z-index: -1; inset: 0; overflow: hidden; border-radius: 50%; pointer-events: none; }
+.mic-film { position: absolute; inset: 0; transform-style: preserve-3d; }
+.mic-reflection { position: absolute; left: 10%; top: 10%; width: 80%; height: 80%; border-radius: 50%; backface-visibility: hidden; background: radial-gradient(ellipse, var(--reflection-color), transparent 68%); }
+.mic-reflection-pearl { --reflection-color: #fff2c64d; transform: rotateY(-40deg) rotateX(42deg) translateZ(var(--glass-radius)); }
+.mic-reflection-violet { --reflection-color: #baa3ff40; transform: rotateY(68deg) rotateX(-30deg) translateZ(var(--glass-radius)); }
+.mic-reflection-mint { --reflection-color: #a4ffe638; transform: rotateY(-68deg) rotateX(-38deg) translateZ(var(--glass-radius)); }
+.mic-reflection-ice { --reflection-color: #b6eaff2b; transform: rotateY(125deg) rotateX(42deg) translateZ(var(--glass-radius)); }
+.mic-reflection-back { --reflection-color: #dfc5ff38; transform: rotateY(-150deg) rotateX(-25deg) translateZ(var(--glass-radius)); }
+.mic-reflection-bottom { --reflection-color: #d7fff138; transform: rotateX(-110deg) translateZ(var(--glass-radius)); }
+.mic-input-glow { position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle, #c4ffe978, #bca5ff38 32%, #9bf4db14 52%, transparent 72%); opacity: 0; transition: opacity 110ms ease-out; }
+.record-button[aria-pressed="true"] .mic-input-glow { opacity: calc(.08 + var(--input-level, 0) * .72); transform: none; }
+.mic-water-surface { position: absolute; inset: 0; filter: var(--water-refraction, none); }
+.mic-water-light { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.record-button .mic-ripples { position: absolute; width: 0; height: 0; pointer-events: none; overflow: hidden; }
 .mic-busy { position: absolute; inset: 5px; border: 1px dashed #bcebd7; border-radius: 50%; }
-.record-button svg { width: 25px; height: 25px; }
+.record-button svg { position: relative; z-index: 1; width: 25px; height: 25px; }
 .live-controls .quiet-button { flex-shrink: 0; }
 .voice-status { min-width: 0; text-align: right; }
 .voice-actions { display: flex; align-items: center; gap: 6px; min-width: 0; }
 .voice-actions .voice-cancel { width: 30px; height: 32px; padding: 0; font-size: 15px; color: #f1b5a2; }
-.record-button[aria-pressed="true"] { color: #ecfff6; border-color: #a3f8d3; box-shadow: 0 0 0 4px #85dec518, 0 6px 24px #0005; }
+.live-controls .record-button[aria-pressed="true"] { color: #ecfff6; }
+.live-controls .record-button[aria-pressed="true"] .mic-shell { border-color: #c8ffe8; box-shadow: inset 1px 1px 2px #f4fff59c, inset -1px -2px 4px #bdece875, 0 0 0 3px #85dec518, 0 0 18px #85dec552; }
+.live-controls[data-paused="true"] .mic-shell, .live-controls[data-paused="true"] .mic-input-glow { transform: none; transition: none; }
 .live-controls meter { width: min(120px, 100%); height: 8px; accent-color: #85dec5; }
 .live-controls [role="status"] { color: #bbdfd1; font-size: 10px; line-height: 1.4; margin: 0; }
 .live-conversation .voice-error { color: #f4baa4; overflow-wrap: anywhere; }
@@ -222,7 +238,7 @@ h2 { font-size: 12px; font-weight: 400; color: #90a0a9; margin: 10px 0 0; }
 .floating .voice-surface { display: none; }
 .floating .live-controls { padding: 0; background: none; }
 .floating .voice-waves { width: min(76vw, 280px); height: 58px; }
-.floating .live-controls .record-button { width: 34px; height: 34px; box-shadow: inset 0 1px #ffffff30, 0 2px 7px #0005; }
+.floating .live-controls .record-button { --glass-radius: 14px; width: 34px; height: 34px; }
 .floating .record-button svg { width: 18px; height: 18px; }
 .floating .voice-actions .quiet-button { padding: 8px; }
 .floating .voice-actions .quiet-button > span:not(:only-child) { display: none; }
@@ -261,4 +277,4 @@ h2 { font-size: 12px; font-weight: 400; color: #90a0a9; margin: 10px 0 0; }
   .activity { padding-left: 16px; padding-right: 16px; }
   .confirmation { left: 220px; right: 270px; flex-wrap: wrap; }
 }
-@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } .record-button[aria-pressed="true"] .mic-shell, .record-button[aria-pressed="true"] .mic-input-glow { transform: none; } }
