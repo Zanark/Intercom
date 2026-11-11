@@ -3,7 +3,7 @@
 import math
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -34,14 +34,16 @@ def box(values):
 
 
 def background():
-    image = Image.new("RGB", (SIZE, SIZE))
+    image = Image.new("RGBA", (SIZE, SIZE))
     pixels = []
     for y in range(SIZE):
         for x in range(SIZE):
-            glow = max(0, 1 - math.hypot(x - 216, y - 205) / 260) ** 2
-            pixels.append(blend(NAVY, (15, 47, 57), glow))
+            distance = math.hypot(x - 216, y - 214)
+            glow = max(0, 1 - distance / 208) ** 2
+            opacity = min(1, max(0, (208 - distance) / 18))
+            pixels.append((*blend(NAVY, (22, 65, 75), glow), round(255 * opacity)))
     image.putdata(pixels)
-    return image.resize((SIZE * SCALE, SIZE * SCALE)).convert("RGBA")
+    return image.resize((SIZE * SCALE, SIZE * SCALE), Image.Resampling.LANCZOS)
 
 
 def gradient(size, top, bottom):
@@ -169,24 +171,45 @@ def render_frame(phase, base, node):
             draw.ellipse((x - radius + 3, y - radius + 5, x + radius + 3, y + radius + 5),
                          fill=(3, 13, 21))
             image.alpha_composite(texture, (round(x - radius), round(y - radius)))
-    image = image.convert("RGB").resize((SIZE, SIZE), Image.Resampling.LANCZOS)
-    draw = ImageDraw.Draw(image)
-    draw.text((216, 395), "ILLUSTRATIVE VOICE ACTIVITY", font=font(10), fill=MUTED, anchor="mm")
-    return image
+    return image.resize((SIZE, SIZE), Image.Resampling.LANCZOS)
 
 
 def panel(name, title, subtitle, width=480):
-    image = Image.new("RGB", (width, 132), NAVY)
+    image = Image.new("RGBA", (width, 156))
+    shadow = Image.new("RGBA", image.size)
+    ImageDraw.Draw(shadow).rounded_rectangle(
+        (16, 20, width - 16, 140), radius=22, fill=(0, 0, 0, 165)
+    )
+    image.alpha_composite(shadow.filter(ImageFilter.GaussianBlur(8)))
     draw = ImageDraw.Draw(image)
-    draw.rounded_rectangle((1, 1, width - 2, 130), radius=18, outline=(38, 76, 82), width=2)
-    draw.text((width / 2, 46), title, font=font(29, True), fill=WHITE, anchor="mm")
-    draw.text((width / 2, 91), subtitle, font=font(20), fill=MINT, anchor="mm")
+    draw.rounded_rectangle(
+        (12, 14, width - 12, 134), radius=20, fill=(4, 17, 26),
+        outline=(17, 42, 51), width=2,
+    )
+    face = gradient((width - 24, 120), (28, 64, 77), (9, 28, 38))
+    mask = Image.new("L", face.size)
+    ImageDraw.Draw(mask).rounded_rectangle(
+        (0, 0, face.width - 1, face.height - 1), radius=20, fill=255
+    )
+    image.paste(face, (12, 6), mask)
+    draw = ImageDraw.Draw(image)
+    draw.rounded_rectangle(
+        (12, 6, width - 13, 125), radius=20, outline=(65, 126, 140), width=2
+    )
+    draw.line((35, 9, width - 36, 9), fill=(113, 179, 185, 150))
+    draw.text((width / 2, 45), title, font=font(29, True), fill=WHITE, anchor="mm")
+    draw.text((width / 2, 88), subtitle, font=font(20), fill=MINT, anchor="mm")
     image.save(ASSETS / name, optimize=True)
 
 
 def gallery(name, source, title, caption):
     with Image.open(ASSETS / source) as screenshot:
         screenshot = screenshot.convert("RGBA")
+        if screenshot.width > 1240:
+            screenshot = screenshot.resize(
+                (1240, round(screenshot.height * 1240 / screenshot.width)),
+                Image.Resampling.LANCZOS,
+            )
         image = Image.new("RGB", (1240, 148 + screenshot.height), NAVY)
         draw = ImageDraw.Draw(image)
         draw.text((40, 35), title, font=font(32, True), fill=WHITE)
@@ -197,9 +220,10 @@ def gallery(name, source, title, caption):
 
 def main():
     base, node = background(), sphere_node()
-    colors = []
+    # Reserve index zero for transparency; GIF cannot retain partial alpha.
+    colors = [(255, 0, 255)]
     for count, a, b in (
-        (16, NAVY, (15, 47, 57)),
+        (15, NAVY, (22, 65, 75)),
         (64, (27, 74, 88), (137, 236, 228)),
         (80, (230, 255, 213), (21, 182, 219)),
         (48, (225, 255, 215), (26, 193, 221)),
@@ -214,10 +238,12 @@ def main():
         frame = render_frame(i / FRAMES, base, node)
         if i == 0:
             frame.save(ASSETS / "readme-logo-still.png", optimize=True)
-        frames.append(frame.quantize(palette=palette, dither=Image.Dither.NONE))
+        indexed = frame.convert("RGB").quantize(palette=palette, dither=Image.Dither.NONE)
+        indexed.paste(0, mask=frame.getchannel("A").point(lambda a: 255 if a < 128 else 0))
+        frames.append(indexed)
     frames[0].save(
         ASSETS / "intercom-logo-animated.gif", save_all=True, append_images=frames[1:],
-        duration=50, loop=0, disposal=1, optimize=False,
+        duration=50, loop=0, transparency=0, background=0, disposal=2, optimize=False,
     )
     title = Image.new("RGB", (1360, 248), NAVY)
     draw = ImageDraw.Draw(title)
@@ -232,8 +258,12 @@ def main():
             "A voice that fits your workflow.", "Packaged .7  /  installed voice profiles  /  synthetic test contexts")
     gallery("readme-workspace.png", "prototype-window-controls.png",
             "Your contexts, in reach.", "Packaged .5  /  graph zoom + native window controls  /  synthetic test contexts")
-    gallery("readme-floating.png", "prototype-floating-controls.png",
-            "Less window. More flow.", "Packaged .6  /  drag to move + window sizing  /  synthetic test contexts")
+    gallery("readme-floating.png", "floating-over-desktop.png",
+            "Your mesh. Over your desktop.",
+            "Owner-provided screenshot  /  transparent Floating Mesh  /  earlier control layout")
+    gallery("readme-floating-browser.png", "floating-over-browser.png",
+            "Stay in your flow.",
+            "Owner-provided screenshot  /  floating above another app  /  earlier control layout")
     print(f"Rendered {FRAMES} frames at {SIZE}px; GIF: {(ASSETS / 'intercom-logo-animated.gif').stat().st_size:,} bytes")
 
 

@@ -6,7 +6,7 @@
   <a href="docs/guide.md#readme-artwork">
     <picture>
       <source media="(prefers-reduced-motion: reduce)" srcset="docs/assets/readme-logo-still.png" />
-      <img src="docs/assets/intercom-logo-animated.gif" alt="Intercom: rotating spherical context mesh around a microphone with a simulated vertical voice-level fill. Open for artwork details and a still image." width="432" />
+      <img src="docs/assets/intercom-logo-animated.gif" alt="Intercom: rotating spherical context mesh around a microphone, with a circular glow and transparent surroundings. Voice-level animation is simulated; open for details and a still image." width="432" />
     </picture>
   </a>
 </p>
@@ -26,5 +26,9 @@
 </p>
 
 <p align="center">
-  <a href="docs/prototype.md"><img src="docs/assets/readme-floating.png" alt="Actual packaged .6 Floating Mesh: Drag to move handle, Smaller/Larger dock and independent graph zoom. Synthetic test contexts; features retained in .7." width="960" /></a>
+  <a href="docs/guide.md#readme-artwork"><img src="docs/assets/readme-floating.png" alt="Owner-provided screenshot: transparent Floating Mesh hovering over a rocky coastline desktop wallpaper. Shows an earlier control layout, not the current .11 microphone placement." width="960" /></a>
+</p>
+
+<p align="center">
+  <a href="docs/guide.md#readme-artwork"><img src="docs/assets/readme-floating-browser.png" alt="Owner-provided screenshot: transparent Floating Mesh above the Intercom repository in a browser. Shows an earlier control layout, not the current .11 microphone placement." width="960" /></a>
 </p>

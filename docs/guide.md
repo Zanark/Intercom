@@ -239,6 +239,11 @@ around a microphone with a vertically rising/falling mint/cyan fill. Its
 The voice level is **simulated**: a GitHub README cannot access your microphone,
 read your context activity, or run the desktop application. The animation
 does not change Intercom's runtime logo or microphone behavior.
+The logo has no embedded caption or rectangular backdrop: only the circular
+center glow remains, with transparent surroundings. The GIF uses palette
+transparency and clears each frame to avoid trails; the still PNG keeps its
+soft alpha edge. Linked button artwork uses raised faces and soft shadows,
+not executable controls or CSS hover effects.
 
 The behavioral reference is Microsoft's
 [New microphone volume indicator in Teams](https://techcommunity.microsoft.com/blog/Microsoft365InsiderBlog/new-microphone-volume-indicator-in-teams/4442879)
@@ -247,8 +252,12 @@ The Intercom artwork is original, not a copied Teams icon.
 
 The README offers a still image when the renderer supports the reduced-motion
 media query. You can also [open the still directly](assets/readme-logo-still.png).
-The gallery preserves the actual packaged captures above, adding headings and
-explicit synthetic-context captions; it is not a new capture of the .7 release.
+The workspace/voice gallery preserves the earlier packaged captures above,
+with explicit version/synthetic-context captions. The two floating showcases
+use the owner's supplied desktop and browser screenshots, resized without
+cropping. They demonstrate the transparent mesh over other surfaces, but show
+an earlier control layout, not the current .11 microphone placement. They are
+not fresh runtime captures or microphone-quality evidence.
 
 Reproduce the documentation assets with Python and Pillow (rendered with
 Pillow 12.2.0 and Windows Segoe UI; neither is an application dependency):

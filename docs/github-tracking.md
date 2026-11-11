@@ -213,7 +213,7 @@ exact read-back; never refresh them merely to hide a remote edit.
 | ic-02 | `5052eecad889f461eb541ff12f429241b6bd07b07712979d34d409aae20e3866` |
 | ic-04 | `5bdd0a9f6e12305f519617ed05d0614e44bdf8a464c2fb4a4a8b69b467abfd20` |
 | ic-05 | `e134e21309fa9c29ff867363f542a00447b02914479b99c23ced0300fa2f2e75` |
-| ic-06 | `a68b1c25abee87c083723ba93b673c1f1bf476771ae2a1720daaeae009739262` |
+| ic-06 | `8ad914d05e9377461d25e8796bb8d61fdf62a239cce33ba95f8beb16a5cd34d6` |
 | ic-07 | `072c0916f6106438b8f32e2ae02415645056015a3049f36f12ec4cfca281fe33` |
 
 These reconciliations used the same saved issue/item identities on

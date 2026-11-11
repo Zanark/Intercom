@@ -19,6 +19,23 @@ Completion evidence:
   This ledger is ongoing, not a finite feature deliverable.
 
 Completion log:
+  2026-11-11 - Reworked image-led README artwork on owner request.
+    Removed embedded logo caption and rectangular background; kept circular
+      glow, moving sphere and simulated mic fill. Reserved GIF transparency
+      with per-frame clearing; still PNG keeps soft alpha edges.
+    Added raised gradient button faces, highlighted rims and soft shadows.
+      Used the two supplied desktop/browser screenshots without cropping;
+      captions identify their earlier control layout, not current .11.
+    Evidence: decoded all 144 GIF frames with expected transparent mask and
+      no trails/holes, infinite 7.2-second loop and changing mic region.
+      Verified PNG/button alpha, showcase dimensions and README references;
+      visually reviewed light/dark logo, buttons and both supplied showcases.
+      Headless desktop/dark and mobile/light README previews load all images,
+      select the reduced-motion still and show no horizontal overflow;
+      visually reviewed both previews. These are local HTML approximations,
+      not a claim of reviewing GitHub's published rendering.
+    Boundary: documentation artwork only; no application, speech, release,
+      session or device change. Activity remains illustrative, not live audio.
   2026-11-11 - Updated README before the requested follow-up push.
     Replaced the generic prototype card with latest local .11, labelled not
     yet published, linked to the retained build/path/checksum details.
