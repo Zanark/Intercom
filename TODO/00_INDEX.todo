@@ -113,7 +113,14 @@ Completion evidence:
   remaining microphone case passes isolated unchanged; no all-28-together claim.
   Retained .11 release and published .7 unchanged; workstream remains active.
 
+  ic-06 .12 is now published as an unsigned nondraft prerelease from
+  48ceeb9ed4d60f08a28528e03040cd595fb1f944. All 28 packaged desktop cases and
+  actual portable smoke pass; anonymous EXE/checksum downloads match local
+  bytes. Previous public releases and local .11 preserved. ic-06 stays active.
+
 Completion log:
+  2026-11-11 - Published and independently download-verified .12; source tag,
+    README downloads and current feature matrix aligned without closing ic-06.
   2026-11-11 - Qualified the owner-requested .12 release candidate: all 28
     packaged desktop cases and actual portable smoke pass; README points to
     the new version. Publication verification pending; ic-06 remains active.

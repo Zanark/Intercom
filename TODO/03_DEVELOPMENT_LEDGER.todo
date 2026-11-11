@@ -19,6 +19,21 @@ Completion evidence:
   This ledger is ongoing, not a finite feature deliverable.
 
 Completion log:
+  2026-11-11 - Published and independently verified the .12 prerelease.
+    Action: pushed qualified source 48ceeb9ed4d60f08a28528e03040cd595fb1f944;
+      created annotated v0.1.0-prototype.12 there. Uploaded the EXE/checksum
+      as a draft, verified exact tag source, notes and asset digests, then
+      published nondraft/prerelease release 441617942 at 11:44:57Z.
+    Evidence: anonymous downloads match the local 110679248-byte EXE and
+      117-byte checksum. Asset IDs 735318495/735318497; EXE SHA-256
+      326129e8193fe2021c3fef988d4dc154aee362f02ed528a76fc37e9646c5699d,
+      checksum SHA-256
+      c25156d8c99b62ddd8e31312b3a181736e92892089ff0b1dbf5c02005786d462.
+      Old .7/.1 IDs, notes, assets/digests and source tags remain unchanged;
+      retained local .11 checksum matches. README links the new prerelease.
+    Boundary: no stable-release promotion, asset clobber, user-app restart or
+      additional real Copilot task. Qualification is not physical/human
+      acceptance; broader ic-06 stays In Progress.
   2026-11-11 - Prepared the explicitly requested updated .12 prototype release.
     Action: bumped package metadata, built in release\prototype-12-candidate,
       updated visual download/details buttons, guide and current feature matrix.

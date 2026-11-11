@@ -15,9 +15,16 @@ Unsigned Windows x64 portable:
 
 110,679,248 bytes; SHA-256:
 `326129e8193fe2021c3fef988d4dc154aee362f02ed528a76fc37e9646c5699d`.
-The sibling `SHA256SUMS.txt` records the checksum. This source milestone
-qualifies the package; publication and public-download verification are pending.
+The sibling `SHA256SUMS.txt` records the checksum.
 Launching a new build does not update an already-running instance.
+
+Published 2026-11-11 at `11:44:57Z`: release `441617942`, nondraft/prerelease,
+tagged source `48ceeb9ed4d60f08a28528e03040cd595fb1f944`.
+EXE asset `735318495` and checksum asset `735318497` were independently
+downloaded anonymously and match the qualified local bytes. The 117-byte
+checksum file has SHA-256
+`c25156d8c99b62ddd8e31312b3a181736e92892089ff0b1dbf5c02005786d462`.
+The source tag stays fixed; this main-branch receipt records publication.
 
 ### Changes since published .7
 
@@ -58,8 +65,8 @@ half-duplex: no wake word, always-listening mode, active-session attach or new
 session creation. The optional external prompt-inbox connector is not included.
 Vite still reports the existing mesh chunk-size warning.
 
-The retained .11 EXE checksum is unchanged. Earlier .7/.1 release assets and
-tags will not be overwritten by this separately versioned prerelease.
+The retained .11 EXE checksum is unchanged. Earlier .7/.1 release identities,
+notes, assets/digests and source tags were independently verified unchanged.
 
 ## Local microphone-layout candidate: 0.1.0-prototype.11
 

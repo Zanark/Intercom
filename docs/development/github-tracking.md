@@ -213,7 +213,7 @@ exact read-back; never refresh them merely to hide a remote edit.
 | ic-02 | `5fa92bc3e1d2f20a27fc5306664d4e4d599e704f8fc64208323afb19a9c894f6` |
 | ic-04 | `ac026513ad44f8548d9e3670037d5efcb2e94c9287728bf781e9f5e48efefd82` |
 | ic-05 | `01e29950e11e9e7ad3928d05a8363244955ea95c7ec68e952b57fbb644043e4c` |
-| ic-06 | `d510ef44cec9a00ae624254dcbfc629b8e8fcd373099366c1e3f3d59d60c47da` |
+| ic-06 | `fba963767f3b7269b819f355b7c28dae76d77602936f578c82e752ce7c0e5417` |
 | ic-07 | `072c0916f6106438b8f32e2ae02415645056015a3049f36f12ec4cfca281fe33` |
 
 These reconciliations used the same saved issue/item identities on
@@ -269,3 +269,15 @@ Project stages, private visibility and sole-repository membership. #6 is
 unchanged; no issue/item or status was created. ic-06 remains In Progress.
 The owner's explicit reorganization-and-push request authorizes that source
 commit/push, not a release/tag, binary upload or active-app restart.
+
+The owner's subsequent explicit push-and-release request authorized the new
+unsigned .12 prerelease. Qualified source
+`48ceeb9ed4d60f08a28528e03040cd595fb1f944` was pushed and tagged separately
+from the publication receipt. Release `441617942` was checked as a draft,
+published nondraft/prerelease and anonymously downloaded; EXE/checksum bytes
+match the local package. Previous .7/.1 releases/tags and local .11 remain
+unchanged. After all six body/state/Project baselines matched, only existing
+#5's description was updated with the final evidence. Independent full-body
+read-back verified all six original identities, states, backlinks and private
+Project stages/membership. ic-06 remains In Progress; no new issue/item,
+stable-release promotion, additional real task or active-app restart.

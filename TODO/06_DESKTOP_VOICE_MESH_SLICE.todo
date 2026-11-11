@@ -375,7 +375,22 @@ Completion evidence:
   no user-app restart, real Copilot prompt, dependency/version change or release.
   Physical microphone/listening and measured performance remain unqualified.
 
+  Owner-authorized .12 publication: nondraft/prerelease release 441617942,
+  v0.1.0-prototype.12 at source 48ceeb9ed4d60f08a28528e03040cd595fb1f944.
+  Published 2026-11-11T11:44:57Z; independently downloaded anonymously:
+  EXE asset 735318495, 110679248 bytes, SHA-256
+  326129e8193fe2021c3fef988d4dc154aee362f02ed528a76fc37e9646c5699d;
+  checksum asset 735318497, 117 bytes, SHA-256
+  c25156d8c99b62ddd8e31312b3a181736e92892089ff0b1dbf5c02005786d462.
+  Exact body/source/assets checked before publishing; .7/.1 release notes,
+  IDs/assets/digests and source tags independently preserved. Local .11 unchanged.
+  Current .12 qualification above passes all 28 packaged cases together and
+  actual portable smoke. Human/device/performance gates keep ic-06 active.
+
 Completion log:
+  2026-11-11 - Published .12 after exact draft source/notes/assets checks.
+    Anonymous EXE/checksum downloads match local bytes; previous releases and
+    local .11 preserved. Fixed source tag remains separate from receipt commit.
   2026-11-11 - Owner authorized pushing and updating the release. Qualified
     separate unsigned .12 with current microphone/review/floating/node fixes
     and reorganized source. Lint/type/build, 8 renderer units, 17 voice-host,
