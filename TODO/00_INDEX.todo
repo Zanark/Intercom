@@ -21,6 +21,9 @@ Acceptance criteria:
   Issues and Project items track actual workstreams, not this index or ledger.
 
 Completion evidence:
+  ic-06 includes the requested frosted sea-glass README GIF/static logos and
+  matching title/buttons/gallery framing. This is documentation artwork only;
+  no runtime/release change or speech-quality acceptance is implied.
   ic-01 foundation is complete locally; Project 13 tracks six issue-backed items.
   Verified read-back: #1 CLOSED/COMPLETED/Done; #2/#3/#4/#5 OPEN/In Progress;
   #6 OPEN/Todo. Fresh conflict check and independent complete-body

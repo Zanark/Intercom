@@ -213,7 +213,7 @@ exact read-back; never refresh them merely to hide a remote edit.
 | ic-02 | `5fa92bc3e1d2f20a27fc5306664d4e4d599e704f8fc64208323afb19a9c894f6` |
 | ic-04 | `ac026513ad44f8548d9e3670037d5efcb2e94c9287728bf781e9f5e48efefd82` |
 | ic-05 | `01e29950e11e9e7ad3928d05a8363244955ea95c7ec68e952b57fbb644043e4c` |
-| ic-06 | `80a61f754210e86f0e74224f420a1eccf11b6689a5732c47719b8ab34ba805c5` |
+| ic-06 | `67b53e02fbcbe5f21bedcacd2434937b2fcff2c5ac300661797c29edef073c81` |
 | ic-07 | `072c0916f6106438b8f32e2ae02415645056015a3049f36f12ec4cfca281fe33` |
 
 These reconciliations used the same saved issue/item identities on
@@ -289,3 +289,12 @@ line-ending/trailing-newline normalization. All six original issue/item IDs,
 states, backlinks, private Project stages and membership remain unchanged.
 ic-06 stays In Progress. The separately qualified same-version candidate is
 local/unpublished; no new issue, source push, tag, release or user-app update.
+
+The frosted sea-glass artwork reconciliation matched all six saved baselines
+and HEAD workstream projections before updating only existing #5. Independent
+full GraphQL read-back verifies its artwork-only staged projection; the other
+five bodies, all six original identities/backlinks/states, private Project
+membership and status options remain unchanged. ic-06 stays In Progress.
+Unfinished local speech/orchestration drafts are intentionally excluded from
+this publication and remote projection; their qualification remains open.
+No new issue/item, runtime change, tag, release or user-app update.

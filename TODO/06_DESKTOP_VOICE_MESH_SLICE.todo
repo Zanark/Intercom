@@ -19,6 +19,7 @@ Purpose:
   session work with retained permissions. Push-to-talk remains selected.
 
 Tasks:
+  [x] Apply frosted sea-glass textures to README animated/static marks and framing.
   [x] Add dim mirrored wave wings to the transparent README logo and still.
   [x] Add original mirrored, center-outward input-reactive waves and liquid-glass mic fill.
   [x] Replace the settings stack with focused category tabs and Advanced controls.
@@ -104,6 +105,12 @@ Acceptance criteria:
   follow docs/architecture/runtime-contracts.md; browser mocks are not native-app evidence.
 
 Completion evidence:
+  Sea-glass documentation artwork adds fixed-seed grain, milky seafoam nodes
+  and diffuse layered connections to the transparent hero/still. Static mark
+  geometry, runtime icons, original screenshots and published .12 are retained.
+  The README title, raised links and gallery framing share the new palette.
+  Verified deterministic rendering, 144-frame/7.2s loop, transparency/disposal,
+  exact still, 1254px static silhouette, screenshot fidelity and asset links.
   Focused-glass sub-slice: category/subcategory settings preserve drafts and
   the single selected-device recorder. Icon-only workspace microphone and small
   floating microphone beside the grip stay outside dock collapse. The expanded
@@ -420,6 +427,9 @@ Completion evidence:
   actual portable smoke. Human/device/performance gates keep ic-06 active.
 
 Completion log:
+  2026-11-11 - Verified frosted sea-glass README GIF/still/static mark, matching
+    title/buttons/gallery, transparency and screenshot fidelity. Asset-layout
+    preview visually inspected; no runtime, speech or release change.
   2026-11-11 - Qualified focused settings, icon-only glass microphones, fitted
     floating dock and symmetric live waves; added dim transparent README wings.
     Corrected minimum-size Voice spacing, intrinsic dock width and mirrored

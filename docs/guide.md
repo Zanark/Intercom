@@ -2,7 +2,7 @@
 
 [Visual home](../README.md) · [Prototype details](prototype/prototype.md)
 
-<img src="assets/branding/intercom-logo.png" alt="Intercom microphone and context-mesh logo" width="144" height="144" />
+<img src="assets/branding/intercom-logo.png" alt="Intercom microphone and context-mesh logo with frosted sea-glass nodes and connections" width="144" height="144" />
 
 The microphone represents voice; varied-size connected nodes, rounded outer
 orbits and straight inner links represent the context mesh. Foreground links
@@ -325,8 +325,15 @@ it is not part of public documentation or release packages.
 
 ## README artwork
 
+The animated hero, reduced-motion still and static documentation mark use
+frosted sea glass: muted seafoam, milky diffuse shading, fine fixed grain and
+soft rim highlights rather than polished neon surfaces. The title, raised
+link buttons and gallery framing share that palette with dark readable text.
+GitHub controls the page itself; these are rendered images, not a custom CSS
+theme or a backdrop filter. Original screenshots are not recolored or retouched.
+
 The [visual README](../README.md) uses an original, looping 3D-projected mesh
-around a microphone with a vertically rising/falling mint/cyan fill. Its
+around a microphone with a vertically rising/falling seafoam fill. Its
 432 x 432 px central sphere is three times the previous 144 px logo. The
 transparent 936 x 432 px canvas adds dim, mirrored mint/cyan wave wings behind
 the center, flowing outward with the same illustrative voice envelope.
@@ -363,4 +370,8 @@ python .\tools\docs\render_readme.py
 
 Run from the repository root. The generator uses no audio, network, session
 connector or live app. Its fixed cyclic rotation and illustrative speech
-envelope produce a 144-frame, 20 fps, 7.2-second loop with a shared palette.
+envelope produce a 144-frame, 20 fps, 7.2-second loop with a shared sea-glass
+palette. Fixed grain seeds keep the material reproducible without random
+frame-to-frame flicker. The original high-resolution static mark is retained
+in `tools/docs/sources/intercom-logo.png`; the generator changes its material,
+not its geometry or alpha silhouette. Runtime/EXE icons remain unchanged.

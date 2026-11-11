@@ -1,14 +1,18 @@
 <p align="center">
-  <img src="docs/assets/readme/readme-title.png" alt="Intercom. Your voice. Your context. Connected." width="680" />
+  <img src="docs/assets/readme/readme-title.png" alt="Intercom. Your voice. Your context. Connected. Frosted sea-glass title panel." width="680" />
 </p>
 
 <p align="center">
   <a href="docs/guide.md#readme-artwork">
     <picture>
       <source media="(prefers-reduced-motion: reduce)" srcset="docs/assets/readme/readme-logo-still.png" />
-      <img src="docs/assets/readme/intercom-logo-animated.gif" alt="Intercom: rotating spherical mesh and level-reactive microphone, with dim mirrored waves flowing outward behind the circular glow. Transparent surroundings; simulated speech, not live audio. Open for details and a still image." width="936" />
+      <img src="docs/assets/readme/intercom-logo-animated.gif" alt="Intercom: frosted sea-glass nodes and connections around a level-reactive microphone. Dim mirrored waves flow outward behind the circular glow; surroundings stay transparent. Simulated speech, not live audio. Open for details and a still image." width="936" />
     </picture>
   </a>
+</p>
+
+<p align="center">
+  <sub>Frosted sea-glass artwork: soft seafoam, fine-grain surfaces and diffuse edges. <a href="docs/assets/readme/readme-logo-still.png">View the still logo</a>.</sub>
 </p>
 
 <p align="center">
