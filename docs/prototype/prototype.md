@@ -7,6 +7,54 @@ historical qualification records, not available local paths. Existing published
 releases are preserved. `release` is Git-ignored; binaries are release assets,
 not source commits.
 
+## Unreleased source: focused glass settings
+
+The source now separates Talk, Input, Session, Voice, Work and Advanced.
+Voice has Voice/Tune/Profiles/Preview categories; work has Target/Task/Review/
+Receipt steps; Advanced holds General/Display/About. Controls stay in view at
+the minimum workspace size rather than stacking into one long settings form.
+Drafts, the selected device and the single recording controller survive tab and
+mode changes. Work still requires explicit target/task confirmation and retains
+one-shot permissions.
+
+The workspace footer shows only a 60 px glass microphone with input-level fill
+and accessible state labels. Floating mode uses a 34 px microphone beside the
+native drag grip, outside a collapsed fitted controls grid. Original mirrored
+ribbons move outward from the microphone and scale with the existing measured
+input level; the capsule fills vertically. The effect exists only during
+capture, paints at most 30 fps, pauses while hidden/minimized and uses stationary
+level-reactive shapes for reduced motion. It opens no extra audio stream.
+The expanded dock
+does not scroll at the 360 px minimum; conversation feedback is separate and
+long transcripts/results may scroll. Pending permissions highlight the dock.
+See the [source control guide](../guide.md#current-source-focused-glass-controls).
+
+This is not a new prerelease or an update to an already-running instance.
+The .12 release and retained .11 below remain unchanged.
+
+### Local candidate qualification
+
+Unsigned, unpublished same-version .12 candidate:
+`C:\devdesk\homedesk\Intercom\.local\glass-ui-candidate\Intercom-Prototype-0.1.0-prototype.12-win-x64.exe`
+
+110,683,012 bytes; SHA-256:
+`0823d9d071fe2ce56fa3cd36440b292c75bc627c12e5d3aaf187519c551ba4b2`.
+Do not confuse it with the published .12 download below.
+
+Lint/type/build and four focused source desktop cases pass. The final packaged
+desktop result records **passed, no failed cases**, for the 30-case suite.
+It covers minimum-size settings, keyboard switching/draft retention, one-stream
+cross-mode capture, waveform symmetry/motion/pausing/reduced motion and cleanup,
+alongside the existing permission/review/receipt scenarios. Actual portable
+smoke separately passes synthetic workspace/floating signal and cancellation,
+track cleanup, native profiles, graph/window controls and real mesh startup
+(40 contexts, 30 relationships). Fifteen runtime resources match the build;
+version, four notices and private/development exclusions are verified.
+
+Published .12 and retained .11 checksums are unchanged. No physical FDUCE/human
+speech or subjective listening acceptance, real Copilot task, user-app restart
+or performance benchmark was performed for this candidate.
+
 ## Prototype 0.1.0-prototype.12
 
 [Windows x64 prerelease and checksum](https://github.com/Zanark/Intercom/releases/tag/v0.1.0-prototype.12).

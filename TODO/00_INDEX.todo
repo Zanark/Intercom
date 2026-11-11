@@ -118,7 +118,16 @@ Completion evidence:
   actual portable smoke pass; anonymous EXE/checksum downloads match local
   bytes. Previous public releases and local .11 preserved. ic-06 stays active.
 
+  ic-06 now includes unpublished focused settings, icon-only glass microphones,
+  a fitted non-scrolling floating dock and measured-input mirrored waves.
+  Packaged desktop result passes the 30-case suite; actual portable synthetic
+  smoke and resource checks pass in .local\glass-ui-candidate. The README adds
+  subdued transparent wave wings. Published .12 and retained .11 are unchanged;
+  technical qualification does not close human/device/performance gates.
+
 Completion log:
+  2026-11-11 - Qualified local glass-controls/waves candidate and transparent
+    README wings; preserved publication, existing-session and hardware boundaries.
   2026-11-11 - Published and independently download-verified .12; source tag,
     README downloads and current feature matrix aligned without closing ic-06.
   2026-11-11 - Qualified the owner-requested .12 release candidate: all 28

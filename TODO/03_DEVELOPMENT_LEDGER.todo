@@ -19,6 +19,37 @@ Completion evidence:
   This ledger is ongoing, not a finite feature deliverable.
 
 Completion log:
+  2026-11-11 - Added focused glass controls and original mirrored voice waves.
+    Action: replaced stacked settings with category/subcategory tabs while
+      preserving mounted capture, drafts and separate work confirmations.
+      Kept icon-only microphones reachable; floating mic sits beside the grip,
+      outside the collapsed fitted grid. Capture-only canvas ribbons travel
+      outward symmetrically, follow existing RMS and share the vertical mic fill.
+      Capped paints at 30 fps, paused hidden/minimized work and supplied
+      stationary reduced-motion feedback without another audio stream.
+    Corrections: compacted minimum-size Voice layout, fixed intrinsic dock
+      sizing and created gradients inside mirrored transforms. Updated legacy
+      tab/dock selectors and waited for bounded startup quiet before idle checks.
+    Evidence: lint/type/build and four final focused source cases pass.
+      Final packaged desktop marker records passed/no failed cases for the
+      30-case suite. Actual portable synthetic workspace/floating capture,
+      signal/cancel/track release, real 40-context/30-link mesh, profiles and
+      graph/native window controls pass. Fifteen exact runtime resources,
+      version, four notices and private/development exclusions verified.
+    Artifact: .local\glass-ui-candidate same-version unpublished .12 portable,
+      110683012 bytes; SHA-256
+      0823d9d071fe2ce56fa3cd36440b292c75bc627c12e5d3aaf187519c551ba4b2.
+      Published .12 and retained .11 hashes remain unchanged.
+    Artwork: added dim mirrored original README wings on a transparent 936x432
+      hero; central sphere remains 432px. Verified 144 exact per-frame alpha
+      masks without trails, disposal=2 and infinite 7.2-second loop. GIF is
+      5331066 bytes; still has soft alpha. Desktop/dark and mobile/light local
+      previews decode without overflow and honor reduced-motion still selection.
+      Reviewed still/previews and packaged workspace/floating/minimum Voice
+      captures, not a complete animation playback or published GitHub rendering.
+    Boundary: uncommitted/local only; no new publication authority, real task,
+      physical microphone/listening acceptance, user-app restart or measured
+      latency claim. ic-06 remains In Progress.
   2026-11-11 - Published and independently verified the .12 prerelease.
     Action: pushed qualified source 48ceeb9ed4d60f08a28528e03040cd595fb1f944;
       created annotated v0.1.0-prototype.12 there. Uploaded the EXE/checksum

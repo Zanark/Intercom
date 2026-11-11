@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[2]
 ASSETS = ROOT / "docs" / "assets" / "readme"
 SCREENSHOTS = ROOT / "docs" / "assets" / "screenshots"
 SIZE = 432
+HERO_WIDTH = 936
 SCALE = 2
 FRAMES = 144
 TAU = math.tau
@@ -108,6 +109,32 @@ def speech_level(phase):
     return levels[index % len(levels)] * (1 - t) + levels[(index + 1) % len(levels)] * t
 
 
+def logo_waves(phase):
+    image = Image.new("RGBA", (HERO_WIDTH * SCALE, SIZE * SCALE))
+    draw = ImageDraw.Draw(image)
+    half = HERO_WIDTH / 2
+    energy = speech_level(phase)
+    for band in range(18):
+        points = []
+        for step in range(161):
+            distance = step / 160
+            envelope = math.sin(math.pi * distance)
+            wave = math.sin(distance * 13 - TAU * phase * 2 + band * .13)
+            wave += .3 * math.sin(distance * 24 - TAU * phase * 3 + band * .08)
+            y = envelope * (wave * (16 + 28 * energy) + (band - 8.5) * energy)
+            points.append((distance * half, y))
+        for direction in (-1, 1):
+            for start, end in zip(points, points[1:]):
+                fade = math.sin(math.pi * start[0] / half) ** .5
+                brightness = fade * (.65 if band == 8 else .38 + .22 * energy)
+                color = blend((15, 33, 45), (67, 133, 147), brightness)
+                draw.line((
+                    (half + direction * start[0]) * SCALE, (214 + start[1]) * SCALE,
+                    (half + direction * end[0]) * SCALE, (214 + end[1]) * SCALE,
+                ), fill=color, width=(2 if band == 8 else 1) * SCALE)
+    return image.resize((HERO_WIDTH, SIZE), Image.Resampling.LANCZOS)
+
+
 def render_frame(phase, base, node):
     angle = TAU * phase
 
@@ -172,7 +199,12 @@ def render_frame(phase, base, node):
             draw.ellipse((x - radius + 3, y - radius + 5, x + radius + 3, y + radius + 5),
                          fill=(3, 13, 21))
             image.alpha_composite(texture, (round(x - radius), round(y - radius)))
-    return image.resize((SIZE, SIZE), Image.Resampling.LANCZOS)
+    hero = logo_waves(phase)
+    hero.alpha_composite(
+        image.resize((SIZE, SIZE), Image.Resampling.LANCZOS),
+        ((HERO_WIDTH - SIZE) // 2, 0),
+    )
+    return hero
 
 
 def panel(name, title, subtitle, width=480):
@@ -219,17 +251,18 @@ def gallery(name, source, title, caption):
         image.save(ASSETS / name, optimize=True)
 
 
-def main():
+def render_logo():
     base, node = background(), sphere_node()
     # Reserve index zero for transparency; GIF cannot retain partial alpha.
     colors = [(255, 0, 255)]
     for count, a, b in (
         (15, NAVY, (22, 65, 75)),
-        (64, (27, 74, 88), (137, 236, 228)),
-        (80, (230, 255, 213), (21, 182, 219)),
-        (48, (225, 255, 215), (26, 193, 221)),
+        (56, (27, 74, 88), (137, 236, 228)),
+        (64, (230, 255, 213), (21, 182, 219)),
+        (40, (225, 255, 215), (26, 193, 221)),
         (32, (34, 79, 84), (13, 35, 44)),
         (16, MUTED, WHITE),
+        (32, (15, 33, 45), (67, 133, 147)),
     ):
         colors.extend(blend(a, b, i / (count - 1)) for i in range(count))
     palette = Image.new("P", (1, 1))
@@ -246,6 +279,11 @@ def main():
         ASSETS / "intercom-logo-animated.gif", save_all=True, append_images=frames[1:],
         duration=50, loop=0, transparency=0, background=0, disposal=2, optimize=False,
     )
+    print(f"Rendered {FRAMES} transparent {HERO_WIDTH} x {SIZE} logo frames; GIF: {(ASSETS / 'intercom-logo-animated.gif').stat().st_size:,} bytes")
+
+
+def main():
+    render_logo()
     title = Image.new("RGB", (1360, 248), NAVY)
     draw = ImageDraw.Draw(title)
     draw.text((680, 85), "intercom.", font=font(112, True), fill=WHITE, anchor="mm")
@@ -265,7 +303,6 @@ def main():
     gallery("readme-floating-browser.png", "floating-over-browser.png",
             "Stay in your flow.",
             "Owner-provided screenshot  /  floating above another app  /  earlier control layout")
-    print(f"Rendered {FRAMES} frames at {SIZE}px; GIF: {(ASSETS / 'intercom-logo-animated.gif').stat().st_size:,} bytes")
 
 
 if __name__ == "__main__":

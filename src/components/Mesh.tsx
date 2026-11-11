@@ -409,7 +409,7 @@ function Mesh(props: Props) {
     <button className="quiet-button" aria-label="Zoom in graph" title="Zoom in" disabled={!!error} onClick={() => navigate.current('in')}>+</button>
     <output aria-label="Graph zoom">{zoom}%</output>
     <button className="quiet-button" aria-label="Zoom out graph" title="Zoom out" disabled={!!error} onClick={() => navigate.current('out')}>-</button>
-    <button className="quiet-button" disabled={!!error} onClick={() => navigate.current('reset')}>Reset view</button>
+    <button className="quiet-button" aria-label="Reset view" title="Reset view" disabled={!!error} onClick={() => navigate.current('reset')}>{props.navigationHost ? <span aria-hidden="true">&#8634;</span> : 'Reset view'}</button>
   </div>;
   return <><div className="mesh-viewport" ref={container}>
     <span className="sr-only" id={helpId}>Hover a colored node for its name; click to pin its label. Focus the graph and use arrow keys to inspect nodes, Enter to pin, Escape to dismiss. Inspection does not change your work target.</span>

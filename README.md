@@ -6,7 +6,7 @@
   <a href="docs/guide.md#readme-artwork">
     <picture>
       <source media="(prefers-reduced-motion: reduce)" srcset="docs/assets/readme/readme-logo-still.png" />
-      <img src="docs/assets/readme/intercom-logo-animated.gif" alt="Intercom: rotating spherical context mesh around a microphone, with a circular glow and transparent surroundings. Voice-level animation is simulated; open for details and a still image." width="432" />
+      <img src="docs/assets/readme/intercom-logo-animated.gif" alt="Intercom: rotating spherical mesh and level-reactive microphone, with dim mirrored waves flowing outward behind the circular glow. Transparent surroundings; simulated speech, not live audio. Open for details and a still image." width="936" />
     </picture>
   </a>
 </p>

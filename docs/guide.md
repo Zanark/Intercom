@@ -77,6 +77,50 @@ npm ci
 npm start
 ```
 
+## Current source: focused glass controls
+
+The current source UI differs from the published .12 download below.
+The bottom of the workspace contains only a glass microphone icon. Its tooltip
+and accessible name describe **Speak**, **Stop & transcribe / send**, or
+**Cancel request**; recording level fills the button. Recording does not require
+a connected session.
+During capture, original mint/cyan ribbons flow outward symmetrically from the
+microphone. Their height and the microphone capsule's vertical fill follow the
+same measured input level, not random animation. Floating mode keeps smaller
+wings around its microphone. Painting is capped at 30 fps, stops when hidden/
+minimized, and is removed when capture stops; reduced motion uses a stationary
+shape that still reflects the level. No extra microphone stream is opened.
+
+The right panel opens on **Talk**. Each category keeps its controls in view:
+
+| Tab | Controls |
+|---|---|
+| Talk | Transcript, explicit send, response and recording cancellation |
+| Input | Microphone selection, load and brief test |
+| Session | Existing session UUID, connection and request destination |
+| Voice | Local playback; Voice / Tune / Profiles / Preview sub-tabs |
+| Work | Target / Task / Review / Receipt steps, with separate confirmation |
+| Advanced | General: automatic sending and processing priority; Display: drift; About: limits |
+
+Use Left/Right or Home/End on a tab to switch by keyboard. Draft text, session
+entry and unsaved voice edits survive category changes. The single recorder
+stays mounted across tabs and workspace/floating transitions.
+
+In Floating Mesh, a small microphone sits immediately beside the native drag
+grip, outside the default-collapsed controls. Expand the arrow to show the fitted
+grid of graph/window controls, settings, conversation and work/receipts.
+The grid does not scroll, including at the 360 px minimum size. Settings and
+work return to the workspace; conversation toggles the floating transcript.
+Recognition review and errors open that transcript automatically. A pending
+permission highlights the dock arrow and work control; it never grants approval.
+
+Settings categories fit the 960 x 680 minimum workspace without scrolling.
+Long transcripts, work confirmations and receipts may still scroll inside their
+content panels; no setting is hidden to fake a fit. The published .12 binary,
+release assets and any already-running instance retain their earlier layout.
+
+## Shared graph and window controls
+
 Use the top-right **Maximize window** square to fill the screen; it becomes
 **Restore window**. Scroll over the graph to zoom toward the pointer, use
 **+ / -** for centered zoom, or right-drag to pan. Zoom can enter the sphere;
@@ -87,6 +131,8 @@ node for its name, or click/tap to pin its details and base path. Names stay
 hidden otherwise. Close with Escape, the close button, a same-node click or
 blank-space click. Keyboard: focus the graph, arrow through nodes, Enter/Space
 to pin. Inspecting a node does not change the work target.
+
+## Published .12 control layout
 
 Click **Floating mesh** to hide the panels and window background. **Prototype .10
 and newer, including .12:** the bottom dock starts collapsed. Its **Drag to
@@ -281,12 +327,15 @@ it is not part of public documentation or release packages.
 
 The [visual README](../README.md) uses an original, looping 3D-projected mesh
 around a microphone with a vertically rising/falling mint/cyan fill. Its
-432 x 432 px display is three times the previous 144 px logo.
+432 x 432 px central sphere is three times the previous 144 px logo. The
+transparent 936 x 432 px canvas adds dim, mirrored mint/cyan wave wings behind
+the center, flowing outward with the same illustrative voice envelope.
 The voice level is **simulated**: a GitHub README cannot access your microphone,
 read your context activity, or run the desktop application. The animation
 does not change Intercom's runtime logo or microphone behavior.
 The logo has no embedded caption or rectangular backdrop: only the circular
-center glow remains, with transparent surroundings. The GIF uses palette
+center glow remains, with transparent space between and around the wave lines.
+There is no background panel behind the wings. The GIF uses palette
 transparency and clears each frame to avoid trails; the still PNG keeps its
 soft alpha edge. Linked button artwork uses raised faces and soft shadows,
 not executable controls or CSS hover effects.

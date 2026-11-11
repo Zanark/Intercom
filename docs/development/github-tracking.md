@@ -213,7 +213,7 @@ exact read-back; never refresh them merely to hide a remote edit.
 | ic-02 | `5fa92bc3e1d2f20a27fc5306664d4e4d599e704f8fc64208323afb19a9c894f6` |
 | ic-04 | `ac026513ad44f8548d9e3670037d5efcb2e94c9287728bf781e9f5e48efefd82` |
 | ic-05 | `01e29950e11e9e7ad3928d05a8363244955ea95c7ec68e952b57fbb644043e4c` |
-| ic-06 | `fba963767f3b7269b819f355b7c28dae76d77602936f578c82e752ce7c0e5417` |
+| ic-06 | `80a61f754210e86f0e74224f420a1eccf11b6689a5732c47719b8ab34ba805c5` |
 | ic-07 | `072c0916f6106438b8f32e2ae02415645056015a3049f36f12ec4cfca281fe33` |
 
 These reconciliations used the same saved issue/item identities on
@@ -281,3 +281,11 @@ unchanged. After all six body/state/Project baselines matched, only existing
 read-back verified all six original identities, states, backlinks and private
 Project stages/membership. ic-06 remains In Progress; no new issue/item,
 stable-release promotion, additional real task or active-app restart.
+
+The focused-glass controls/live-waves/README-wings reconciliation checked all
+six saved baselines before updating only existing #5. Independent fresh full
+GraphQL read-back equals every local public-safe projection using the documented
+line-ending/trailing-newline normalization. All six original issue/item IDs,
+states, backlinks, private Project stages and membership remain unchanged.
+ic-06 stays In Progress. The separately qualified same-version candidate is
+local/unpublished; no new issue, source push, tag, release or user-app update.

@@ -19,6 +19,11 @@ Purpose:
   session work with retained permissions. Push-to-talk remains selected.
 
 Tasks:
+  [x] Add dim mirrored wave wings to the transparent README logo and still.
+  [x] Add original mirrored, center-outward input-reactive waves and liquid-glass mic fill.
+  [x] Replace the settings stack with focused category tabs and Advanced controls.
+  [x] Add icon-only glass microphones and a non-scrolling minimum-size floating dock.
+  [x] Preserve capture, drafts, explicit confirmation and permission handling across tabs.
   [x] Obtain authority and explicit Electron selection for the fixture prototype.
   [x] Build the isolated synthetic UI and real transparent Floating Mesh mode.
   [x] Add saved profile selection, request snapshots and bounded graph rendering.
@@ -99,6 +104,33 @@ Acceptance criteria:
   follow docs/architecture/runtime-contracts.md; browser mocks are not native-app evidence.
 
 Completion evidence:
+  Focused-glass sub-slice: category/subcategory settings preserve drafts and
+  the single selected-device recorder. Icon-only workspace microphone and small
+  floating microphone beside the grip stay outside dock collapse. The expanded
+  grid fits at 360 px without either-axis scrolling; settings fit 960x680.
+  Capture-only mirrored ribbons use measured RMS, center-outward motion and
+  vertical capsule fill, capped at 30 fps with hidden/minimized pause and
+  stationary reduced-motion feedback. No extra stream or new dependency.
+  Lint/type/build and four focused source desktop cases pass; the final packaged
+  desktop run records passed with no failed cases across the 30-case suite.
+  Actual portable smoke separately passes synthetic capture/signal/cancel/
+  track release in both views, tabbed settings, persistent voice profiles,
+  native window/graph controls and the real 40-context/30-link mesh.
+  Fifteen exact packaged runtime resources, version, four notices and
+  private/development exclusions verified. Local unsigned same-version .12
+  candidate: .local\glass-ui-candidate,
+  Intercom-Prototype-0.1.0-prototype.12-win-x64.exe, 110683012 bytes, SHA-256
+  0823d9d071fe2ce56fa3cd36440b292c75bc627c12e5d3aaf187519c551ba4b2.
+  This is not the published .12 artifact. Published .12/local .11 hashes match
+  their prior receipts; no user instance, real session or device was driven.
+  README hero adds subdued original mirrored wings on a transparent 936x432
+  canvas, preserving the 432px central sphere. All 144 frames match exact
+  expected alpha masks without trails, disposal=2, infinite 7200 ms loop;
+  GIF is 5331066 bytes. Still PNG retains soft alpha. Local desktop/dark and
+  mobile/light previews decode images, avoid overflow and select the reduced-
+  motion still. Still, preview and packaged UI captures visually reviewed;
+  this is not published GitHub rendering or human microphone acceptance.
+
   Fixture sub-slice: Electron 45.2.1, React/TypeScript/Vite and Three.js; exact
   dependency lock, local build and launch commands in README/docs/prototype/prototype.md.
   npm run lint and npm run build pass; seven Vitest cases and six Playwright
@@ -388,6 +420,12 @@ Completion evidence:
   actual portable smoke. Human/device/performance gates keep ic-06 active.
 
 Completion log:
+  2026-11-11 - Qualified focused settings, icon-only glass microphones, fitted
+    floating dock and symmetric live waves; added dim transparent README wings.
+    Corrected minimum-size Voice spacing, intrinsic dock width and mirrored
+    canvas-gradient coordinates; updated older test navigation and bounded
+    startup-idle sampling. Local same-version candidate only, not a release.
+    Broader physical/human, permission and measured-performance gates stay open.
   2026-11-11 - Published .12 after exact draft source/notes/assets checks.
     Anonymous EXE/checksum downloads match local bytes; previous releases and
     local .11 preserved. Fixed source tag remains separate from receipt commit.

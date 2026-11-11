@@ -46,6 +46,7 @@ async function main() {
     page = browser.contexts()[0].pages()[0];
     if (!page) throw new Error('Portable app opened no renderer.');
     const errors = [];
+    const settings = (tab) => page.getByRole('tablist', { name: 'Workspace settings', exact: true }).getByRole('tab', { name: tab, exact: true }).click();
     page.on('pageerror', (error) => errors.push(error.message));
     await expect(page.getByRole('heading', { name: 'Everything has a connection.' })).toBeVisible();
     expect(page.url()).toContain('/resources/app.asar/dist/index.html');
@@ -62,7 +63,7 @@ async function main() {
       return image.naturalWidth;
     })).toBe(256);
     await expect(page.getByRole('button', { name: 'Speak', exact: true })).toBeInViewport({ ratio: 1 });
-    await page.getByRole('button', { name: 'Voice settings and transcript', exact: true }).click();
+    await settings('Input');
     const microphone = page.getByRole('region', { name: 'Microphone settings' });
     await microphone.getByRole('button', { name: 'Load microphones' }).click();
     await expect(microphone.getByRole('status')).toContainText('Devices loaded. Microphone is off.');
@@ -73,21 +74,20 @@ async function main() {
     await page.getByRole('button', { name: 'Speak', exact: true }).click();
     await expect(page.getByRole('button', { name: 'Stop & transcribe', exact: true })).toHaveAttribute('aria-pressed', 'true');
     await expect.poll(() => page.getByRole('meter').evaluate((meter) => meter.value)).toBeGreaterThan(0);
-    await page.getByRole('button', { name: 'Cancel request', exact: true }).click();
+    await settings('Talk');
+    await page.getByRole('button', { name: 'Cancel recording', exact: true }).click();
     await expect(page.getByRole('button', { name: 'Speak', exact: true })).toBeEnabled();
     expect(await page.evaluate(() => window.__portableTracks.length > 0 && window.__portableTracks.every((track) => track.readyState === 'ended'))).toBe(true);
-    await page.getByText('Voice profiles and playback', { exact: true }).click();
-    await page.getByText('Voice profiles / customize speech', { exact: true }).click();
+    await settings('Voice');
     await expect(page.locator('.voice-profile-active')).toContainText('Standard');
     await expect(page.getByLabel('Speaking voice / accent').locator('option')).not.toHaveCount(1);
+    await page.getByRole('tablist', { name: 'Speaking voice categories', exact: true }).getByRole('tab', { name: 'Profiles', exact: true }).click();
     await page.getByLabel('Voice profile name', { exact: true }).fill('Portable smoke voice');
     await page.getByRole('button', { name: 'Save & use profile', exact: true }).click();
     await expect(page.locator('.voice-profile-active')).toContainText('Portable smoke voice');
     await page.reload();
-    await page.getByText('Voice profiles and playback', { exact: true }).click();
-    await page.getByText('Voice profiles / customize speech', { exact: true }).click();
+    await settings('Voice');
     await expect(page.locator('.voice-profile-active')).toContainText('Portable smoke voice');
-    await page.getByText('Voice profiles / customize speech', { exact: true }).click();
     await page.getByRole('button', { name: 'Maximize window', exact: true }).click();
     await expect(page.locator('main')).toHaveAttribute('data-maximized', 'true');
     await page.getByRole('button', { name: 'Restore window', exact: true }).click();
@@ -106,12 +106,13 @@ async function main() {
     await page.getByRole('button', { name: 'Speak', exact: true }).click();
     await expect(page.getByRole('button', { name: 'Stop & transcribe', exact: true })).toBeVisible();
     await expect.poll(() => page.getByRole('meter').evaluate((meter) => meter.value)).toBeGreaterThan(0);
-    await page.getByRole('button', { name: 'Cancel request', exact: true }).click();
+    await page.getByRole('button', { name: 'Expand floating controls', exact: true }).click();
+    await page.getByRole('button', { name: 'Conversation and transcript', exact: true }).click();
+    await page.getByRole('button', { name: 'Cancel recording', exact: true }).click();
     await expect(page.getByRole('alert')).toContainText('Cancelled');
     await expect(page.getByRole('alert')).toBeInViewport();
     expect(await page.evaluate(() => window.__portableTracks.length > 0 && window.__portableTracks.every((track) => track.readyState === 'ended'))).toBe(true);
-    await page.getByRole('button', { name: 'Hide voice settings', exact: true }).click();
-    await page.getByRole('button', { name: 'Expand floating controls', exact: true }).click();
+    await page.getByRole('button', { name: 'Conversation and transcript', exact: true }).click();
     await expect(page.getByLabel('Floating window size', { exact: true })).toHaveText('540px');
     await page.getByRole('button', { name: 'Make floating window larger', exact: true }).click();
     await expect(page.getByLabel('Floating window size', { exact: true })).toHaveText('588px');
@@ -121,7 +122,7 @@ async function main() {
     await page.keyboard.press('Escape');
     await expect(page.locator('main')).toHaveAttribute('data-floating', 'false');
     expect(errors).toEqual([]);
-    console.log(JSON.stringify({ executable, result: 'Actual portable mesh startup, workspace/floating microphone signal and cancellation/track release, visible floating feedback, persistent voice profiles, maximize/restore and collapsed single-row dock with graph/native size controls passed', contexts: snapshot.contexts.length, relationships: snapshot.edges.length }));
+    console.log(JSON.stringify({ executable, result: 'Actual portable mesh startup, tabbed settings, workspace/floating microphone signal and cancellation/track release, visible floating feedback, persistent voice profiles, maximize/restore and collapsed fitted dock with graph/native size controls passed', contexts: snapshot.contexts.length, relationships: snapshot.edges.length }));
   } finally {
     if (page && !page.isClosed()) await page.evaluate(() => window.intercom.windowAction('close')).catch((error) => {
       if (!/closed|destroyed/i.test(error.message)) throw error;

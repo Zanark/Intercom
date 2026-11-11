@@ -4,6 +4,8 @@ import type { Context, Job, MeshSnapshot, Profile } from '../domain/model';
 import { MicrophonePicker } from '../components/MicrophonePicker';
 import { VoiceConversation } from '../components/VoiceConversation';
 import { WorkPanel } from '../components/WorkPanel';
+import { SettingsTabs } from '../components/SettingsTabs';
+import type { SettingsTab } from '../components/SettingsTabs';
 
 const profileKey = 'intercom.prototype.profile';
 const Mesh = lazy(() => import('../components/Mesh'));
@@ -15,7 +17,7 @@ const phaseLabel = {
   cancelled: 'Demo cancelled',
 };
 
-function Icon({ name }: { name: 'float' | 'mic' | 'arrow' | 'pin' | 'close' | 'minus' | 'plus' | 'move' | 'restore' | 'maximize' }) {
+function Icon({ name }: { name: 'float' | 'mic' | 'arrow' | 'pin' | 'close' | 'minus' | 'plus' | 'move' | 'restore' | 'maximize' | 'settings' | 'message' }) {
   const paths = {
     float: <><rect x="4" y="4" width="16" height="16" rx="3" /><path d="M14 4v6h6M10 14l-6 6" /></>,
     mic: <><rect x="9" y="3" width="6" height="12" rx="3" /><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3M8 22h8" /></>,
@@ -27,6 +29,8 @@ function Icon({ name }: { name: 'float' | 'mic' | 'arrow' | 'pin' | 'close' | 'm
     move: <path d="M12 3v18M3 12h18M8 7l4-4 4 4M8 17l4 4 4-4M7 8l-4 4 4 4M17 8l4 4-4 4" />,
     maximize: <rect x="5" y="5" width="14" height="14" rx="1" />,
     restore: <><rect x="5" y="8" width="11" height="11" rx="1" /><path d="M9 8V4h11v11h-4" /></>,
+    settings: <><path d="M4 7h16M4 17h16" /><circle cx="9" cy="7" r="3" /><circle cx="15" cy="17" r="3" /></>,
+    message: <path d="M5 4h14v12H9l-4 4V4zM8 8h8M8 12h5" />,
   };
   return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{paths[name]}</svg>;
 }
@@ -55,6 +59,10 @@ export function App() {
   const [dockExpanded, setDockExpanded] = useState(false);
   const [navigationHost, setNavigationHost] = useState<HTMLDivElement | null>(null);
   const [voiceHost, setVoiceHost] = useState<HTMLElement | null>(null);
+  const [floatingVoiceHost, setFloatingVoiceHost] = useState<HTMLDivElement | null>(null);
+  const [tab, setTab] = useState<SettingsTab>('Talk');
+  const [voicePanelOpen, setVoicePanelOpen] = useState(false);
+  const [advancedTab, setAdvancedTab] = useState<'General' | 'Display' | 'About'>('General');
   const meshRequest = useRef(0);
   const invalidateMesh = useCallback(() => { meshRequest.current++; }, []);
   const [recording, setRecording] = useState(false);
@@ -240,12 +248,17 @@ export function App() {
   const selected = contexts.find((context) => context.id === selectedId) ?? contexts.find((context) => context.name.toLowerCase() === 'intercom') ?? contexts[0];
   const actualSelected = actualContexts.find((context) => context.id === selectedId) ?? actualContexts.find((context) => context.name.toLowerCase() === 'intercom') ?? actualContexts[0];
   const workActive = !!realJob && ['starting', 'running', 'awaiting-approval'].includes(realJob.phase);
+  const openTab = useCallback((value: SettingsTab) => setTab(value), []);
+  useEffect(() => {
+    if (realJob?.phase === 'awaiting-approval') setTab('Work');
+  }, [realJob?.phase]);
   const observedSlots = useMemo(() => workActive ? actualContexts.filter((context) => realJob?.observedContextIds.includes(context.id)).map((context) => context.slot) : [], [workActive, actualContexts, realJob]);
   function workFromVoice(text: string, mode: WorkMode) {
     const matches = resolveTarget(text, actualContexts);
     setRouteChoices(matches.length > 1 ? matches : null);
     if (matches.length === 1) setSelectedId(matches[0].id);
     setWorkProposal({ id: crypto.randomUUID(), text, mode });
+    setTab('Work');
     if (desktop.floating) void windowAction('toggle-floating');
   }
 
@@ -291,17 +304,20 @@ export function App() {
       <div className="mesh-caption chrome"><span className="selected-context" style={{ color: selected?.color }}>{selected?.name ?? 'No context loaded'}</span><span>Hover nodes for names / Click to pin</span><span>Drag to orbit / Right-drag to pan / Scroll to zoom</span></div>
       <div className="mesh-toolbar chrome">
         <span className="legend"><i />{demo ? 'Demo path' : 'Observed job / tool locations'} <i className="dim" />Topology</span>
-        <button className="quiet-button" aria-pressed={motion} onClick={() => setMotion(!motion)}>{motion ? 'Pause drift' : 'Enable drift'}</button>
         <button className="quiet-button float-button" disabled={!desktopAvailable} onClick={() => void windowAction('toggle-floating')}><Icon name="float" />Floating mesh</button>
       </div>
       <div className="floating-tools" role="group" aria-label="Floating controls dock">
         <div className="floating-handle" aria-label="Move floating mesh" title="Grab and drag to move the floating window. Drag the graph itself to orbit.">
-          <Icon name="move" /><span>Drag to move</span>
+          <Icon name="move" /><span className="sr-only">Drag to move</span>
         </div>
-        <button aria-label={dockExpanded ? 'Collapse floating controls' : 'Expand floating controls'} title={dockExpanded ? 'Collapse controls' : 'Expand controls'} aria-expanded={dockExpanded} aria-controls="floating-dock-controls" onClick={() => setDockExpanded(!dockExpanded)}>{dockExpanded ? '\u2039' : '\u203a'}</button>
+        {!demo && <div className="floating-microphone" ref={setFloatingVoiceHost} />}
+        <button aria-label={dockExpanded ? 'Collapse floating controls' : 'Expand floating controls'} title={realJob?.phase === 'awaiting-approval' ? 'Work needs permission - expand controls' : dockExpanded ? 'Collapse controls' : 'Expand controls'} className={realJob?.phase === 'awaiting-approval' ? 'needs-attention' : ''} aria-expanded={dockExpanded} aria-controls="floating-dock-controls" onClick={() => setDockExpanded(!dockExpanded)}>{dockExpanded ? '\u2039' : '\u203a'}</button>
         <div className="floating-dock-controls" id="floating-dock-controls" hidden={!dockExpanded}>
-        <span className="floating-demo">{demo ? 'DEMO' : snapshot ? `${contexts.length} CONTEXTS` : 'NO DATA'}</span>
+        {demo && <span className="floating-demo">DEMO</span>}
         <div className="floating-zoom" ref={setNavigationHost} />
+        <button title="Settings" aria-label="Voice settings and transcript" onClick={() => { setTab('Input'); void windowAction('toggle-floating'); }}><Icon name="settings" /></button>
+        <button title="Conversation and transcript" aria-label="Conversation and transcript" aria-expanded={voicePanelOpen} onClick={() => setVoicePanelOpen(!voicePanelOpen)}><Icon name="message" /></button>
+        <button title={realJob?.phase === 'awaiting-approval' ? 'Work needs permission' : 'Work and receipts'} aria-label="Work and receipts" className={realJob?.phase === 'awaiting-approval' ? 'needs-attention' : ''} onClick={() => { setTab('Work'); void windowAction('toggle-floating'); }}><Icon name="arrow" /></button>
         <button title="Restore workspace (Escape)" aria-label="Restore workspace" onClick={() => void windowAction('toggle-floating')}><Icon name="restore" /></button>
         <button title="Always on top" aria-label="Always on top" aria-pressed={desktop.onTop} onClick={() => void windowAction('toggle-top')}><Icon name="pin" /></button>
         <button title="Close" aria-label="Close floating mesh" onClick={() => void windowAction('close')}><Icon name="close" /></button>
@@ -315,9 +331,14 @@ export function App() {
     </section>
 
     <aside className="activity chrome">
-      <div className="eyebrow">THE CONVERSATION</div>
-      <button className="quiet-button" onClick={() => { stopSpeech(); setJob(null); setProposal(null); setCandidates(null); setVoiceEnabled(false); setDemo(!demo); }}>{demo ? 'Use live voice' : 'Show fixture demo'}</button>
-      {!demo ? <VoiceConversation onRecordingChange={onRecordingChange} onWorkRequest={workFromVoice} floating={desktop.floating} controlsHost={voiceHost} /> : <>
+      <div className="settings-heading"><div><div className="eyebrow">YOUR SPACE</div><h2>{demo ? 'Fixture preview' : 'Make yourself at home.'}</h2></div>
+        <button className="quiet-button" aria-label="Voice settings and transcript" title="Microphone settings" onClick={() => setTab('Input')}><Icon name="settings" /></button>
+      </div>
+      {!demo && <SettingsTabs tabs={['Talk', 'Input', 'Session', 'Voice', 'Work', 'Advanced'] as const} value={tab} onChange={setTab} label="Workspace settings" />}
+      <div className="settings-content" data-settings-tab={tab}>
+      {!demo && tab === 'Advanced' && <SettingsTabs tabs={['General', 'Display', 'About'] as const} value={advancedTab} onChange={setAdvancedTab} label="Advanced categories" />}
+      {!demo ? <VoiceConversation onRecordingChange={onRecordingChange} onWorkRequest={workFromVoice} floating={desktop.floating} paused={desktop.paused} controlsHost={desktop.floating ? floatingVoiceHost : voiceHost} tab={tab} advancedGeneral={advancedTab === 'General'} onOpenTab={openTab} panelOpen={voicePanelOpen} setPanelOpen={setVoicePanelOpen} /> : <>
+      <button className="quiet-button" onClick={() => { stopSpeech(); setJob(null); setProposal(null); setCandidates(null); setVoiceEnabled(false); setDemo(false); setTab('Talk'); }}>Use live voice</button>
       <div className="activity-title"><span className="status-dot" /><span>{busy ? 'Demo in progress' : 'Ready when you are'}</span></div>
       <div className="message assistant"><span className="message-label">INTERCOM / DEMO</span><p>Your workspace, without the window shuffle.</p><p className="muted">Try a synthetic request below. I&apos;ll show the route, not run a real agent.</p></div>
       <MicrophonePicker />
@@ -332,17 +353,29 @@ export function App() {
       <label className="voice-toggle"><input type="checkbox" checked={voiceEnabled} onChange={(event) => { setVoiceEnabled(event.target.checked); if (!event.target.checked) stopSpeech(); }} />Read demo results using a local system voice</label>
       <button className="quiet-button" disabled={!speaking} onClick={stopSpeech}>Stop speech <span className="muted">(does not cancel work)</span></button>
       </>}
-      {routeChoices && !demo && <div role="region" aria-label="Choose voice task context"><p>Multiple contexts were mentioned. Choose the target before preparing work.</p>{routeChoices.map((context) =>
+      {routeChoices && !demo && tab === 'Work' && <div role="region" aria-label="Choose voice task context"><p>Multiple contexts were mentioned. Choose the target before preparing work.</p>{routeChoices.map((context) =>
         <button className="quiet-button" key={context.id} onClick={() => { setSelectedId(context.id); setRouteChoices(null); }}>{context.name}</button>)}</div>}
       <WorkPanel contexts={actualContexts} contextId={routeChoices ? '' : actualSelected?.id ?? ''} profile={profile} voiceProposal={workProposal}
-        onSelect={(id) => { setSelectedId(id); setRouteChoices(null); }} onJob={setRealJob} recording={recording} hidden={demo} />
+        onSelect={(id) => { setSelectedId(id); setRouteChoices(null); }} onJob={setRealJob} recording={recording} hidden={demo || tab !== 'Work'} />
+      <section hidden={!demo && tab !== 'Advanced'} aria-label="Advanced settings">
+      <div hidden={advancedTab !== 'About'}>
       <details className="prototype-coverage"><summary>Prototype coverage</summary>
         <p>Push-to-talk and mic selection; local English transcription and spoken replies; real mesh on every launch; explicit context/session routing; confirmed background work or terminal handoff; manual tool prompts; event-driven receipts and desktop notifications; floating mesh; selectable speed-first priorities; application branding.</p>
         <p>No wake word (push-to-talk chosen), simultaneous multi-job execution, unattended approvals, or inferred live retrieval paths. Bright spokes mean observed job output or tool-reported locations, not traversal of topology links. A returned answer is not independent task verification.</p>
       </details>
+      </div>
+      <div hidden={advancedTab !== 'General'}>
       <div className="profile-section"><label htmlFor="profile">Processing priority</label><select id="profile" value={profile} onChange={(event) => { if (isProfile(event.target.value)) setProfile(event.target.value); }}>
         {profiles.map((item) => <option key={item}>{item}</option>)}
       </select><small>Controls rendering and supported background reasoning effort (low / medium / high). Copilot retains its model; unsupported effort controls stay inherited. Speech uses the installed local English recognizer.</small></div>
+      {!demo && <button className="quiet-button" onClick={() => { stopSpeech(); setJob(null); setProposal(null); setCandidates(null); setVoiceEnabled(false); setDemo(true); }}>Show fixture demo</button>}
+      </div>
+      <div hidden={advancedTab !== 'Display'}>
+        <h3>Mesh motion</h3><button className="quiet-button" aria-pressed={motion} onClick={() => setMotion(!motion)}>{motion ? 'Pause drift' : 'Enable drift'}</button>
+        <p className="muted">Drift is off by default to keep the graph quiet and lightweight.</p>
+      </div>
+      </section>
+      </div>
     </aside>
 
     {!demo && <footer className="voice-surface" aria-label="Persistent voice controls" ref={setVoiceHost} />}

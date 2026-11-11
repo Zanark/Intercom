@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Context, Profile } from '../domain/model';
+import { SettingsTabs } from './SettingsTabs';
 
 const finished = new Set<WorkJob['phase']>(['responded', 'failed', 'unknown', 'cancelled', 'terminal-opened']);
 const labels: Record<WorkJob['phase'], string> = {
@@ -30,6 +31,7 @@ export function WorkPanel({ contexts, contextId, profile, voiceProposal, onSelec
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
   const [announce, setAnnounce] = useState(true);
+  const [tab, setTab] = useState<'Target' | 'Task' | 'Review' | 'Receipt'>('Target');
   const version = useRef(0);
   const received = useRef(0);
   const announced = useRef(new Set<string>());
@@ -42,11 +44,12 @@ export function WorkPanel({ contexts, contextId, profile, voiceProposal, onSelec
     let mounted = true;
     const sequence = received.current;
     void window.intercom?.workState().then((current) => {
-      if (mounted && received.current === sequence) { setJob(current); onJob(current); }
+      if (mounted && received.current === sequence) { setJob(current); onJob(current); if (current) setTab('Receipt'); }
     }).catch((reason: unknown) => { if (mounted) setError(report(reason)); });
     const remove = window.intercom?.onWorkProgress((current) => {
       if (current.completedAt) liveCompletions.current.add(current.id);
       received.current++; setJob(current); onJob(current);
+      setTab('Receipt');
     });
     return () => { mounted = false; remove?.(); };
   }, [onJob]);
@@ -58,6 +61,7 @@ export function WorkPanel({ contexts, contextId, profile, voiceProposal, onSelec
   useEffect(() => {
     if (!voiceProposal) return;
     version.current++; setProposal(null); setRequest(voiceProposal.text); setMode(voiceProposal.mode);
+    setTab('Task');
   }, [voiceProposal]);
   useEffect(() => {
     if (!job?.completedAt || !finished.has(job.phase) || !announce || recording || job.acknowledged ||
@@ -78,7 +82,9 @@ export function WorkPanel({ contexts, contextId, profile, voiceProposal, onSelec
   }
   function invalidate() { version.current++; setProposal(null); }
   return <section className="work-panel" aria-label="Confirmed existing-session work" hidden={hidden}>
-    <details open><summary>Real session work / terminal</summary>
+    <h3>Existing-session work</h3>
+    <SettingsTabs tabs={['Target', 'Task', 'Review', 'Receipt'] as const} value={tab} onChange={setTab} label="Work steps" />
+    <div hidden={tab !== 'Target'}>
       <label htmlFor="work-context">Target context</label>
       <select id="work-context" value={contextId} disabled={busy || recording} onChange={(event) => onSelect(event.target.value)}>
         {!context && <option value="">Load the real mesh first</option>}
@@ -97,6 +103,8 @@ export function WorkPanel({ contexts, contextId, profile, voiceProposal, onSelec
         <option value="">Select explicitly</option>
         {sessions.map((item) => <option key={item.id} value={item.id} disabled={item.status !== 'idle'}>{item.id} / {item.status}</option>)}
       </select>
+    </div>
+    <div hidden={tab !== 'Task'}>
       <label htmlFor="work-mode">Execution</label>
       <select id="work-mode" value={mode} disabled={busy || recording} onChange={(event) => { invalidate(); if (event.target.value === 'background' || event.target.value === 'terminal') setMode(event.target.value); }}>
         <option value="background">Background / in-app approvals and result</option><option value="terminal">New terminal / manual ownership</option>
@@ -106,8 +114,11 @@ export function WorkPanel({ contexts, contextId, profile, voiceProposal, onSelec
       <button className="quiet-button" disabled={busy || working || recording || !sessionId || !request.trim()} onClick={() => void act(async () => {
         const revision = version.current;
         const prepared = await window.intercom!.prepareWork(contextId, sessionId, request, mode, profile);
-        if (revision === version.current) setProposal(prepared);
+        if (revision === version.current) { setProposal(prepared); setTab('Review'); }
       })}>Review target and task</button>
+    </div>
+    <div hidden={tab !== 'Review'}>
+      {!proposal && <p>Prepare a task first. Nothing runs without your confirmation.</p>}
       {proposal && <div className="work-confirmation" role="region" aria-label="Real work confirmation">
         <strong>{proposal.contextName}</strong><p>{proposal.workspace}</p><p>{proposal.sessionId}</p><p>{proposal.request}</p>
         <small>{proposal.mode} / {proposal.profile}. Agent mode, allow-all OFF, no new session. Existing saved Copilot approvals still apply. Supported reasoning effort follows the chosen priority; model stays inherited. These session settings persist.</small>
@@ -118,7 +129,8 @@ export function WorkPanel({ contexts, contextId, profile, voiceProposal, onSelec
         <button className="quiet-button" onClick={invalidate}>Dismiss proposal</button>
       </div>}
       <small>Busy sessions are refused at dispatch. One owned job; no model polling. A new terminal requires manual task entry and is not monitored or reported as completed.</small>
-    </details>
+    </div>
+    <div hidden={tab !== 'Receipt'}>
     <label className="voice-toggle"><input type="checkbox" checked={announce} onChange={(event) => setAnnounce(event.target.checked)} />Speak work completion and attention updates</label>
     {job && <div className="job-card real-job" aria-live="polite">
       <div className="message-label">REAL WORK RECEIPT / {job.contextName}</div><strong>{labels[job.phase]}</strong>
@@ -137,6 +149,8 @@ export function WorkPanel({ contexts, contextId, profile, voiceProposal, onSelec
       {finished.has(job.phase) && !job.acknowledged && <button className="quiet-button" disabled={busy || job.cleanupNeeded} onClick={() => void act(() => window.intercom!.acknowledgeWork(job.id))}>Acknowledge receipt</button>}
       <small>Agent-reported results are not independent verification. Work survives panel changes, not app exit; an interrupted run is never silently retried.</small>
     </div>}
+    {!job && <p>No owned work receipt yet.</p>}
+    </div>
     {error && <p className="voice-error" role="alert">{error}</p>}
   </section>;
 }
