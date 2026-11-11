@@ -57,7 +57,7 @@ Completion evidence:
   speech is observed once, never replayed from restored receipts; deterministic
   packaged cases cover that UI behavior. No new physical/audio-quality claim.
   Candidate picks and reproducible evidence plan are in
-  docs/technology-decisions.md and docs/performance-and-qualification.md.
+  docs/architecture/technology-decisions.md and docs/research/performance-and-qualification.md.
 
 Completion log:
   2026-11-11 - Extended voice destinations to reviewed background/terminal

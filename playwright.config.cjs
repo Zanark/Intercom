@@ -1,7 +1,7 @@
 const { defineConfig } = require('@playwright/test');
 
 module.exports = defineConfig({
-  testDir: './tests',
+  testDir: './tests/e2e',
   testMatch: '**/*.test.cjs',
   outputDir: '.local/desktop-test-results',
   workers: 1,

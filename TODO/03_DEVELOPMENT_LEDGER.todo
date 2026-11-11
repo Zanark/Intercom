@@ -19,6 +19,30 @@ Completion evidence:
   This ledger is ongoing, not a finite feature deliverable.
 
 Completion log:
+  2026-11-11 - Reorganized the entire repository on explicit owner selection.
+    Action: moved 62 tracked files into renderer app/components/domain/voice,
+      native services/speech, unit/e2e/smoke/helpers, topic-based docs and
+      role-based assets. Rebased imports, native script/worker/worklet/icon
+      paths, packaging/test/typecheck configuration and artwork tooling.
+      Kept conventional root entry/configuration and numbered TODO identities.
+      README stays centered/image-led; guide and contributor map explain layout.
+    Evidence: lint/type/build; eight renderer/PCM units, 17 voice-host and
+      17 mesh/work-host cases pass. Source desktop run 27/28 initially;
+      cross-mode microphone meter returned zero, then passes isolated without
+      code/test edits. No all-28-together or confirmed root-cause claim.
+      Separate .local\reorganization-package portable passes synthetic capture/
+      cancellation in workspace/floating, actual mesh, native voices/profile
+      persistence and graph/window/dock controls. Eleven runtime resource bytes,
+      four license notices and private/development exclusions verified.
+      All 86 local links/anchors, original artwork bytes, unchanged test names
+      and isolated button/gallery renderer outputs verified.
+    Corrections: fixed a stale feature-matrix anchor during link reconciliation;
+      session-only archive checker needed native Windows path separators.
+      One anchored test selector matched no tests; corrected selector ran case.
+    Boundary: no dependencies/version, permissions, real Copilot task, public
+      release, retained artifact/profile or user-app restart changed. Retained
+      .11 EXE checksum unchanged. Physical input/listening/performance remain
+      unqualified. Existing workstream issues retain original identities/status.
   2026-11-11 - Reworked image-led README artwork on owner request.
     Removed embedded logo caption and rectangular background; kept circular
       glow, moving sphere and simulated mic fill. Reserved GIF transparency
@@ -184,7 +208,7 @@ Completion log:
     Limits: presentation only; no microphone capture, runtime/icon/release
       change, user-app restart, real agent prompt, commit, push or publication.
     Next: user visual acceptance; existing product/device/performance gates stay
-      open. Reproduce assets with python .\tools\render_readme.py.
+      open. Reproduce assets with python .\tools\docs\render_readme.py.
   2026-11-11 - Prototype .7 published on explicit owner request.
     Action: reviewed/staged 56 intended public files, committed with verified
       Zanark identity and required trailers, atomically pushed main/new tag,
@@ -329,8 +353,8 @@ Completion log:
     Mechanism: separate wake/dialogue, session routing, connector, durable jobs,
       evidence-backed graph activity and completion speech; compare speech before
       choosing a provider. Keep context topology distinct from live telemetry.
-    Evidence: docs/product-brief.md, docs/architecture.md, docs/speech-options.md
-      and docs/roadmap.md distinguish user choices, proposals and unproven behavior.
+    Evidence: docs/product/product-brief.md, docs/architecture/architecture.md, docs/research/speech-options.md
+      and docs/product/roadmap.md distinguish user choices, proposals and unproven behavior.
     Limit: user chose documentation only. No app, selected stack/provider, audio
       capture, model download, session dispatch, live attachment or quality claim.
     Next: reconcile tracking and continuity; wait for separately authorized
@@ -341,7 +365,7 @@ Completion log:
     Effect: all six workstreams have actual issue-backed Project items/backlinks.
     Evidence: independent full remote read verifies bodies, states/status IDs,
       six issues/items, private Project visibility and sole repository link;
-      original #1 is unchanged. docs/github-tracking.md records final mappings
+      original #1 is unchanged. docs/development/github-tracking.md records final mappings
       and read-back hashes. Eight TODO schemas and acyclic dependencies checked.
     Limit: manual reconciliation, not a sync service; no runtime qualification.
     Next: persist the design milestone and refresh owned Context Mesh continuity.
@@ -387,7 +411,7 @@ Completion log:
         Updated only #2 through #6 descriptions; independent full read-back
         verified all bodies, backlinks, original issue/item/status IDs, states,
         private Project and sole linked repository. #1 remains unchanged.
-      Effect: docs/github-tracking.md records the new verified body hashes.
+      Effect: docs/development/github-tracking.md records the new verified body hashes.
       Limit: live Agency/AEC/provider/device behavior remains unqualified;
         public documentation changes are local and uncommitted.
       Next: finish owned-store/zmem persistence and checked mesh publication;
@@ -475,7 +499,7 @@ Completion log:
       Evidence: independent full GraphQL read-back matched all six complete
         bodies, backlinks, original issue/item IDs, status option IDs, private
         Project visibility and sole repository link. Updated the two managed
-        conflict hashes in docs/github-tracking.md only after verification.
+        conflict hashes in docs/development/github-tracking.md only after verification.
       Limit: #5 remains In Progress; the published fixture does not complete
         actual voice/Agency qualification or product acceptance.
   2026-11-11 - Voice-and-mesh branding integrated into an isolated EXE candidate.

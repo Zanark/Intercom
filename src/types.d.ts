@@ -8,7 +8,7 @@ interface DesktopState {
 type WorkMode = 'background' | 'terminal';
 interface WorkProposal {
   id: string; contextId: string; contextName: string; sessionId: string; workspace: string;
-  request: string; mode: WorkMode; profile: import('./model').Profile; expiresAt: number;
+  request: string; mode: WorkMode; profile: import('./domain/model').Profile; expiresAt: number;
 }
 interface WorkJob extends WorkProposal {
   phase: 'starting' | 'running' | 'awaiting-approval' | 'responded' | 'failed' | 'unknown' | 'cancelled' | 'terminal-opened';
@@ -31,10 +31,10 @@ interface SpeakingProvider {
 }
 interface Window {
   intercom?: {
-    loadContextMesh(): Promise<import('./model').MeshSnapshot>;
+    loadContextMesh(): Promise<import('./domain/model').MeshSnapshot>;
     workState(): Promise<WorkJob | null>;
     workSessions(contextId: string): Promise<{ id: string; status: string }[]>;
-    prepareWork(contextId: string, sessionId: string, text: string, mode: WorkMode, profile: import('./model').Profile): Promise<WorkProposal>;
+    prepareWork(contextId: string, sessionId: string, text: string, mode: WorkMode, profile: import('./domain/model').Profile): Promise<WorkProposal>;
     confirmWork(id: string): Promise<WorkJob>;
     approveWork(id: string, permissionId: string, optionId: string): Promise<void>;
     acknowledgeWork(id: string): Promise<void>;

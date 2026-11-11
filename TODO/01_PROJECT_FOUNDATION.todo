@@ -40,7 +40,7 @@ Completion evidence:
   Independent remote read confirms #1 CLOSED/COMPLETED with Project Done;
     #2 OPEN with Project Todo. Both items contain the actual repository issues.
   Managed descriptions are mirrored from these public-safe workstream sources;
-    final body baselines and read-back receipt live in docs/github-tracking.md.
+    final body baselines and read-back receipt live in docs/development/github-tracking.md.
   No application build or test suite exists; no runtime validation is claimed.
   Human acceptance and product implementation are not claimed.
 

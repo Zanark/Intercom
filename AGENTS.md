@@ -2,9 +2,9 @@
 
 ## Read first
 
-Read `README.md`, `docs/guide.md`, `docs/product-brief.md`, `docs/development-manual.md`,
+Read `README.md`, `docs/guide.md`, `docs/product/product-brief.md`, `docs/development/development-manual.md`,
 `TODO/00_INDEX.todo`, and the affected workstream before changing the project.
-Read `docs/github-tracking.md` before remote tracking changes.
+Read `docs/development/github-tracking.md` before remote tracking changes.
 
 For session startup, follow the installed `context-offload` and `context-mesh`
 skills. Resolve the current base from the mesh index, hydrate this base's
@@ -41,15 +41,23 @@ Sibling context stores are read-only.
   product recommendation. Electron is the approved bounded-prototype host,
   not a qualified performance winner. Speech and OS/device support remain gated.
 - Do not infer integrations or features from the project name.
-- Read `docs/architecture.md`, `docs/speech-options.md`, and `docs/roadmap.md`
+- Read `docs/architecture/architecture.md`, `docs/research/speech-options.md`, and `docs/product/roadmap.md`
   before future implementation. Proposed technology is not user approval.
-- Read `docs/technology-decisions.md`, `docs/runtime-contracts.md` and
-  `docs/performance-and-qualification.md` for the detailed candidate contract;
-  `docs/research-sources.md` distinguishes upstream from installed evidence.
+- Read `docs/architecture/technology-decisions.md`, `docs/architecture/runtime-contracts.md` and
+  `docs/research/performance-and-qualification.md` for the detailed candidate contract;
+  `docs/research/research-sources.md` distinguishes upstream from installed evidence.
 - Do not substitute a new SDK session for an existing Agency session and call
   the integration proven. Do not show guessed retrieval activity as observed.
 
 ## Development loop
+
+Keep application UI in `src/app` and `src/components`, routing/model code in
+`src/domain`, recording in `src/voice`, and native modules in `desktop/services`.
+`desktop/main.cjs` and `desktop/preload.cjs` remain the host entry/bridge.
+Tests are grouped into `tests/unit`, `tests/e2e`, `tests/smoke` and `tests/helpers`.
+The repository map in `docs/guide.md` covers documentation, assets and tooling.
+Update import, resource, test-discovery and packaging paths together when moving
+files; preserve the numbered TODO identities and owned context-store location.
 
 1. Define one bounded outcome in a numbered `.todo` workstream.
 2. Read relevant implementation and prior art; preserve unrelated dirty changes.

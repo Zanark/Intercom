@@ -70,6 +70,8 @@ Tasks:
   [x] Group secondary settings, prioritize transcript and focus microphone selection.
   [x] Verify placement across scrolling/resizing and qualify separate .11 portable.
   [x] Remove older local releases on owner request; retain verified .11 only.
+  [x] Reorganize source, native services, tests, tooling and documentation together.
+  [x] Verify relocated resources and packaging without replacing retained .11.
   [ ] Add the required future arbitrary identity, timbre and emotional-style engine.
   [ ] Qualify native permission prompting on a target without saved grants.
   [ ] Qualify manual terminal opening and any future acknowledged automatic handoff.
@@ -85,7 +87,7 @@ Tasks:
   [ ] Document actual build/test/launch commands and remaining evidence limits.
 
 Acceptance criteria:
-  The docs/roadmap.md first-slice scenario passes on disposable test data.
+  The docs/product/roadmap.md first-slice scenario passes on disposable test data.
   Voice remains available while a request runs without model-based status polling.
   No fabricated reads, false completion, unrestricted tools or duplicate dispatch.
   Playback interruption is separate from task cancellation.
@@ -94,11 +96,11 @@ Acceptance criteria:
   Profile changes apply at a request boundary without changing running jobs,
   permissions or approved providers; default performance meets agreed budgets.
   Host authority, request/outbox transactions and snapshot resynchronization
-  follow docs/runtime-contracts.md; browser mocks are not native-app evidence.
+  follow docs/architecture/runtime-contracts.md; browser mocks are not native-app evidence.
 
 Completion evidence:
   Fixture sub-slice: Electron 45.2.1, React/TypeScript/Vite and Three.js; exact
-  dependency lock, local build and launch commands in README/docs/prototype.md.
+  dependency lock, local build and launch commands in README/docs/prototype/prototype.md.
   npm run lint and npm run build pass; seven Vitest cases and six Playwright
   desktop scenarios pass. Actual Electron captures have alpha-zero corner
   pixels and visible mesh pixels; both workspace/floating screenshots inspected.
@@ -244,7 +246,7 @@ Completion evidence:
   README contains centered linked images, with captioned actual packaged
   screenshots and synthetic-context disclosure. docs/guide.md preserves the
   former README content, rebasing links; it retains release/security warnings,
-  workflow limits, setup and documentation navigation. tools/render_readme.py
+  workflow limits, setup and documentation navigation. tools/docs/render_readme.py
   reproduces artwork locally with Pillow, without audio, sessions or a network.
   Reviewed representative animation frames and desktop/mobile HTML previews.
   Asset/link/anchor checks, exact text preservation, loop timing/seam and
@@ -354,7 +356,29 @@ Completion evidence:
   Retained .11 EXE checksum matches before/after; GitHub releases/assets and
   application profiles unchanged. Older paths above are historical evidence.
 
+  Repository-organization sub-slice: relocated 62 tracked files into app,
+  components, domain, voice, native services/speech, test layers, documentation
+  topics and asset roles. Updated imports, native/AudioWorklet paths, test
+  discovery/typechecking, packaging globs, artwork tooling and local links.
+  Stable root configuration, entry points and numbered TODO identities remain.
+  Lint/type/build, eight renderer/PCM units, 17 voice-host and 17 mesh/work-host
+  cases pass. Source desktop run: 27/28 initially; the cross-mode microphone
+  signal check returned zero, then passed isolated without source/test changes.
+  This is not a claim that all 28 passed together or a proven timing diagnosis.
+  Isolated portable passes actual mesh startup, workspace/floating synthetic
+  recording/cancel/track cleanup, native voices/profiles and graph/window/dock
+  controls. Eleven packaged runtime resources match source; four notices and
+  private/development exclusions verified. All 86 local documentation links/
+  anchors, moved image bytes and test inventories verified; isolated artwork
+  button/gallery rendering passes. Qualification output is under
+  .local\reorganization-package, not release. Retained .11 checksum unchanged;
+  no user-app restart, real Copilot prompt, dependency/version change or release.
+  Physical microphone/listening and measured performance remain unqualified.
+
 Completion log:
+  2026-11-11 - Reorganized the entire repository on owner request; updated
+    application/resource/test/tooling paths, README, guide and contributors'
+    map. Separate qualification package verified; retained release untouched.
   2026-11-11 - Refreshed README artwork on owner request: caption-free animated
     logo with transparent exterior/circular glow, raised shadowed link buttons
     and supplied desktop/browser floating showcases labelled earlier layout.

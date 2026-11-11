@@ -1,9 +1,9 @@
 const { app, BrowserWindow, ipcMain, Menu, session, Notification, screen } = require('electron');
 const path = require('node:path');
 const { pathToFileURL } = require('node:url');
-const { VoiceHost } = require('./voice.cjs');
-const { loadMesh } = require('./mesh.cjs');
-const { WorkHost } = require('./work.cjs');
+const { VoiceHost } = require('./services/voice.cjs');
+const { loadMesh } = require('./services/mesh.cjs');
+const { WorkHost } = require('./services/work.cjs');
 
 const profilePath = process.env.INTERCOM_PROFILE_DIR || path.join(app.getPath('appData'), 'IntercomVoicePrototype');
 app.setPath('userData', profilePath);
@@ -35,7 +35,7 @@ const work = new WorkHost(profilePath, () => currentMesh, (event) => {
     const notification = new Notification({
       title: 'Intercom',
       body: `${job.contextName}: ${job.phase === 'responded' ? 'Copilot has responded. Review the result.' : 'Work needs attention. Review the receipt.'}`,
-      icon: path.join(__dirname, '..', 'dist', 'intercom-icon.png'),
+      icon: path.join(__dirname, '..', 'dist', 'branding', 'intercom-icon.png'),
     });
     const timer = setTimeout(() => reject(new Error('Windows did not acknowledge the notification.')), 5000);
     notification.once('show', () => { clearTimeout(timer); resolve(); });
@@ -132,7 +132,7 @@ app.whenReady().then(async () => {
     hasShadow: false,
     show: false,
     title: 'Intercom Prototype',
-    icon: path.join(__dirname, '..', 'dist', 'intercom.ico'),
+    icon: path.join(__dirname, '..', 'dist', 'branding', 'intercom.ico'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.cjs'),
       sandbox: true,

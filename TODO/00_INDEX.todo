@@ -107,7 +107,15 @@ Completion evidence:
   and passing isolated). Separate unsigned .11 actual portable smoke passes.
   Published .7, previous candidates and user's running application untouched.
 
+  ic-06 repository organization moves 62 tracked files into responsibility-based
+  folders with updated imports, commands, packaging and documentation. Unit/
+  native suites and isolated portable checks pass. Source desktop run 27/28,
+  remaining microphone case passes isolated unchanged; no all-28-together claim.
+  Retained .11 release and published .7 unchanged; workstream remains active.
+
 Completion log:
+  2026-11-11 - Reorganized source, tests, native services, assets, docs and
+    tooling; retained stable TODO IDs and recorded exact qualification limits.
   2026-11-11 - Updated transparent README animation, raised buttons and supplied
     desktop/browser Floating Mesh screenshots; application unchanged.
   2026-11-11 - Refreshed README latest-build artwork/link before pushing;

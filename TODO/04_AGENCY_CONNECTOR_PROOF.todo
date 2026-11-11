@@ -51,8 +51,8 @@ Completion evidence:
   mismatched/failed completion and duplicate work; native owned-child
   cancellation is exercised. This is not active attach, ACP/SDK parity,
   inherited permission audit, arbitrary tool work or terminal-handoff proof.
-  See docs/architecture.md and docs/roadmap.md for the proposed proof boundary.
-  docs/runtime-contracts.md expands the capability/ownership and dispatch rules.
+  See docs/architecture/architecture.md and docs/product/roadmap.md for the proposed proof boundary.
+  docs/architecture/runtime-contracts.md expands the capability/ownership and dispatch rules.
   The current ACP path explicitly sets/verifies Agent mode then allow-all OFF,
   retains the inherited model and applies supported profile reasoning effort.
   One separately approved native source test ran only Get-Location and returned

@@ -46,9 +46,9 @@ Acceptance criteria:
 Completion evidence:
   User selected architecture/roadmap only, wake-word activation, existing Agency
   sessions first, and local/cloud speech research before selection.
-  docs/architecture.md records proposed components, telemetry and outcome semantics.
-  docs/speech-options.md compares sourced candidates without claiming voice tests.
-  docs/roadmap.md defines phase gates and the first end-to-end scenario.
+  docs/architecture/architecture.md records proposed components, telemetry and outcome semantics.
+  docs/research/speech-options.md compares sourced candidates without claiming voice tests.
+  docs/product/roadmap.md defines phase gates and the first end-to-end scenario.
   CareerOS graph source and installed Agency/Copilot help inspected read-only.
   User subsequently confirmed performance/speed first and default, with options
   to select priorities. Accuracy remains important; actual inference/speech
@@ -57,12 +57,12 @@ Completion evidence:
   for it. At that milestone no final stack/provider or live connector proof existed.
   Deeper research recommends Tauri 2/Rust + React/TypeScript/Three.js,
   native sherpa audio and SQLite; Electron is retained as a fallback.
-  docs/technology-decisions.md and docs/research-sources.md explain rationale
-  and evidence limits. docs/runtime-contracts.md and
-  docs/performance-and-qualification.md define proposed behavior and gates.
+  docs/architecture/technology-decisions.md and docs/research/research-sources.md explain rationale
+  and evidence limits. docs/architecture/runtime-contracts.md and
+  docs/research/performance-and-qualification.md define proposed behavior and gates.
   Windows endpoint AEC, resumed permissions and actual existing-session control
   remain explicit qualification risks, not completed proofs.
-  docs/prototype.md preserves that initial synthetic desktop milestone,
+  docs/prototype/prototype.md preserves that initial synthetic desktop milestone,
   transparent Floating Mesh and rendering profiles as historical evidence.
   The owner additionally requested an EXE prerelease and microphone selection.
   An unsigned Windows x64 portable prerelease and saved input picker now exist;

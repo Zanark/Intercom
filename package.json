@@ -14,10 +14,10 @@
     "start": "npm run build && electron .",
     "desktop": "electron .",
     "test": "vitest run",
-    "test:voice": "node --test tests\\voice-host.unit.cjs",
-    "test:host": "node --test tests\\mesh-host.unit.cjs tests\\work-host.unit.cjs",
+    "test:voice": "node --test tests\\unit\\voice-host.unit.cjs",
+    "test:host": "node --test tests\\unit\\mesh-host.unit.cjs tests\\unit\\work-host.unit.cjs",
     "test:desktop": "node -p \"require('electron')\" && playwright test",
-    "test:portable": "node tests\\portable-smoke.cjs",
+    "test:portable": "node tests\\smoke\\portable-smoke.cjs",
     "package:win": "npm run build && electron-builder --win portable --x64 --publish never",
     "lint": "eslint . --max-warnings 0"
   },
@@ -53,8 +53,8 @@
     },
     "files": [
       "dist/**/*",
-      "desktop/*.cjs",
-      "desktop/*.ps1",
+      "desktop/**/*.cjs",
+      "desktop/speech/*.ps1",
       "package.json",
       "!node_modules/**/*"
     ],
@@ -79,7 +79,7 @@
     "win": {
       "target": "portable",
       "executableName": "IntercomPrototype",
-      "icon": "public/intercom.ico",
+      "icon": "public/branding/intercom.ico",
       "signAndEditExecutable": true,
       "signExecutable": false,
       "artifactName": "Intercom-Prototype-${version}-win-${arch}.${ext}"

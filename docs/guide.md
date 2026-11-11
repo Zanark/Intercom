@@ -1,8 +1,8 @@
 # Intercom project guide
 
-[Visual home](../README.md) · [Prototype details](prototype.md)
+[Visual home](../README.md) · [Prototype details](prototype/prototype.md)
 
-<img src="assets/intercom-logo.png" alt="Intercom microphone and context-mesh logo" width="144" height="144" />
+<img src="assets/branding/intercom-logo.png" alt="Intercom microphone and context-mesh logo" width="144" height="144" />
 
 The microphone represents voice; varied-size connected nodes, rounded outer
 orbits and straight inner links represent the context mesh. Foreground links
@@ -41,13 +41,15 @@ gate selection.
 The current Windows x64 prototype is **unsigned**:
 [Download the .7 EXE](https://github.com/Zanark/Intercom/releases/download/v0.1.0-prototype.7/Intercom-Prototype-0.1.0-prototype.7-win-x64.exe)
 from the [prototype prerelease](https://github.com/Zanark/Intercom/releases/tag/v0.1.0-prototype.7).
-Local release package:
-`C:\devdesk\homedesk\Intercom\release\voice-profiles-candidate\Intercom-Prototype-0.1.0-prototype.7-win-x64.exe`
+Only the latest local .11 candidate is retained:
+`C:\devdesk\homedesk\Intercom\release\mic-layout-candidate\Intercom-Prototype-0.1.0-prototype.11-win-x64.exe`.
+It is not the published .7 download.
 
 This .7 release adds persistent **Voice profiles**: installed voice/gender/
 accent choice, pitch, speed, volume, preview, duplication and naming.
 Floating movement/sizing, deep graph zoom and native maximize/restore remain
-available; previous executables are preserved.
+available. Earlier local executables were removed in the owner-requested
+cleanup; published GitHub releases are unchanged.
 
 The live source acceptance path captured synthetic speech, executed the exact
 approved read-only `Get-Location` in the existing session, returned "Hello world."
@@ -55,7 +57,7 @@ and completed local playback. Existing saved grants meant no native permission
 prompt appeared; approval mediation is tested with fixtures, not live-qualified.
 The packaged candidate is qualified separately from that historical live task.
 Physical FDUCE and human voice-quality acceptance remain unverified. Checksums,
-the feature matrix and exact limits are in the [prototype guide](prototype.md).
+the feature matrix and exact limits are in the [prototype guide](prototype/prototype.md).
 
 Windows may show an unknown-publisher/SmartScreen warning; verify
 the release checksum and follow your device's security policy.
@@ -63,8 +65,8 @@ No Node.js installation is needed to run the EXE. First launch extracts the
 bundled Electron runtime; startup speed has not been benchmarked.
 
 The [earlier fixture-only .1 prerelease](https://github.com/Zanark/Intercom/releases/tag/v0.1.0-prototype.1)
-is preserved unchanged. The intermediate .2-.6 builds remain local historical
-candidates; their features are included in .7.
+is preserved unchanged. The intermediate .2-.6 builds are historical
+qualification records; their features are included in .7.
 
 From `C:\devdesk\homedesk\Intercom` in PowerShell, with Node.js/npm installed:
 
@@ -112,7 +114,7 @@ demo remains synthetic and separate from live capture.
 workspace; **Ctrl+Shift+M** toggles views while Intercom has focus. Returning from
 a maximized workspace retains its previous normal-window bounds/maximization.
 Older .7-.9 builds retain the top drag handle and two-row dock; they do not
-update automatically. See the [separate .11 candidate](prototype.md#local-microphone-layout-candidate-010-prototype11).
+update automatically. See the [separate .11 candidate](prototype/prototype.md#local-microphone-layout-candidate-010-prototype11).
 
 **Local .8 and newer candidates/current checkout:** in .11 click **Settings**
 beside Speak first, then **Load microphones**, select FDUCE
@@ -121,7 +123,7 @@ shows the selected input while recording. No Copilot connection is needed for
 recording or local transcription. Click **Stop & transcribe** to retain an
 editable transcript; without a connection, nothing is sent, even if automatic
 sending is checked. **Load/Test only checks access**, not capture or recognition.
-The [prototype guide](prototype.md#local-microphone-fix-candidate-010-prototype8)
+The [prototype guide](prototype/prototype.md#local-microphone-fix-candidate-010-prototype8)
 identifies the separate fixed EXE; the published .7 download is unchanged and
 still requires connection before Speak.
 
@@ -141,7 +143,7 @@ work. Transcripts over 1,000 characters remain intact but must be shortened
 before sending. There is no automatic truncation or splitting. Empty recognition
 still gives a distinct error. This improves recovery, not recognition accuracy;
 the engine remains Windows English (US), regardless of the speaking-voice profile.
-See the [separate recognition-review candidate](prototype.md#local-recognition-review-candidate-010-prototype9).
+See the [separate recognition-review candidate](prototype/prototype.md#local-recognition-review-candidate-010-prototype9).
 
 English (US) Windows speech recognition and an installed English voice are
 required; nothing is downloaded. Audio stays in memory and is not uploaded.
@@ -157,9 +159,9 @@ relaunch and apply to progress, replies and work updates. Gender is installed
 voice metadata, not a transformation; pitch depends on the voice, and speed
 uses Windows' scale. The required future arbitrary identity/timbre/emotional
 style engine has a separate provider boundary but is not implemented here.
-See the [speech contract](speech-options.md).
+See the [speech contract](research/speech-options.md).
 
-![Installed voice profiles in the packaged desktop](assets/prototype-voice-profiles.png)
+![Installed voice profiles in the packaged desktop](assets/screenshots/prototype-voice-profiles.png)
 
 Packaged .7: saved speaking profile with installed voice, pitch, speed and volume.
 The sidebar scrolls to preview/save actions below. Contexts are a synthetic
@@ -179,16 +181,16 @@ Context Mesh itself. Source/load timestamps and stale warnings are visible.
 Missing or malformed data produces an error, never a silent fixture substitute.
 Bright spokes indicate observed job/tool locations, not inferred reads of links.
 
-See the [prototype guide](prototype.md) for controls, architecture,
+See the [prototype guide](prototype/prototype.md) for controls, architecture,
 performance behavior, checks and limitations.
 
-![Intercom desktop workspace with graph zoom and window controls](assets/prototype-window-controls.png)
+![Intercom desktop workspace with graph zoom and window controls](assets/screenshots/prototype-window-controls.png)
 
 Actual packaged v0.1.0-prototype.5 capture: maximize/restore is beside minimize
 and close; graph zoom/reset controls sit beside the sphere. This image uses
 explicit synthetic demo contexts; normal startup reads the actual local mesh.
 
-![Floating Mesh with visible movement handle and window-size controls](assets/prototype-floating-controls.png)
+![Floating Mesh with visible movement handle and window-size controls](assets/screenshots/prototype-floating-controls.png)
 
 Actual packaged .6 fixture capture: grab **Drag to move** above the sphere;
 use **Smaller / Larger** in the always-visible bottom dock. The window is
@@ -197,18 +199,18 @@ transparent; synthetic contexts do not represent actual context reads.
 
 ## Start here
 
-- [Product brief and open decisions](product-brief.md)
-- [Architecture and integration boundaries](architecture.md)
-- [Technology picks, alternatives and reversal gates](technology-decisions.md)
-- [Runtime, IPC, routing and recovery contracts](runtime-contracts.md)
-- [Performance profiles and qualification plan](performance-and-qualification.md)
-- [Primary-source research evidence](research-sources.md)
-- [Local and cloud speech comparison](speech-options.md)
-- [Phased roadmap and implementation gates](roadmap.md)
-- [Development manual](development-manual.md)
+- [Product brief and open decisions](product/product-brief.md)
+- [Architecture and integration boundaries](architecture/architecture.md)
+- [Technology picks, alternatives and reversal gates](architecture/technology-decisions.md)
+- [Runtime, IPC, routing and recovery contracts](architecture/runtime-contracts.md)
+- [Performance profiles and qualification plan](research/performance-and-qualification.md)
+- [Primary-source research evidence](research/research-sources.md)
+- [Local and cloud speech comparison](research/speech-options.md)
+- [Phased roadmap and implementation gates](product/roadmap.md)
+- [Development manual](development/development-manual.md)
 - [Workstream index](../TODO/00_INDEX.todo)
 - [Development ledger](../TODO/03_DEVELOPMENT_LEDGER.todo)
-- [GitHub tracking policy](github-tracking.md)
+- [GitHub tracking policy](development/github-tracking.md)
 - [Contributor and agent instructions](../AGENTS.md)
 - [Intercom GitHub Project](https://github.com/users/Zanark/projects/13)
 
@@ -218,6 +220,48 @@ confirmed real work with manual approvals and a fresh actual mesh each launch.
 Multilingual/hardware/performance and broader orchestration remain open.
 
 ## Development boundaries
+
+### Repository layout
+
+The root keeps the package/build configuration, browser entry, contributor
+instructions and numbered workstreams. Implementation and evidence are grouped
+by responsibility rather than mixed into those entry points:
+
+| Location | Contents |
+|---|---|
+| `src/app` | Application shell and shared styles |
+| `src/components` | Mesh, microphone, conversation, voice-profile and work UI |
+| `src/domain` | Context, processing-profile and routing model |
+| `src/voice` | Selected-input recording and WAV encoding |
+| `desktop/main.cjs`, `desktop/preload.cjs` | Electron entry and isolated renderer bridge |
+| `desktop/services` | Mesh worker, voice, synthesis, ACP and work hosts |
+| `desktop/speech` | Local Windows speech script and companion text |
+| `public/audio`, `public/branding` | Runtime worklet and application icons, copied into `dist` |
+| `tests/unit`, `tests/e2e`, `tests/smoke`, `tests/helpers` | Unit suites, desktop fixtures, opt-in smoke scripts and synthetic audio |
+| `tools/docs` | README artwork generator |
+| `docs/product`, `docs/architecture`, `docs/research` | Requirements, design/contracts and qualification research |
+| `docs/prototype`, `docs/development` | Prototype evidence, contributor workflow and tracking policy |
+| `docs/assets/branding`, `docs/assets/readme`, `docs/assets/screenshots` | Original identity, generated showcase and source captures |
+| `TODO` | Stable numbered workstreams, index and development ledger |
+
+`dist`, `.local`, `release` and `.agent-context` remain ignored generated,
+qualification, delivery and private-continuity locations respectively. The
+folder reorganization does not migrate profiles or replace a running release.
+
+Run the existing npm commands from the repository root. `npm test` discovers
+the renderer/domain unit suites; `npm run test:voice` and `npm run test:host`
+cover native services. `npm run test:desktop` uses disposable profiles and
+synthetic audio. Live smoke scripts are not part of those suites and still
+require fresh explicit consent before contacting a real Copilot session.
+
+For isolated packaging while a retained release is in use, choose a separate
+ignored output rather than replacing it:
+
+```powershell
+npm run package:win -- --config.directories.output=.local\reorganization-package
+```
+
+### Runtime boundaries
 
 Local agent execution does not guarantee offline model processing. Speech
 privacy, permissions, retention, cancellation, and confirmation retain explicit
@@ -251,7 +295,7 @@ The behavioral reference is Microsoft's
 The Intercom artwork is original, not a copied Teams icon.
 
 The README offers a still image when the renderer supports the reduced-motion
-media query. You can also [open the still directly](assets/readme-logo-still.png).
+media query. You can also [open the still directly](assets/readme/readme-logo-still.png).
 The workspace/voice gallery preserves the earlier packaged captures above,
 with explicit version/synthetic-context captions. The two floating showcases
 use the owner's supplied desktop and browser screenshots, resized without
@@ -263,7 +307,7 @@ Reproduce the documentation assets with Python and Pillow (rendered with
 Pillow 12.2.0 and Windows Segoe UI; neither is an application dependency):
 
 ```powershell
-python .\tools\render_readme.py
+python .\tools\docs\render_readme.py
 ```
 
 Run from the repository root. The generator uses no audio, network, session
