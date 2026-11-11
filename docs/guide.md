@@ -39,17 +39,19 @@ gate selection.
 ## Run the prototype
 
 The current Windows x64 prototype is **unsigned**:
-[Download the .7 EXE](https://github.com/Zanark/Intercom/releases/download/v0.1.0-prototype.7/Intercom-Prototype-0.1.0-prototype.7-win-x64.exe)
-from the [prototype prerelease](https://github.com/Zanark/Intercom/releases/tag/v0.1.0-prototype.7).
-Only the latest local .11 candidate is retained:
-`C:\devdesk\homedesk\Intercom\release\mic-layout-candidate\Intercom-Prototype-0.1.0-prototype.11-win-x64.exe`.
-It is not the published .7 download.
+[Download the .12 EXE](https://github.com/Zanark/Intercom/releases/download/v0.1.0-prototype.12/Intercom-Prototype-0.1.0-prototype.12-win-x64.exe)
+from the [prototype prerelease](https://github.com/Zanark/Intercom/releases/tag/v0.1.0-prototype.12).
+The new local artifact is:
+`C:\devdesk\homedesk\Intercom\release\prototype-12-candidate\Intercom-Prototype-0.1.0-prototype.12-win-x64.exe`.
+The earlier retained .11 and published .7 are preserved, not overwritten.
 
-This .7 release adds persistent **Voice profiles**: installed voice/gender/
-accent choice, pitch, speed, volume, preview, duplication and naming.
-Floating movement/sizing, deep graph zoom and native maximize/restore remain
-available. Earlier local executables were removed in the owner-requested
-cleanup; published GitHub releases are unchanged.
+Prototype .12 includes the microphone fixes since .7: session-independent local
+capture/transcription, a stationary microphone in both views, a collapsed
+single-row floating dock, accessible settings/transcripts and explicit review
+of uncertain/long recognition. Hover or pin mesh nodes to identify them without
+permanent labels. It also packages the reorganized repository and retains
+named installed-voice profiles, pitch/speed/volume, deep graph zoom,
+maximize/restore and confirmed existing-session background work.
 
 The live source acceptance path captured synthetic speech, executed the exact
 approved read-only `Get-Location` in the existing session, returned "Hello world."
@@ -66,7 +68,7 @@ bundled Electron runtime; startup speed has not been benchmarked.
 
 The [earlier fixture-only .1 prerelease](https://github.com/Zanark/Intercom/releases/tag/v0.1.0-prototype.1)
 is preserved unchanged. The intermediate .2-.6 builds are historical
-qualification records; their features are included in .7.
+qualification records; their features are included in .12.
 
 From `C:\devdesk\homedesk\Intercom` in PowerShell, with Node.js/npm installed:
 
@@ -80,21 +82,21 @@ Use the top-right **Maximize window** square to fill the screen; it becomes
 **+ / -** for centered zoom, or right-drag to pan. Zoom can enter the sphere;
 **Reset view** restores the starting camera and graph orientation.
 
-**Source checkout feature; not in the published .7 download:** hover a colored
+**Node identification in .12:** hover a colored
 node for its name, or click/tap to pin its details and base path. Names stay
 hidden otherwise. Close with Escape, the close button, a same-node click or
 blank-space click. Keyboard: focus the graph, arrow through nodes, Enter/Space
 to pin. Inspecting a node does not change the work target.
 
-Click **Floating mesh** to hide the panels and window background. **Local .10
-and newer/current checkout:** the bottom dock starts collapsed. Its **Drag to
+Click **Floating mesh** to hide the panels and window background. **Prototype .10
+and newer, including .12:** the bottom dock starts collapsed. Its **Drag to
 move** grip moves the native window; the adjacent arrow expands one horizontal
 row containing graph zoom/reset, restore, pin, close and window-size controls.
 At small sizes the row scrolls horizontally rather than wrapping. The size
 buttons resize the native window without changing graph zoom. There is no
 separate top grip or hovering zoom toolbar in this view.
 
-**Local .11/current checkout:** the large **Speak** button is fixed at the
+**Prototype .11 and newer, including .12:** the large **Speak** button is fixed at the
 bottom center of the whole window, in its own operational bar below the graph
 and scrolling panels. It never shifts when recording or cancellation controls
 appear. In floating mode it stays centered above, and outside, the collapsed
@@ -114,18 +116,18 @@ demo remains synthetic and separate from live capture.
 workspace; **Ctrl+Shift+M** toggles views while Intercom has focus. Returning from
 a maximized workspace retains its previous normal-window bounds/maximization.
 Older .7-.9 builds retain the top drag handle and two-row dock; they do not
-update automatically. See the [separate .11 candidate](prototype/prototype.md#local-microphone-layout-candidate-010-prototype11).
+update automatically. See the [current prototype details](prototype/prototype.md#prototype-010-prototype12).
 
-**Local .8 and newer candidates/current checkout:** in .11 click **Settings**
+**Prototype .8 and newer, including .12:** click **Settings**
 beside Speak first, then **Load microphones**, select FDUCE
 (or your preferred input), optionally **Test selected**, then **Speak**. The meter
 shows the selected input while recording. No Copilot connection is needed for
 recording or local transcription. Click **Stop & transcribe** to retain an
 editable transcript; without a connection, nothing is sent, even if automatic
 sending is checked. **Load/Test only checks access**, not capture or recognition.
-The [prototype guide](prototype/prototype.md#local-microphone-fix-candidate-010-prototype8)
-identifies the separate fixed EXE; the published .7 download is unchanged and
-still requires connection before Speak.
+The [prototype guide](prototype/prototype.md#prototype-010-prototype12)
+identifies the fixed .12 EXE; the older .7 download is unchanged and still
+requires connection before Speak.
 
 To send, paste your existing dedicated session UUID and click **Connect existing
 session**, then **Send text to Copilot**. Connecting alone never sends an existing
@@ -136,14 +138,14 @@ and automatic sending enabled use **Stop & send** and read the returned answer.
 Disable automatic sending to review/edit before sending. Typed fallback remains
 available.
 
-**Local .9 candidate/current checkout:** low-confidence recognition preserves
+**Prototype .9 and newer, including .12:** low-confidence recognition preserves
 the transcript for review instead of discarding it. Nothing is automatically
 sent or proposed in any destination; review/edit, then explicitly send or prepare
 work. Transcripts over 1,000 characters remain intact but must be shortened
 before sending. There is no automatic truncation or splitting. Empty recognition
 still gives a distinct error. This improves recovery, not recognition accuracy;
 the engine remains Windows English (US), regardless of the speaking-voice profile.
-See the [separate recognition-review candidate](prototype/prototype.md#local-recognition-review-candidate-010-prototype9).
+See the [current prototype details](prototype/prototype.md#prototype-010-prototype12).
 
 English (US) Windows speech recognition and an installed English voice are
 required; nothing is downloaded. Audio stays in memory and is not uploaded.
@@ -300,7 +302,7 @@ The workspace/voice gallery preserves the earlier packaged captures above,
 with explicit version/synthetic-context captions. The two floating showcases
 use the owner's supplied desktop and browser screenshots, resized without
 cropping. They demonstrate the transparent mesh over other surfaces, but show
-an earlier control layout, not the current .11 microphone placement. They are
+an earlier control layout, not the current .12 microphone placement. They are
 not fresh runtime captures or microphone-quality evidence.
 
 Reproduce the documentation assets with Python and Pillow (rendered with

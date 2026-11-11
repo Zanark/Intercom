@@ -376,6 +376,18 @@ Completion evidence:
   Physical microphone/listening and measured performance remain unqualified.
 
 Completion log:
+  2026-11-11 - Owner authorized pushing and updating the release. Qualified
+    separate unsigned .12 with current microphone/review/floating/node fixes
+    and reorganized source. Lint/type/build, 8 renderer units, 17 voice-host,
+    17 mesh/work-host and all 28 packaged desktop cases pass together.
+    Actual portable passes synthetic capture/cancel/cleanup, real 40-context/
+    30-link mesh, profiles and native controls. Fifteen runtime resources,
+    exact version, four notices and private/development exclusions verified.
+    EXE: 110679248 bytes, SHA-256
+    326129e8193fe2021c3fef988d4dc154aee362f02ed528a76fc37e9646c5699d.
+    README/guide now target .12. Publication/download verification pending;
+    retained .11 unchanged. No new live task or user-instance restart.
+    Broader human/device, native-permission and performance gates stay open.
   2026-11-11 - Reorganized the entire repository on owner request; updated
     application/resource/test/tooling paths, README, guide and contributors'
     map. Separate qualification package verified; retained release untouched.

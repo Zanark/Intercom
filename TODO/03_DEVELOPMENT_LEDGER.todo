@@ -19,6 +19,20 @@ Completion evidence:
   This ledger is ongoing, not a finite feature deliverable.
 
 Completion log:
+  2026-11-11 - Prepared the explicitly requested updated .12 prototype release.
+    Action: bumped package metadata, built in release\prototype-12-candidate,
+      updated visual download/details buttons, guide and current feature matrix.
+      Preserved the .11 local rollback and existing public releases.
+    Evidence: lint/type/build, 8 renderer/PCM units, 17 voice-host and
+      17 mesh/work-host cases pass. All 28 packaged desktop cases pass in one
+      run. Actual portable synthetic capture/cancel/cleanup, real mesh,
+      profiles and native controls pass. Fifteen runtime resource bytes,
+      exact version, four notices and private/development exclusions verified.
+      EXE is 110679248 bytes; SHA-256
+      326129e8193fe2021c3fef988d4dc154aee362f02ed528a76fc37e9646c5699d.
+    Boundary: publication/download checks pending at this source milestone;
+      no physical/human acceptance, new real task, audible preview or restart.
+      The existing mesh chunk-size warning remains; no measured speed claim.
   2026-11-11 - Reorganized the entire repository on explicit owner selection.
     Action: moved 62 tracked files into renderer app/components/domain/voice,
       native services/speech, unit/e2e/smoke/helpers, topic-based docs and

@@ -11,7 +11,7 @@ receipt. It does not implement the proposed Rust/SQLite queue or durable
 notification outbox below. Terminal mode only opens the existing session for
 manual task entry; it does not claim acknowledged ownership transfer or send
 the task automatically. Exact behavior, native/fixture evidence and remaining
-gates are in the [current feature matrix](../prototype/prototype.md#published-prototype-010-prototype7).
+gates are in the [current feature matrix](../prototype/prototype.md#prototype-010-prototype12).
 
 ## 1. Process topology and authority
 

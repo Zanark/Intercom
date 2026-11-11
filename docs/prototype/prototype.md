@@ -1,11 +1,65 @@
 # Desktop prototype
 
-**Local retention (2026-11-11):** the owner requested cleanup of `release`.
-Only `release\mic-layout-candidate` (.11 portable, checksum and build support
-files) remains. Older local executables/unpacked builds were removed; their
-sections below are historical qualification records, not available local paths.
-Published GitHub releases/assets are unchanged. `release` is Git-ignored;
-source pushes carry this record, not the executable.
+**Local retention (2026-11-11):** `release\prototype-12-candidate` holds the new
+.12 package; `release\mic-layout-candidate` retains .11 for rollback. The earlier
+owner-requested cleanup removed older local builds. Their sections below are
+historical qualification records, not available local paths. Existing published
+releases are preserved. `release` is Git-ignored; binaries are release assets,
+not source commits.
+
+## Prototype 0.1.0-prototype.12
+
+[Windows x64 prerelease and checksum](https://github.com/Zanark/Intercom/releases/tag/v0.1.0-prototype.12).
+Unsigned Windows x64 portable:
+`C:\devdesk\homedesk\Intercom\release\prototype-12-candidate\Intercom-Prototype-0.1.0-prototype.12-win-x64.exe`
+
+110,679,248 bytes; SHA-256:
+`326129e8193fe2021c3fef988d4dc154aee362f02ed528a76fc37e9646c5699d`.
+The sibling `SHA256SUMS.txt` records the checksum. This source milestone
+qualifies the package; publication and public-download verification are pending.
+Launching a new build does not update an already-running instance.
+
+### Changes since published .7
+
+| Feature | Actual .12 behavior |
+|---|---|
+| Always-visible microphone | Stationary 64 px Speak control across the whole workspace and above the floating dock, outside scrolling content. Settings opens input selection; transcript comes first and secondary controls start collapsed. |
+| Local capture without a session | Selected-device recording/transcription does not require Copilot. Disconnected text stays editable and unsent; connection alone never dispatches it. |
+| Recognition recovery | Uncertain text requires explicit review in every destination. Over-limit text is retained for manual shortening, not silently truncated, split or automatically sent. This does not change recognition accuracy or its English-only engine. |
+| Floating controls | Default-collapsed, single-row dock with native movement/sizing and graph controls. The microphone stays outside it; one selected stream survives view changes. Review/errors/settings open in a scrollable panel. |
+| Node identification | Hover for a name; click/tap or keyboard-pin for details/path. Labels stay hidden otherwise. Inspection never changes the work target or establishes observed context reads. |
+| Repository and presentation | Reorganized renderer/native/test/docs/tooling paths with verified packaged resources. Centered image-led README, transparent animated sphere and supplied desktop/browser showcases. The README mic animation is simulated, not live input. |
+
+Installed voice profiles, synthesis controls, actual-mesh loading, graph
+navigation, native window controls, confirmed existing-session work and durable
+receipts retain the [.7 baseline contracts](#published-prototype-010-prototype7).
+The microphone, floating dock and node-identification rows above supersede the
+corresponding historical .7 behavior.
+
+### Qualification and limits
+
+Fresh .12 lint/type/build, eight renderer/PCM units, 17 native voice cases and
+17 mesh/work-host cases pass. **All 28 packaged desktop cases pass together**
+against the .12 unpacked executable with disposable profiles and synthetic
+audio/mesh. Actual portable startup separately passes synthetic workspace/
+floating recording, signal, cancellation and track release; native voice
+profiles/persistence; maximize/restore; graph/native-size controls; and the
+collapsed dock. Its real snapshot loaded 40 contexts and 30 relationships.
+All 15 built runtime resources match source; exact package version, four
+license notices and development/private exclusions are verified.
+
+These are not physical FDUCE or human speech/listening acceptance. No new real
+Copilot task, audible preview or user-app restart was performed for .12.
+Native permission prompts, automatic terminal task handoff, richer arbitrary
+voice identity/timbre/emotion and measured performance remain unqualified or
+unimplemented as described in the baseline. Speed is the default preference,
+not a measured latency guarantee. Push-to-talk remains English-only and
+half-duplex: no wake word, always-listening mode, active-session attach or new
+session creation. The optional external prompt-inbox connector is not included.
+Vite still reports the existing mesh chunk-size warning.
+
+The retained .11 EXE checksum is unchanged. Earlier .7/.1 release assets and
+tags will not be overwritten by this separately versioned prerelease.
 
 ## Local microphone-layout candidate: 0.1.0-prototype.11
 
@@ -200,7 +254,7 @@ not represented as a finished feature.
 
 ### Graph and window controls
 
-**Source checkout update, not included in the published .7 EXE:** hover a colored
+**Included in .12, not in the historical .7 EXE:** hover a colored
 context node to reveal its name and subtitle. Click/tap to pin the small label
 and reveal its base path; close it with **Escape**, its close button, another
 click on the same node, or a blank-space click. The center identifies the

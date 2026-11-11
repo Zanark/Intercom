@@ -252,9 +252,9 @@ def main():
     draw.text((680, 200), "YOUR VOICE. YOUR CONTEXT. CONNECTED.",
               font=font(27), fill=MINT, anchor="mm")
     title.save(ASSETS / "readme-title.png", optimize=True)
-    panel("readme-download.png", "Download prototype .7", "Windows x64  /  unsigned")
+    panel("readme-download.png", "Download prototype .12", "Windows x64  /  unsigned")
     panel("readme-guide.png", "Project guide", "Setup  /  workflows  /  architecture")
-    panel("readme-prototype.png", "Latest local build .11", "Mic fixes  /  not yet published")
+    panel("readme-prototype.png", "Prototype .12", "Always-visible mic  /  release notes")
     gallery("readme-voices.png", "prototype-voice-profiles.png",
             "A voice that fits your workflow.", "Packaged .7  /  installed voice profiles  /  synthetic test contexts")
     gallery("readme-workspace.png", "prototype-window-controls.png",

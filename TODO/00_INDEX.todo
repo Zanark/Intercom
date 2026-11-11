@@ -114,6 +114,9 @@ Completion evidence:
   Retained .11 release and published .7 unchanged; workstream remains active.
 
 Completion log:
+  2026-11-11 - Qualified the owner-requested .12 release candidate: all 28
+    packaged desktop cases and actual portable smoke pass; README points to
+    the new version. Publication verification pending; ic-06 remains active.
   2026-11-11 - Reorganized source, tests, native services, assets, docs and
     tooling; retained stable TODO IDs and recorded exact qualification limits.
   2026-11-11 - Updated transparent README animation, raised buttons and supplied
