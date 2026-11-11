@@ -13,6 +13,9 @@ ROOT = Path(__file__).resolve().parents[2]
 ASSETS = ROOT / "docs" / "assets" / "readme"
 SIZE = 432
 HERO_WIDTH = 936
+MIC_CAPSULE = (178, 126, 254, 277)
+MIC_PURPLE = (158, 132, 212)
+MIC_MINT = (124, 216, 185)
 SCALE = 2
 FRAMES = 144
 TAU = math.tau
@@ -100,12 +103,19 @@ def sea_glass_ink(size, region):
 
 @lru_cache(maxsize=4)
 def microphone_gradient(size, top, bottom):
-    purple = (86, 80, 113)
-    seafoam = (91, 139, 125)
+    purple = MIC_PURPLE
+    seafoam = MIC_MINT
     image = Image.new("RGBA", size, (*purple, 255))
     image.paste(gradient((size[0], bottom - top), purple, seafoam), (0, top))
     ImageDraw.Draw(image).rectangle((0, bottom, size[0], size[1]), fill=(*seafoam, 255))
     return image
+
+
+@lru_cache(maxsize=1)
+def microphone_capsule_mask():
+    mask = Image.new("L", (SIZE * SCALE, SIZE * SCALE))
+    ImageDraw.Draw(mask).rounded_rectangle(box(MIC_CAPSULE), radius=38 * SCALE, fill=255)
+    return mask
 
 
 def microphone(level):
@@ -122,16 +132,14 @@ def microphone(level):
     ink = microphone_gradient(image.size, 126 * SCALE, 335 * SCALE)
     image.paste(ink, (0, 0), support)
     draw = ImageDraw.Draw(image)
-    capsule = (178, 126, 254, 277)
-    draw.rounded_rectangle(
-        box((180, 129, 258, 282)), radius=38 * SCALE, fill=(3, 10, 17)
-    )
-    mask = Image.new("L", image.size)
-    ImageDraw.Draw(mask).rounded_rectangle(box(capsule), radius=38 * SCALE, fill=255)
-    image.paste(ink, (0, 0), mask)
+    fill_mask = microphone_capsule_mask().copy()
+    _, top, _, bottom = MIC_CAPSULE
+    fill_top = round((bottom - (bottom - top) * level) * SCALE)
+    fill_mask.paste(0, (0, 0, image.width, fill_top))
+    image.paste(ink, (0, 0), fill_mask)
     draw = ImageDraw.Draw(image)
     draw.rounded_rectangle(
-        box(capsule), radius=38 * SCALE,
+        box(MIC_CAPSULE), radius=38 * SCALE,
         outline=blend(SEAFOAM, WHITE, level * .65), width=2 * SCALE,
     )
     return image
@@ -261,6 +269,7 @@ def render_frame(phase, base, node):
         primitives.append((point[2] + radius / 151, "node", (point, radius)))
 
     image = base.copy()
+    image.paste((0, 0, 0, 0), (0, 0), microphone_capsule_mask())
     mic = microphone(speech_level(phase))
     for depth, kind, value in sorted(primitives, key=lambda p: p[0]):
         draw = ImageDraw.Draw(image)
@@ -457,7 +466,7 @@ def render_logo():
         (8, SEAFOAM, WHITE),
     ):
         colors.extend(blend(a, b, i / (count - 1)) for i in range(count))
-    colors.extend(blend((86, 80, 113), (91, 139, 125), i / 63) for i in range(64))
+    colors.extend(blend(MIC_PURPLE, MIC_MINT, i / 63) for i in range(64))
     for tint in WAVE_COLORS:
         colors.extend(blend(NAVY, tint, .8 * i / 18) for i in range(19))
     palette = Image.new("P", (1, 1))

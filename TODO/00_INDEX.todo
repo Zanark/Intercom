@@ -21,6 +21,12 @@ Acceptance criteria:
   Issues and Project items track actual workstreams, not this index or ledger.
 
 Completion evidence:
+  The logo's rising/falling fill is restored, with smooth color and a
+  transparent unfilled capsule. Inspiration uses borderless floating-image
+  HTML rather than a table; older rim-only/table descriptions are superseded.
+  Both logo microphones retain a smooth, now brighter lavender/mint gradient.
+  Baseline Windows Actions checks are defined for the published prototype;
+  automation does not qualify human speech or the local controller rebuild.
   Owner refinements: one inspiration paragraph and smooth violet-to-seafoam
   microphone gradients in both logos, preserving wordmark texture and UI.
   Larger photo, denser fictional GUI globes and an end-of-page local-only

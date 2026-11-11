@@ -6,7 +6,7 @@
   <a href="docs/guide.md#readme-artwork">
     <picture>
       <source media="(prefers-reduced-motion: reduce)" srcset="docs/assets/readme/readme-logo-still.png" />
-      <img src="docs/assets/readme/intercom-logo-animated.gif" alt="Intercom: frosted sea-glass mesh with a seafoam/violet microphone, surrounded by flowing cyan, mint, lavender, rose and amber wave ribbons. Mirrored ethereal waves and soft glow on transparent surroundings. Simulated speech, not live audio. Open for details and a still image." width="936" />
+      <img src="docs/assets/readme/intercom-logo-animated.gif" alt="Intercom: frosted sea-glass mesh with bright, smooth lavender/mint microphone fill rising and falling below a transparent unfilled capsule. Flowing cyan, mint, lavender, rose and amber waves glow softly beside it. Simulated speech, not live audio. Open for details and a still image." width="936" />
     </picture>
   </a>
 </p>
@@ -23,17 +23,15 @@
 
 ## A switchboard, conducted by voice
 
-<table>
-  <tr>
-    <td width="45%" valign="top">
-      <p>Inspired by mid-century switchboard operators and the conductor of an opera orchestra, Intercom aims to turn one spoken request into coordinated work across existing Agency/Copilot sessions: connect the right specialists, cue their tasks and bring their replies back. Its sea-glass Context Mesh visualizes those connections, lighting paths only for observed activity.</p>
-    </td>
-    <td width="55%" valign="top">
-      <img src="docs/assets/readme/kdd-telephone-exchange-1967.jpg" alt="Headset-wearing operators seated at the consoles of a KDD international telephone exchange in the 1960s." width="540" />
-      <br /><sub>KDD exchange, 1967. Asahi Shimbun. <a href="https://commons.wikimedia.org/wiki/File:KDD_telephone_exchange_in_1960s.jpg">Source / rights</a>. Used with owner-confirmed permission.</sub>
-    </td>
-  </tr>
-</table>
+<img align="right" src="docs/assets/readme/kdd-telephone-exchange-1967.jpg" alt="Headset-wearing operators seated at the consoles of a KDD international telephone exchange in the 1960s." width="52%" />
+
+<p>Inspired by mid-century switchboard operators and the conductor of an opera orchestra, Intercom aims to turn one spoken request into coordinated work across existing Agency/Copilot sessions: connect the right specialists, cue their tasks and bring their replies back. Its sea-glass Context Mesh visualizes those connections, lighting paths only for observed activity.</p>
+
+<br clear="all" />
+
+<p align="right">
+  <sub>KDD exchange, 1967. Asahi Shimbun. <a href="https://commons.wikimedia.org/wiki/File:KDD_telephone_exchange_in_1960s.jpg">Source / rights</a>. Used with owner-confirmed permission.</sub>
+</p>
 
 <p align="center">
   <sub>GUI recordings below use the current source, fictional contexts and synthetic audio, not the published .12 build or speech-quality evidence. Each has a reduced-motion still.</sub>

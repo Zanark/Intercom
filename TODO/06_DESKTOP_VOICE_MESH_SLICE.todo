@@ -19,6 +19,9 @@ Purpose:
   session work with retained permissions. Push-to-talk remains selected.
 
 Tasks:
+  [x] Restore rising/falling transparent logo fill and remove the README layout table.
+  [x] Brighten the smooth lavender/mint material in animated and static microphones.
+  [x] Define least-privilege pinned Windows Actions for prototype automated checks.
   [x] Keep original logo density, blend microphones without bands and add wave glow.
   [x] Smooth both logo microphone gradients and condense inspiration to one paragraph.
   [x] Increase documentation mesh density and move the local rebuild note to the end.
@@ -114,6 +117,20 @@ Acceptance criteria:
   follow docs/architecture/runtime-contracts.md; browser mocks are not native-app evidence.
 
 Completion evidence:
+  Owner correction restores the logo's rising/falling fill while retaining
+  its smooth violet/seafoam material and glowing waves. The unfilled capsule
+  is transparent; earlier rim-only/no-fill descriptions are superseded.
+  Both animated and static microphones use brighter lavender/mint endpoints.
+  README inspiration now uses a right-floating HTML image, one paragraph,
+  clearing break and attributed credit, without a bordered layout table.
+  The Test workflow covers lint, type-check/build, renderer, native voice/host
+  and disposable Electron tests on Windows Server 2025 / Node 26. It has
+  pinned actions, read-only contents access, no persisted checkout credential,
+  bounded concurrency/time and synthetic-only failure artifacts. Local
+  isolated published-source checks passed: eight renderer, 17 voice and 17
+  host cases, lint and build. Hosted execution is separate evidence.
+  No live smoke, real session, physical microphone, release or deployment is
+  part of this automation. Human speech and full reliability gates stay open.
   Owner follow-up reduces the inspiration to one paragraph with a shorter
   attributed photo caption and a larger 55%-width right-hand photo (540px cap).
   Both logo microphones use one smooth vertical violet-to-seafoam gradient.
@@ -491,6 +508,12 @@ Completion evidence:
   actual portable smoke. Human/device/performance gates keep ic-06 active.
 
 Completion log:
+  2026-11-11 - Restored the requested transparent rising/falling logo fill;
+    smooth color material and original sparse branding are retained. Replaced
+    the inspiration table with GitHub-compatible floating-image HTML.
+    Brightened both logo microphones without changing the wordmark or geometry.
+    Added the authorized Windows repository-test workflow, keeping the
+    unpublished speech/controller rebuild outside its published source.
   2026-11-11 - Corrected the unintended dense logo: restored exact original
     nine-node geometry while keeping only application demos dense.
     Removed the mic's hard fill boundary; smooth blended bodies and a

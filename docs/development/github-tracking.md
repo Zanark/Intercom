@@ -20,6 +20,18 @@ The microphone request initially authorized input choice and brief device checks
 Publication and asset receipts are recorded after independent verification,
 not inferred from the packaging command.
 
+The owner subsequently authorized a repository testing action and explicitly
+approved committing/pushing only its changes and executing it against the
+published source, keeping the unfinished speech/controller rebuild local.
+The same follow-up restores transparent rising/falling logo fill, brightens
+both logo microphones and replaces the inspiration table with floating HTML.
+The workflow has main-push, pull-request and manual triggers, pinned actions,
+read-only contents access and no persisted checkout credential. Hosted tests
+receive no local credential runner/PAT, private Context Mesh or real session.
+They use disposable profiles/synthetic input; failure uploads are confined to
+the synthetic desktop-results directory for three days. This is not release,
+deployment, remote-secret or permission-change authority.
+
 ## Source of truth and operation
 
 Local numbered `.todo` files own descriptions, tasks, dependencies, criteria,
@@ -213,7 +225,7 @@ exact read-back; never refresh them merely to hide a remote edit.
 | ic-02 | `5fa92bc3e1d2f20a27fc5306664d4e4d599e704f8fc64208323afb19a9c894f6` |
 | ic-04 | `ac026513ad44f8548d9e3670037d5efcb2e94c9287728bf781e9f5e48efefd82` |
 | ic-05 | `01e29950e11e9e7ad3928d05a8363244955ea95c7ec68e952b57fbb644043e4c` |
-| ic-06 | `ddd9aa5e5e4673981de54c4ed865159206deade994fe28d26e2747d1411c9304` |
+| ic-06 | `f59247d28659f7661b0f1a5409b1eac07a3446471579cf5a494aab63eac16c08` |
 | ic-07 | `072c0916f6106438b8f32e2ae02415645056015a3049f36f12ec4cfca281fe33` |
 
 The final README refinement reconciliation matched all six saved baselines,

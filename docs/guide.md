@@ -302,6 +302,15 @@ cover native services. `npm run test:desktop` uses disposable profiles and
 synthetic audio. Live smoke scripts are not part of those suites and still
 require fresh explicit consent before contacting a real Copilot session.
 
+The [Test workflow](../.github/workflows/test.yml) runs the same lint, build,
+renderer, native voice/host and Electron desktop commands on Windows Server
+2025 with Node 26 for main pushes, pull requests and manual dispatches. It uses
+`npm ci`, one desktop worker and the existing synthetic/disposable fixtures.
+Only synthetic desktop failure outputs are uploaded, retained for three days.
+It does not run live smoke scripts, real sessions, physical microphones,
+packaging, releases or deployment. Hosted results are separate from human
+speech quality, hardware acceptance and the unfinished local rebuild.
+
 For isolated packaging while a retained release is in use, choose a separate
 ignored output rather than replacing it:
 
@@ -330,7 +339,9 @@ The README's single inspiration paragraph pairs a mid-century switchboard operat
 (coordinating independent work and returning results). It describes product
 intent, not completed speech/orchestration qualification; no UI redesign is
 part of this documentation change.
-The photo occupies the larger right-hand column, with a 540px image limit.
+The photo floats right at 52% width using GitHub-compatible HTML, without a
+bordered layout table. Text wraps beside it; the right-aligned credit follows
+a clearing break so the gallery starts below the photograph.
 The accompanying unchanged photograph is
 `docs/assets/readme/kdd-telephone-exchange-1967.jpg`, supplied by the owner.
 [Wikimedia Commons provenance](https://commons.wikimedia.org/wiki/File:KDD_telephone_exchange_in_1960s.jpg)
@@ -348,8 +359,11 @@ with grainy seafoam ink and soft violet pigment washes. The subtitle and
 navigation remain in legible Segoe UI.
 The animated and static documentation microphones use one smooth vertical
 violet-to-seafoam gradient, without the wordmark's streaked pigment washes.
-The animated capsule has no horizontal fill boundary: only its rim breathes
-with the illustrative voice level. The static mark retains its original silhouette,
+Both logo microphones use a brighter lavender-to-mint gradient. The animated
+fill rises and falls with the illustrative voice level. Its
+unfilled capsule is transparent, not painted with a second material; the
+visible fill retains one smooth gradient and the rim also breathes.
+The static mark retains its original silhouette,
 foreground node and crossing links. Runtime/EXE icons are not changed.
 GitHub controls the page itself; these are rendered images, not a custom CSS
 theme or a backdrop filter. Original screenshots are not recolored or retouched.

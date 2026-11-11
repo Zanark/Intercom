@@ -19,6 +19,18 @@ Completion evidence:
   This ledger is ongoing, not a finite feature deliverable.
 
 Completion log:
+  2026-11-11 - Owner requested restoring the logo microphone's rising/falling
+    fill with transparency. Retained the smooth material and glowing waves;
+    cleared the unfilled capsule instead of using an opaque second pigment.
+    Removed the bordered inspiration table in favor of a right-floating
+    HTML image, one paragraph, clearing break and source credit.
+    Brightened the animated/static microphone material while preserving
+    the original wordmark, sparse logo geometry and application-demo density.
+    Added Windows repository CI with pinned actions and read-only permissions;
+    main/PR/manual runs use locked dependencies and synthetic disposable
+    desktop fixtures. Isolated published-source lint/build and all eight
+    renderer / 17 voice / 17 host cases pass locally. Hosted qualification
+    remains distinct; no rebuild code, release or live-session test is included.
   2026-11-11 - Corrected logo scope after owner feedback: restored its original
     nine-node geometry; density belongs only to the 48-context/144-connection
     application demos. Removed the animated mic's hard horizontal fill boundary;
