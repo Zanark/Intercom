@@ -203,7 +203,8 @@ test('real desktop transparency, reversible floating controls and narrow IPC', a
   expect(capture.visiblePixels).toBeGreaterThan(100);
   await page.screenshot({ path: test.info().outputPath('floating-mesh.png'), omitBackground: true });
   await page.mouse.move(260, 440);
-  await expect(page.locator('.floating-tools .brand-logo')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Expand floating controls', exact: true })).toHaveAttribute('aria-expanded', 'false');
+  await page.getByRole('button', { name: 'Expand floating controls', exact: true }).click();
   await page.getByRole('button', { name: 'Always on top' }).click();
   expect(await application.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].isAlwaysOnTop())).toBe(true);
   await page.keyboard.press('Escape');
@@ -211,6 +212,7 @@ test('real desktop transparency, reversible floating controls and narrow IPC', a
   expect(await application.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].getBounds())).toEqual(bounds);
   await page.keyboard.press('Control+Shift+M');
   await expect(page.locator('main')).toHaveAttribute('data-floating', 'true');
+  await page.getByRole('button', { name: 'Expand floating controls', exact: true }).click();
   await page.getByRole('button', { name: 'Restore workspace' }).focus();
   await page.getByRole('button', { name: 'Restore workspace' }).click();
   await expect(page.locator('main')).toHaveAttribute('data-floating', 'false');
@@ -249,7 +251,7 @@ test('window maximize and restore track native events and survive floating mode'
   await page.screenshot({ path: test.info().outputPath('workspace-window-controls.png') });
 });
 
-test('floating move handle and size controls stay visible, resize the window within limits and preserve workspace and zoom', async () => {
+test('floating dock starts collapsed, expands to one scrollable row and preserves window and graph controls', async () => {
   const normalBounds = await application.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].getBounds());
   expect(await page.evaluate(async () => {
     try { await window.intercom.windowAction('grow-floating'); return false; }
@@ -266,6 +268,9 @@ test('floating move handle and size controls stay visible, resize the window wit
   await expect(handle).toBeVisible();
   await expect(handle).toHaveText('Drag to move');
   expect(await handle.evaluate((element) => getComputedStyle(element).getPropertyValue('-webkit-app-region'))).toBe('drag');
+  await expect(smaller).toBeHidden();
+  await expect(page.getByRole('button', { name: 'Zoom in graph', exact: true })).toBeHidden();
+  await page.getByRole('button', { name: 'Expand floating controls', exact: true }).click();
   await expect(smaller).toBeVisible();
   await expect(larger).toBeVisible();
   expect(await page.locator('.floating-tools').evaluate((element) => getComputedStyle(element).opacity)).toBe('1');
@@ -287,6 +292,13 @@ test('floating move handle and size controls stay visible, resize the window wit
   const smallLayout = await page.locator('.floating-tools').boundingBox();
   expect(smallLayout.x).toBeGreaterThanOrEqual(0);
   expect(smallLayout.x + smallLayout.width).toBeLessThanOrEqual(360);
+  expect(smallLayout.height).toBeLessThan(56);
+  const row = await page.locator('.floating-dock-controls').evaluate((element) => ({
+    overflowing: element.scrollWidth > element.clientWidth,
+    centers: [...element.children].map((child) => { const rect = child.getBoundingClientRect(); return rect.y + rect.height / 2; }),
+  }));
+  expect(row.overflowing).toBe(true);
+  expect(Math.max(...row.centers) - Math.min(...row.centers)).toBeLessThan(2);
   await page.screenshot({ path: test.info().outputPath('floating-move-size-minimum.png'), omitBackground: true });
   expect(await page.evaluate(async () => (await window.intercom.windowAction('shrink-floating')).floatingSize.side)).toBe(360);
 
@@ -408,6 +420,7 @@ test('keyboard node inspection fits the smallest floating view and Escape dismis
   const details = page.getByRole('region', { name: 'Pinned node details' });
   await expect(details).toContainText('Test Context');
   await page.getByRole('button', { name: 'Floating mesh', exact: true }).click();
+  await page.getByRole('button', { name: 'Expand floating controls', exact: true }).click();
   for (let count = 0; count < 4; count++) await page.getByRole('button', { name: 'Make floating window smaller', exact: true }).click();
   await expect(details).toBeVisible();
   await expect.poll(async () => {
@@ -626,6 +639,90 @@ test('microphone denial and enumeration failure are visible and acquired tracks 
     await expect(page.getByRole('button', { name: 'Speak', exact: true })).toBeEnabled();
   }
 
+test('floating microphone stays outside the collapsed dock, preserves selected device and capture across modes, and opens transcript review', async () => {
+  await prepareVoiceMock({ connect: false });
+  await expect(page.locator('.composer')).toHaveCount(0);
+  await page.getByRole('button', { name: 'Load microphones', exact: true }).click();
+  const picker = page.getByLabel('Microphone device', { exact: true });
+  await expect(picker).toBeEnabled();
+  const device = await picker.locator('option').evaluateAll((options) => options.find((option) => option.value !== 'default').value);
+  await picker.selectOption(device);
+  await page.evaluate(() => {
+    window.__floatingStreams = [];
+    window.__floatingConstraints = [];
+    const original = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
+    navigator.mediaDevices.getUserMedia = async (constraints) => {
+      const stream = await original(constraints);
+      window.__floatingStreams.push(stream);
+      window.__floatingConstraints.push(constraints);
+      return stream;
+    };
+  });
+  await page.getByRole('button', { name: 'Speak', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Stop & transcribe', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Floating mesh', exact: true }).click();
+  await expect(page.locator('main')).toHaveAttribute('data-floating', 'true');
+  await expect(page.getByRole('button', { name: 'Expand floating controls', exact: true })).toHaveAttribute('aria-expanded', 'false');
+  const mic = page.getByRole('button', { name: 'Stop & transcribe', exact: true });
+  await expect(mic).toBeEnabled();
+  expect(await mic.evaluate((element) => element.closest('.floating-tools') === null)).toBe(true);
+  await expect.poll(() => page.getByRole('meter').evaluate((element) => element.value)).toBeGreaterThan(0);
+  expect(await page.evaluate(() => window.__floatingStreams.length)).toBe(1);
+  await page.waitForTimeout(600);
+  await mic.click();
+  await expect(page.getByRole('region', { name: 'Live voice conversation', exact: true })).toBeVisible();
+  await expect(page.getByLabel('Transcript / typed fallback')).toHaveValue('Say hello world.');
+  expect(await application.evaluate(() => globalThis.__voiceReceipt.sent)).toEqual([]);
+  expect(await page.evaluate(() => window.__floatingConstraints[0])).toMatchObject({ audio: { deviceId: { exact: device } }, video: false });
+  expect(await page.evaluate(() => window.__floatingStreams.flatMap((stream) => stream.getTracks()).every((track) => track.readyState === 'ended'))).toBe(true);
+  const micBox = await page.getByRole('button', { name: 'Speak', exact: true }).boundingBox();
+  const dockBox = await page.getByRole('group', { name: 'Floating controls dock', exact: true }).boundingBox();
+  expect(micBox.y + micBox.height).toBeLessThan(dockBox.y);
+  await page.screenshot({ path: test.info().outputPath('floating-microphone-transcript.png'), omitBackground: true });
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('region', { name: 'Live voice conversation', exact: true })).toBeHidden();
+  await expect(page.locator('main')).toHaveAttribute('data-floating', 'true');
+  await page.getByRole('button', { name: 'Speak', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Stop & transcribe', exact: true })).toBeVisible();
+  await page.keyboard.press('Control+Shift+M');
+  await expect(page.locator('main')).toHaveAttribute('data-floating', 'false');
+  await expect(picker).toHaveValue(device);
+  await expect(page.getByRole('button', { name: 'Stop & transcribe', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Cancel request', exact: true }).click();
+  expect(await page.evaluate(() => window.__floatingStreams.length)).toBe(2);
+  expect(await page.evaluate(() => window.__floatingStreams.flatMap((stream) => stream.getTracks()).every((track) => track.readyState === 'ended'))).toBe(true);
+  expect(await application.evaluate(() => globalThis.__voiceReceipt.recordings.length)).toBe(1);
+});
+
+test('floating recognition failures open visible feedback and leave the outside microphone available', async () => {
+  await prepareVoiceMock({ connect: false, recognitionError: true });
+  await page.getByRole('button', { name: 'Floating mesh', exact: true }).click();
+  await page.getByRole('button', { name: 'Expand floating controls', exact: true }).click();
+  for (let count = 0; count < 4; count++) await page.getByRole('button', { name: 'Make floating window smaller', exact: true }).click();
+  await page.getByRole('button', { name: 'Collapse floating controls', exact: true }).click();
+  await page.getByRole('button', { name: 'Voice settings and transcript', exact: true }).click();
+  await page.getByText('Microphone, session and delivery settings', { exact: true }).click();
+  expect(await page.locator('.live-conversation').evaluate((element) => {
+    element.scrollTop = element.scrollHeight;
+    return element.scrollTop;
+  })).toBeGreaterThan(0);
+  await page.getByRole('button', { name: 'Speak', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Stop & transcribe', exact: true })).toBeVisible();
+  await expect.poll(() => page.getByRole('meter').evaluate((element) => element.value)).toBeGreaterThan(0);
+  await page.waitForTimeout(600);
+  await page.getByRole('button', { name: 'Stop & transcribe', exact: true }).click();
+  await expect(page.getByRole('alert')).toContainText('No English speech was recognized');
+  await expect(page.getByRole('alert')).toBeInViewport();
+  await expect(page.getByRole('button', { name: 'Speak', exact: true })).toBeEnabled();
+  await expect(page.getByRole('button', { name: 'Speak', exact: true })).toBeInViewport({ ratio: 1 });
+  await expect(page.getByRole('button', { name: 'Expand floating controls', exact: true })).toHaveAttribute('aria-expanded', 'false');
+  expect(await application.evaluate(() => globalThis.__voiceReceipt.sent)).toEqual([]);
+  await page.getByRole('button', { name: 'Hide voice settings', exact: true }).click();
+  await page.getByRole('button', { name: 'Voice settings and transcript', exact: true }).click();
+  await expect(page.getByRole('alert')).toBeVisible();
+  await page.screenshot({ path: test.info().outputPath('floating-microphone-error-minimum.png'), omitBackground: true });
+});
+
 test('selected microphone records and transcribes without a connected session, preserving text until explicit send', async () => {
   await prepareVoiceMock({ connect: false });
   await page.evaluate(() => {
@@ -767,13 +864,16 @@ test('microphone recording denial without a session stays visible and allows a c
     await page.getByRole('button', { name: 'Speak', exact: true }).click();
     await expect(page.getByRole('button', { name: 'Stop & send', exact: true })).toHaveAttribute('aria-pressed', 'true');
     await expect(page.getByLabel('Microphone device', { exact: true })).toBeDisabled();
-    await expect(page.getByRole('button', { name: 'Floating mesh', exact: true })).toBeDisabled();
+    await expect(page.getByRole('button', { name: 'Floating mesh', exact: true })).toBeEnabled();
     await page.keyboard.press('Control+Shift+M');
-    await expect(page.locator('main')).toHaveAttribute('data-floating', 'false');
+    await expect(page.locator('main')).toHaveAttribute('data-floating', 'true');
+    await expect(page.getByRole('button', { name: 'Stop & send', exact: true })).toBeVisible();
     await expect.poll(() => page.getByRole('meter').evaluate((meter) => meter.value)).toBeGreaterThan(0);
     await page.waitForTimeout(600);
     await page.getByRole('button', { name: 'Stop & send', exact: true }).click();
     await expect(page.locator('.live-result')).toContainText('Hello world.');
+    await page.keyboard.press('Control+Shift+M');
+    await expect(page.locator('main')).toHaveAttribute('data-floating', 'false');
     await expect(page.getByLabel('Transcript / typed fallback')).toHaveValue('Say hello world.');
     const receipt = await application.evaluate(() => globalThis.__voiceReceipt);
     expect(receipt.recordings).toHaveLength(1);

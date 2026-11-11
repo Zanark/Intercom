@@ -1,5 +1,43 @@
 # Desktop prototype
 
+## Local floating-microphone candidate: 0.1.0-prototype.10
+
+Unsigned Windows x64 portable:
+`C:\devdesk\homedesk\Intercom\release\floating-mic-candidate\Intercom-Prototype-0.1.0-prototype.10-win-x64.exe`
+
+110,682,241 bytes; SHA-256:
+`7786311f362a5a1c5dc319b7047d61d214fc6f90269ae89fcbc139913d6df0d4`.
+The sibling `SHA256SUMS.txt` records the checksum. This separate local candidate
+includes the previous microphone/review fixes; it does not replace the running
+app or published .7 release automatically.
+
+The inert live footer is gone. One operational microphone stays outside the
+floating dock and remains available when the dock is collapsed. Workspace and
+floating mode share one recorder, selected input and transcript: changing views
+does not interrupt capture. Voice settings, recognition errors, transcripts and
+responses open in a scrollable floating panel. Settings/profile groups collapse
+to prioritize feedback; Escape closes the panel before restoring the workspace.
+Work preparation restores the workspace for its separate target/task confirmation.
+Explicit fixture-demo mode remains synthetic, not an always-listening recorder.
+
+The bottom dock starts collapsed with a native **Drag to move** grip and expand
+button. Its expanded controls occupy one horizontally scrollable row: graph
+zoom/reset, restore, pin, close and native size controls/readout. No top drag
+handle or separate floating zoom toolbar remains. Graph camera state persists.
+No new poller, watcher, speech provider or dependency was added.
+
+Lint/type/build, 15 focused source desktop cases and 17 focused packaged cases
+pass. Packaged coverage includes cross-mode selected-device capture, one-stream
+ownership, visible narrow-window feedback, track cleanup, separate work review,
+collapsed/single-row dock, sizing, node inspection, uncertain/over-limit review
+and existing voice-profile/preview behavior. Backend dispatch is mocked.
+Actual portable startup verifies synthetic microphone signal/cancellation in
+both views, visible floating feedback, released tracks, actual 40-context/30-link
+mesh, persistent voices and native window/graph controls. All 16 runtime files
+and metadata match source; notices/private exclusions and .4-.9 preservation
+hashes pass. Physical FDUCE/human speech and listening remain unverified.
+No live Copilot prompt, audible preview, user-app restart or new public release.
+
 ## Local recognition-review candidate: 0.1.0-prototype.9
 
 Unsigned Windows x64 portable:

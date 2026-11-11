@@ -52,11 +52,13 @@ export function App() {
   const [workProposal, setWorkProposal] = useState<WorkVoiceProposal | null>(null);
   const [realJob, setRealJob] = useState<WorkJob | null>(null);
   const [routeChoices, setRouteChoices] = useState<Context[] | null>(null);
+  const [dockExpanded, setDockExpanded] = useState(false);
+  const [navigationHost, setNavigationHost] = useState<HTMLDivElement | null>(null);
+  const [voiceHost, setVoiceHost] = useState<HTMLDivElement | null>(null);
   const meshRequest = useRef(0);
   const invalidateMesh = useCallback(() => { meshRequest.current++; }, []);
   const [recording, setRecording] = useState(false);
-  const recordingRef = useRef(false);
-  const onRecordingChange = useCallback((value: boolean) => { recordingRef.current = value; setRecording(value); }, []);
+  const onRecordingChange = useCallback((value: boolean) => setRecording(value), []);
   const utterance = useRef<SpeechSynthesisUtterance | null>(null);
   const nativeSpeech = useRef(false);
   const speakingGeneration = useRef(0);
@@ -138,10 +140,6 @@ export function App() {
   }, [stopSpeech]);
 
   const windowAction = useCallback(async (action: WindowAction) => {
-    if (action === 'toggle-floating' && recordingRef.current) {
-      setError('Stop or cancel recording before hiding the microphone controls in Floating Mesh.');
-      return;
-    }
     if (!window.intercom) {
       setError('Desktop window controls require the Electron app. A browser page cannot float transparently over your desktop.');
       return;
@@ -149,6 +147,7 @@ export function App() {
     try {
       const state = await window.intercom.windowAction(action);
       setDesktop(state);
+      if (action === 'toggle-floating') setDockExpanded(false);
     } catch (reason) {
       setError(`Window action failed: ${reason instanceof Error ? reason.message : String(reason)}`);
     }
@@ -247,9 +246,10 @@ export function App() {
     setRouteChoices(matches.length > 1 ? matches : null);
     if (matches.length === 1) setSelectedId(matches[0].id);
     setWorkProposal({ id: crypto.randomUUID(), text, mode });
+    if (desktop.floating) void windowAction('toggle-floating');
   }
 
-  return <main className={`app${desktop.floating ? ' floating' : ''}${desktop.maximized ? ' maximized' : ''}`} data-floating={desktop.floating} data-maximized={desktop.maximized}>
+  return <main className={`app${demo ? ' fixture-demo' : ''}${desktop.floating ? ' floating' : ''}${desktop.maximized ? ' maximized' : ''}`} data-floating={desktop.floating} data-maximized={desktop.maximized}>
     <header className="titlebar chrome">
       <a className="brand" href="#" onClick={(event) => event.preventDefault()}><img className="brand-logo" src="./intercom-icon.png" alt="Intercom logo" width="48" height="48" /><span>intercom<span className="brand-dot">.</span></span></a>
       <div className="titlebar-center">YOUR CONTEXT, CONNECTED</div>
@@ -283,7 +283,7 @@ export function App() {
     <section className="center" aria-label="Context mesh">
       <div className="mesh-heading chrome"><div><div className="eyebrow">CONTEXT MESH</div><h2>Everything has a connection.</h2></div><span className="fixture-badge">{demo ? 'FIXTURE DATA' : meshLoading ? 'LOADING LOCAL MESH' : snapshot ? 'ACTUAL LOCAL MESH' : 'MESH UNAVAILABLE'}</span></div>
       <Suspense fallback={<p className="mesh-loading" role="status">Loading the mesh renderer...</p>}>
-        <Mesh key={demo ? 'fixture' : snapshot?.loadedAt ?? 'empty'} graph={graph} activeSlots={demo ? slots : observedSlots} selectedId={selected?.id ?? ''} profile={busy && job ? job.profile : profile} motion={motion} paused={desktop.paused} />
+        <Mesh key={demo ? 'fixture' : snapshot?.loadedAt ?? 'empty'} graph={graph} activeSlots={demo ? slots : observedSlots} selectedId={selected?.id ?? ''} profile={busy && job ? job.profile : profile} motion={motion} paused={desktop.paused} navigationHost={desktop.floating ? navigationHost : null} />
       </Suspense>
       {!demo && meshError && <p className="mesh-error" role="alert">{meshError}</p>}
       {!demo && meshLoading && <p className="mesh-loading" role="status">Reading the current local snapshot...</p>}
@@ -292,21 +292,25 @@ export function App() {
       <div className="mesh-toolbar chrome">
         <span className="legend"><i />{demo ? 'Demo path' : 'Observed job / tool locations'} <i className="dim" />Topology</span>
         <button className="quiet-button" aria-pressed={motion} onClick={() => setMotion(!motion)}>{motion ? 'Pause drift' : 'Enable drift'}</button>
-        <button className="quiet-button float-button" disabled={!desktopAvailable || recording} onClick={() => void windowAction('toggle-floating')}><Icon name="float" />Floating mesh</button>
+        <button className="quiet-button float-button" disabled={!desktopAvailable} onClick={() => void windowAction('toggle-floating')}><Icon name="float" />Floating mesh</button>
       </div>
-      <div className="floating-handle" aria-label="Move floating mesh" title="Grab this handle and drag to move the floating window. Drag the graph itself to orbit.">
-        <Icon name="move" /><span>Drag to move</span>
-      </div>
-      <div className="floating-tools">
-        <img className="brand-logo" src="./intercom-icon.png" alt="Intercom logo" width="20" height="20" />
+      <div className="voice-surface" ref={setVoiceHost} />
+      <div className="floating-tools" role="group" aria-label="Floating controls dock">
+        <div className="floating-handle" aria-label="Move floating mesh" title="Grab and drag to move the floating window. Drag the graph itself to orbit.">
+          <Icon name="move" /><span>Drag to move</span>
+        </div>
+        <button aria-label={dockExpanded ? 'Collapse floating controls' : 'Expand floating controls'} title={dockExpanded ? 'Collapse controls' : 'Expand controls'} aria-expanded={dockExpanded} aria-controls="floating-dock-controls" onClick={() => setDockExpanded(!dockExpanded)}>{dockExpanded ? '\u2039' : '\u203a'}</button>
+        <div className="floating-dock-controls" id="floating-dock-controls" hidden={!dockExpanded}>
         <span className="floating-demo">{demo ? 'DEMO' : snapshot ? `${contexts.length} CONTEXTS` : 'NO DATA'}</span>
+        <div className="floating-zoom" ref={setNavigationHost} />
         <button title="Restore workspace (Escape)" aria-label="Restore workspace" onClick={() => void windowAction('toggle-floating')}><Icon name="restore" /></button>
         <button title="Always on top" aria-label="Always on top" aria-pressed={desktop.onTop} onClick={() => void windowAction('toggle-top')}><Icon name="pin" /></button>
         <button title="Close" aria-label="Close floating mesh" onClick={() => void windowAction('close')}><Icon name="close" /></button>
         <div className="floating-size" role="group" aria-label="Floating window size controls">
-          <button aria-label="Make floating window smaller" title="Make the floating window smaller (graph zoom stays unchanged)" disabled={!desktop.floatingSize || desktop.floatingSize.side <= desktop.floatingSize.min} onClick={() => void windowAction('shrink-floating')}><Icon name="minus" />Smaller</button>
-          <span className="floating-size-value"><span>WINDOW SIZE</span><output aria-label="Floating window size">{desktop.floatingSize?.side ?? 0}px</output></span>
-          <button aria-label="Make floating window larger" title="Make the floating window larger (graph zoom stays unchanged)" disabled={!desktop.floatingSize || desktop.floatingSize.side >= desktop.floatingSize.max} onClick={() => void windowAction('grow-floating')}><Icon name="plus" />Larger</button>
+          <button aria-label="Make floating window smaller" title="Smaller window (graph zoom stays unchanged)" disabled={!desktop.floatingSize || desktop.floatingSize.side <= desktop.floatingSize.min} onClick={() => void windowAction('shrink-floating')}><Icon name="minus" /></button>
+          <output aria-label="Floating window size">{desktop.floatingSize?.side ?? 0}px</output>
+          <button aria-label="Make floating window larger" title="Larger window (graph zoom stays unchanged)" disabled={!desktop.floatingSize || desktop.floatingSize.side >= desktop.floatingSize.max} onClick={() => void windowAction('grow-floating')}><Icon name="plus" /></button>
+        </div>
         </div>
       </div>
     </section>
@@ -314,7 +318,7 @@ export function App() {
     <aside className="activity chrome">
       <div className="eyebrow">THE CONVERSATION</div>
       <button className="quiet-button" onClick={() => { stopSpeech(); setJob(null); setProposal(null); setCandidates(null); setVoiceEnabled(false); setDemo(!demo); }}>{demo ? 'Use live voice' : 'Show fixture demo'}</button>
-      {!demo ? <VoiceConversation onRecordingChange={onRecordingChange} onWorkRequest={workFromVoice} /> : <>
+      {!demo ? <VoiceConversation onRecordingChange={onRecordingChange} onWorkRequest={workFromVoice} floating={desktop.floating} controlsHost={voiceHost} /> : <>
       <div className="activity-title"><span className="status-dot" /><span>{busy ? 'Demo in progress' : 'Ready when you are'}</span></div>
       <div className="message assistant"><span className="message-label">INTERCOM / DEMO</span><p>Your workspace, without the window shuffle.</p><p className="muted">Try a synthetic request below. I&apos;ll show the route, not run a real agent.</p></div>
       <MicrophonePicker />
@@ -342,16 +346,14 @@ export function App() {
       </select><small>Controls rendering and supported background reasoning effort (low / medium / high). Copilot retains its model; unsupported effort controls stay inherited. Speech uses the installed local English recognizer.</small></div>
     </aside>
 
-    <footer className="composer chrome">
-      {!demo ? <><div className="composer-icon"><Icon name="mic" /></div><div><div className="eyebrow">PUSH TO TALK. A REAL RESPONSE.</div><p className="muted">Choose your mic and click Speak to record and transcribe locally. Connect a dedicated session when you are ready to send to Copilot.</p></div></> : <>
+    {demo && <footer className="composer chrome">
       <div className="composer-icon"><Icon name="mic" /></div>
       <form onSubmit={(event) => { event.preventDefault(); prepare(); }}>
         <label htmlFor="request">A VOICE WORKSPACE, IN PREVIEW</label>
         <div className="input-row"><input id="request" maxLength={1000} value={request} disabled={busy} onChange={(event) => { setRequest(event.target.value); setProposal(null); setCandidates(null); }} placeholder="Try: In Workshop, outline the next release." /><button className="send-button" type="submit" disabled={busy || !request.trim()} aria-label="Prepare demo request"><Icon name="arrow" /></button></div>
       </form>
       <button className="sample-button" disabled={busy} onClick={() => { const sample = 'In Atlas, summarize the research plan.'; setRequest(sample); prepare(sample); }}>Simulate voice request</button>
-      </>}
-    </footer>
+    </footer>}
 
     {(proposal || candidates) && <div className="confirmation chrome" role="region" aria-label="Demo request confirmation">
       {proposal ? <><div><span className="message-label">CONFIRM DEMO TARGET</span><p><strong>{proposal.name}</strong> / synthetic session only</p><small>No terminal, agent, or microphone will be started.</small></div><button className="primary-button" onClick={confirm}>Run simulation</button></> :

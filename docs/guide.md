@@ -84,15 +84,29 @@ hidden otherwise. Close with Escape, the close button, a same-node click or
 blank-space click. Keyboard: focus the graph, arrow through nodes, Enter/Space
 to pin. Inspecting a node does not change the work target.
 
-Click **Floating mesh** to hide the panels and window background. Grab the
-visible **Drag to move** handle at the top to move the window. The bottom dock
-stays visible: **Smaller / Larger** resize the actual floating window, with a
-pixel-size readout. These buttons do not change graph zoom. The dock also
-restores the workspace or pins it above other windows. **Escape** dismisses an
-open node label first (source checkout), otherwise restores the workspace;
-**Ctrl+Shift+M** toggles modes while Intercom has focus.
-Hover reveals graph zoom/reset controls too. Returning from a maximized
-workspace restores maximization and retains its previous normal-window bounds.
+Click **Floating mesh** to hide the panels and window background. **Local .10
+and newer/current checkout:** the bottom dock starts collapsed. Its **Drag to
+move** grip moves the native window; the adjacent arrow expands one horizontal
+row containing graph zoom/reset, restore, pin, close and window-size controls.
+At small sizes the row scrolls horizontally rather than wrapping. The size
+buttons resize the native window without changing graph zoom. There is no
+separate top grip or hovering zoom toolbar in this view.
+
+The operational **Speak** mic stays outside the dock, even when it is collapsed.
+It uses the same selected input and recording in workspace/floating mode:
+switching views does not stop or reopen the stream. **Voice settings and
+transcript** opens a scrollable panel; stopping opens recognition review/results
+or an explicit error. Settings and playback profiles remain reachable there.
+Preparing a work request returns to the workspace for the existing separate
+target/task confirmation; it does not dispatch work. The old inert live-mode
+footer and its reserved space have been removed. Explicit fixture demo remains
+synthetic and separate from live capture.
+
+**Escape** dismisses an open voice panel or node label before restoring the
+workspace; **Ctrl+Shift+M** toggles views while Intercom has focus. Returning from
+a maximized workspace retains its previous normal-window bounds/maximization.
+Older .7-.9 builds retain the top drag handle and two-row dock; they do not
+update automatically. See the [separate .10 candidate](prototype.md#local-floating-microphone-candidate-010-prototype10).
 
 **Local .8 and newer candidates/current checkout:** click **Load microphones**, select FDUCE
 (or your preferred input), optionally **Test selected**, then **Speak**. The meter

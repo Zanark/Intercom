@@ -1,4 +1,5 @@
 import { memo, useEffect, useId, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { graphCapacity, spherePosition } from './model';
@@ -11,6 +12,7 @@ interface Props {
   profile: Profile;
   motion: boolean;
   paused: boolean;
+  navigationHost: HTMLDivElement | null;
 }
 
 function Mesh(props: Props) {
@@ -403,6 +405,12 @@ function Mesh(props: Props) {
     };
   }, [helpId, labelId]);
 
+  const navigation = <div className="mesh-navigation" role="group" aria-label="Graph view controls">
+    <button className="quiet-button" aria-label="Zoom in graph" title="Zoom in" disabled={!!error} onClick={() => navigate.current('in')}>+</button>
+    <output aria-label="Graph zoom">{zoom}%</output>
+    <button className="quiet-button" aria-label="Zoom out graph" title="Zoom out" disabled={!!error} onClick={() => navigate.current('out')}>-</button>
+    <button className="quiet-button" disabled={!!error} onClick={() => navigate.current('reset')}>Reset view</button>
+  </div>;
   return <><div className="mesh-viewport" ref={container}>
     <span className="sr-only" id={helpId}>Hover a colored node for its name; click to pin its label. Focus the graph and use arrow keys to inspect nodes, Enter to pin, Escape to dismiss. Inspection does not change your work target.</span>
     {inspection && inspectedContext && <div ref={label} id={labelId} className={`mesh-node-label${inspection.pinned ? ' pinned' : ''}`} role={inspection.pinned ? 'region' : 'tooltip'} aria-label={inspection.pinned ? 'Pinned node details' : undefined} style={{ visibility: 'hidden', borderColor: inspectedContext.color }}>
@@ -411,12 +419,7 @@ function Mesh(props: Props) {
       {inspection.pinned ? <>{inspectedContext.basePath && <small>{inspectedContext.basePath}</small>}<button aria-label="Close node label" title="Close node label (Escape)" onClick={() => dismiss.current()}>×</button></> : <small>Click to pin</small>}
     </div>}
     {error && <p className="mesh-error" role="alert">{error}</p>}
-  </div><div className="mesh-navigation" role="group" aria-label="Graph view controls">
-    <button className="quiet-button" aria-label="Zoom in graph" title="Zoom in" disabled={!!error} onClick={() => navigate.current('in')}>+</button>
-    <output aria-label="Graph zoom">{zoom}%</output>
-    <button className="quiet-button" aria-label="Zoom out graph" title="Zoom out" disabled={!!error} onClick={() => navigate.current('out')}>-</button>
-    <button className="quiet-button" disabled={!!error} onClick={() => navigate.current('reset')}>Reset view</button>
-  </div></>;
+  </div>{props.navigationHost ? createPortal(navigation, props.navigationHost) : navigation}</>;
 }
 
 export default memo(Mesh);

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Recording } from './recording';
 import { MicrophonePicker } from './MicrophonePicker';
 import { VoiceProfiles } from './VoiceProfiles';
@@ -10,9 +11,11 @@ const labels: Record<Phase, string> = {
   transcribing: 'Transcribing locally...', checking: 'Checking session ownership...', running: 'Copilot is responding...',
 };
 
-export function VoiceConversation({ onRecordingChange, onWorkRequest }: {
+export function VoiceConversation({ onRecordingChange, onWorkRequest, floating, controlsHost }: {
   onRecordingChange: (recording: boolean) => void;
   onWorkRequest: (text: string, mode: WorkMode) => void;
+  floating: boolean;
+  controlsHost: HTMLDivElement | null;
 }) {
   const [sessionId, setSessionId] = useState('');
   const [connected, setConnected] = useState(false);
@@ -28,6 +31,8 @@ export function VoiceConversation({ onRecordingChange, onWorkRequest }: {
   const [autoSend, setAutoSend] = useState(true);
   const [speaking, setSpeaking] = useState(false);
   const [delivery, setDelivery] = useState<'chat' | WorkMode>('chat');
+  const [panelOpen, setPanelOpen] = useState(false);
+  const panel = useRef<HTMLElement>(null);
   const active = useRef<string | null>(null);
   const recorder = useRef<Recording | null>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -37,6 +42,21 @@ export function VoiceConversation({ onRecordingChange, onWorkRequest }: {
   const recording = phase === 'opening' || phase === 'listening';
   const canSend = delivery !== 'chat' || connected;
   const stopLabel = autoSend && canSend ? 'Stop & send' : 'Stop & transcribe';
+
+  useEffect(() => {
+    if (panelOpen) panel.current?.scrollTo({ top: 0 });
+  }, [panelOpen, error, warning, answer]);
+
+  useEffect(() => {
+    function dismiss(event: KeyboardEvent) {
+      if (event.key === 'Escape' && floating && panelOpen) {
+        event.preventDefault();
+        setPanelOpen(false);
+      }
+    }
+    window.addEventListener('keydown', dismiss, true);
+    return () => window.removeEventListener('keydown', dismiss, true);
+  }, [floating, panelOpen]);
 
   useEffect(() => {
     onRecordingChange(recording);
@@ -64,7 +84,7 @@ export function VoiceConversation({ onRecordingChange, onWorkRequest }: {
     void window.intercom?.voiceSettings().then((settings) => { if (mounted.current) setSessionId(settings.sessionId); })
       .catch((reason: unknown) => { if (mounted.current) setError(report(reason)); });
     const remove = window.intercom?.onVoiceProgress((event) => {
-      if (event.phase === 'error') { setError(event.message); return; }
+      if (event.phase === 'error') { setError(event.message); setPanelOpen(true); return; }
       if (active.current === event.requestId && (event.phase === 'checking' || event.phase === 'running')) setPhase(event.phase);
     });
     return () => {
@@ -87,7 +107,7 @@ export function VoiceConversation({ onRecordingChange, onWorkRequest }: {
     try {
       await window.intercom.configureVoiceSession(id, sessionId.trim());
       if (active.current === id) setConnected(true);
-    } catch (reason) { if (active.current === id) setError(report(reason)); }
+    } catch (reason) { if (active.current === id) { setError(report(reason)); setPanelOpen(true); } }
     finally { if (active.current === id) { active.current = null; setPhase('idle'); } }
   }
 
@@ -104,6 +124,7 @@ export function VoiceConversation({ onRecordingChange, onWorkRequest }: {
     const result = await window.intercom.sendVoicePrompt(id, value);
     if (active.current !== id) return;
     setAnswer(result.text);
+    setPanelOpen(true);
     if (result.warning) setWarning(result.warning);
     await stopSpeech();
     if (active.current === id) void say(result.text.length > 4000 ? `${result.text.slice(0, 4000)}. The remaining response is on screen.` : result.text);
@@ -120,18 +141,19 @@ export function VoiceConversation({ onRecordingChange, onWorkRequest }: {
       const result = await window.intercom!.transcribeVoice(id, wave);
       if (active.current !== id) return;
       setText(result.text);
+      setPanelOpen(true);
       if (result.reviewRequired) setWarning(result.text.length > 1000
         ? `Recognized ${result.text.length} characters. The request limit is 1,000; shorten the transcript below before sending. Nothing was sent.`
         : 'Windows English (US) recognition has low confidence. Your transcript is preserved below; review or edit it, then send explicitly. Nothing was sent.');
       if (autoSend && canSend && !result.reviewRequired) await send(result.text, id);
-    } catch (reason) { if (active.current === id) setError(report(reason)); }
+    } catch (reason) { if (active.current === id) { setError(report(reason)); setPanelOpen(true); } }
     finally { if (active.current === id) { active.current = null; setPhase('idle'); } }
   }
 
   async function startRecording() {
     if (active.current || checkingMic || !window.intercom) return;
     const id = crypto.randomUUID();
-    active.current = id; setPhase('opening'); setError(''); setWarning(''); setAnswer(''); setText('');
+    active.current = id; setPhase('opening'); setError(''); setWarning(''); setAnswer(''); setText(''); setPanelOpen(false);
     try {
       await stopSpeech();
       if (active.current !== id) return;
@@ -146,7 +168,7 @@ export function VoiceConversation({ onRecordingChange, onWorkRequest }: {
     } catch (reason) {
       if (active.current === id) {
         await recorder.current?.cancel();
-        recorder.current = null; active.current = null; setPhase('idle'); setError(`Microphone failed: ${report(reason)}`);
+        recorder.current = null; active.current = null; setPhase('idle'); setError(`Microphone failed: ${report(reason)}`); setPanelOpen(true);
       }
     }
   }
@@ -158,11 +180,17 @@ export function VoiceConversation({ onRecordingChange, onWorkRequest }: {
     clearTimer();
     try { await Promise.all([recorder.current?.cancel(), window.intercom?.cancelVoice(id), stopSpeech()]); }
     catch (reason) { message = `Cancellation could not be confirmed: ${report(reason)}`; }
-    recorder.current = null; setLevel(0); setPhase('idle'); setError(message);
+    recorder.current = null; setLevel(0); setPhase('idle'); setError(message); setPanelOpen(true);
   }
 
-  return <section className="live-conversation" aria-label="Live voice conversation">
+  return <><section ref={panel} className="live-conversation" aria-label="Live voice conversation" data-panel-open={panelOpen}>
+    {floating && <button className="quiet-button voice-panel-close" onClick={() => setPanelOpen(false)}>Hide voice settings</button>}
+    {error && <p className="voice-error" role="alert">{error}</p>}
+    {warning && <p className="voice-error" role="alert">{warning}</p>}
+    {answer && <div className="live-result" aria-live="polite"><div className="message-label">COPILOT RESPONSE / VERIFIED SESSION COMPLETION</div><p>{answer}</p></div>}
     <div className="message-label">LOCAL SPEECH / EXISTING COPILOT SESSION</div>
+    <details open={!floating}>
+    <summary>Microphone, session and delivery settings</summary>
     <label htmlFor="voice-delivery">Voice request destination</label>
     <select id="voice-delivery" value={delivery} disabled={busy} onChange={(event) => {
       const value = event.target.value;
@@ -177,30 +205,23 @@ export function VoiceConversation({ onRecordingChange, onWorkRequest }: {
       <small>Close that session&apos;s terminal first. No new session or competing writer will be created.</small>
     </details>
     <MicrophonePicker onSelect={setDevice} locked={busy} onCheckingChange={setCheckingMic} />
-    <div className="live-controls">
-      <button className="primary-button record-button" disabled={!window.intercom || checkingMic || (busy && phase !== 'listening')} aria-pressed={phase === 'listening'} aria-describedby="voice-recording-help"
-        onClick={() => { if (phase === 'listening' && active.current) void finishRecording(active.current); else void startRecording(); }}>
-        {phase === 'listening' ? stopLabel : 'Speak'}
-      </button>
-      {busy && <button className="quiet-button" onClick={() => void cancel()}>Cancel request</button>}
-      <p role="status">{checkingMic ? 'Checking microphone access...' : phase === 'listening' ? `Listening - click ${stopLabel} when finished` : labels[phase]}</p>
-      <meter aria-label="Microphone input level" min="0" max="0.15" value={level} />
-      <small id="voice-recording-help">{phase === 'opening' ? 'Microphone starting; input may be active.' : phase === 'listening' ? 'Microphone ON. Audio stays in memory; maximum 60 seconds.' : `Microphone off. Click Speak, talk, then click ${stopLabel}.`}</small>
-      {!canSend && <small>Recording and local transcription work without Copilot. To send your transcript, connect an existing session above, then click Send text to Copilot. Connecting alone does not send it.</small>}
-    </div>
+    <small id="voice-recording-help">{phase === 'opening' ? 'Microphone starting; input may be active.' : phase === 'listening' ? 'Microphone ON. Audio stays in memory; maximum 60 seconds.' : `Microphone off. Click Speak, talk, then click ${stopLabel}.`}</small>
+    {!canSend && <small>Recording and local transcription work without Copilot. To send your transcript, connect an existing session above, then click Send text to Copilot. Connecting alone does not send it.</small>}
     <label className="voice-toggle"><input type="checkbox" checked={autoSend} disabled={busy} onChange={(event) => setAutoSend(event.target.checked)} />Send recognized text automatically after stopping</label>
+    </details>
     <form onSubmit={(event) => {
       event.preventDefault();
       if (active.current || (delivery === 'chat' && !connected) || !text.trim()) return;
       if (text.trim().length > 1000) { setError('Shorten the transcript to 1,000 characters or fewer before sending. Nothing was sent.'); return; }
       const id = crypto.randomUUID(); active.current = id; setError(''); setWarning(''); setAnswer('');
-      void send(text.trim(), id).catch((reason: unknown) => { if (active.current === id) setError(report(reason)); })
+      void send(text.trim(), id).catch((reason: unknown) => { if (active.current === id) { setError(report(reason)); setPanelOpen(true); } })
         .finally(() => { if (active.current === id) { active.current = null; setPhase('idle'); } });
     }}>
       <label htmlFor="voice-transcript">Transcript / typed fallback</label>
       <textarea id="voice-transcript" maxLength={1000} value={text} disabled={busy} onChange={(event) => setText(event.target.value)} placeholder="Try: Say hello world." />
       <button className="quiet-button" disabled={busy || (delivery === 'chat' && !connected) || !text.trim() || text.trim().length > 1000} type="submit">{delivery === 'chat' ? 'Send text to Copilot' : 'Prepare work from text'}</button>
     </form>
+    <details open={!floating}><summary>Voice profiles and playback</summary>
     <label className="voice-toggle"><input type="checkbox" checked={voice} onChange={(event) => { setVoice(event.target.checked); if (!event.target.checked) void stopSpeech().catch((reason: unknown) => setWarning(report(reason))); }} />Speak progress and responses (local Windows voice)</label>
     <button className="quiet-button" disabled={!speaking} onClick={() => void stopSpeech().catch((reason: unknown) => setWarning(report(reason)))}>Stop voice playback</button>
     <VoiceProfiles locked={busy || checkingMic} onStop={stopSpeech} onPreview={async (value, profile) => {
@@ -211,9 +232,23 @@ export function VoiceConversation({ onRecordingChange, onWorkRequest }: {
       catch (reason) { if (epoch === speechEpoch.current) throw reason; return false; }
       finally { if (mounted.current && epoch === speechEpoch.current) setSpeaking(false); }
     }} />
-    {error && <p className="voice-error" role="alert">{error}</p>}
-    {warning && <p className="voice-error" role="alert">{warning}</p>}
-    {answer && <div className="live-result" aria-live="polite"><div className="message-label">COPILOT RESPONSE / VERIFIED SESSION COMPLETION</div><p>{answer}</p></div>}
+    </details>
     <small>English (US), push-to-talk. Conversation mode has no file/work tools; work modes require a separate target/task confirmation and retain Copilot permission prompts. No wake word. Audio stays local; task text uses your existing Copilot account/history.</small>
-  </section>;
+  </section>{controlsHost && createPortal(<div className="live-controls" role="group" aria-label="Always available microphone">
+      <button className="primary-button record-button" disabled={!window.intercom || checkingMic || (busy && phase !== 'listening')} aria-pressed={phase === 'listening'} aria-describedby="voice-recording-help"
+        aria-label={phase === 'listening' ? stopLabel : 'Speak'}
+        onClick={() => { if (phase === 'listening' && active.current) void finishRecording(active.current); else void startRecording(); }}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3" /><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3M8 22h8" /></svg>
+        <span>{phase === 'listening' ? 'Stop' : 'Speak'}</span>
+      </button>
+      <div className="voice-status">
+        <p role="status">{checkingMic ? 'Checking microphone access...' : phase === 'listening' ? `Listening - click ${stopLabel} when finished` : labels[phase]}</p>
+        <meter aria-label="Microphone input level" min="0" max="0.15" value={level} />
+      </div>
+      <button className="quiet-button" aria-label="Voice settings and transcript" title="Microphone, session and transcript" aria-expanded={floating ? panelOpen : true} onClick={() => {
+        if (floating) setPanelOpen(!panelOpen);
+        else document.querySelector('.live-conversation')?.scrollIntoView({ block: 'nearest' });
+      }}>...</button>
+      {busy && <button className="quiet-button" onClick={() => void cancel()}>Cancel request</button>}
+    </div>, controlsHost)}</>;
 }

@@ -19,6 +19,33 @@ Completion evidence:
   This ledger is ongoing, not a finite feature deliverable.
 
 Completion log:
+  2026-11-11 - Replaced inert footer with operational workspace/floating voice.
+    Cause: the large footer was only guidance, while real voice controls lived
+      in activity chrome hidden by floating mode. Separate top grip/zoom and
+      two-row dock also obscured the minimal view.
+    Action: portal one existing record/status/cancel control into a shared live
+      surface outside the dock; retain the mounted controller, device/profile/
+      transcript state and capture across mode changes. Floating settings/review/
+      errors open a bounded scrollable panel with new feedback reset to its top.
+      Work preparation restores workspace for separate confirmation.
+      Move native grip, graph navigation and window/size controls into one
+      default-collapsed horizontal dock; overflow scrolls instead of wrapping.
+      Remove live footer space, retaining explicitly synthetic demo separation.
+    Evidence: lint/type/build; 15 focused source and 17 packaged desktop cases
+      pass. Actual portable verifies synthetic workspace/floating signal,
+      cancellation/released tracks, visible floating feedback, actual mesh,
+      voice-profile persistence and native graph/window controls. Sixteen runtime
+      files/metadata, notices/private exclusions and .4-.9 hashes verified.
+    Corrections: early source run 13/15; allow sufficient synthetic capture
+      duration and rebuild stale dist before the final passing run. Final
+      packaged run includes the panel scroll-reset effect.
+    Artifact: local unsigned .10 under release\floating-mic-candidate;
+      110682241 bytes, SHA-256
+      7786311f362a5a1c5dc319b7047d61d214fc6f90269ae89fcbc139913d6df0d4.
+    Limits: FDUCE/human recognition/listening unverified. No live prompt, audible
+      preview, provider download, new poller/dependency, public release or
+      interference with the user's existing application.
+    Next: user elects the new EXE; older running/released builds do not auto-update.
   2026-11-11 - Recovered uncertain and over-limit speech instead of discarding it.
     Cause: the generic host error combined empty text, length and confidence
       rejection. The owner's message does not establish which condition occurred.

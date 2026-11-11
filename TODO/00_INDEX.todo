@@ -94,7 +94,15 @@ Completion evidence:
   native, focused packaged and actual portable checks; .7/.8 remain unchanged.
   Recognition accuracy and physical FDUCE/human acceptance remain unqualified.
 
+  ic-06 floating microphone replaces the inert live footer with one operational
+  control outside the default-collapsed dock. View changes retain capture;
+  one-row dock and visible floating review/errors/settings are packaged in the
+  separate unsigned .10 candidate. Seventeen focused packaged cases and actual
+  portable synthetic capture/cancel pass. Published .7 and user app untouched.
+
 Completion log:
+  2026-11-11 - Recorded operational floating voice and collapsed single-row
+    controls in ic-06; separate .10 candidate, no new public release.
   2026-11-11 - Recorded bounded speech-result recovery and separate .9 candidate;
     no new recognition provider, public release or user-instance restart.
   2026-11-11 - Recorded the session-independent microphone fix and local .8

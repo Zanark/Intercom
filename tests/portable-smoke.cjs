@@ -5,6 +5,18 @@ const os = require('node:os');
 const path = require('node:path');
 const { syntheticTone } = require('./synthetic-audio.cjs');
 
+async function trackAudio(page) {
+  await page.evaluate(() => {
+    const original = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
+    window.__portableTracks = [];
+    navigator.mediaDevices.getUserMedia = async (constraints) => {
+      const stream = await original(constraints);
+      window.__portableTracks.push(...stream.getTracks());
+      return stream;
+    };
+  });
+}
+
 async function main() {
   const executable = process.env.INTERCOM_TEST_EXECUTABLE;
   if (!executable) throw new Error('Set INTERCOM_TEST_EXECUTABLE to the portable EXE.');
@@ -55,15 +67,7 @@ async function main() {
     await microphone.getByRole('button', { name: 'Test selected', exact: true }).click();
     await expect(microphone.getByRole('status')).toContainText('Selected microphone opens successfully.');
     await expect(page.getByRole('button', { name: 'Speak', exact: true })).toBeEnabled();
-    await page.evaluate(() => {
-      const original = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
-      window.__portableTracks = [];
-      navigator.mediaDevices.getUserMedia = async (constraints) => {
-        const stream = await original(constraints);
-        window.__portableTracks.push(...stream.getTracks());
-        return stream;
-      };
-    });
+    await trackAudio(page);
     await page.getByRole('button', { name: 'Speak', exact: true }).click();
     await expect(page.getByRole('button', { name: 'Stop & transcribe', exact: true })).toHaveAttribute('aria-pressed', 'true');
     await expect.poll(() => page.getByRole('meter').evaluate((meter) => meter.value)).toBeGreaterThan(0);
@@ -92,6 +96,18 @@ async function main() {
     await expect(page.locator('main')).toHaveAttribute('data-floating', 'true');
     expect(await page.locator('main').evaluate((element) => getComputedStyle(element).backgroundColor)).toBe('rgba(0, 0, 0, 0)');
     await expect(page.getByLabel('Move floating mesh', { exact: true })).toHaveText('Drag to move');
+    await expect(page.getByRole('button', { name: 'Expand floating controls', exact: true })).toHaveAttribute('aria-expanded', 'false');
+    await expect(page.getByRole('button', { name: 'Speak', exact: true })).toBeEnabled();
+    await trackAudio(page);
+    await page.getByRole('button', { name: 'Speak', exact: true }).click();
+    await expect(page.getByRole('button', { name: 'Stop & transcribe', exact: true })).toBeVisible();
+    await expect.poll(() => page.getByRole('meter').evaluate((meter) => meter.value)).toBeGreaterThan(0);
+    await page.getByRole('button', { name: 'Cancel request', exact: true }).click();
+    await expect(page.getByRole('alert')).toContainText('Cancelled');
+    await expect(page.getByRole('alert')).toBeInViewport();
+    expect(await page.evaluate(() => window.__portableTracks.length > 0 && window.__portableTracks.every((track) => track.readyState === 'ended'))).toBe(true);
+    await page.getByRole('button', { name: 'Hide voice settings', exact: true }).click();
+    await page.getByRole('button', { name: 'Expand floating controls', exact: true }).click();
     await expect(page.getByLabel('Floating window size', { exact: true })).toHaveText('540px');
     await page.getByRole('button', { name: 'Make floating window larger', exact: true }).click();
     await expect(page.getByLabel('Floating window size', { exact: true })).toHaveText('588px');
@@ -101,7 +117,7 @@ async function main() {
     await page.keyboard.press('Escape');
     await expect(page.locator('main')).toHaveAttribute('data-floating', 'false');
     expect(errors).toEqual([]);
-    console.log(JSON.stringify({ executable, result: 'Actual packaged mesh worker/startup, microphone access and session-independent recording/cancellation, installed voice catalog and persistent profiles, maximize/restore, graph zoom/reset, visible floating handle and native size controls passed', contexts: snapshot.contexts.length, relationships: snapshot.edges.length }));
+    console.log(JSON.stringify({ executable, result: 'Actual portable mesh startup, workspace/floating microphone signal and cancellation/track release, visible floating feedback, persistent voice profiles, maximize/restore and collapsed single-row dock with graph/native size controls passed', contexts: snapshot.contexts.length, relationships: snapshot.edges.length }));
   } finally {
     if (page && !page.isClosed()) await page.evaluate(() => window.intercom.windowAction('close')).catch((error) => {
       if (!/closed|destroyed/i.test(error.message)) throw error;

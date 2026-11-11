@@ -61,6 +61,11 @@ Tasks:
   [x] Preserve uncertain recognition for explicit review in every destination.
   [x] Retain over-limit transcripts, block dispatch and require manual shortening.
   [x] Qualify a separate .9 review candidate without replacing .7/.8 or user app.
+  [x] Replace inert live footer with an operational mic outside the floating dock.
+  [x] Preserve one recording/device across workspace and floating transitions.
+  [x] Collapse the floating dock by default; move drag/zoom/window controls into one row.
+  [x] Keep floating review/errors/settings accessible and work confirmation separate.
+  [x] Qualify the separate .10 portable without changing published/earlier builds.
   [ ] Add the required future arbitrary identity, timbre and emotional-style engine.
   [ ] Qualify native permission prompting on a target without saved grants.
   [ ] Qualify manual terminal opening and any future acknowledged automatic handoff.
@@ -298,7 +303,29 @@ Completion evidence:
   Physical FDUCE/human acceptance remains open. Published .7 and user's app
   untouched; no real prompt, audible preview, new release or provider download.
 
+  Floating-microphone sub-slice: removed the inert live footer/reserved row;
+  one actual microphone remains outside the collapsed-by-default floating dock.
+  Its shared controller/device/stream survives view switches without reopening.
+  Floating review/errors/settings are accessible; new feedback resets panel
+  scrolling. Work preparation returns to the separate workspace confirmation.
+  Native drag grip and zoom/window/size controls share one expandable horizontal
+  row, scrolling at small widths rather than wrapping. Graph camera persists.
+  Fixture demo stays explicitly synthetic. No new dependency/poller/watcher.
+  Lint/type/build, 15 focused source and 17 focused packaged desktop cases pass.
+  Actual portable passes synthetic workspace/floating recording signal, cancel/
+  track release and visible feedback, actual mesh, voices and window controls.
+  Local unsigned .10: release\floating-mic-candidate,
+  Intercom-Prototype-0.1.0-prototype.10-win-x64.exe, 110682241 bytes, SHA-256
+  7786311f362a5a1c5dc319b7047d61d214fc6f90269ae89fcbc139913d6df0d4.
+  Sixteen runtime files/metadata match; notices/private exclusions and .4-.9
+  hashes pass. Published .7 and user's app untouched; no real prompt, audible
+  preview or new release. Physical FDUCE/human acceptance remains open.
+
 Completion log:
+  2026-11-11 - Made the actual live microphone available outside the floating
+    dock; removed inert guidance/footer space. Consolidated floating controls
+    into a default-collapsed single row and qualified a separate .10 portable.
+    Recording survives view changes; broader product/human gates remain open.
   2026-11-11 - Preserved uncertain/over-limit recognition for explicit review,
     retaining automatic-dispatch safeguards. Qualified separate .9 portable
     and all three destinations; no replacement of the user's running build.
