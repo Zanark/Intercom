@@ -21,6 +21,22 @@ function testMesh(name = 'Test Context') {
   };
 }
 
+async function nodePoint(slot, capacity = 2) {
+  const THREE = await import('three');
+  const bounds = await page.locator('canvas').boundingBox();
+  const y = 1 - 2 * (slot + 0.5) / capacity;
+  const radius = Math.sqrt(1 - y * y);
+  const theta = slot * Math.PI * (3 - Math.sqrt(5));
+  const point = new THREE.Vector3(Math.cos(theta) * radius * 2.45, y * 2.45, Math.sin(theta) * radius * 2.45);
+  point.applyEuler(new THREE.Euler(0.12, -0.5, 0.12));
+  const camera = new THREE.PerspectiveCamera(42, bounds.width / bounds.height, 0.01, 100);
+  camera.position.set(0, 0.3, 8.6);
+  camera.lookAt(0, 0, 0);
+  camera.updateMatrixWorld();
+  point.project(camera);
+  return { x: bounds.x + (point.x + 1) * bounds.width / 2, y: bounds.y + (1 - point.y) * bounds.height / 2 };
+}
+
 test.beforeEach(async () => {
   profile = await mkdtemp(path.join(os.tmpdir(), 'intercom-test-'));
   const tone = Buffer.alloc(32044);
@@ -340,6 +356,96 @@ test('graph zoom enters the sphere, supports cursor zoom and pan, and resets the
   await expect(zoom).toHaveText('100%');
 });
 
+test('mesh nodes reveal names on hover and pin independently of the work target, not on orbit drags', async () => {
+  const decorative = await nodePoint(0, 144);
+  await page.mouse.move(decorative.x, decorative.y);
+  await expect(page.locator('.mesh-node-label')).toHaveCount(0);
+  await page.getByRole('button', { name: 'Use live voice', exact: true }).click();
+  const canvas = page.locator('canvas');
+  await expect(canvas).toBeVisible();
+  await expect(page.locator('.mesh-node-label')).toHaveCount(0);
+  const selected = await page.locator('.context-row.selected').textContent();
+  const point = await nodePoint(1);
+  await page.mouse.move(point.x, point.y);
+  await expect(page.getByRole('tooltip')).toContainText('Test Context');
+  await page.getByLabel('Find context', { exact: true }).hover();
+  await expect(page.getByRole('tooltip')).toHaveCount(0);
+  await page.mouse.click(point.x, point.y);
+  const details = page.getByRole('region', { name: 'Pinned node details' });
+  await expect(details).toContainText('Test Context');
+  await expect(details).toContainText(process.cwd());
+  expect(await page.locator('.context-row.selected').textContent()).toBe(selected);
+  const before = await details.boundingBox();
+  await page.getByRole('button', { name: 'Zoom in graph', exact: true }).click();
+  await expect.poll(async () => (await details.boundingBox()).x).not.toBe(before.x);
+  await page.getByRole('button', { name: 'Close node label', exact: true }).click();
+  await expect(page.locator('.mesh-node-label')).toHaveCount(0);
+  await page.getByRole('button', { name: 'Reset view', exact: true }).click();
+  const reset = await nodePoint(1);
+  await page.mouse.move(reset.x, reset.y);
+  await page.mouse.down();
+  await page.mouse.move(reset.x + 65, reset.y + 35, { steps: 5 });
+  await page.mouse.up();
+  await expect(details).toHaveCount(0);
+  await page.getByRole('button', { name: 'Reset view', exact: true }).click();
+  const first = await nodePoint(0);
+  await page.mouse.click(first.x, first.y);
+  await expect(details).toContainText('Alternate Context');
+  const bounds = await canvas.boundingBox();
+  await page.mouse.click(bounds.x + 15, bounds.y + bounds.height - 15);
+  await expect(page.locator('.mesh-node-label')).toHaveCount(0);
+  await page.mouse.move(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
+  await expect(page.getByRole('tooltip')).toContainText('Voice assistant hub');
+});
+
+test('keyboard node inspection fits the smallest floating view and Escape dismisses before restoring', async () => {
+  await page.evaluate(() => {
+    window.__speechStops = 0;
+    const cancel = window.speechSynthesis.cancel.bind(window.speechSynthesis);
+    window.speechSynthesis.cancel = () => { window.__speechStops++; cancel(); };
+  });
+  await page.getByRole('button', { name: 'Use live voice', exact: true }).click();
+  const canvas = page.locator('canvas');
+  await canvas.focus();
+  await expect(page.getByRole('tooltip')).toContainText('Alternate Context');
+  await page.keyboard.press('ArrowRight');
+  await expect(page.getByRole('tooltip')).toContainText('Test Context');
+  await page.keyboard.press('Enter');
+  const details = page.getByRole('region', { name: 'Pinned node details' });
+  await expect(details).toContainText('Test Context');
+  await page.getByRole('button', { name: 'Floating mesh', exact: true }).click();
+  for (let count = 0; count < 4; count++) await page.getByRole('button', { name: 'Make floating window smaller', exact: true }).click();
+  await expect(details).toBeVisible();
+  await expect.poll(async () => {
+    const graph = await canvas.boundingBox();
+    const label = await details.boundingBox();
+    return label.x >= graph.x && label.y >= graph.y && label.x + label.width <= graph.x + graph.width
+      && label.y + label.height <= graph.y + graph.height;
+  }).toBe(true);
+  const graph = await canvas.boundingBox();
+  const anchor = await nodePoint(1);
+  await expect.poll(async () => {
+    const label = await details.boundingBox();
+    const expected = graph.y + Math.max(8, Math.min(anchor.y - graph.y - label.height - 12, graph.height - label.height - 8));
+    return Math.abs(label.y - expected);
+  }).toBeLessThan(1);
+  await page.screenshot({ path: path.join(__dirname, '..', '.local', 'node-inspection-floating.png') });
+  const speechStops = await page.evaluate(() => window.__speechStops);
+  await page.keyboard.press('Escape');
+  await expect(page.locator('.mesh-node-label')).toHaveCount(0);
+  await expect(page.locator('main')).toHaveAttribute('data-floating', 'true');
+  expect(await page.evaluate(() => window.__speechStops)).toBeGreaterThan(speechStops);
+  await page.keyboard.press('Escape');
+  await expect(page.locator('main')).toHaveAttribute('data-floating', 'false');
+  await canvas.focus();
+  await page.keyboard.press('End');
+  await expect(page.getByRole('tooltip')).toContainText('Voice assistant hub');
+  await page.keyboard.press('Space');
+  await expect(details).toContainText('Intercom');
+  await page.keyboard.press('Escape');
+  await expect(details).toHaveCount(0);
+});
+
 test('explicit target confirmation, profile snapshots, cancellation and honest completion', async () => {
   await expect(page.getByLabel('Processing priority', { exact: true })).toHaveValue('Speed / performance');
   await page.getByRole('button', { name: 'Prepare demo request' }).click();
@@ -371,11 +477,17 @@ test('ambiguity never guesses and context loss retains accessible controls', asy
   await expect(page.getByRole('button', { name: 'Run simulation' })).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(page.getByRole('region', { name: 'Demo request confirmation' })).toHaveCount(0);
+  await page.locator('canvas').focus();
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('region', { name: 'Pinned node details' })).toBeVisible();
   await page.locator('canvas').evaluate((canvas) => {
     const context = canvas.getContext('webgl2');
     context.getExtension('WEBGL_lose_context').loseContext();
   });
   await expect(page.getByRole('alert')).toContainText('3D graphics context was lost');
+  await expect(page.locator('.mesh-node-label')).toHaveCount(0);
+  await page.keyboard.press('ArrowRight');
+  await expect(page.locator('.mesh-node-label')).toHaveCount(0);
   await expect(page.getByRole('button', { name: 'Prepare demo request' })).toBeEnabled();
 });
 
@@ -395,8 +507,19 @@ test('idle rendering stays on demand and animation pauses while minimized', asyn
   const idle = await page.evaluate(() => window.__frameRequests);
   await page.waitForTimeout(300);
   expect(await page.evaluate(() => window.__frameRequests)).toBe(idle);
+  await page.locator('canvas').focus();
+  await page.keyboard.press('ArrowRight');
+  await page.keyboard.press('Enter');
+  const details = page.getByRole('region', { name: 'Pinned node details' });
+  await expect(details).toBeVisible();
+  await page.waitForTimeout(100);
+  const pinnedIdle = await page.evaluate(() => window.__frameRequests);
+  const anchor = await details.boundingBox();
+  await page.waitForTimeout(300);
+  expect(await page.evaluate(() => window.__frameRequests)).toBe(pinnedIdle);
   await page.getByRole('button', { name: 'Enable drift' }).click();
-  await expect.poll(() => page.evaluate(() => window.__frameRequests)).toBeGreaterThan(idle + 2);
+  await expect.poll(() => page.evaluate(() => window.__frameRequests)).toBeGreaterThan(pinnedIdle + 2);
+  await expect.poll(async () => (await details.boundingBox()).x).not.toBe(anchor.x);
   await application.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].minimize());
   await expect.poll(() => application.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].isMinimized())).toBe(true);
   await page.waitForTimeout(100);

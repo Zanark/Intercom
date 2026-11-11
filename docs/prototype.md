@@ -51,6 +51,20 @@ not represented as a finished feature.
 
 ### Graph and window controls
 
+**Source checkout update, not included in the published .7 EXE:** hover a colored
+context node to reveal its name and subtitle. Click/tap to pin the small label
+and reveal its base path; close it with **Escape**, its close button, another
+click on the same node, or a blank-space click. The center identifies the
+Intercom voice hub; decorative fixture dots are not real contexts.
+
+Tab to the graph and use arrow keys to inspect nodes, **Home / End** for the
+first node / hub, and **Enter / Space** to pin or dismiss. Inspection never
+changes the work-routing target or asserts activity. Labels follow camera,
+drift and window changes, fit the 360 px floating window and hide off-screen.
+The first Escape dismisses an open label without restoring the workspace;
+speech cancellation remains available. No permanent node names or extra
+idle animation loop are introduced.
+
 Scroll over the graph to zoom toward the pointer, or use **+ / -** for centered
 zoom. Right-drag pans; **Reset view** restores the camera target, distance and
 starting graph orientation. The previous distant zoom floor is removed; a small

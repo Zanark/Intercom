@@ -19,6 +19,47 @@ Completion evidence:
   This ledger is ongoing, not a finite feature deliverable.
 
 Completion log:
+  2026-11-11 - Context nodes identifiable without persistent graph labels.
+    Action: hover/focus previews and click/tap-pinned name/subtitle/path details,
+      keyboard cycling, close/Escape/blank dismissal and a distinct hub label.
+    Mechanism: raycast only real context markers and hub, suppress clicks after
+      drags, project/clamp one overlay through existing render events, keep
+      inspection separate from dispatch selection. No permanent name field or
+      polling/idle animation loop. First Escape dismisses inspection, not the
+      floating window, while preserving speech cancellation and pending review.
+    Evidence: lint/type/build, eight Vitest and six focused source Electron
+      cases pass with synthetic meshes/disposable profiles. Actual pointer
+      picking, no decorative-dot identity, independent routing, keyboard/pins,
+      camera tracking, smallest floating layout, pan/zoom, WebGL loss, pinned
+      idle and minimized/drift scheduling covered; narrow capture inspected.
+    Corrections: initial tests assumed unsorted fixture contexts and a wrong
+      size-button label; aligned them with host ordering/existing UI. A clamped
+      x-coordinate was not a drift proxy; inspect an unclamped context instead.
+      Used intrinsic popup sizing to keep measurement/positioning independent
+      of the available space on either side; checked the resized anchor.
+    Limits: local source only, not a new .7 package or release. No real prompt,
+      microphone, user-instance automation, commit or push.
+    Next: user visual acceptance and existing broader product gates.
+  2026-11-11 - README rebuilt as a centered visual showcase.
+    Action: added a 432 px original animated sphere/microphone hero, linked
+      image navigation and framed actual packaged captures with fixture labels.
+      Moved all prior README prose into docs/guide.md with corrected links.
+    Mechanism: deterministic local Pillow renderer, perspective/depth ordering,
+      curved outer orbits, straight inner chords and a clipped mint/cyan voice
+      envelope. The 144-frame, 20 fps loop is 4004733 bytes with one palette.
+      README selects a still for supported reduced-motion rendering; the guide
+      also links it directly and preserves unsigned-release/security warnings.
+    Reference: Microsoft's August 14, 2025 Teams microphone-level indicator
+      post explains levels moving with speech. Only the behavior is referenced;
+      the Intercom artwork is original and its voice level is simulated.
+    Evidence: reviewed animation frames and local desktop/mobile previews;
+      links/assets/anchors, original text preservation, timing/seam and image
+      budget pass. Edge checks 432/350 px square sizing, media selection and
+      no narrow-screen overflow. No live GitHub-render verification claimed.
+    Limits: presentation only; no microphone capture, runtime/icon/release
+      change, user-app restart, real agent prompt, commit, push or publication.
+    Next: user visual acceptance; existing product/device/performance gates stay
+      open. Reproduce assets with python .\tools\render_readme.py.
   2026-11-11 - Prototype .7 published on explicit owner request.
     Action: reviewed/staged 56 intended public files, committed with verified
       Zanark identity and required trailers, atomically pushed main/new tag,

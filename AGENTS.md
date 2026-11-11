@@ -2,7 +2,7 @@
 
 ## Read first
 
-Read `README.md`, `docs/product-brief.md`, `docs/development-manual.md`,
+Read `README.md`, `docs/guide.md`, `docs/product-brief.md`, `docs/development-manual.md`,
 `TODO/00_INDEX.todo`, and the affected workstream before changing the project.
 Read `docs/github-tracking.md` before remote tracking changes.
 

@@ -63,6 +63,16 @@ h2 { font-size: 12px; font-weight: 400; color: #90a0a9; margin: 10px 0 0; }
 .fixture-badge { border: 1px solid #34413f; color: #8caf9f; border-radius: 4px; padding: 5px 7px; font-size: 7px; letter-spacing: 1.4px; }
 .mesh-viewport { position: absolute; inset: 36px 0 56px; overflow: hidden; }
 .mesh-viewport canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+.mesh-viewport canvas:focus-visible { outline: 1px solid #85dec580; outline-offset: -4px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+.mesh-node-label { position: absolute; z-index: 5; width: max-content; max-width: min(240px, calc(100% - 16px)); padding: 9px 12px; border: 1px solid; border-radius: 8px; background: #0c171ff2; box-shadow: 0 4px 16px #0005; pointer-events: none; overflow-wrap: anywhere; font-size: 11px; line-height: 1.5; }
+.mesh-node-label.pinned { pointer-events: auto; padding-right: 32px; }
+.mesh-node-label strong { display: flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 500; color: #e4e9ed; }
+.mesh-node-label i { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+.mesh-node-label > span, .mesh-node-label small { display: block; color: #a4b9c3; }
+.mesh-node-label small { margin-top: 4px; font-size: 9px; color: #7f999f; }
+.mesh-node-label button { position: absolute; top: 4px; right: 4px; width: 24px; height: 24px; padding: 0; border: 0; border-radius: 4px; background: transparent; color: #a4b9c3; font-size: 16px; }
+.mesh-node-label button:hover { color: white; background: #28313d; }
 .mesh-navigation { position: absolute; z-index: 2; right: 16px; top: 90px; display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 6px; border: 1px solid #2a3842; border-radius: 8px; background: #0d171ee8; }
 .mesh-navigation output { font-size: 9px; color: #b0cec4; font-variant-numeric: tabular-nums; }
 .mesh-navigation button { min-width: 32px; }

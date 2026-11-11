@@ -69,7 +69,25 @@ Completion evidence:
   from source 3147d492574980f6c89cc8e9a32920efb859f253; independent anonymous
   downloads match the qualified EXE/checksum. Broader acceptance stays open.
 
+  The README presentation milestone adds a 432 px animated hero and captioned
+  image navigation/gallery; docs/guide.md preserves the former entry text.
+  Existing #5 mirrors the milestone after all six body baselines matched;
+  independent complete-body read-back verifies unchanged mappings/states/stages.
+  No runtime/release asset changed and ic-06 remains IN_PROGRESS.
+
+  ic-06 additionally implements on-demand node names and pinned details in
+  local source, with keyboard access and no dispatch retargeting. Six focused
+  desktop cases cover picking, dragging, floating fit, navigation and idle/
+  minimized scheduling; broader product criteria and .7 release stay unchanged.
+  Only existing #5 was mirrored after all six prior body hashes matched;
+  fresh complete-body read-back verifies unchanged mappings/states/stages.
+
 Completion log:
+  2026-11-11 - Recorded the bounded node-inspection source milestone in ic-06;
+    no permanent labels, new dependency, package or release.
+  2026-11-11 - Added the centered animated/image-led README milestone to ic-06.
+    Existing prose is retained in docs/guide.md; animation is simulated and
+    runtime/release assets are unchanged. Broader product criteria remain open.
   2026-11-11 - Published requested v0.1.0-prototype.7 with EXE/checksum, verified
     public bytes and preserved .1 release identities/digests; ic-06 stays open.
   2026-11-11 - Recorded customizable voice profiles, engine boundary and separate

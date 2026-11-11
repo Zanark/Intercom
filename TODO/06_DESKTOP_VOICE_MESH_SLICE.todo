@@ -51,6 +51,10 @@ Tasks:
   [x] Expose pitch/rate/volume, draft preview/stop and save/use/rename/duplicate.
   [x] Separate synthesis providers from conversation/job execution and persistence.
   [x] Qualify native PCM controls and the separate .7 package/portable startup.
+  [x] Create the centered 3x animated README logo and image-led project showcase.
+  [x] Preserve setup/limits in a linked guide and label simulated voice activity.
+  [x] Identify context nodes on hover/focus with compact click-to-pin details.
+  [x] Preserve routing, navigation, floating access and demand-driven rendering.
   [ ] Add the required future arbitrary identity, timbre and emotional-style engine.
   [ ] Qualify native permission prompting on a target without saved grants.
   [ ] Qualify manual terminal opening and any future acknowledged automatic handoff.
@@ -219,7 +223,46 @@ Completion evidence:
   Publication does not complete human/device/native-prompt/performance gates
   or implement the mandatory future richer voice engine.
 
+  README presentation sub-slice: 432 px rotating spherical mesh and vertically
+  clipped, simulated microphone fill; 144 frames, 20 fps, 7.2-second loop.
+  Shared-palette GIF is 4004733 bytes; original runtime icons remain unchanged.
+  README contains centered linked images, with captioned actual packaged
+  screenshots and synthetic-context disclosure. docs/guide.md preserves the
+  former README content, rebasing links; it retains release/security warnings,
+  workflow limits, setup and documentation navigation. tools/render_readme.py
+  reproduces artwork locally with Pillow, without audio, sessions or a network.
+  Reviewed representative animation frames and desktop/mobile HTML previews.
+  Asset/link/anchor checks, exact text preservation, loop timing/seam and
+  sub-5 MB budget pass. Isolated Edge verifies a 432 px desktop / 350 px mobile
+  square, no narrow-screen overflow and still/GIF media selection. This is a
+  local GitHub-like preview, not live GitHub rendering or human acceptance.
+  No runtime/release changes, live agent prompt, app restart or new publication.
+
+  Node-inspection source sub-slice: actual context-marker picking and the voice
+  hub reveal compact transient labels; click/tap pins name/subtitle/base path.
+  Arrow/Home/End keyboard inspection, Enter/Space pinning and close/Escape/
+  same-node/blank dismissal preserve the work target. Orbit/pan drags do not
+  pin; decorative fixture dots remain anonymous. Anchors follow camera/drift/
+  resizing, clamp within the viewport and hide off-screen. First Escape closes
+  a label before floating restoration while retaining speech cancellation.
+  Lint/type/build, eight Vitest and six focused source Electron cases pass
+  on disposable profiles. Actual pointer picking, keyboard/pin/dismissal,
+  unchanged routing, zoom tracking, 360 px floating fit, orbit distinction,
+  WebGL loss and pinned idle/minimize/drift scheduling are covered. Reviewed
+  the narrow floating capture. No new dependency or continuous idle frame loop.
+  This is local source, not a new package or published .7 feature. Existing
+  user instances, microphones, actual agent sessions and releases are untouched.
+
 Completion log:
+  2026-11-11 - Added on-demand node identification without permanent graph names.
+    Kept inspection separate from dispatch selection and retained floating/
+    speech Escape semantics. Qualified the bounded source update; no new
+    package, commit, push or release. Broader product criteria remain open.
+  2026-11-11 - Replaced the text-heavy README with centered visual navigation,
+    a 3x animated microphone/mesh hero and captioned packaged captures.
+    Preserved explanatory content in docs/guide.md. Voice-level animation is
+    illustrative, not microphone input; reduced-motion still is also linked.
+    Qualified the media and local responsive preview; full workstream stays open.
   2026-11-11 - Published the requested unsigned .7 prerelease from the reviewed
     qualified source, verified public bytes and preserved .1. Source/tag and
     publication receipt are separate milestones; full workstream remains open.

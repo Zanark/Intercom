@@ -29,7 +29,8 @@ do not infer arbitrary test tools, new prompts or publication authority.
 
 | Artifact | Responsibility |
 |---|---|
-| `README.md` | Honest product stage and entry points |
+| `README.md` | Centered visual showcase and linked entry points |
+| `docs/guide.md` | Honest product stage, setup, workflow and documentation navigation |
 | `docs/product-brief.md` | Confirmed direction, undecided requirements, first-slice gate |
 | `docs/architecture.md` | Component overview and invariant boundaries |
 | `docs/technology-decisions.md` | Candidate stack, alternatives and reversal gates |

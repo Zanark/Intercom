@@ -193,14 +193,17 @@ export function App() {
 
   useEffect(() => {
     function onKey(event: KeyboardEvent) {
-      if (window.intercom && ((event.ctrlKey && event.shiftKey && event.key.toLowerCase() === 'm') || (event.key === 'Escape' && desktop.floating))) {
+      const handledEscape = event.key === 'Escape' && event.defaultPrevented;
+      if (window.intercom && ((event.ctrlKey && event.shiftKey && event.key.toLowerCase() === 'm') || (event.key === 'Escape' && desktop.floating && !handledEscape))) {
         event.preventDefault();
         void windowAction('toggle-floating');
       }
       if (event.key === 'Escape') {
         stopSpeech();
-        setProposal(null);
-        setCandidates(null);
+        if (!handledEscape) {
+          setProposal(null);
+          setCandidates(null);
+        }
       }
     }
     function onVisibility() { if (document.hidden) stopSpeech(); }
@@ -285,7 +288,7 @@ export function App() {
       {!demo && meshError && <p className="mesh-error" role="alert">{meshError}</p>}
       {!demo && meshLoading && <p className="mesh-loading" role="status">Reading the current local snapshot...</p>}
       {!demo && snapshot && contexts.length === 0 && <p className="mesh-loading" role="status">The real snapshot has no registered contexts.</p>}
-      <div className="mesh-caption chrome"><span className="selected-context" style={{ color: selected?.color }}>{selected?.name ?? 'No context loaded'}</span><span>Drag to orbit / Right-drag to pan / Scroll to zoom</span></div>
+      <div className="mesh-caption chrome"><span className="selected-context" style={{ color: selected?.color }}>{selected?.name ?? 'No context loaded'}</span><span>Hover nodes for names / Click to pin</span><span>Drag to orbit / Right-drag to pan / Scroll to zoom</span></div>
       <div className="mesh-toolbar chrome">
         <span className="legend"><i />{demo ? 'Demo path' : 'Observed job / tool locations'} <i className="dim" />Topology</span>
         <button className="quiet-button" aria-pressed={motion} onClick={() => setMotion(!motion)}>{motion ? 'Pause drift' : 'Enable drift'}</button>

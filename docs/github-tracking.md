@@ -213,7 +213,7 @@ exact read-back; never refresh them merely to hide a remote edit.
 | ic-02 | `5052eecad889f461eb541ff12f429241b6bd07b07712979d34d409aae20e3866` |
 | ic-04 | `5bdd0a9f6e12305f519617ed05d0614e44bdf8a464c2fb4a4a8b69b467abfd20` |
 | ic-05 | `e134e21309fa9c29ff867363f542a00447b02914479b99c23ced0300fa2f2e75` |
-| ic-06 | `8af42eee8e72f106a960eed8cef72f3ac3bdf3d81cc5576d340a7693c8189184` |
+| ic-06 | `735ee41c1af08321ebf6af6ed7bc113e4a8eb34b20373cb6f8a658e6668c0b58` |
 | ic-07 | `072c0916f6106438b8f32e2ae02415645056015a3049f36f12ec4cfca281fe33` |
 
 These reconciliations used the same saved issue/item identities on
@@ -234,3 +234,21 @@ complete-body read-back verified all six backlinks, issue/item identities,
 states, Project stages/membership and private visibility. No new issue/item or
 completion/state change. The release tag remains at the qualified source;
 the separate receipt-doc commit does not move it or replace either release.
+
+The animated-README reconciliation matched all six publication baselines before
+updating only existing #5's description with the qualified presentation milestone.
+Independent complete-body read-back verified #5 equals its local projection;
+the other five issues are unchanged. All six original issue/item identities,
+states and Project stages, private visibility and sole repository membership
+remain intact. No new issue/item, product completion, source push or release.
+
+The node-inspection reconciliation matched all six animated-README baselines
+before updating only existing #5's description with the local source milestone.
+Independent complete-body read-back matches the local projection; the other
+five issues are unchanged. Original identities, issue states, Project stages,
+private visibility and sole-repository membership remain intact. No new
+issue/item, package, commit, push or release; ic-06 remains In Progress.
+
+The owner subsequently authorized committing and pushing the animated README
+and node-inspection source changes. This is separate from the completed .7
+prerelease and does not authorize replacing its source tag, binary or assets.
