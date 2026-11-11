@@ -19,6 +19,31 @@ Completion evidence:
   This ledger is ongoing, not a finite feature deliverable.
 
 Completion log:
+  2026-11-11 - Fixed microphone recording incorrectly gated by chat connection.
+    Cause: the Speak button inherited !connected although native transcription
+      has no session dependency. A successful device-access test therefore left
+      recording disabled while the UI still told the user to click Speak.
+    Action: decoupled capture, blocked disconnected automatic/manual chat send,
+      retained editable recognition and labelled Stop & transcribe versus send.
+      Connecting an existing idle session never dispatches the retained text.
+      Updated the composer guidance; no relaxation of work confirmation.
+    Evidence: lint/type/build, eight Vitest, 14 native voice and eight focused
+      source desktop scenarios pass. Packaged regression passes 20/21 initially;
+      the unrelated immediate native pin-state assertion passes on isolated
+      repeat. No runtime change was made for that assertion. Three affected
+      capture cases also pass after extracting their shared synthetic tone.
+      Portable smoke now verifies session-independent capture/meter/cancellation,
+      actual mesh, persistent voices and native window controls. Archive/runtime
+      metadata, 16-file allowlist, licenses and previous .4/.5/.6/.7 hashes pass.
+    Corrections: portable smoke's default fake input produced no signal; reused
+      the desktop suite's explicit synthetic WAV instead of assuming audible
+      fake input. No physical input or actual work request was used.
+    Artifact: separate unsigned local .8 under release\microphone-fix-candidate;
+      110680335 bytes, SHA-256
+      022c9b27795353b30b058cf8fc5c67d4eba198b616ec7470627ca1494e2f3199.
+    Limits: FDUCE/human speech/listening not qualified; no new public release,
+      tag movement, replacement/restart of the user's existing application.
+    Next: user switches to the fixed candidate; physical-device acceptance.
   2026-11-11 - Context nodes identifiable without persistent graph labels.
     Action: hover/focus previews and click/tap-pinned name/subtitle/path details,
       keyboard cycling, close/Escape/blank dismissal and a distinct hub label.

@@ -1,14 +1,17 @@
 const { chromium, expect } = require('@playwright/test');
 const { spawn } = require('node:child_process');
-const { mkdtemp, readFile, rm } = require('node:fs/promises');
+const { mkdtemp, readFile, rm, writeFile } = require('node:fs/promises');
 const os = require('node:os');
 const path = require('node:path');
+const { syntheticTone } = require('./synthetic-audio.cjs');
 
 async function main() {
   const executable = process.env.INTERCOM_TEST_EXECUTABLE;
   if (!executable) throw new Error('Set INTERCOM_TEST_EXECUTABLE to the portable EXE.');
   const profile = await mkdtemp(path.join(os.tmpdir(), 'intercom-portable-'));
-  const child = spawn(executable, ['--remote-debugging-port=0', '--use-fake-device-for-media-stream'], {
+  const fakeAudio = path.join(profile, 'synthetic-tone.wav');
+  await writeFile(fakeAudio, syntheticTone());
+  const child = spawn(executable, ['--remote-debugging-port=0', '--use-fake-device-for-media-stream', `--use-file-for-fake-audio-capture=${fakeAudio}`], {
     env: { ...process.env, INTERCOM_PROFILE_DIR: profile },
     stdio: 'ignore',
   });
@@ -51,6 +54,22 @@ async function main() {
     await expect(microphone.getByRole('status')).toContainText('Devices loaded. Microphone is off.');
     await microphone.getByRole('button', { name: 'Test selected', exact: true }).click();
     await expect(microphone.getByRole('status')).toContainText('Selected microphone opens successfully.');
+    await expect(page.getByRole('button', { name: 'Speak', exact: true })).toBeEnabled();
+    await page.evaluate(() => {
+      const original = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
+      window.__portableTracks = [];
+      navigator.mediaDevices.getUserMedia = async (constraints) => {
+        const stream = await original(constraints);
+        window.__portableTracks.push(...stream.getTracks());
+        return stream;
+      };
+    });
+    await page.getByRole('button', { name: 'Speak', exact: true }).click();
+    await expect(page.getByRole('button', { name: 'Stop & transcribe', exact: true })).toHaveAttribute('aria-pressed', 'true');
+    await expect.poll(() => page.getByRole('meter').evaluate((meter) => meter.value)).toBeGreaterThan(0);
+    await page.getByRole('button', { name: 'Cancel request', exact: true }).click();
+    await expect(page.getByRole('button', { name: 'Speak', exact: true })).toBeEnabled();
+    expect(await page.evaluate(() => window.__portableTracks.length > 0 && window.__portableTracks.every((track) => track.readyState === 'ended'))).toBe(true);
     await page.getByText('Voice profiles / customize speech', { exact: true }).click();
     await expect(page.locator('.voice-profile-active')).toContainText('Standard');
     await expect(page.getByLabel('Speaking voice / accent').locator('option')).not.toHaveCount(1);
@@ -82,7 +101,7 @@ async function main() {
     await page.keyboard.press('Escape');
     await expect(page.locator('main')).toHaveAttribute('data-floating', 'false');
     expect(errors).toEqual([]);
-    console.log(JSON.stringify({ executable, result: 'Actual packaged mesh worker/startup, microphone access, installed voice catalog and persistent profiles, maximize/restore, graph zoom/reset, visible floating handle and native size controls passed', contexts: snapshot.contexts.length, relationships: snapshot.edges.length }));
+    console.log(JSON.stringify({ executable, result: 'Actual packaged mesh worker/startup, microphone access and session-independent recording/cancellation, installed voice catalog and persistent profiles, maximize/restore, graph zoom/reset, visible floating handle and native size controls passed', contexts: snapshot.contexts.length, relationships: snapshot.edges.length }));
   } finally {
     if (page && !page.isClosed()) await page.evaluate(() => window.intercom.windowAction('close')).catch((error) => {
       if (!/closed|destroyed/i.test(error.message)) throw error;

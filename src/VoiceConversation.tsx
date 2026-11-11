@@ -35,6 +35,8 @@ export function VoiceConversation({ onRecordingChange, onWorkRequest }: {
   const speechEpoch = useRef(0);
   const busy = phase !== 'idle';
   const recording = phase === 'opening' || phase === 'listening';
+  const canSend = delivery !== 'chat' || connected;
+  const stopLabel = autoSend && canSend ? 'Stop & send' : 'Stop & transcribe';
 
   useEffect(() => {
     onRecordingChange(recording);
@@ -96,6 +98,7 @@ export function VoiceConversation({ onRecordingChange, onWorkRequest }: {
       void say('Review the context, existing session, and task below. Nothing runs until you confirm.');
       return;
     }
+    if (!connected) throw new Error('Connect an existing session before sending. Your transcript is still available; nothing was sent.');
     setPhase('checking');
     void say('I am sending your request to Copilot.');
     const result = await window.intercom.sendVoicePrompt(id, value);
@@ -117,7 +120,7 @@ export function VoiceConversation({ onRecordingChange, onWorkRequest }: {
       const result = await window.intercom!.transcribeVoice(id, wave);
       if (active.current !== id) return;
       setText(result.text);
-      if (autoSend) await send(result.text, id);
+      if (autoSend && canSend) await send(result.text, id);
     } catch (reason) { if (active.current === id) setError(report(reason)); }
     finally { if (active.current === id) { active.current = null; setPhase('idle'); } }
   }
@@ -172,14 +175,15 @@ export function VoiceConversation({ onRecordingChange, onWorkRequest }: {
     </details>
     <MicrophonePicker onSelect={setDevice} locked={busy} onCheckingChange={setCheckingMic} />
     <div className="live-controls">
-      <button className="primary-button record-button" disabled={(delivery === 'chat' && !connected) || checkingMic || (busy && phase !== 'listening')} aria-pressed={phase === 'listening'}
+      <button className="primary-button record-button" disabled={!window.intercom || checkingMic || (busy && phase !== 'listening')} aria-pressed={phase === 'listening'} aria-describedby="voice-recording-help"
         onClick={() => { if (phase === 'listening' && active.current) void finishRecording(active.current); else void startRecording(); }}>
-        {phase === 'listening' ? 'Stop & send' : 'Speak'}
+        {phase === 'listening' ? stopLabel : 'Speak'}
       </button>
       {busy && <button className="quiet-button" onClick={() => void cancel()}>Cancel request</button>}
-      <p role="status">{labels[phase]}</p>
+      <p role="status">{checkingMic ? 'Checking microphone access...' : phase === 'listening' ? `Listening - click ${stopLabel} when finished` : labels[phase]}</p>
       <meter aria-label="Microphone input level" min="0" max="0.15" value={level} />
-      <small>{phase === 'opening' ? 'Microphone starting; input may be active.' : phase === 'listening' ? 'Microphone ON. Audio stays in memory; maximum 60 seconds.' : 'Microphone off. Click Speak, talk, then click Stop & send.'}</small>
+      <small id="voice-recording-help">{phase === 'opening' ? 'Microphone starting; input may be active.' : phase === 'listening' ? 'Microphone ON. Audio stays in memory; maximum 60 seconds.' : `Microphone off. Click Speak, talk, then click ${stopLabel}.`}</small>
+      {!canSend && <small>Recording and local transcription work without Copilot. To send your transcript, connect an existing session above, then click Send text to Copilot. Connecting alone does not send it.</small>}
     </div>
     <label className="voice-toggle"><input type="checkbox" checked={autoSend} disabled={busy} onChange={(event) => setAutoSend(event.target.checked)} />Send recognized text automatically after stopping</label>
     <form onSubmit={(event) => {

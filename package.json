@@ -1,6 +1,6 @@
 {
   "name": "intercom-prototype",
-  "version": "0.1.0-prototype.7",
+  "version": "0.1.0-prototype.8",
   "private": true,
   "description": "Local push-to-talk, existing Copilot conversation and transparent desktop mesh prototype",
   "author": "Zanark",

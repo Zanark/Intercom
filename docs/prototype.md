@@ -1,6 +1,40 @@
 # Desktop prototype
 
-## Current prototype: 0.1.0-prototype.7
+## Local microphone-fix candidate: 0.1.0-prototype.8
+
+Unsigned Windows x64 portable:
+`C:\devdesk\homedesk\Intercom\release\microphone-fix-candidate\Intercom-Prototype-0.1.0-prototype.8-win-x64.exe`
+
+110,680,335 bytes; SHA-256:
+`022c9b27795353b30b058cf8fc5c67d4eba198b616ec7470627ca1494e2f3199`.
+The sibling `SHA256SUMS.txt` records the checksum. This candidate is local,
+not a published release or an update to an already-running instance.
+
+**Speak no longer requires a connected Copilot session.** Choose/test an input,
+click Speak and then **Stop & transcribe** to get a local editable transcript.
+Without a connection, automatic sending is suppressed. Connect an existing
+idle session and explicitly click **Send text to Copilot** afterward; connecting
+alone never sends the retained transcript. With a connected session and automatic
+sending enabled, the stop action remains **Stop & send**. Disabling automatic
+sending uses **Stop & transcribe** even when connected. Work destinations still
+require separate target/task confirmation. Busy checks and browser-only
+unavailability remain enforced.
+
+The .8 archive matches all 16 intended runtime files and version metadata;
+licenses are present and private stores/tests are excluded. Eight focused
+source desktop cases, eight Vitest and 14 native voice cases pass. The packaged
+desktop run passed 20 of 21 cases initially; its unrelated immediate native
+pin-state assertion passed on isolated repeat. The three capture-focused cases
+also pass after sharing the synthetic-audio fixture. Actual portable startup
+verifies session-independent recording, signal and cancellation with synthetic
+audio, real mesh loading, voice-profile persistence and window controls.
+Physical FDUCE/human speech and listening acceptance remain unverified.
+
+This candidate also includes the source node-inspection feature below.
+Published .7 and earlier candidates remain unchanged; no real Copilot prompt
+or user-instance restart was performed.
+
+## Published prototype: 0.1.0-prototype.7
 
 [Windows x64 prerelease and checksum](https://github.com/Zanark/Intercom/releases/tag/v0.1.0-prototype.7).
 Unsigned local release package:

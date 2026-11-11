@@ -2,6 +2,7 @@ const { test, expect, _electron } = require('@playwright/test');
 const path = require('node:path');
 const { mkdtemp, rm, writeFile } = require('node:fs/promises');
 const os = require('node:os');
+const { syntheticTone } = require('./synthetic-audio.cjs');
 
 let application;
 let page;
@@ -39,15 +40,8 @@ async function nodePoint(slot, capacity = 2) {
 
 test.beforeEach(async () => {
   profile = await mkdtemp(path.join(os.tmpdir(), 'intercom-test-'));
-  const tone = Buffer.alloc(32044);
-  tone.write('RIFF'); tone.writeUInt32LE(tone.length - 8, 4); tone.write('WAVEfmt ', 8);
-  tone.writeUInt32LE(16, 16); tone.writeUInt16LE(1, 20); tone.writeUInt16LE(1, 22);
-  tone.writeUInt32LE(16000, 24); tone.writeUInt32LE(32000, 28);
-  tone.writeUInt16LE(2, 32); tone.writeUInt16LE(16, 34); tone.write('data', 36);
-  tone.writeUInt32LE(32000, 40);
-  for (let sample = 0; sample < 16000; sample++) tone.writeInt16LE(Math.round(Math.sin(sample * 2 * Math.PI * 440 / 16000) * 8000), 44 + sample * 2);
   const fakeAudio = path.join(profile, 'synthetic-tone.wav');
-  await writeFile(fakeAudio, tone);
+  await writeFile(fakeAudio, syntheticTone());
   meshFile = path.join(profile, 'context-index.json');
   await writeFile(meshFile, JSON.stringify(testMesh()));
   errors = [];
@@ -600,7 +594,7 @@ test('microphone denial and enumeration failure are visible and acquired tracks 
   expect(await page.evaluate(() => window.__microphoneTracks.every((track) => track.readyState === 'ended'))).toBe(true);
 });
 
-  async function prepareVoiceMock({ delayed = false, recognitionError = false } = {}) {
+  async function prepareVoiceMock({ delayed = false, recognitionError = false, connect = true } = {}) {
     await page.getByRole('button', { name: 'Use live voice', exact: true }).click();
     await application.evaluate(({ ipcMain }, options) => {
       globalThis.__voiceReceipt = { sent: [], recordings: [], cancelled: [] };
@@ -623,10 +617,87 @@ test('microphone denial and enumeration failure are visible and acquired tracks 
       ipcMain.handle('voice:stop-speech', () => {});
     }, { delayed, recognitionError });
     await page.getByLabel('Speak progress and responses (local Windows voice)').uncheck();
-    await page.getByLabel('Existing session ID', { exact: true }).fill('11111111-1111-4111-8111-111111111111');
-    await page.getByRole('button', { name: 'Connect existing session', exact: true }).click();
+    if (connect) {
+      await page.getByLabel('Existing session ID', { exact: true }).fill('11111111-1111-4111-8111-111111111111');
+      await page.getByRole('button', { name: 'Connect existing session', exact: true }).click();
+      await expect(page.getByText('Session connected - settings', { exact: true })).toBeVisible();
+    }
     await expect(page.getByRole('button', { name: 'Speak', exact: true })).toBeEnabled();
   }
+
+test('selected microphone records and transcribes without a connected session, preserving text until explicit send', async () => {
+  await prepareVoiceMock({ connect: false });
+  await page.evaluate(() => {
+    window.__voiceTracks = [];
+    window.__voiceConstraints = [];
+    const original = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
+    navigator.mediaDevices.getUserMedia = async (constraints) => {
+      window.__voiceConstraints.push(constraints);
+      const stream = await original(constraints);
+      window.__voiceTracks.push(...stream.getTracks());
+      return stream;
+    };
+  });
+  await page.getByRole('button', { name: 'Load microphones', exact: true }).click();
+  await expect(page.getByLabel('Microphone device', { exact: true })).toBeEnabled();
+  const device = await page.getByLabel('Microphone device', { exact: true }).locator('option').evaluateAll((options) =>
+    options.find((option) => option.value !== 'default').value);
+  await page.getByLabel('Microphone device', { exact: true }).selectOption(device);
+  await page.getByRole('button', { name: 'Test selected', exact: true }).click();
+  await expect(page.getByRole('region', { name: 'Microphone settings' }).getByRole('status')).toContainText('Selected microphone opens successfully.');
+  await expect(page.getByRole('button', { name: 'Speak', exact: true })).toBeEnabled();
+  await page.locator('.live-controls').screenshot({ path: path.join(__dirname, '..', '.local', 'microphone-ready-without-session.png') });
+  await page.getByRole('button', { name: 'Speak', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Stop & transcribe', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  await expect.poll(() => page.getByRole('meter').evaluate((meter) => meter.value)).toBeGreaterThan(0);
+  await page.waitForTimeout(600);
+  await page.getByRole('button', { name: 'Stop & transcribe', exact: true }).click();
+  await expect(page.getByLabel('Transcript / typed fallback')).toHaveValue('Say hello world.');
+  const receipt = await application.evaluate(() => globalThis.__voiceReceipt);
+  expect(receipt.recordings).toHaveLength(1);
+  expect(receipt.recordings[0]).toMatchObject({ rate: 16000, pcm: 1 });
+  expect(receipt.sent).toEqual([]);
+  await expect(page.getByRole('button', { name: 'Send text to Copilot', exact: true })).toBeDisabled();
+  await expect(page.getByRole('alert')).toHaveCount(0);
+  expect(await page.evaluate(() => window.__voiceConstraints.at(-1))).toMatchObject({ audio: { deviceId: { exact: device }, channelCount: 1 }, video: false });
+  expect(await page.evaluate(() => window.__voiceTracks.every((track) => track.readyState === 'ended'))).toBe(true);
+  await page.getByLabel('Existing session ID', { exact: true }).fill('11111111-1111-4111-8111-111111111111');
+  await page.getByRole('button', { name: 'Connect existing session', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Send text to Copilot', exact: true })).toBeEnabled();
+  expect(await application.evaluate(() => globalThis.__voiceReceipt.sent)).toEqual([]);
+  await expect(page.getByLabel('Transcript / typed fallback')).toHaveValue('Say hello world.');
+  await page.getByRole('button', { name: 'Send text to Copilot', exact: true }).click();
+  await expect(page.locator('.live-result')).toContainText('Hello world.');
+  expect(await application.evaluate(() => globalThis.__voiceReceipt.sent.map((entry) => entry.text))).toEqual(['Say hello world.']);
+});
+
+test('microphone recording denial without a session stays visible and allows a clean retry', async () => {
+  await prepareVoiceMock({ connect: false });
+  await page.evaluate(() => {
+    const original = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
+    window.__retryTracks = [];
+    navigator.mediaDevices.getUserMedia = async () => { throw new DOMException('Permission denied', 'NotAllowedError'); };
+    window.__restoreRecording = () => {
+      navigator.mediaDevices.getUserMedia = async (constraints) => {
+        const stream = await original(constraints);
+        window.__retryTracks.push(...stream.getTracks());
+        return stream;
+      };
+    };
+  });
+  await page.getByRole('button', { name: 'Speak', exact: true }).click();
+  await expect(page.getByRole('alert')).toContainText('Microphone failed: Permission denied');
+  await expect(page.getByRole('button', { name: 'Speak', exact: true })).toBeEnabled();
+  await page.evaluate(() => window.__restoreRecording());
+  await page.getByRole('button', { name: 'Speak', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Stop & transcribe', exact: true })).toBeVisible();
+  await expect.poll(() => page.getByRole('meter').evaluate((meter) => meter.value)).toBeGreaterThan(0);
+  await page.getByRole('button', { name: 'Cancel request', exact: true }).click();
+  expect(await page.evaluate(() => window.__retryTracks.every((track) => track.readyState === 'ended'))).toBe(true);
+  expect(await application.evaluate(() => globalThis.__voiceReceipt.sent)).toEqual([]);
+  expect(await application.evaluate(() => globalThis.__voiceReceipt.recordings)).toEqual([]);
+  await expect(page.getByRole('button', { name: 'Speak', exact: true })).toBeEnabled();
+});
 
   test('real selected-device push-to-talk captures PCM, shows a signal and returns the correlated response through mocked backend IPC', async () => {
     await prepareVoiceMock();
@@ -693,9 +764,9 @@ test('transcript review waits for explicit send and leaving live mode releases c
   await prepareVoiceMock();
   await page.getByLabel('Send recognized text automatically after stopping').uncheck();
   await page.getByRole('button', { name: 'Speak', exact: true }).click();
-  await expect(page.getByRole('button', { name: 'Stop & send', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Stop & transcribe', exact: true })).toBeVisible();
   await page.waitForTimeout(650);
-  await page.getByRole('button', { name: 'Stop & send', exact: true }).click();
+  await page.getByRole('button', { name: 'Stop & transcribe', exact: true }).click();
   await expect(page.getByLabel('Transcript / typed fallback')).toHaveValue('Say hello world.');
   expect(await application.evaluate(() => globalThis.__voiceReceipt.sent)).toEqual([]);
   await page.getByLabel('Transcript / typed fallback').fill('Say hello world again.');
@@ -711,7 +782,7 @@ test('transcript review waits for explicit send and leaving live mode releases c
     };
   });
   await page.getByRole('button', { name: 'Speak', exact: true }).click();
-  await expect(page.getByRole('button', { name: 'Stop & send', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Stop & transcribe', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Show fixture demo', exact: true }).click();
   await expect.poll(() => page.evaluate(() => window.__leavingTracks.every((track) => track.readyState === 'ended'))).toBe(true);
 });

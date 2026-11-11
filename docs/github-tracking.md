@@ -213,7 +213,7 @@ exact read-back; never refresh them merely to hide a remote edit.
 | ic-02 | `5052eecad889f461eb541ff12f429241b6bd07b07712979d34d409aae20e3866` |
 | ic-04 | `5bdd0a9f6e12305f519617ed05d0614e44bdf8a464c2fb4a4a8b69b467abfd20` |
 | ic-05 | `e134e21309fa9c29ff867363f542a00447b02914479b99c23ced0300fa2f2e75` |
-| ic-06 | `735ee41c1af08321ebf6af6ed7bc113e4a8eb34b20373cb6f8a658e6668c0b58` |
+| ic-06 | `3bdf73e91b7e5090cbbe610c12c3e0d750d9bf84bd47ac1bb95e3e379ced1bc0` |
 | ic-07 | `072c0916f6106438b8f32e2ae02415645056015a3049f36f12ec4cfca281fe33` |
 
 These reconciliations used the same saved issue/item identities on
@@ -248,6 +248,14 @@ Independent complete-body read-back matches the local projection; the other
 five issues are unchanged. Original identities, issue states, Project stages,
 private visibility and sole-repository membership remain intact. No new
 issue/item, package, commit, push or release; ic-06 remains In Progress.
+
+The microphone-fix reconciliation matched all six node-inspection baselines
+before updating only existing #5's description. Independent complete-body
+read-back equals the local projection; the other five issues are unchanged.
+Original identities, issue states, Project stages, private visibility and
+sole-repository membership remain intact. The .8 executable is a separate
+local candidate, not a new release. No new issue/item or completion/state change;
+physical-device and broader product acceptance remain open.
 
 The owner subsequently authorized committing and pushing the animated README
 and node-inspection source changes. This is separate from the completed .7

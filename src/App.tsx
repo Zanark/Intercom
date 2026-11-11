@@ -343,7 +343,7 @@ export function App() {
     </aside>
 
     <footer className="composer chrome">
-      {!demo ? <><div className="composer-icon"><Icon name="mic" /></div><div><div className="eyebrow">PUSH TO TALK. A REAL RESPONSE.</div><p className="muted">Connect your dedicated session on the right, choose your mic, then click Speak. Click again to stop and send.</p></div></> : <>
+      {!demo ? <><div className="composer-icon"><Icon name="mic" /></div><div><div className="eyebrow">PUSH TO TALK. A REAL RESPONSE.</div><p className="muted">Choose your mic and click Speak to record and transcribe locally. Connect a dedicated session when you are ready to send to Copilot.</p></div></> : <>
       <div className="composer-icon"><Icon name="mic" /></div>
       <form onSubmit={(event) => { event.preventDefault(); prepare(); }}>
         <label htmlFor="request">A VOICE WORKSPACE, IN PREVIEW</label>

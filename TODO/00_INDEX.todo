@@ -82,7 +82,15 @@ Completion evidence:
   Only existing #5 was mirrored after all six prior body hashes matched;
   fresh complete-body read-back verifies unchanged mappings/states/stages.
 
+  ic-06 microphone fix removes the session gate from local capture/transcription.
+  Disconnected transcripts remain editable and unsent; connection alone never
+  dispatches. A separate unsigned .8 candidate and actual portable recording/
+  cancellation pass using synthetic input. Published .7 and user app untouched.
+  Broader physical-device/human/performance criteria remain open.
+
 Completion log:
+  2026-11-11 - Recorded the session-independent microphone fix and local .8
+    candidate in ic-06; no release or running-instance replacement.
   2026-11-11 - Recorded the bounded node-inspection source milestone in ic-06;
     no permanent labels, new dependency, package or release.
   2026-11-11 - Added the centered animated/image-led README milestone to ic-06.

@@ -94,17 +94,24 @@ open node label first (source checkout), otherwise restores the workspace;
 Hover reveals graph zoom/reset controls too. Returning from a maximized
 workspace restores maximization and retains its previous normal-window bounds.
 
-In the new voice build, paste your existing dedicated session UUID and click
-**Connect existing session**. Its terminal must be closed/idle; Intercom
-refuses a second writer. Agency and Copilot must be installed, on PATH and
-authenticated. No session UUID or credentials ship in the EXE.
+**Local .8 candidate/current checkout:** click **Load microphones**, select FDUCE
+(or your preferred input), optionally **Test selected**, then **Speak**. The meter
+shows the selected input while recording. No Copilot connection is needed for
+recording or local transcription. Click **Stop & transcribe** to retain an
+editable transcript; without a connection, nothing is sent, even if automatic
+sending is checked. **Load/Test only checks access**, not capture or recognition.
+The [prototype guide](prototype.md#local-microphone-fix-candidate-010-prototype8)
+identifies the separate fixed EXE; the published .7 download is unchanged and
+still requires connection before Speak.
 
-Click **Load microphones**, select FDUCE (or your preferred input), then
-**Speak**. The meter shows the selected input while recording. Click
-**Stop & send** after saying "Say hello world." Intercom transcribes locally,
-sends the text and reads the returned answer. **Load/Test only checks access**;
-it never starts a conversation. Disable automatic sending to review/edit the
-transcript first. A typed fallback is available.
+To send, paste your existing dedicated session UUID and click **Connect existing
+session**, then **Send text to Copilot**. Connecting alone never sends an existing
+transcript. Its terminal must be closed/idle; Intercom refuses a second writer.
+Agency and Copilot must be installed, on PATH and authenticated. No session UUID
+or credentials ship in the EXE. Subsequent recordings with a connected session
+and automatic sending enabled use **Stop & send** and read the returned answer.
+Disable automatic sending to review/edit before sending. Typed fallback remains
+available.
 
 English (US) Windows speech recognition and an installed English voice are
 required; nothing is downloaded. Audio stays in memory and is not uploaded.

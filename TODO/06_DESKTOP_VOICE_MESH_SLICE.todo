@@ -55,6 +55,9 @@ Tasks:
   [x] Preserve setup/limits in a linked guide and label simulated voice activity.
   [x] Identify context nodes on hover/focus with compact click-to-pin details.
   [x] Preserve routing, navigation, floating access and demand-driven rendering.
+  [x] Allow microphone recording/transcription independently of session connection.
+  [x] Retain disconnected transcripts, guard sending and truthfully label stopping.
+  [x] Verify a separate .8 microphone-fix EXE without replacing running/.7 builds.
   [ ] Add the required future arbitrary identity, timbre and emotional-style engine.
   [ ] Qualify native permission prompting on a target without saved grants.
   [ ] Qualify manual terminal opening and any future acknowledged automatic handoff.
@@ -253,7 +256,29 @@ Completion evidence:
   This is local source, not a new package or published .7 feature. Existing
   user instances, microphones, actual agent sessions and releases are untouched.
 
+  Microphone-fix sub-slice: recording had incorrectly inherited the default chat
+  session gate. Speak now requires the desktop host and no conflicting operation,
+  not connection. Local recognition retains editable text without dispatch;
+  connecting afterward never auto-sends it. Stop & transcribe versus Stop & send
+  reflects actual review/destination readiness. Sending still requires connection
+  for chat, and work destinations retain their separate confirmation.
+  Eight focused source desktop scenarios, eight Vitest and 14 native voice cases
+  pass. Packaged regression: 20/21 initial pass; unrelated immediate native pin
+  assertion passes on isolated repeat. Three capture-focused cases pass again
+  after sharing the existing synthetic tone fixture with the portable smoke.
+  That smoke now verifies actual launcher Speak availability, input signal and
+  cancellation without a configured session; profiles/mesh/window checks pass.
+  Local unsigned .8: release\microphone-fix-candidate,
+  Intercom-Prototype-0.1.0-prototype.8-win-x64.exe, 110680335 bytes, SHA-256
+  022c9b27795353b30b058cf8fc5c67d4eba198b616ec7470627ca1494e2f3199.
+  Sixteen packaged runtime files/metadata match source; licenses included,
+  private stores/tests excluded. .4/.5/.6/.7 artifacts preserved. Physical
+  FDUCE/human speech remains unqualified. No live prompt, release or app restart.
+
 Completion log:
+  2026-11-11 - Fixed session-gated Speak and retained local transcripts until
+    explicit dispatch. Qualified a separate .8 portable candidate, preserving
+    the published .7 artifact and user-owned running instance.
   2026-11-11 - Added on-demand node identification without permanent graph names.
     Kept inspection separate from dispatch selection and retained floating/
     speech Escape semantics. Qualified the bounded source update; no new
