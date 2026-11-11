@@ -1,5 +1,12 @@
 # Desktop prototype
 
+**Local retention (2026-11-11):** the owner requested cleanup of `release`.
+Only `release\mic-layout-candidate` (.11 portable, checksum and build support
+files) remains. Older local executables/unpacked builds were removed; their
+sections below are historical qualification records, not available local paths.
+Published GitHub releases/assets are unchanged. `release` is Git-ignored;
+source pushes carry this record, not the executable.
+
 ## Local microphone-layout candidate: 0.1.0-prototype.11
 
 Unsigned Windows x64 portable:

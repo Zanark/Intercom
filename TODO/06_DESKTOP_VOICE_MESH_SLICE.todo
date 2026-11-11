@@ -69,6 +69,7 @@ Tasks:
   [x] Center a prominent mic in its own workspace row and above the floating dock.
   [x] Group secondary settings, prioritize transcript and focus microphone selection.
   [x] Verify placement across scrolling/resizing and qualify separate .11 portable.
+  [x] Remove older local releases on owner request; retain verified .11 only.
   [ ] Add the required future arbitrary identity, timbre and emotional-style engine.
   [ ] Qualify native permission prompting on a target without saved grants.
   [ ] Qualify manual terminal opening and any future acknowledged automatic handoff.
@@ -347,7 +348,15 @@ Completion evidence:
   No live prompt, audible preview, dependency/provider/poller or new release.
   Physical FDUCE/human speech and listening acceptance remain open.
 
+  Owner-requested local retention cleanup: only release\mic-layout-candidate
+  remains. Removed ten inspected older candidate/unpacked directories and the
+  three obsolete root build files. No running Intercom process was found.
+  Retained .11 EXE checksum matches before/after; GitHub releases/assets and
+  application profiles unchanged. Older paths above are historical evidence.
+
 Completion log:
+  2026-11-11 - Removed obsolete local release versions at the owner's request,
+    retaining only the qualified .11 candidate and its build support files.
   2026-11-11 - Centered the permanent primary mic across the entire workspace
     and floating view; grouped secondary setup/playback with explicit Settings.
     Qualified separate .11 portable without restarting the user's application.

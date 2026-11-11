@@ -19,6 +19,15 @@ Completion evidence:
   This ledger is ongoing, not a finite feature deliverable.
 
 Completion log:
+  2026-11-11 - Cleaned obsolete local release artifacts on explicit request.
+    Action: inspected release inventory, links and active executable paths;
+      removed ten older candidate/unpacked directories and three root build
+      files. Kept only release\mic-layout-candidate and its .11 build files.
+    Evidence: no Intercom process found; sole remaining top-level candidate
+      verified, retained portable SHA-256 unchanged before/after cleanup.
+    Boundary: release is Git-ignored; push records cleanup, not binary upload.
+      Existing GitHub release assets, application profiles and historical
+      qualification records unchanged. Older local artifact paths no longer exist.
   2026-11-11 - Centered the primary microphone and organized secondary controls.
     Cause: the graph-column capsule left the small mic offset and made voice
       setup compete with transcript/results in the scrolling activity panel.
