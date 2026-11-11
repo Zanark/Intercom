@@ -100,7 +100,16 @@ Completion evidence:
   separate unsigned .10 candidate. Seventeen focused packaged cases and actual
   portable synthetic capture/cancel pass. Published .7 and user app untouched.
 
+  ic-06 persistent microphone layout centers a 64 px primary control in a
+  dedicated workspace row and above the floating dock. Secondary settings
+  start collapsed; transcript comes first. Thirteen focused source cases and
+  packaged checks pass (20/21 initial, older collapsed-dock zoom test corrected
+  and passing isolated). Separate unsigned .11 actual portable smoke passes.
+  Published .7, previous candidates and user's running application untouched.
+
 Completion log:
+  2026-11-11 - Recorded centered permanent microphone layout and separate .11
+    qualification in ic-06; broader human/product acceptance gates remain open.
   2026-11-11 - Recorded operational floating voice and collapsed single-row
     controls in ic-06; separate .10 candidate, no new public release.
   2026-11-11 - Recorded bounded speech-result recovery and separate .9 candidate;

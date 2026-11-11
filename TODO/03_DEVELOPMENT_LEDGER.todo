@@ -19,6 +19,27 @@ Completion evidence:
   This ledger is ongoing, not a finite feature deliverable.
 
 Completion log:
+  2026-11-11 - Centered the primary microphone and organized secondary controls.
+    Cause: the graph-column capsule left the small mic offset and made voice
+      setup compete with transcript/results in the scrolling activity panel.
+    Action: reserve an app-wide bottom row for a centered 64 px mic, with stable
+      equal side columns for status/settings/cancel. Keep the same centered mic
+      above the floating dock. Explicit Settings focuses workspace microphone
+      selection; put transcript first and collapse setup/playback by default.
+    Evidence: lint/type/build and 13 focused source desktop cases pass. Packaged
+      20/21 initial; legacy graph test corrected to expand the default-collapsed
+      floating dock and passes isolated. Runtime/package unchanged by correction.
+      Actual portable synthetic capture/cancel/track release in both views,
+      real mesh, voices and graph/window/dock checks pass. Sixteen runtime files/
+      metadata, notices/private exclusions and .4-.10 hashes verified.
+    Corrections: initial TypeScript footer ref was div-specific; use HTMLElement
+      for the semantic footer host. Final type/build passes.
+    Artifact: local unsigned .11 under release\mic-layout-candidate;
+      110679182 bytes, SHA-256
+      1c3300408728cda012096d0ef2c0508fecd3c2d20142cc73c3669d8fe35aeed8.
+    Limits: FDUCE/human recognition/listening unverified. No live prompt, audible
+      preview, new provider/poller/dependency, public release or user-app restart.
+    Next: user elects the new EXE; old running/released builds do not auto-update.
   2026-11-11 - Replaced inert footer with operational workspace/floating voice.
     Cause: the large footer was only guidance, while real voice controls lived
       in activity chrome hidden by floating mode. Separate top grip/zoom and

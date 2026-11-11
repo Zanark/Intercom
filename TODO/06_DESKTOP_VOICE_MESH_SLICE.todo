@@ -66,6 +66,9 @@ Tasks:
   [x] Collapse the floating dock by default; move drag/zoom/window controls into one row.
   [x] Keep floating review/errors/settings accessible and work confirmation separate.
   [x] Qualify the separate .10 portable without changing published/earlier builds.
+  [x] Center a prominent mic in its own workspace row and above the floating dock.
+  [x] Group secondary settings, prioritize transcript and focus microphone selection.
+  [x] Verify placement across scrolling/resizing and qualify separate .11 portable.
   [ ] Add the required future arbitrary identity, timbre and emotional-style engine.
   [ ] Qualify native permission prompting on a target without saved grants.
   [ ] Qualify manual terminal opening and any future acknowledged automatic handoff.
@@ -321,7 +324,33 @@ Completion evidence:
   hashes pass. Published .7 and user's app untouched; no real prompt, audible
   preview or new release. Physical FDUCE/human acceptance remains open.
 
+  Persistent-placement sub-slice: a 64 px microphone occupies a dedicated
+  app-wide bottom row outside graph/panel scrolling; symmetric status/action
+  columns prevent movement as recording/cancel state changes. Floating keeps
+  the same centered mic outside its collapsed dock. Explicit Settings opens/
+  focuses workspace device selection or toggles the floating panel. Transcript
+  first, setup/playback collapsed by default; recorder and dispatch unchanged.
+  Lint/type/build and 13 focused source desktop cases pass. Packaged 20/21
+  initial pass; older graph test needed to expand the default-collapsed dock,
+  then passes on isolated repeat. No runtime change or package rebuild needed.
+  Hit-tested full-viewport mic at 1240x820/960x680 and minimum360px floating;
+  scrolling, settings focus, maximize/restore, cross-mode capture, review,
+  permission-safe mocked work, profiles, graph/node/idle behavior covered.
+  Default/expanded workspace and narrow floating captures visually reviewed.
+  Actual portable passes synthetic recording/cancel/released tracks in both
+  views, real mesh, voice persistence and native graph/window/dock controls.
+  Local unsigned .11: release\mic-layout-candidate,
+  Intercom-Prototype-0.1.0-prototype.11-win-x64.exe, 110679182 bytes, SHA-256
+  1c3300408728cda012096d0ef2c0508fecd3c2d20142cc73c3669d8fe35aeed8.
+  Sixteen runtime files/metadata match, notices/private exclusions and .4-.10
+  preservation hashes pass. Published .7 and user's running app untouched.
+  No live prompt, audible preview, dependency/provider/poller or new release.
+  Physical FDUCE/human speech and listening acceptance remain open.
+
 Completion log:
+  2026-11-11 - Centered the permanent primary mic across the entire workspace
+    and floating view; grouped secondary setup/playback with explicit Settings.
+    Qualified separate .11 portable without restarting the user's application.
   2026-11-11 - Made the actual live microphone available outside the floating
     dock; removed inert guidance/footer space. Consolidated floating controls
     into a default-collapsed single row and qualified a separate .10 portable.

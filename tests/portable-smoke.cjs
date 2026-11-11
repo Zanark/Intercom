@@ -61,6 +61,8 @@ async function main() {
       await image.decode();
       return image.naturalWidth;
     })).toBe(256);
+    await expect(page.getByRole('button', { name: 'Speak', exact: true })).toBeInViewport({ ratio: 1 });
+    await page.getByRole('button', { name: 'Voice settings and transcript', exact: true }).click();
     const microphone = page.getByRole('region', { name: 'Microphone settings' });
     await microphone.getByRole('button', { name: 'Load microphones' }).click();
     await expect(microphone.getByRole('status')).toContainText('Devices loaded. Microphone is off.');
@@ -74,6 +76,7 @@ async function main() {
     await page.getByRole('button', { name: 'Cancel request', exact: true }).click();
     await expect(page.getByRole('button', { name: 'Speak', exact: true })).toBeEnabled();
     expect(await page.evaluate(() => window.__portableTracks.length > 0 && window.__portableTracks.every((track) => track.readyState === 'ended'))).toBe(true);
+    await page.getByText('Voice profiles and playback', { exact: true }).click();
     await page.getByText('Voice profiles / customize speech', { exact: true }).click();
     await expect(page.locator('.voice-profile-active')).toContainText('Standard');
     await expect(page.getByLabel('Speaking voice / accent').locator('option')).not.toHaveCount(1);
@@ -81,6 +84,7 @@ async function main() {
     await page.getByRole('button', { name: 'Save & use profile', exact: true }).click();
     await expect(page.locator('.voice-profile-active')).toContainText('Portable smoke voice');
     await page.reload();
+    await page.getByText('Voice profiles and playback', { exact: true }).click();
     await page.getByText('Voice profiles / customize speech', { exact: true }).click();
     await expect(page.locator('.voice-profile-active')).toContainText('Portable smoke voice');
     await page.getByText('Voice profiles / customize speech', { exact: true }).click();

@@ -1,5 +1,41 @@
 # Desktop prototype
 
+## Local microphone-layout candidate: 0.1.0-prototype.11
+
+Unsigned Windows x64 portable:
+`C:\devdesk\homedesk\Intercom\release\mic-layout-candidate\Intercom-Prototype-0.1.0-prototype.11-win-x64.exe`
+
+110,679,182 bytes; SHA-256:
+`1c3300408728cda012096d0ef2c0508fecd3c2d20142cc73c3669d8fe35aeed8`.
+The sibling `SHA256SUMS.txt` records the checksum. This separate local candidate
+includes the previous microphone/review fixes; it does not replace the running
+app or published .7 release automatically.
+
+The 64 px **Speak** button is centered in a dedicated bottom bar across the
+whole workspace, outside graph and panel scrolling. Equal side columns keep
+the mic stationary while recording status, input meter and cancellation change.
+In floating mode the same mic remains centered above the collapsed dock.
+**Settings** beside it opens/focuses microphone selection in the workspace or
+toggles the floating panel. Transcript comes first; setup and playback profiles
+start collapsed. Recording still works without a session, and switching views
+preserves the selected input and stream. Work confirmation and uncertain-text
+review are unchanged. No new dependency, provider, watcher or poller.
+
+Lint/type/build and 13 focused source desktop cases pass. The packaged run
+passed 20 of 21 cases; its older zoom test tried clicking inside the now
+default-collapsed floating dock. Updating that test to expand the dock passes
+on isolated repeat, without changing the runtime or rebuilding the package.
+Coverage includes centered hit-tested mic at 1240x820/960x680, panel scrolling,
+settings focus, maximize/restore, cross-mode capture, 360 px floating feedback,
+dispatch/review safeguards, graph navigation, nodes and idle rendering.
+Reviewed default and expanded-settings workspace captures and minimum floating
+feedback. Actual portable startup passes synthetic workspace/floating capture,
+cancel/track release, real 40-context/30-link mesh, voice-profile persistence and
+native graph/window/dock controls. All 16 runtime files/metadata match source;
+notices/private exclusions and .4-.10 preservation hashes pass.
+Physical FDUCE/human speech and listening remain unverified. No live Copilot
+prompt, audible preview, user-app restart or new public release.
+
 ## Local floating-microphone candidate: 0.1.0-prototype.10
 
 Unsigned Windows x64 portable:

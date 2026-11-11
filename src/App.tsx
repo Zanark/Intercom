@@ -54,7 +54,7 @@ export function App() {
   const [routeChoices, setRouteChoices] = useState<Context[] | null>(null);
   const [dockExpanded, setDockExpanded] = useState(false);
   const [navigationHost, setNavigationHost] = useState<HTMLDivElement | null>(null);
-  const [voiceHost, setVoiceHost] = useState<HTMLDivElement | null>(null);
+  const [voiceHost, setVoiceHost] = useState<HTMLElement | null>(null);
   const meshRequest = useRef(0);
   const invalidateMesh = useCallback(() => { meshRequest.current++; }, []);
   const [recording, setRecording] = useState(false);
@@ -294,7 +294,6 @@ export function App() {
         <button className="quiet-button" aria-pressed={motion} onClick={() => setMotion(!motion)}>{motion ? 'Pause drift' : 'Enable drift'}</button>
         <button className="quiet-button float-button" disabled={!desktopAvailable} onClick={() => void windowAction('toggle-floating')}><Icon name="float" />Floating mesh</button>
       </div>
-      <div className="voice-surface" ref={setVoiceHost} />
       <div className="floating-tools" role="group" aria-label="Floating controls dock">
         <div className="floating-handle" aria-label="Move floating mesh" title="Grab and drag to move the floating window. Drag the graph itself to orbit.">
           <Icon name="move" /><span>Drag to move</span>
@@ -345,6 +344,8 @@ export function App() {
         {profiles.map((item) => <option key={item}>{item}</option>)}
       </select><small>Controls rendering and supported background reasoning effort (low / medium / high). Copilot retains its model; unsupported effort controls stay inherited. Speech uses the installed local English recognizer.</small></div>
     </aside>
+
+    {!demo && <footer className="voice-surface" aria-label="Persistent voice controls" ref={setVoiceHost} />}
 
     {demo && <footer className="composer chrome">
       <div className="composer-icon"><Icon name="mic" /></div>

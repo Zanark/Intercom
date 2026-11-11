@@ -139,6 +139,7 @@ test('real work UI binds confirmation, keeps voice and floating available during
   await expect(page.locator('.real-job')).toHaveCount(0);
   await page.getByRole('button', { name: 'Confirm this target and task', exact: true }).click();
   await expect(page.getByRole('region', { name: 'Copilot tool permission' })).toContainText('Get-Location');
+  await page.getByRole('button', { name: 'Voice settings and transcript', exact: true }).click();
   await page.getByLabel('Voice request destination').selectOption('background');
   await expect(page.getByRole('button', { name: 'Speak', exact: true })).toBeEnabled();
   await page.getByRole('button', { name: 'Floating mesh', exact: true }).click();
@@ -355,6 +356,7 @@ test('graph zoom enters the sphere, supports cursor zoom and pan, and resets the
   await page.getByRole('button', { name: 'Reset view', exact: true }).click();
   await expect(zoom).toHaveText('100%');
   await page.getByRole('button', { name: 'Floating mesh', exact: true }).click();
+  await page.getByRole('button', { name: 'Expand floating controls', exact: true }).click();
   await page.getByRole('button', { name: 'Zoom in graph', exact: true }).focus();
   await page.getByRole('button', { name: 'Zoom in graph', exact: true }).click();
   await expect(zoom).toHaveText('125%');
@@ -630,6 +632,8 @@ test('microphone denial and enumeration failure are visible and acquired tracks 
       ipcMain.handle('voice:speak', () => {});
       ipcMain.handle('voice:stop-speech', () => {});
     }, { delayed, recognitionError, recognition });
+    await page.getByRole('button', { name: 'Voice settings and transcript', exact: true }).click();
+    await page.getByText('Voice profiles and playback', { exact: true }).click();
     await page.getByLabel('Speak progress and responses (local Windows voice)').uncheck();
     if (connect) {
       await page.getByLabel('Existing session ID', { exact: true }).fill('11111111-1111-4111-8111-111111111111');
@@ -638,6 +642,50 @@ test('microphone denial and enumeration failure are visible and acquired tracks 
     }
     await expect(page.getByRole('button', { name: 'Speak', exact: true })).toBeEnabled();
   }
+
+async function expectReachableCenteredMicrophone() {
+  const mic = page.locator('.record-button');
+  await expect(mic).toBeInViewport({ ratio: 1 });
+  await mic.click({ trial: true });
+  const placement = await mic.evaluate((button) => {
+    const box = button.getBoundingClientRect();
+    const x = box.x + box.width / 2;
+    const y = box.y + box.height / 2;
+    return { centerOffset: Math.abs(x - innerWidth / 2), hit: button.contains(document.elementFromPoint(x, y)), y };
+  });
+  expect(placement.centerOffset).toBeLessThanOrEqual(1);
+  expect(placement.hit).toBe(true);
+  return placement;
+}
+
+test('workspace microphone stays centered and clickable while panels scroll, settings open and the window resizes or maximizes', async () => {
+  await page.getByRole('button', { name: 'Use live voice', exact: true }).click();
+  await expect(page.locator('.voice-setup')).not.toHaveAttribute('open', '');
+  await expect(page.locator('.voice-playback')).not.toHaveAttribute('open', '');
+  await expect(page.getByLabel('Transcript / typed fallback')).toBeVisible();
+  await page.screenshot({ path: test.info().outputPath('workspace-microphone-default.png') });
+  for (const [width, height] of [[1240, 820], [960, 680]]) {
+    await application.evaluate(({ BrowserWindow }, size) => BrowserWindow.getAllWindows()[0].setSize(...size), [width, height]);
+    await expect.poll(() => page.evaluate(() => [innerWidth, innerHeight])).toEqual([width, height]);
+    const initial = await expectReachableCenteredMicrophone();
+    await page.locator('.activity').evaluate((element) => { element.scrollTop = element.scrollHeight; });
+    expect((await expectReachableCenteredMicrophone()).y).toBe(initial.y);
+    await page.getByRole('button', { name: 'Voice settings and transcript', exact: true }).click();
+    await expect(page.getByLabel('Microphone device', { exact: true })).toBeFocused();
+    await expect(page.getByLabel('Microphone device', { exact: true })).toBeInViewport();
+    expect((await expectReachableCenteredMicrophone()).y).toBe(initial.y);
+    const footer = await page.locator('.voice-surface').boundingBox();
+    const graph = await page.locator('.center').boundingBox();
+    expect(graph.y + graph.height).toBeLessThanOrEqual(footer.y);
+    await page.screenshot({ path: test.info().outputPath(`workspace-microphone-${width}.png`) });
+  }
+  await page.getByRole('button', { name: 'Maximize window', exact: true }).click();
+  await expect(page.locator('main')).toHaveAttribute('data-maximized', 'true');
+  await expectReachableCenteredMicrophone();
+  await page.getByRole('button', { name: 'Restore window', exact: true }).click();
+  await expect(page.locator('main')).toHaveAttribute('data-maximized', 'false');
+  await expectReachableCenteredMicrophone();
+});
 
 test('floating microphone stays outside the collapsed dock, preserves selected device and capture across modes, and opens transcript review', async () => {
   await prepareVoiceMock({ connect: false });
@@ -660,11 +708,13 @@ test('floating microphone stays outside the collapsed dock, preserves selected d
   });
   await page.getByRole('button', { name: 'Speak', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Stop & transcribe', exact: true })).toBeVisible();
+  await expectReachableCenteredMicrophone();
   await page.getByRole('button', { name: 'Floating mesh', exact: true }).click();
   await expect(page.locator('main')).toHaveAttribute('data-floating', 'true');
   await expect(page.getByRole('button', { name: 'Expand floating controls', exact: true })).toHaveAttribute('aria-expanded', 'false');
   const mic = page.getByRole('button', { name: 'Stop & transcribe', exact: true });
   await expect(mic).toBeEnabled();
+  const recordingPosition = await expectReachableCenteredMicrophone();
   expect(await mic.evaluate((element) => element.closest('.floating-tools') === null)).toBe(true);
   await expect.poll(() => page.getByRole('meter').evaluate((element) => element.value)).toBeGreaterThan(0);
   expect(await page.evaluate(() => window.__floatingStreams.length)).toBe(1);
@@ -672,6 +722,7 @@ test('floating microphone stays outside the collapsed dock, preserves selected d
   await mic.click();
   await expect(page.getByRole('region', { name: 'Live voice conversation', exact: true })).toBeVisible();
   await expect(page.getByLabel('Transcript / typed fallback')).toHaveValue('Say hello world.');
+  expect((await expectReachableCenteredMicrophone()).y).toBe(recordingPosition.y);
   expect(await application.evaluate(() => globalThis.__voiceReceipt.sent)).toEqual([]);
   expect(await page.evaluate(() => window.__floatingConstraints[0])).toMatchObject({ audio: { deviceId: { exact: device } }, video: false });
   expect(await page.evaluate(() => window.__floatingStreams.flatMap((stream) => stream.getTracks()).every((track) => track.readyState === 'ended'))).toBe(true);
@@ -701,7 +752,7 @@ test('floating recognition failures open visible feedback and leave the outside 
   for (let count = 0; count < 4; count++) await page.getByRole('button', { name: 'Make floating window smaller', exact: true }).click();
   await page.getByRole('button', { name: 'Collapse floating controls', exact: true }).click();
   await page.getByRole('button', { name: 'Voice settings and transcript', exact: true }).click();
-  await page.getByText('Microphone, session and delivery settings', { exact: true }).click();
+  await expectReachableCenteredMicrophone();
   expect(await page.locator('.live-conversation').evaluate((element) => {
     element.scrollTop = element.scrollHeight;
     return element.scrollTop;
@@ -965,6 +1016,7 @@ async function setVoiceControl(key, value) {
 test('real voice-profile bridge previews unsaved controls, saves/activates/renames/deletes and restores the active voice on reload', async () => {
   await observeSpeechWithoutPlayback();
   await page.getByRole('button', { name: 'Use live voice', exact: true }).click();
+  await page.getByText('Voice profiles and playback', { exact: true }).click();
   await page.getByText('Voice profiles / customize speech', { exact: true }).click();
   const panel = page.locator('.voice-profiles');
   await expect(panel.locator('.voice-profile-active')).toContainText('Standard');
@@ -995,6 +1047,7 @@ test('real voice-profile bridge previews unsaved controls, saves/activates/renam
   await page.getByRole('button', { name: 'Delete profile', exact: true }).click();
   await expect(page.getByLabel('Saved voice profile').locator('option')).toHaveCount(1);
   await page.reload();
+  await page.getByText('Voice profiles and playback', { exact: true }).click();
   await page.getByText('Voice profiles / customize speech', { exact: true }).click();
   await expect(page.locator('.voice-profile-active')).toContainText('Evening');
   await expect(page.locator('#voice-pitch')).toHaveValue('5');
@@ -1011,7 +1064,9 @@ test('real voice-profile bridge previews unsaved controls, saves/activates/renam
 test('starting capture cancels only the owned preview and locks voice controls until recording finishes', async () => {
   await observeSpeechWithoutPlayback(true);
   await page.getByRole('button', { name: 'Use live voice', exact: true }).click();
+  await page.getByRole('button', { name: 'Voice settings and transcript', exact: true }).click();
   await page.getByLabel('Voice request destination').selectOption('background');
+  await page.getByText('Voice profiles and playback', { exact: true }).click();
   await page.getByText('Voice profiles / customize speech', { exact: true }).click();
   await expect(page.getByRole('button', { name: 'Preview voice', exact: true })).toBeEnabled();
   await page.getByRole('button', { name: 'Preview voice', exact: true }).click();

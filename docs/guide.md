@@ -92,23 +92,30 @@ At small sizes the row scrolls horizontally rather than wrapping. The size
 buttons resize the native window without changing graph zoom. There is no
 separate top grip or hovering zoom toolbar in this view.
 
-The operational **Speak** mic stays outside the dock, even when it is collapsed.
+**Local .11/current checkout:** the large **Speak** button is fixed at the
+bottom center of the whole window, in its own operational bar below the graph
+and scrolling panels. It never shifts when recording or cancellation controls
+appear. In floating mode it stays centered above, and outside, the collapsed
+dock. The input meter appears while recording; **x** cancels the request.
 It uses the same selected input and recording in workspace/floating mode:
-switching views does not stop or reopen the stream. **Voice settings and
-transcript** opens a scrollable panel; stopping opens recognition review/results
-or an explicit error. Settings and playback profiles remain reachable there.
+switching views does not stop or reopen the stream. **Settings** beside the mic
+opens/focuses microphone selection in the workspace, or toggles the scrollable
+floating voice panel. The transcript is first; microphone/session setup and
+playback profiles start collapsed. Stopping opens recognition review/results
+or an explicit error in floating mode.
 Preparing a work request returns to the workspace for the existing separate
 target/task confirmation; it does not dispatch work. The old inert live-mode
-footer and its reserved space have been removed. Explicit fixture demo remains
-synthetic and separate from live capture.
+footer is not used; the new bar contains the actual recorder. Explicit fixture
+demo remains synthetic and separate from live capture.
 
 **Escape** dismisses an open voice panel or node label before restoring the
 workspace; **Ctrl+Shift+M** toggles views while Intercom has focus. Returning from
 a maximized workspace retains its previous normal-window bounds/maximization.
 Older .7-.9 builds retain the top drag handle and two-row dock; they do not
-update automatically. See the [separate .10 candidate](prototype.md#local-floating-microphone-candidate-010-prototype10).
+update automatically. See the [separate .11 candidate](prototype.md#local-microphone-layout-candidate-010-prototype11).
 
-**Local .8 and newer candidates/current checkout:** click **Load microphones**, select FDUCE
+**Local .8 and newer candidates/current checkout:** in .11 click **Settings**
+beside Speak first, then **Load microphones**, select FDUCE
 (or your preferred input), optionally **Test selected**, then **Speak**. The meter
 shows the selected input while recording. No Copilot connection is needed for
 recording or local transcription. Click **Stop & transcribe** to retain an
@@ -141,7 +148,8 @@ required; nothing is downloaded. Audio stays in memory and is not uploaded.
 Text goes to the existing Copilot account/session and may remain in its history.
 Use **Show fixture demo** for the older synthetic routing controls.
 
-Open **Voice profiles / customize speech** without connecting a session.
+Expand **Voice profiles and playback**, then **Voice profiles / customize
+speech**, without connecting a session.
 Choose an installed voice, adjust pitch/speed/volume, and **Preview voice**.
 Preview does not save edits. **Save & use profile** keeps and activates them;
 **Duplicate profile** creates another named configuration. Profiles survive
