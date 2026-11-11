@@ -14,7 +14,7 @@
 <p align="center">
   <a href="https://github.com/Zanark/Intercom/releases/tag/v0.1.0-prototype.7"><img src="docs/assets/readme-download.png" alt="Download prototype .7: Windows x64, unsigned. Read the release warnings and verify checksums." width="240" /></a>
   <a href="docs/guide.md"><img src="docs/assets/readme-guide.png" alt="Project guide: setup, workflows, architecture and documentation." width="240" /></a>
-  <a href="docs/prototype.md"><img src="docs/assets/readme-prototype.png" alt="Prototype details: features, checksums and limitations." width="240" /></a>
+  <a href="docs/prototype.md#local-microphone-layout-candidate-010-prototype11"><img src="docs/assets/readme-prototype.png" alt="Latest local prototype .11, not yet published: centered microphone, simplified settings, executable path, checksum and limitations." width="240" /></a>
 </p>
 
 <p align="center">

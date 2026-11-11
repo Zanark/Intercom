@@ -19,6 +19,11 @@ Completion evidence:
   This ledger is ongoing, not a finite feature deliverable.
 
 Completion log:
+  2026-11-11 - Updated README before the requested follow-up push.
+    Replaced the generic prototype card with latest local .11, labelled not
+    yet published, linked to the retained build/path/checksum details.
+    Kept the centered image-led layout, animation and actual published .7
+    download. Updated the artwork renderer so regeneration preserves the card.
   2026-11-11 - Cleaned obsolete local release artifacts on explicit request.
     Action: inspected release inventory, links and active executable paths;
       removed ten older candidate/unpacked directories and three root build

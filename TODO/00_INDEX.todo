@@ -108,6 +108,8 @@ Completion evidence:
   Published .7, previous candidates and user's running application untouched.
 
 Completion log:
+  2026-11-11 - Refreshed README latest-build artwork/link before pushing;
+    explicitly distinguishes local .11 from published .7.
   2026-11-11 - Owner requested local release cleanup: only .11 remains;
     historical qualification records and published GitHub releases preserved.
   2026-11-11 - Recorded centered permanent microphone layout and separate .11

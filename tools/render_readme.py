@@ -227,7 +227,7 @@ def main():
     title.save(ASSETS / "readme-title.png", optimize=True)
     panel("readme-download.png", "Download prototype .7", "Windows x64  /  unsigned")
     panel("readme-guide.png", "Project guide", "Setup  /  workflows  /  architecture")
-    panel("readme-prototype.png", "Prototype details", "Features  /  checksums  /  limits")
+    panel("readme-prototype.png", "Latest local build .11", "Mic fixes  /  not yet published")
     gallery("readme-voices.png", "prototype-voice-profiles.png",
             "A voice that fits your workflow.", "Packaged .7  /  installed voice profiles  /  synthetic test contexts")
     gallery("readme-workspace.png", "prototype-window-controls.png",
