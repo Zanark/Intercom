@@ -3,12 +3,16 @@
 ## Current authorization
 
 The owner requested the research push and then a prototype, and explicitly
-approved Electron for that early prototype. Its [fixture-only UI](prototype.md)
-is an authorized ic-06 sub-slice before the live integration prerequisites.
+approved Electron for that early prototype. Its initial fixture UI
+was an authorized ic-06 sub-slice before the live integration prerequisites.
 The later request authorizes an unsigned Windows prototype prerelease and
 explicit microphone-device selection/brief checks. These exceptions do not
 waive ic-02/ic-04/ic-05, authorize continuous listening/provider/agent access,
-or grant production deployment.
+or grant production deployment. Subsequent authority selects local-English
+push-to-talk, actual published-mesh loading every launch and confirmed work in
+existing idle sessions. The [.4 coverage matrix](prototype.md) records the
+implemented slice and exact qualification limits. Manual terminal entry is not
+automatic handoff, and saved native grants can suppress permission prompts.
 
 Confirmed product intent is in the [brief](product-brief.md); component and
 event contracts are in [architecture](architecture.md); speech choices remain
@@ -27,15 +31,15 @@ correct targeting, permission enforcement and honest outcome reporting.
 | Phase | Workstream | Observable exit gate |
 |---|---|---|
 | 0. Define | ic-02, in progress | This design is recorded. Remaining stack, privacy, permission and provider decisions are explicit; finalize them from the two qualification receipts below before app implementation. |
-| 1. Prove Agency | ic-04, not started | On a separately authorized disposable session, discover/identify the existing Agency session, preserve configuration, dispatch once, observe the right outcome, and demonstrate handoff/approval/cancellation limits. Active attachment and dormant resume reported separately. |
-| 2. Choose speech | ic-05, not started | Same-scenario local/cloud comparison, local wake proof, measured timing/resources, human listening, model licenses and explicit provider/privacy selection. Can proceed independently of ic-04 after authorization. |
-| 3. First desktop slice | ic-06, in progress (early fixture UI only) | Wake, speak, clarify if needed, select one real Agency session, hand off or run an authorized task, display evidence-backed graph activity, and deliver an accurate spoken outcome. |
+| 1. Prove Agency | ic-04, in progress | Existing idle conversation and one approved read-only ACP task pass. Native approval prompting without saved grants, automatic handoff and active attachment remain unqualified. |
+| 2. Choose speech | ic-05, in progress | Bounded local-English push-to-talk passes with synthetic speech. Same-scenario comparison, wake proof, timing/resources and human/hardware acceptance remain open. |
+| 3. First desktop slice | ic-06, in progress | Actual mesh, confirmed existing-session background work and spoken result are implemented in .4. Full-product wake/handoff, native-prompt and human/performance gates remain open. |
 | 4. Reliability | ic-07, not started | Restart/reconnect, uncertain dispatch, duplicate events, competing sessions/workspaces, audio/device failure and lifecycle behavior qualified without stealing the user's session. No release is implied. |
 
 ic-04 and ic-05 depend on the completed foundation, not on final product
 selection: their findings inform ic-02. ic-06 depends on all three.
-ic-07 depends on ic-06. The early fixture UI is the explicit exception, not
-evidence that these prerequisites passed.
+ic-07 depends on ic-06. The approved bounded prototype exceptions are not
+evidence that every full-product prerequisite passed.
 
 ## Dependency-driven development packages
 

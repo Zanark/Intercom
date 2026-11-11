@@ -19,6 +19,94 @@ Completion evidence:
   This ledger is ongoing, not a finite feature deliverable.
 
 Completion log:
+  2026-11-11 - Extensible local voice profiles qualified.
+    Action: added named installed-voice profiles, gender/culture selection,
+      pitch/rate/volume, unsaved preview, save/use/rename/duplicate and deletion.
+    Mechanism: bounded serialized atomic storage, lazy catalog, strict provider
+      validation and cancellable per-utterance snapshots. All desktop speech
+      paths share the host provider entry; capture first stops owned preview.
+      Invalid previews preserve current playback; superseded queued speech
+      rejects cancellation rather than falsely reporting playback completion.
+    Decision: installed local voices for this prototype; arbitrary identity,
+      timbre and emotional style are mandatory future-engine work. The seam
+      does not implement that engine or authorize downloads/cloud processing.
+    Evidence: lint/type/build, eight Vitest, 14 voice/native, 17 mesh/work host
+      and all 17 packaged desktop cases pass. Native PCM checks verify pitch,
+      rate, silence and exact installed selection without audible playback.
+      Portable startup loaded 40 contexts/30 links, discovered installed voices
+      and verified profile save/activation/reload. Sixteen runtime files match
+      source; notices/private exclusion/signatures and prior .4/.5/.6 verified.
+    Artifact: release\voice-profiles-candidate\Intercom-Prototype-0.1.0-prototype.7-win-x64.exe,
+      110684564 bytes, SHA-256
+      2ce4c5d70bdbfd29de7304462a3f0449e73ab2c79ff5617ea76448d00413df03.
+    Limits: unsigned/local/unpublished; no actual Copilot prompt, audible preview,
+      physical microphone/listening acceptance or user-instance replacement.
+      Pitch response is approximate; Windows rate is not a measured multiplier.
+    Next: user acceptance and the existing engine/device/permission/speed gates.
+  2026-11-11 - Floating movement and window sizing made discoverable.
+    Action: added a visible Drag to move native handle and always-visible
+      Smaller/Larger controls with native size readout.
+    Mechanism: narrow allowlisted IPC, square 48 px sizing steps, 360 px floor,
+      monitor work-area clamping and bounded state events. Graph camera and
+      saved workspace bounds are unchanged; no continuous rendering added.
+    Evidence: lint/type/build, four focused source desktop cases, all 15
+      packaged desktop cases and actual portable real-mesh startup pass.
+      Packaged 540/360 px fixture captures inspected; no global OS drag gesture
+      automated. Portable app loaded 40 contexts/30 projected links and checked
+      microphone access, graph/window controls and floating size/readout.
+      Fifteen source-matched runtime files/metadata, notices and absent private
+      target verified; launcher/runtime NotSigned; prior .4/.5 hashes match.
+    Artifact: release\floating-controls-candidate\Intercom-Prototype-0.1.0-prototype.6-win-x64.exe,
+      110672204 bytes, SHA-256
+      58a93c6d5ea097475b34bd6e7537fa80bf28678b944bf50faf52c19d2252b2e6.
+    Limits: unsigned/local/unpublished; no actual Copilot work prompt, human
+      microphone acceptance or user-app replacement. Floating size is not
+      persisted across mode re-entry/launch; existing broader gates stay open.
+    Next: user acceptance; no commit/push/publication authority inferred.
+  2026-11-11 - Deep graph navigation and native window controls qualified.
+    Action: removed the distant zoom floor; added cursor-directed wheel zoom,
+      right-drag panning, centered +/-/readout/reset and maximize/restore.
+    Mechanism: finite close camera clipping, demand-driven rendering, narrow
+      IPC/native state events and saved normal/maximized floating restoration.
+    Evidence: lint/type/build, five focused source desktop scenarios, all 14
+      packaged desktop cases and actual portable real-mesh startup pass.
+      Packaged launcher loaded 40 contexts/30 projected links, exercised mic
+      access and graph/window/floating controls. Inspected packaged UI capture.
+      Fifteen source-matched runtime files/metadata, required notices and
+      absent private target identity verified; both EXEs NotSigned.
+    Artifact: release\zoom-window-candidate\Intercom-Prototype-0.1.0-prototype.5-win-x64.exe,
+      110683190 bytes, SHA-256
+      aee7aaef14f8fbe827035ff895c6b22a5ab5d4373501c99306880bf7b2297c8a.
+    Limits: local/unpublished; no new native Copilot work prompt or physical mic
+      acceptance. Prior .4 checksum matches; user runtime remains untouched.
+    Next: user acceptance and the existing device/approval/performance gates;
+      no commit, push, publication or running-app switch is implied.
+  2026-11-11 - Actual mesh and confirmed-work prototype candidate qualified.
+    Action: added host-worker fresh mesh loading, explicit existing-session
+      proposals/confirmation, negotiated ACP policy, approvals and one durable
+      receipt. Kept manual terminal entry rather than pretending spawn proves
+      automatic handoff; added a full feature/limitation matrix.
+    Mechanism: bounded projection, exact identities/workspaces, Agent plus
+      allow-all OFF verification, one-shot decisions, passive events and no
+      automatic retry. Fixed cancellation during receipt save and recovery of
+      uncertain previous-process cleanup. Native discovery pages increased
+      within the same 2,000-row cap to avoid repeated catalog rebuilds.
+    Evidence: lint/type/build, eight Vitest, nine voice/native, 17 mesh/work
+      host cases, all 12 packaged desktop cases and actual portable startup pass.
+      Approved native source path captured synthetic speech, executed only
+      Get-Location, received "Hello world." and completed local playback.
+      Existing saved grants meant zero native permission prompts.
+    Artifact: release\full-slice-candidate\Intercom-Prototype-0.1.0-prototype.4-win-x64.exe,
+      110672770 bytes, SHA-256
+      4dd86aa3bfd2e9bfea11d88944685e905f31522d40e2d1698e9bbab9fcc26766.
+      Actual packaged worker read 40 contexts/30 projected relationships.
+    Limits: unsigned/unpublished; source acceptance is not a second packaged
+      work prompt. Physical FDUCE/human listening, native prompt mediation,
+      visible toast, manual terminal window and speed-SLO remain unqualified.
+      Atomic JSON is not the proposed SQLite queue/outbox. Prior artifacts and
+      independently owned applications were not replaced or driven.
+    Next: human/device and remaining product qualification; do not label every
+      discussed feature complete merely because its coverage entry exists.
   2026-11-10 - Project foundation authored.
     Action: inspected the clean repository and adopted the development manual.
     Effect: project entry points, contributor rules, product brief, and numbered
@@ -202,3 +290,60 @@ Completion log:
         conflict hashes in docs/github-tracking.md only after verification.
       Limit: #5 remains In Progress; the published fixture does not complete
         actual voice/Agency qualification or product acceptance.
+  2026-11-11 - Voice-and-mesh branding integrated into an isolated EXE candidate.
+      Action: created original mic artwork and applied owner refinements:
+        interconnected varied-size nodes, straight crossing links and shadows,
+        a node in front of the mic, and rounded outer orbital connections.
+        Added PNG/ICO assets, header/floating branding, favicon, native window/
+        taskbar identity, executable resources and captioned README images.
+      Mechanism: enabled executable resource editing while disabling signing
+        separately. Used release\branding-candidate and disposable profiles;
+        did not replace/restart the published prototype or clear Windows caches.
+      Evidence: lint/type/build, seven unit cases, six packaged desktop scenarios
+        and actual portable smoke pass. Both executable resource groups have
+        nine byte-identical source ICO frames. Actual window 16/32 px icons
+        and branded workspace visually reviewed; UI/favicon assets decode.
+        Raw ASAR-header traversal confirms nine runtime files, byte-matched
+        PNG/ICO and no bundled private store/tests/node_modules/credentials.
+      Artifact: unsigned local v0.1.0-prototype.2 portable, 110659385 bytes,
+        SHA-256 474708cc4756022558beb53daf427fb9ee7ace91cf2fefa30d7d5c106a67031e.
+        Both candidate executables report NotSigned. The .1 release EXE still
+        matches its original independently verified public download hash.
+      Tracking: conflict-checked all six mappings, updated only existing #5's
+        public-safe body and independently read back all bodies/identities/
+        states/stages/backlinks/membership/visibility. No duplicate or new item.
+      Limit: source changes are uncommitted; candidate is unpublished. Final
+        user artwork acceptance, Windows matrix and live voice/Agency remain open.
+  2026-11-11 - Bounded local voice conversation implemented and packaged.
+      Authority: owner selected click-on/click-off capture, installed local
+        English recognition and a designated existing dormant Copilot session.
+        No cloud audio, new session, active attach or work tools.
+      Action: added exact-device PCM capture/meter, review/typed fallback,
+        local multi-phrase ASR/TTS, narrow IPC, fresh idle-session checks,
+        structured response correlation, owned cancellation and private receipts.
+        Enlarged the header logo to 48 px without changing the floating icon.
+      Failures/fixes: synchronous ASR lost later phrases; asynchronous stream
+        events retain them. Disabled browser DSP for raw half-duplex capture.
+        The first integrated send actually returned "Hello world." but the host
+        rejected plain conversation without task_complete. Inspected existing
+        session events before retrying; now accepts assistant text only with a
+        matching successful final result, retaining explicit-failure rejection.
+      Evidence: lint/type/build, eight Vitest and nine host/native cases pass.
+        All ten packaged Electron scenarios and actual portable launcher pass.
+        Packaged real workflow: synthetic microphone -> "Say hello world" ->
+        actual existing-session "Hello world." -> private matching receipt ->
+        native speech completion without reported error. Single integrated run
+        67,370 ms includes connection/recording/playback, not a performance SLO.
+      Artifact: unsigned local v0.1.0-prototype.3 portable, 110662728 bytes,
+        SHA-256 1c33043ed52fe78748ace958cf11c84ad5dd12bce3d81c4e982e13add7ead7b6.
+        .1/.2 executable hashes unchanged. Source is uncommitted/unpublished.
+      Packaging/tracking: inspected 12 source-matched runtime files, notices,
+        excluded private stores/tests/node_modules and nine exact ICO frames
+        in both EXEs. Conflict-checked six remote baselines, updated only four
+        existing issue bodies and #3/#4 Project stages, then independently
+        verified all full bodies, original identities, states and membership.
+      Limit: physical FDUCE and subjective listening are unverified. English
+        only; no wake word, full-duplex/AEC, live mesh import, work tools,
+        durable jobs or broad lifecycle/resource/latency qualification.
+        Queue recovery inspection found delivered requests, not unsaved queue
+        contents; installed CLI documentation provides no queue recovery command.

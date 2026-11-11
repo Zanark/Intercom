@@ -2,15 +2,19 @@ Intercom local/cloud speech and wake-word qualification
 
 Workstream ID: ic-05
 GitHub issue: https://github.com/Zanark/Intercom/issues/4
-Status: NOT_STARTED
+Status: IN_PROGRESS
 Milestone: Evidence-backed speech selection and wake conversation contract
 Dependencies: ic-01
 
 Purpose:
   Compare local and cloud speech before selection and qualify local wake-only
-  standby. No microphone capture or provider use is authorized by this roadmap.
+  standby. The owner's later request selects installed local English speech
+  and click-on/click-off capture for a bounded prototype; no cloud audio or wake
+  standby is authorized by that exception.
 
 Tasks:
+  [x] Implement the selected installed-Windows English push-to-talk prototype.
+  [x] Verify local recognition retains multiple phrases through stream completion.
   [ ] Select test hardware, languages, phrase, datasets and resource/latency budgets.
   [ ] Obtain audio/provider consent and choose one viable local/cloud candidate.
   [ ] Verify exact model/voice licenses, packaging and provider data/cost terms.
@@ -32,12 +36,41 @@ Acceptance criteria:
   Native binding support is not exact model/license/device qualification.
 
 Completion evidence:
-  None. docs/speech-options.md contains research, not downloads or audio tests.
-  No speech engine, voice, provider, target hardware or numeric budget selected.
+  Installed en-US System.Speech recognizer transcribes locally synthesized
+  "Hello world. Please say hello world." as
+  "Hello world please say hello world", confidence 0.9176309108734131.
+  Multiple-phrase events avoid silently losing speech after a pause.
+  Selected-device AudioWorklet capture, canonical PCM, level meter, cleanup,
+  review-before-send and visible recognition failures pass Electron tests with
+  deterministic synthetic audio. Silence/short input, low confidence and
+  overlong input are rejected without dispatch. Browser DSP is disabled for
+  this half-duplex path; playback stops before recording.
+  Actual packaged synthetic-microphone capture transcribes "Say hello world";
+  the existing Copilot session answers "Hello world." and native local playback
+  completes without reported error. The single 67,370 ms run includes connection,
+  recording and playback, not a component latency benchmark or qualified SLO.
+  No physical FDUCE, multilingual quality, human listening, AEC, wake word,
+  broad provider comparison or latency/resource budget is qualified.
+  The .4 native source work test also captured synthetic "Say hello world",
+  then required separate visible task review/confirmation before one approved
+  read-only command. Actual response playback completed. Background completion
+  speech is observed once, never replayed from restored receipts; deterministic
+  packaged cases cover that UI behavior. No new physical/audio-quality claim.
   Candidate picks and reproducible evidence plan are in
   docs/technology-decisions.md and docs/performance-and-qualification.md.
 
 Completion log:
+  2026-11-11 - Extended voice destinations to reviewed background/terminal
+    proposals without allowing a spoken proposal alone to dispatch work.
+    Verified synthetic speech through one explicitly approved real background
+    task and completed local speech; retained human/device/performance gates.
+  2026-11-11 - Integrated packaged speech/Copilot round trip passed using locally
+    synthesized input. This does not establish physical FDUCE acoustics or
+    subjective listening quality. Kept raw audio in memory only.
+  2026-11-11 - Owner selected click-on/click-off recording and installed local
+    English recognition without model downloads. Implemented the bounded path;
+    fixed native stream-end/phrase handling and verified synthetic recognition.
+    Installed local speech is not fully offline Copilot execution.
   2026-11-10 - Planned after the user requested research of both speech approaches.
   2026-11-10 - Deepened native/cloud shortlist, audio/AEC and measurement gates;
     no capture, model download, cloud test or human listening performed.

@@ -23,9 +23,11 @@ interchangeable identities.
 
 ## Confirmed scope choices
 
-- **Current deliverable:** after pushing the research, build a fixture-only
-  desktop prototype. The owner approved Electron for that prototype, not a
-  final product stack or live integration.
+- **Current deliverable:** Electron prototype with local-English push-to-talk,
+  actual local mesh every launch and separately confirmed background work in
+  existing idle sessions. Retain permission prompts and refuse busy writers.
+  Terminal opening requires manual task entry. No new sessions, active attach,
+  wake word or cloud audio.
 - **Floating Mesh:** a mesh-only mode with native transparent background, so
   the graph can appear to float on the desktop.
 - **Prototype distribution and microphone choice:** publish an unsigned Windows
@@ -35,18 +37,22 @@ interchangeable identities.
   conversation. The phrase and conversation timeout are not chosen.
 - **Integration priority:** existing Agency sessions are essential; prove that
   integration first. A plain-Copilot-only substitute is not sufficient.
-- **Speech:** research local and cloud approaches and present trade-offs before
-  choosing. Neither provider nor audio upload is approved.
+- **Speech:** installed local Windows voices are selected for the prototype.
+  Richer arbitrary voice identity, timbre and emotional style are mandatory
+  future requirements. Keep synthesis replaceable without rewriting the
+  conversation/work workflow. No richer engine, cloud audio or model download
+  is approved; the final product provider still needs comparison/selection.
 - **Processing priorities:** performance and speed come first and are the
   default. Provide options to choose what to prioritize; processing quality
   and accuracy remain important.
 
 These remain product requirements; the [prototype](prototype.md) implements
-only the labelled synthetic UI subset. The deeper engineering
+the bounded confirmed-work/voice slice and actual published mesh, not unrestricted
+orchestration or automatic terminal handoff. The deeper engineering
 recommendation is Windows-first Tauri 2/Rust + React/TypeScript/Three.js,
 superseding provisional Electron. It is not an accepted or qualified stack.
-Speed/performance, Balanced and Accuracy are proposed profile labels; only the
-speed-first default and ability to select priorities are confirmed.
+Speed/performance, Balanced and Accuracy are implemented prototype choices with
+supported background reasoning effort; product-level latency budgets remain open.
 
 ## Decisions required before implementation
 
@@ -85,8 +91,16 @@ disposable session/workspace for real connector tests, not the user's active wor
 
 ## Current evidence limits
 
-A packaged Electron UI now exists; `npm start` also builds and launches it. Its graph
-and session activity are synthetic. Microphone selection/checks do not implement
-the voice pipeline. No installer, live agent invocation,
-speech/device qualification, product performance measurements or human
-acceptance is claimed.
+A packaged .4 Electron candidate loads the real local snapshot; `npm start`
+also builds and launches it. A native source test captured synthetic speech,
+ran the exact approved read-only command in the designated existing session,
+received the real response and completed local playback. Saved grants meant
+no native permission prompt occurred; fixtures separately cover mediation.
+The packaged runtime and actual portable startup pass. Physical microphone,
+human listening, automatic terminal handoff, installer and performance budgets
+remain unqualified. See the [complete feature matrix](prototype.md).
+
+The subsequent voice-profile slice adds named persistent installed-voice
+profiles, gender/culture-based voice choice, pitch/rate/volume and draft
+preview. The capability/adapter boundary is ready for another provider, but
+arbitrary identity/timbre/emotion remain future work, not local-engine claims.

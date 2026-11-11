@@ -2,16 +2,22 @@ Intercom existing Agency session connector qualification
 
 Workstream ID: ic-04
 GitHub issue: https://github.com/Zanark/Intercom/issues/3
-Status: NOT_STARTED
+Status: IN_PROGRESS
 Milestone: Proven capability for the actual existing Agency session
 Dependencies: ic-01
 
 Purpose:
   Validate the essential integration before building a voice/desktop shell
-  around an assumed API. Current scope authorizes documentation only.
+  around an assumed API. The owner now authorizes one designated existing
+  idle-session conversation and subsequently confirmed background work,
+  retaining manual approvals and refusing busy writers. Active attach is excluded.
 
 Tasks:
-  [ ] Obtain authority and designate disposable sessions/workspaces for testing.
+  [x] Qualify exact Agency discovery and bounded existing-session conversation.
+  [x] Verify installed ACP existing-session load and explicit manual policy.
+  [x] Exercise one approved read-only tool with actual terminal response/speech.
+  [ ] Qualify actual native permission requests without retained saved grants.
+  [ ] Obtain further authority/disposable workspaces for the broader capability tests.
   [ ] Discover sessions with source/capability/active-state distinctions.
   [ ] Qualify active attach and dormant resume separately; preserve launch policy.
   [ ] Validate effective resumed permission state and ACP versus SDK transport.
@@ -29,11 +35,48 @@ Acceptance criteria:
   Human approval and technical qualification remain distinct.
 
 Completion evidence:
-  None. Help inspection supports research only; no runtime connector test ran.
+  Actual Agency catalog distinguishes resumable copilot_cli, idle and in_use.
+  The designated existing session returned "Hello world." through direct
+  Copilot resume, with successful task_complete, exact terminal session ID and
+  result/process exit zero. No new session or competing writer was created.
+  The packaged integrated voice smoke also returns an ordinary "Hello world."
+  assistant reply, persisted only after the matching successful final result.
+  Ordinary conversation need not invoke task_complete. An observed initial
+  parser failure was investigated in existing session history before any retry;
+  accepting plain replies preserves exact terminal correlation and rejects
+  explicit failed tasks. Nine host/native cases cover these boundaries.
+  Current transport exposes only task_complete, denies shell/write, disables
+  built-in MCPs/custom instructions and never grants blanket approval.
+  Host tests reject missing/browse-only/in-use identities, unexpected tools,
+  mismatched/failed completion and duplicate work; native owned-child
+  cancellation is exercised. This is not active attach, ACP/SDK parity,
+  inherited permission audit, arbitrary tool work or terminal-handoff proof.
   See docs/architecture.md and docs/roadmap.md for the proposed proof boundary.
   docs/runtime-contracts.md expands the capability/ownership and dispatch rules.
+  The current ACP path explicitly sets/verifies Agent mode then allow-all OFF,
+  retains the inherited model and applies supported profile reasoning effort.
+  One separately approved native source test ran only Get-Location and returned
+  "Hello world." with completed local playback, exact existing identity and
+  observed successful tool event. Existing saved grants covered the operation;
+  no native permission prompt occurred. Fixtures cover exact one-shot allow/
+  reject, policy/session identity, stream failures and cancellation boundaries.
+  Session catalogs remain bounded to 2,000 rows over at most four 500-row pages;
+  per-page native rebuild cost motivated avoiding redundant small pages.
+  A new terminal opens for manual task entry only, not automatic ownership
+  transfer or monitored completion. Broader connector criteria remain open.
 
 Completion log:
+  2026-11-11 - Qualified the exact approved read-only ACP work operation once.
+    Inherited Autopilot/allow-all state was not trusted: set and verified manual
+    Agent policy before the prompt. Preserved saved grants/model; live approval
+    prompting remains open. No new session, active attach or automatic retry.
+  2026-11-11 - Verified the actual packaged capture/transcription/conversation/
+    response/playback loop. Fixed the ordinary-reply parser rather than treating
+    idle/process exit as success. No general tool or active-attach authority added.
+  2026-11-11 - Owner designated an existing dedicated session for conversation.
+    Corrected guessed CLI flags from installed help and qualified the exact
+    conversation-only command. Added bounded host discovery/event correlation
+    and cancellation. Broad capability and failure matrix remain open.
   2026-11-10 - Planned under documentation-only scope; execution not authorized.
   2026-11-10 - Refined proof criteria from deeper protocol/runtime research;
     no session catalog, live control or process execution tested.

@@ -4,6 +4,15 @@ Proposed application contracts, not implemented APIs. Read with
 [architecture](architecture.md), [technology decisions](technology-decisions.md)
 and [qualification](performance-and-qualification.md).
 
+**Prototype exception (.4):** the implemented Electron slice uses narrow
+main-frame IPC, push-to-talk local Windows speech, a host-worker actual-mesh
+projection, confirmed existing-session ACP work and a single atomic JSON
+receipt. It does not implement the proposed Rust/SQLite queue or durable
+notification outbox below. Terminal mode only opens the existing session for
+manual task entry; it does not claim acknowledged ownership transfer or send
+the task automatically. Exact behavior, native/fixture evidence and remaining
+gates are in the [current feature matrix](prototype.md#current-full-slice-candidate-010-prototype4).
+
 ## 1. Process topology and authority
 
 ```mermaid

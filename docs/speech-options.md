@@ -1,12 +1,80 @@
 # Speech options: research before selection
 
-**Decision pending.** The user requested both local and cloud research before
-choosing. No microphone capture, provider account, audio upload, model download
-or listening-quality comparison occurred. Sources checked 2026-11-10;
-availability, pricing and data terms must be rechecked at selection.
+**Final product decision pending.** The user subsequently selected a bounded
+prototype using installed Windows en-US `System.Speech` recognition and local
+English playback, with click-on/click-off capture and no model download.
+Synthetic English recognition is verified, including phrases separated by
+pauses; physical-microphone and human listening acceptance remain open.
+No cloud audio/provider trial occurred. See [prototype](prototype.md).
+The following comparative research was checked 2026-11-10; availability,
+pricing and data terms must be rechecked at final selection.
 
 **Product priority:** performance/speed first and default, with user-selectable
 priorities. Neither local nor cloud speech is presumed faster without evidence.
+
+## Prototype voice profiles and the required future engine
+
+The owner selected **installed local voices for the prototype**, but made
+**arbitrary voice identity, timbre and emotional style mandatory future
+requirements**, not optional polish. Those richer controls are not supplied
+by Windows System.Speech and are not implemented or downloaded here.
+
+The desktop's **Voice profiles / customize speech** panel discovers enabled
+installed voices on demand, showing their gender and culture metadata.
+Gender selection filters voices; it does not transform a voice's identity.
+Profiles save the exact voice, requested pitch (-12 to +12 semitones), Windows
+rate (-10 to +10) and volume (0-100). Pitch response is voice/engine-dependent,
+not a promise of calibrated acoustic intervals. Rate is not a measured
+playback-speed multiplier. Volume 0 is silent. Recognition remains en-US
+regardless of the speaking voice's culture.
+
+Create a profile with **Duplicate profile**, edit its name/controls and
+**Save & use profile**. Rename an existing profile through the same save action.
+**Use saved profile** activates an unchanged saved profile; only an inactive
+profile can be deleted. At most 32 named profiles are supported. Preview uses
+the current draft without saving or activating it. **Stop preview** interrupts
+playback, not work. Starting capture stops preview before opening the input;
+voice controls are locked during microphone checks/recording/dispatch.
+
+### Synthesis-provider boundary
+
+`desktop/synthesis.cjs` separates profile persistence from provider-specific
+validation, voice discovery and playback. `VoiceHost` owns the provider
+registry; only `WindowsSpeechProvider` is currently registered:
+
+- `id`, `label`, `controls`, `features`: stable provider identity, numeric
+  control descriptors and explicit arbitrary-identity/timbre/emotion support.
+- `validate(profile)`: reject invalid or unsupported parameters, never ignore
+  them. `voiceId` is an opaque exact identity within that provider.
+- `catalog(operation)`: return enabled voices and capability metadata on
+  explicit discovery, honoring cancellation.
+- `speak(text, profile, operation)`: play one validated, immutable profile
+  snapshot; honor `operation.controller.signal`. Native adapters also track
+  only their own child for bounded process-tree cleanup.
+
+Conversation progress, replies, work completion and desktop fixture speech
+all call the same host speech entry. A future adapter can replace synthesis
+without changing session routing, confirmation, permissions or job execution.
+The host cancels superseded speech explicitly; previews never dispatch work.
+The native adapter passes structured JSON to `speech.ps1` and XML-escapes
+spoken text before SSML. Its companion `speech.txt` is kept identical.
+The internal render mode returns bounded in-memory PCM for non-audible native
+qualification; no renderer render/file-write API is exposed.
+
+Profiles are serialized to one atomic `voice-profiles.json` in the private
+application profile, separate from session configuration. Reads are bounded
+to 64 KiB. Only an absent file gets the standard default; malformed data and
+missing providers produce visible errors. An explicitly selected missing voice
+fails instead of silently substituting another. The default profile deliberately
+uses the first enabled English voice, rate 1, pitch 0 and volume 100.
+Saving/activating a profile affects later utterances, not playback already
+in progress. Playback has a 180-second host bound.
+
+Adding the required richer engine still needs its adapter, licensed original/
+consented voice assets, richer parameter metadata/UI where needed, cancellation
+and performance qualification. Network/audio/text handling, accounts, costs
+and any model download need explicit approval. The provider seam does not
+implement or authorize those features, and a fixture adapter is not an AI engine.
 
 ## 1. Common wake-word contract
 

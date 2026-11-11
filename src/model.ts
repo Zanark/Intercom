@@ -7,6 +7,17 @@ export interface Context {
   aliases: string[];
   color: string;
   slot: number;
+  basePath?: string;
+}
+
+export interface MeshEdge { source: string; target: string; type: string; confidence: string; relationshipClass: string }
+export interface MeshSnapshot {
+  contexts: Context[];
+  edges: MeshEdge[];
+  source: string;
+  generatedAt: string;
+  loadedAt: string;
+  demo: boolean;
 }
 
 export const contexts: Context[] = [
@@ -26,8 +37,8 @@ export function resolveTarget(text: string, catalog = contexts): Context[] {
 
 export const isProfile = (value: string | null): value is Profile => profiles.some((profile) => profile === value);
 export const graphCapacity = 144;
-export function spherePosition(slot: number): [number, number, number] {
-  const y = 1 - (2 * (slot + 0.5)) / graphCapacity;
+export function spherePosition(slot: number, capacity = graphCapacity): [number, number, number] {
+  const y = 1 - (2 * (slot + 0.5)) / capacity;
   const r = Math.sqrt(1 - y * y);
   const theta = slot * Math.PI * (3 - Math.sqrt(5));
   return [Math.cos(theta) * r * 2.45, y * 2.45, Math.sin(theta) * r * 2.45];

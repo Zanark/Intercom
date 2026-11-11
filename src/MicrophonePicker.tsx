@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 const storageKey = 'intercom.prototype.microphone';
 
-export function MicrophonePicker() {
+export function MicrophonePicker({ onSelect, locked = false, onCheckingChange }: { onSelect?: (id: string) => void; locked?: boolean; onCheckingChange?: (busy: boolean) => void }) {
   const [selected, setSelected] = useState('default');
   const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
   const [loaded, setLoaded] = useState(false);
@@ -12,6 +12,7 @@ export function MicrophonePicker() {
   const mounted = useRef(true);
   const stream = useRef<MediaStream | null>(null);
   const missing = loaded && selected !== 'default' && !devices.some((device) => device.deviceId === selected);
+  useEffect(() => { onSelect?.(selected); }, [onSelect, selected]);
 
   const refresh = useCallback(async () => {
     const available = (await navigator.mediaDevices.enumerateDevices()).filter((device) => device.kind === 'audioinput' && device.deviceId);
@@ -44,8 +45,9 @@ export function MicrophonePicker() {
   }, [loaded, refresh]);
 
   async function check(load: boolean) {
-    if (busy) return;
+    if (busy || locked) return;
     setBusy(true);
+    onCheckingChange?.(true);
     setError('');
     setStatus('Opening microphone briefly...');
     let opened: MediaStream | undefined;
@@ -59,7 +61,7 @@ export function MicrophonePicker() {
       if (!mounted.current) return;
       const available = await refresh();
       if (!available.length) throw new Error('No microphone devices are available.');
-      setStatus(load ? 'Devices loaded. Microphone is off.' : 'Selected microphone checked. Input is off.');
+      setStatus(load ? 'Devices loaded. Microphone is off.' : 'Selected microphone opens successfully. Click Speak to record; input is currently off.');
     } catch (reason) {
       if (mounted.current) {
         setStatus('');
@@ -69,12 +71,13 @@ export function MicrophonePicker() {
       opened?.getTracks().forEach((track) => track.stop());
       stream.current = null;
       if (mounted.current) setBusy(false);
+      onCheckingChange?.(false);
     }
   }
 
   function choose(value: string) {
     setSelected(value);
-    setStatus('Selection saved for microphone checks. Speech input is not connected.');
+    setStatus('Selection saved for recording. Click Speak to start.');
     setError('');
     try { localStorage.setItem(storageKey, value); }
     catch { setError('The microphone choice could not be saved. It will last only for this launch.'); }
@@ -82,7 +85,7 @@ export function MicrophonePicker() {
 
   return <section className="microphone-panel" aria-label="Microphone settings">
     <label htmlFor="microphone">Microphone device</label>
-    <select id="microphone" value={selected} disabled={busy} onChange={(event) => choose(event.target.value)}>
+    <select id="microphone" value={selected} disabled={busy || locked} onChange={(event) => choose(event.target.value)}>
       <option value="default">System default</option>
       {selected !== 'default' && !devices.some((device) => device.deviceId === selected) &&
         <option value={selected}>{loaded ? 'Saved microphone - unavailable' : 'Saved microphone - load devices to verify'}</option>}
@@ -90,10 +93,10 @@ export function MicrophonePicker() {
         <option key={device.deviceId} value={device.deviceId}>{device.label || `Microphone ${index + 1}`}</option>)}
     </select>
     <div className="microphone-actions">
-      <button className="quiet-button" disabled={busy} onClick={() => void check(true)}>{loaded ? 'Refresh devices' : 'Load microphones'}</button>
-      <button className="quiet-button" disabled={busy || !loaded || missing || !devices.length} onClick={() => void check(false)}>Test selected</button>
+      <button className="quiet-button" disabled={busy || locked} onClick={() => void check(true)}>{loaded ? 'Refresh devices' : 'Load microphones'}</button>
+      <button className="quiet-button" disabled={busy || locked || !loaded || missing || !devices.length} onClick={() => void check(false)}>Test selected</button>
     </div>
-    <small>Loading or testing briefly opens a mic, then stops it. No audio is saved or sent; speech input is not connected.</small>
+    <small>Load / Test only checks access, then turns input off. The live Speak button records your selected device and shows its signal level.</small>
     {status && <p role="status">{status}</p>}
     {missing && <p role="alert">The saved microphone is unavailable. Reconnect it or choose another; no device was substituted.</p>}
     {error && <p role="alert">{error}</p>}

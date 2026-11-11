@@ -10,8 +10,8 @@ Purpose:
 Tasks:
   ic-01 | DONE | 01_PROJECT_FOUNDATION.todo
   ic-02 | IN_PROGRESS | 02_PRODUCT_DECISIONS.todo
-  ic-04 | NOT_STARTED | 04_AGENCY_CONNECTOR_PROOF.todo
-  ic-05 | NOT_STARTED | 05_SPEECH_AND_WAKE_QUALIFICATION.todo
+  ic-04 | IN_PROGRESS | 04_AGENCY_CONNECTOR_PROOF.todo
+  ic-05 | IN_PROGRESS | 05_SPEECH_AND_WAKE_QUALIFICATION.todo
   ic-06 | IN_PROGRESS | 06_DESKTOP_VOICE_MESH_SLICE.todo
   ic-07 | NOT_STARTED | 07_RELIABILITY_AND_LIFECYCLE.todo
   History | ACTIVE | 03_DEVELOPMENT_LEDGER.todo
@@ -22,8 +22,8 @@ Acceptance criteria:
 
 Completion evidence:
   ic-01 foundation is complete locally; Project 13 tracks six issue-backed items.
-  Verified read-back: #1 CLOSED/COMPLETED/Done; #2 and #5 OPEN/In Progress;
-  #3, #4 and #6 OPEN/Todo. Fresh conflict check and independent complete-body
+  Verified read-back: #1 CLOSED/COMPLETED/Done; #2/#3/#4/#5 OPEN/In Progress;
+  #6 OPEN/Todo. Fresh conflict check and independent complete-body
   verification preserve all six original issue/item mappings and backlinks.
   ic-02 records the voice/wake/Agency/3D-mesh requirements and prototype exception.
   ic-04/ic-05 qualification informs remaining ic-02 decisions before ic-06.
@@ -32,10 +32,54 @@ Completion evidence:
   A later request authorizes microphone selection/brief device checks and an
   unsigned Windows portable prerelease. v0.1.0-prototype.1 is published, nondraft;
   its source tag and independently downloaded EXE/checksum are verified.
+  The separately requested branding is implemented and verified in a local,
+  unpublished v0.1.0-prototype.2 candidate; .1 remains unchanged. Native/EXE/UI
+  icons use the refined microphone-and-mesh artwork. ic-06 remains IN_PROGRESS.
   Deep research records technology alternatives, runtime contracts and
   performance evidence in docs; recommendation is not selection/qualification.
+  ic-04/ic-05 now progress under explicit bounded conversation/speech authority:
+  installed local-English push-to-talk, exact existing idle session, no work
+  tools, cloud audio or new sessions. The packaged real capture/transcription/
+  existing-session response/local-playback loop and actual portable launcher
+  pass in .3. Evidence is recorded in ic-06; broader criteria, speed qualification
+  and hardware/human acceptance are not complete.
+  Current .4 candidate adds actual published-mesh startup, confirmed ACP work,
+  one atomic receipt and observed activity. The exact approved native read-only
+  tool/response/speech test passes; saved grants meant zero native prompts.
+  Twelve packaged desktop cases and actual portable real-mesh startup pass.
+  .4 is unsigned/unpublished; manual terminal entry, human/performance and
+  native permission-prompt qualification remain explicit open gates.
+
+  The separate .5 candidate adds close graph zoom/pan/reset and native window
+  maximize/restore, preserving normal bounds and prior maximization through
+  floating mode. All 14 packaged desktop cases and actual portable startup pass.
+  .4 is preserved; .5 remains unsigned/local/unpublished with no new live task.
+
+  The separate .6 candidate makes floating movement/size controls always
+  discoverable with Drag to move and Smaller/Larger/native size readout.
+  All 15 packaged desktop cases and actual portable real-mesh startup pass;
+  sizing preserves graph zoom/workspace bounds and respects monitor limits.
+  .4/.5 remain preserved; .6 is unsigned/local/unpublished.
+
+  The separate .7 candidate adds installed-voice profiles and pitch/rate/volume,
+  draft preview and atomic persistence, with a cancellable provider boundary.
+  Richer arbitrary identity/timbre/emotion remain mandatory future requirements.
+  All 17 packaged cases and actual portable startup/profile persistence pass.
+  Prior builds remain preserved; .7 is unsigned/local/unpublished.
 
 Completion log:
+  2026-11-11 - Recorded customizable voice profiles, engine boundary and separate
+    .7 qualification in ic-06; retained open rich-speech/product acceptance gates.
+  2026-11-11 - Recorded visible floating movement/sizing and separate .6
+    qualification in ic-06; retained open product acceptance gates.
+  2026-11-11 - Added the requested graph/window controls and separately qualified
+    .5 delivery to ic-06; retained its open state and broader product gates.
+  2026-11-11 - Recorded actual-mesh/confirmed-work .4 implementation and evidence
+    without closing product qualification or inferring new publication authority.
+  2026-11-11 - Verified the bounded packaged voice loop. Conflict-checked all six
+    baselines, updated four existing issue descriptions and moved only #3/#4
+    existing Project items to In Progress. Independent full-body read-back
+    preserves all identities, issue states, backlinks and private membership.
   2026-11-10 - Established index. Future additions keep existing numbers stable.
   2026-11-10 - Closed ic-01; retained ic-02 as NOT_STARTED.
   2026-11-10 - Began ic-02 and added gated qualification/implementation roadmap.

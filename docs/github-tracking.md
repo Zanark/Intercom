@@ -13,9 +13,10 @@ commit `3e2693cf2875af96f728e56a5066c7065aecaf93` was pushed to main.
 The later explicit research-push request completed as
 `20632243c38ae4a2689ffbdb676a2d70ff1c4a96`, independently verified on main.
 Neither completed request was standing authority to publish later prototype work.
-The owner's subsequent explicit EXE-release request now authorizes committing/
-pushing this prototype and publishing its unsigned Windows prerelease; the
-microphone request authorizes input choice and brief device checks only.
+The owner's subsequent explicit EXE-release request authorized committing/
+pushing the .1 prototype and publishing its unsigned Windows prerelease.
+That completed publication is not standing authority for later .2/.3/.4/.5/.6 releases.
+The microphone request initially authorized input choice and brief device checks.
 Publication and asset receipts are recorded after independent verification,
 not inferred from the packaging command.
 
@@ -169,7 +170,35 @@ No stage changed and no issue/item was created; #5 remains In Progress because
 its integrated voice/Agency acceptance criteria remain open. The hashes below
 now include this release receipt.
 
+The bounded voice-conversation reconciliation matched all six branding baselines
+before updating only existing #2/#3/#4/#5 descriptions. It moved the existing
+#3/#4 Project items to In Progress; no issue state, identity or membership
+changed. Independent complete-body read-back verified all six descriptions,
+backlinks, original issue/item IDs, status options, private visibility and sole
+repository linkage. #1 remains CLOSED/COMPLETED/Done; #2/#3/#4/#5 are OPEN/In
+Progress; #6 remains OPEN/Todo. No private target UUID, audio or raw session log
+was published. The .3 local candidate is not a new release.
+
+The .4 complete-slice reconciliation matched all six conversation baselines
+before updating only existing #2/#3/#4/#5 descriptions. Independent read-back
+verified all six complete bodies, backlinks, original issue/item identities,
+states/status option IDs, private Project visibility and sole repository link.
+No state/stage or mapping changed; no new issue, item, commit, push or release.
+The updated evidence distinguishes native source work from packaged fixtures,
+saved-grant behavior from actual permission prompts, and manual terminal entry
+from automatic handoff. Full-product qualification workstreams remain open.
+
+The .5 graph/window-controls reconciliation matched all six .4 baselines before
+updating only the existing #5 description. Independent complete-body read-back
+verified all six identities, backlinks, issue states, Project statuses/membership
+and private visibility. No state/stage change, new issue/item or release.
+
 ### Managed-body conflict baselines
+
+The .6 floating-controls reconciliation matched all six .5 baselines before
+updating only the existing #5 description. Independent complete-body read-back
+verified all six identities, backlinks, issue states, Project statuses/membership
+and private visibility. No state/stage change, new issue/item or release.
 
 Compute SHA-256 over UTF-8 body text after converting CRLF to LF and stripping
 trailing whitespace only. The HTML identity marker is included. Local projection
@@ -181,12 +210,19 @@ exact read-back; never refresh them merely to hide a remote edit.
 | Workstream | Verified remote body SHA-256 |
 |---|---|
 | ic-01 | `562ceaadaa676dcfb47fa40fa79c77ddc9dbce059965142c48b18082d66c9788` |
-| ic-02 | `6c2a4a2f4c45690014addcb1d43f20a05b46423e171738f0acf7f61334b3ec56` |
-| ic-04 | `1a2f2956f36974c36920e6ef1c43d4c00a8a3414e7a23d52f8e3ac4e1719b1ec` |
-| ic-05 | `f192573f2f7f70630ba8f0e1ad79567be32787b071563bf75779fa0322069519` |
-| ic-06 | `d0af8e3fc7b13861b8ed8335d60aa22ee7c2bd6faefb02e85ef7a01872e36a98` |
+| ic-02 | `5052eecad889f461eb541ff12f429241b6bd07b07712979d34d409aae20e3866` |
+| ic-04 | `5bdd0a9f6e12305f519617ed05d0614e44bdf8a464c2fb4a4a8b69b467abfd20` |
+| ic-05 | `e134e21309fa9c29ff867363f542a00447b02914479b99c23ced0300fa2f2e75` |
+| ic-06 | `5c8346c4e088dfeb7f4a5b271089331bd6f11a88eb90b808c3bc4bb0c100cd34` |
 | ic-07 | `072c0916f6106438b8f32e2ae02415645056015a3049f36f12ec4cfca281fe33` |
 
 These reconciliations used the same saved issue/item identities on
 read-back and confirmed no duplicates. Automated retry, reopening, and conflict
 tests are not claimed because no sync runtime was introduced.
+
+The .7 voice-profile reconciliation matched all six .6 baselines before
+updating only existing #5's description. Independent complete-body read-back
+verified all six identities, backlinks, issue states, Project statuses/membership
+and private visibility. No new issue/item, state/stage change or publication.
+Local installed voices and native/profile checks are implemented; the required
+richer synthesis engine and human/performance acceptance remain explicitly open.

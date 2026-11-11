@@ -12,6 +12,11 @@ Purpose:
   product candidate. The owner separately authorized an early fixture-only
   Electron UI, including transparent Floating Mesh, before the live prerequisites.
   Dependencies remain required for the real voice-to-existing-session loop.
+  The later request separately authorizes installed local-English push-to-talk
+  and conversation-only use of one designated existing idle session. The broader
+  orchestrator and wake dependencies remain open. The subsequent complete-slice
+  request authorizes actual mesh startup and separately confirmed existing-idle-
+  session work with retained permissions. Push-to-talk remains selected.
 
 Tasks:
   [x] Obtain authority and explicit Electron selection for the fixture prototype.
@@ -22,6 +27,33 @@ Tasks:
   [x] Add saved microphone choice, explicit brief checks and visible access/device errors.
   [x] Package and verify an unsigned Windows x64 portable EXE on disposable profiles.
   [x] Publish the requested prototype prerelease and independently verify its assets.
+  [x] Create and integrate the requested microphone/interconnected-mesh identity.
+  [x] Verify a separate branded EXE, native/window icons and packaged artwork.
+  [x] Implement local recording/transcription, transcript review and typed fallback.
+  [x] Add bounded existing-session dispatch, visible progress and local speech.
+  [x] Exercise capture, review, late-result rejection and owned native cancellation.
+  [x] Enlarge the header logo from 32 to 48 px; preserve the floating icon size.
+  [x] Read the actual published local mesh on every app launch without fallback.
+  [x] Add real context/session discovery, immutable confirmation and ACP work.
+  [x] Verify Agent/allow-all-OFF policy and expose only one-shot decisions.
+  [x] Persist a single atomic receipt and disclose uncertain/interrupted outcomes.
+  [x] Keep voice proposals/floating controls available during background work.
+  [x] Cover every discussed feature and remaining limit in a current feature matrix.
+  [x] Verify one explicitly approved read-only native tool/response/speech path.
+  [x] Qualify the separate .4 package, real mesh worker and actual portable launcher.
+  [x] Enable close cursor zoom, panning/readout/reset and native maximize/restore.
+  [x] Preserve normal/maximized restoration across transparent Floating Mesh.
+  [x] Qualify a separate .5 EXE without replacing .4 or sending another live task.
+  [x] Make floating movement discoverable with a visible native drag handle.
+  [x] Add always-visible native window-size controls independent of graph zoom.
+  [x] Qualify a separate .6 EXE, minimum-size layout and preserved .4/.5 artifacts.
+  [x] Add installed voice selection and named persistent speaking profiles.
+  [x] Expose pitch/rate/volume, draft preview/stop and save/use/rename/duplicate.
+  [x] Separate synthesis providers from conversation/job execution and persistence.
+  [x] Qualify native PCM controls and the separate .7 package/portable startup.
+  [ ] Add the required future arbitrary identity, timbre and emotional-style engine.
+  [ ] Qualify native permission prompting on a target without saved grants.
+  [ ] Qualify manual terminal opening and any future acknowledged automatic handoff.
   [ ] Finalize the product stack/dependencies from the live qualification receipts.
   [ ] Build an isolated desktop host, audio controls and selected speech pipeline.
   [ ] Constrain native commands and implement versioned bounded IPC contracts.
@@ -67,13 +99,148 @@ Completion evidence:
   6cfa26fd1d89934f21ba6311bc86037be84fca4c. Independent public download matches
   EXE SHA-256 29b7282e592331dfb849143be9e2b9e5a1c4799d7b6415c8aa39607b046953f0;
   the uploaded checksum text also matches. README links the actual download.
-  No continuous microphone input, wake word,
+  Branding sub-slice: original microphone artwork, varied-size connected nodes,
+  rounded outer orbits, straight inner links, foreground occlusion and shadows.
+  Applied to header/floating controls/favicon, native window/taskbar identity,
+  EXE resources and README. No new runtime dependency or animation.
+  Unpublished v0.1.0-prototype.2 candidate lives under release\branding-candidate;
+  lint/build, seven unit cases, six packaged desktop scenarios and actual
+  portable smoke pass. Both executable icon groups contain all nine exact
+  source ICO frames; actual native window 16/32 px icons and workspace reviewed.
+  Inspected ASAR has nine runtime files, including byte-matched PNG/ICO assets,
+  without private data/tests/node_modules. Both executables are NotSigned.
+  Candidate SHA-256 474708cc4756022558beb53daf427fb9ee7ace91cf2fefa30d7d5c106a67031e;
+  size 110659385 bytes. Original .1 EXE still matches its published hash.
+  No new commit, push, release, icon-cache reset or existing-app automation.
+  Historical .1/.2 limits: no continuous microphone input, wake word,
   mesh import, Agency session, terminal dispatch, durable jobs, installer or
   human acceptance. Live criteria remain open.
   Known limits: lazy 3D chunk warning; moderate minimatch development-tool
   advisory; production-only dependency audit rate-limited. No clean audit claim.
+  New bounded .3 voice implementation passes lint/build, eight Vitest cases,
+  nine host/native cases and ten packaged Electron scenarios. Desktop tests use
+  synthetic audio and mock only backend IPC for deterministic UI cases; native
+  installed recognition and owned-process cancellation are tested separately.
+  The selected device is captured exactly, microphone tracks close on stop/
+  failure/unmount, reviewed text is not dispatched until explicit send, and
+  late cancelled results cannot appear as completion. Floating controls cannot
+  hide active recording. The new isolated profile is IntercomVoicePrototype.
+  The packaged real-session smoke captures/transcribes "Say hello world",
+  receives/persists "Hello world." and completes native local playback without
+  reported error. Actual portable launcher smoke passes. The .3 EXE is unsigned,
+  110662728 bytes, SHA-256
+  1c33043ed52fe78748ace958cf11c84ad5dd12bce3d81c4e982e13add7ead7b6.
+  A 67,370 ms integrated run is not speed qualification. Physical microphone
+  and human voice acceptance remain open; the .3 candidate is not published.
+  Current .4 slice: actual mesh worker, target/task confirmation, one ACP job,
+  manual policy verification, observed activity spokes, receipt recovery,
+  one-shot approval UI and completion notifications/speech are implemented.
+  Lint/type/build, eight Vitest, nine voice/native and 17 mesh/work host cases
+  pass. All 12 packaged Electron scenarios pass, including snapshot replacement
+  on process relaunch, missing/malformed source without fallback, busy targets,
+  confirmation/approval controls, floating independence and no repeated speech.
+  Actual portable startup reads 40 contexts/30 structural/handoff relationships
+  from the published private snapshot through the packaged ASAR worker.
+  Explicitly approved native source test: synthetic "Say hello world", visible
+  review/edit into the exact read-only Get-Location task, completed native tool,
+  actual "Hello world." response and completed local speech. Manual policy and
+  low effort verified; existing saved grants meant zero permission prompts.
+  No live native approval-mediation, physical microphone, subjective listening,
+  actual toast visibility, automatic handoff or speed-SLO claim.
+  The .4 EXE is unsigned/unpublished, 110672770 bytes, SHA-256
+  4dd86aa3bfd2e9bfea11d88944685e905f31522d40e2d1698e9bbab9fcc26766;
+  release\full-slice-candidate preserves prior versions. Fifteen source-matched
+  archive files, expected notices and absent private target identity verified.
+  Current job persistence is one atomic JSON receipt, not the proposed SQLite
+  queue/outbox. Native terminal task entry remains manual and unmonitored.
+
+  The .5 navigation update removes the distant zoom floor, supports pointer
+  wheel zoom, right-drag pan and centered +/- with a reset/readout. Native
+  maximize/restore tracks host events and preserves maximized/normal bounds
+  through floating mode. Lint/type/build, five focused source desktop scenarios,
+  all 14 packaged desktop cases and actual portable startup pass. Real packaged
+  startup again reads 40 contexts/30 projected links; mic access, graph/window
+  controls and floating restoration pass without another actual work prompt.
+  Fifteen source-matched runtime files/metadata, notices, absent private target
+  and independently NotSigned launcher/runtime verified. Local unpublished EXE:
+  release\zoom-window-candidate\Intercom-Prototype-0.1.0-prototype.5-win-x64.exe,
+  110683190 bytes, SHA-256
+  aee7aaef14f8fbe827035ff895c6b22a5ab5d4373501c99306880bf7b2297c8a.
+  Prior .4 hash independently matches; no existing user instance was driven.
+
+  The .6 floating update adds a visible native Drag to move handle and an
+  always-visible dock with Smaller/Larger and native pixel-size readout.
+  Actual window sizing uses 48 px steps, a 360 px minimum and a monitor-bound
+  maximum up to 1080 px; graph zoom and saved workspace geometry are unchanged.
+  Lint/type/build, four focused source desktop cases, all 15 packaged cases
+  and actual portable startup pass. New coverage verifies native sizing/clamps,
+  dock visibility at minimum size and workspace/zoom preservation. Inspected
+  packaged 540/360 px fixture captures; no global physical mouse drag automated.
+  Portable app loaded 40 actual contexts/30 relationships, checked microphone
+  access and exercised graph/window/floating controls without a live work task.
+  Fifteen source-matched runtime files/metadata, notices, absent private target
+  and NotSigned launcher/runtime verified. Local unpublished EXE:
+  release\floating-controls-candidate\Intercom-Prototype-0.1.0-prototype.6-win-x64.exe,
+  110672204 bytes, SHA-256
+  58a93c6d5ea097475b34bd6e7537fa80bf28678b944bf50faf52c19d2252b2e6.
+  Prior .4/.5 hashes independently match. No user app switch or publication.
+
+  The .7 voice update adds lazy installed-voice discovery, named persistent
+  profiles, gender/culture selection, requested pitch, Windows rate, volume,
+  unsaved preview/stop and inactive deletion. Host speech snapshots apply to
+  progress, replies and completion. A separate cancellable provider contract
+  prepares for mandatory future arbitrary identity/timbre/emotional style;
+  that engine and its richer controls are not implemented or downloaded.
+  Profile updates are serialized/atomic/bounded and errors are visible.
+  Native PCM checks verify actual selection/rate/pitch/volume without playback;
+  requested pitch is approximate, not a calibrated semitone promise.
+  Lint/type/build, eight Vitest, 14 voice/native and 17 mesh/work host cases,
+  all 17 packaged desktop cases and actual portable startup pass. Installed
+  catalog, save/activation/reload persistence and capture/preview cancellation
+  are checked on disposable profiles; playback is intercepted only for UI tests.
+  Actual portable startup loaded 40 contexts/30 relationships, with no new
+  Copilot prompt or audible preview. Sixteen runtime files/metadata match
+  source; notices/private-target exclusion and NotSigned launcher/runtime verified.
+  Local unpublished EXE:
+  release\voice-profiles-candidate\Intercom-Prototype-0.1.0-prototype.7-win-x64.exe,
+  110684564 bytes, SHA-256
+  2ce4c5d70bdbfd29de7304462a3f0449e73ab2c79ff5617ea76448d00413df03.
+  Prior .4/.5/.6 hashes match; no user app switch or publication.
 
 Completion log:
+  2026-11-11 - Owner selected installed local voices for the prototype and made
+    richer arbitrary identity/timbre/emotion a required future engine boundary.
+    Added persistent profile controls and cancelled preview ownership safely.
+    Qualified non-audible native synthesis and separate .7 delivery. Human
+    listening, richer engine and existing device/permission/speed gates stay open.
+  2026-11-11 - Owner could not discover floating movement or resizing.
+    Replaced the invisible drag cap with a labelled native handle and added
+    always-visible size controls/readout, separate from graph zoom. Qualified
+    the separate .6 package and portable launcher, preserving .4/.5.
+    Broader human/device, native-permission and performance gates remain open.
+  2026-11-11 - Owner requested complete close graph zoom and a maximize option.
+    Added cursor-directed deep zoom, pan, +/-/reset and native maximize/restore
+    with synchronized events and reversible maximized/floating transitions.
+    Qualified the separate .5 package and portable launcher, preserving .4.
+    No live agent work, commit, push or publication; broader gates remain open.
+  2026-11-11 - Added actual-mesh startup and confirmed background work under
+    explicit expanded prototype authority. Fixed a cancel-during-save dispatch
+    race, bounded owned cleanup, validated recovery UI fields and retained
+    unknown outcomes. Larger bounded catalog pages avoid repeated native
+    rebuilds. Verified the exact approved Get-Location/Hello-world task once;
+    saved grants meant no native prompt. Qualified the separate .4 candidate
+    without another live work prompt or changing the user's existing runtime.
+  2026-11-11 - Fixed ordinary Copilot replies being rejected for not invoking
+    task_complete. Inspected the already-dispatched outcome before retesting;
+    retained matching terminal-result checks and explicit-failure rejection.
+    Rebuilt and verified the packaged live loop and portable launcher, preserving
+    .1/.2 artifacts. Header logo is 48 px; floating-control icon remains 20 px.
+  2026-11-11 - Owner reported FDUCE worked in Windows Recorder but old Load/Test
+    did not start a conversation. Clarified the access-only behavior and built
+    the selected push-to-talk workflow. Added explicit controls/meter/errors,
+    local multi-phrase recognition, restricted session dispatch, correlated
+    responses and speech. Corrected asynchronous fake-device tests with a
+    deterministic synthetic WAV. Enlarged the header logo as subsequently asked.
   2026-11-10 - Recorded as gated future work, not authorized implementation.
   2026-11-10 - Reconciled the researched shell recommendation and native boundary;
     current deliverables remain documents, not a scaffold or runtime.
@@ -90,3 +257,8 @@ Completion log:
     unsigned Windows x64 prerelease with EXE and SHA256SUMS.txt. Independently
     verified nondraft/prerelease flags, uploaded asset metadata/digests, exact
     source tag and downloaded public bytes. Full live-loop criteria remain open.
+  2026-11-11 - Owner requested application-wide branding, then refined the mic,
+    interconnected varied-size nodes, overlapping foreground node/shadowed links,
+    rounded outside links and straight inside links. Integrated the latest image
+    and verified a separate .2 candidate without replacing the .1 release.
+    Technical/visual inspection is not final user acceptance or publication.

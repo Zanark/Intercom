@@ -18,18 +18,27 @@ Sibling context stores are read-only.
 - The owner authorized a bounded desktop prototype after the research push.
   Electron is approved for this prototype only. The later request authorizes
   an unsigned Windows prototype prerelease and microphone-device selection/
-  brief checks, not continuous capture, ASR, providers, mesh imports or Agency.
+  brief checks. The subsequent owner request explicitly authorizes click-on/
+  click-off capture, installed local en-US Windows recognition, local spoken
+  progress/results and conversation-only dispatch to an owner-designated existing
+  dormant Copilot session. The newer complete-slice request additionally authorizes
+  reading the real local Context Mesh on every launch and real work in explicitly
+  confirmed existing idle sessions. Retain manual tool approvals and refuse busy
+  sessions; never inherit allow-all unnoticed. Push-to-talk is selected for this
+  prototype. No cloud audio, wake word, new session, active attach or blanket
+  approval is authorized.
 - Implement Floating Mesh as native window transparency plus a transparent
   renderer, not a black browser page. Keep movement and restoration accessible.
-- Wake-word activation before each conversation is selected; continuous
-  unconditionally active transcription is not.
+- Wake-word activation remains a later product choice, not this prototype's
+  activation contract. Continuous unconditional transcription is not authorized.
 - Existing Agency sessions are essential; validate that connector first.
-- Compare local and cloud speech before choosing either. Neither is approved.
+- The bounded Windows speech prototype is selected, not the final product engine.
+  Broader local/cloud and multilingual quality comparisons remain unqualified.
 - Performance and speed are the top product priority and default processing
   profile. Provide selectable priorities; keep correct targets, permission
   enforcement and truthful outcomes invariant across profiles.
 - Tauri 2/Rust + React/TypeScript/Three.js is the current engineering
-  product recommendation. Electron is the approved fixture-prototype host,
+  product recommendation. Electron is the approved bounded-prototype host,
   not a qualified performance winner. Speech and OS/device support remain gated.
 - Do not infer integrations or features from the project name.
 - Read `docs/architecture.md`, `docs/speech-options.md`, and `docs/roadmap.md`

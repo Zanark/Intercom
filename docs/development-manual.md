@@ -17,6 +17,13 @@ for the initial documentation-only setup. The owner subsequently authorized
 a bounded Electron fixture prototype; real voice/Agency integration remains gated.
 The later request separately authorizes an unsigned Windows prototype release
 and explicit microphone-device checks, not continuous listening or providers.
+The subsequent bounded voice request selects push-to-talk, installed local
+en-US recognition/playback and conversation-only use of one designated
+existing idle session. The subsequent complete-slice request authorizes actual
+mesh loading every launch and confirmed work in existing idle sessions, retaining
+permissions and refusing busy writers. Push-to-talk remains selected. Only the
+exact read-only native acceptance operation was approved for this agent's test;
+do not infer arbitrary test tools, new prompts or publication authority.
 
 ## 2. Canonical artifacts
 
@@ -88,8 +95,11 @@ source inventories, actual output review, and separate publication clearance.
 ## 6. User-instance protection
 
 The initial setup created no runtime. Prototype tests now launch their own
-Electron windows with disposable profiles, synthetic media devices, no physical microphone, private mesh import,
-network backend or agent access. Do not infer that unrelated desktop processes
+Electron windows with disposable profiles, synthetic media devices and fixture
+mesh/work IPC for deterministic scenarios. Explicitly consented live checks use
+the actual private mesh and designated existing idle session; portable startup
+also verifies actual mesh loading without sending a work prompt. No physical
+microphone is driven by these tests. Do not infer that unrelated desktop processes
 belong to this project.
 
 Before future runtime changes, identify protected and candidate build paths,

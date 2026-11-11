@@ -20,7 +20,9 @@ Tasks:
   [x] Record deep primary-source technology research and explicit reversal gates.
   [x] Define runtime/IPC/job/recovery contracts and dependency-driven packages.
   [ ] Finalize resource thresholds and decisions from ic-04/ic-05 receipts.
-  [ ] Qualify profile settings and timing/accuracy budgets; labels remain proposed.
+  [x] Apply supported prototype background effort without changing the model.
+  [ ] Qualify profile settings and timing/accuracy budgets against real hardware.
+  [x] Record complete-slice authority and all-feature implementation/limits matrix.
 
 Acceptance criteria:
   The product brief distinguishes approved decisions from proposals.
@@ -32,6 +34,12 @@ Acceptance criteria:
   roadmap items still do not authorize continuous microphone/provider/agent
   execution. Later explicit selection/check and prototype-release authority
   does not waive those boundaries.
+  The later bounded speech request explicitly permits installed local-English
+  push-to-talk and conversation-only dispatch to one existing idle session,
+  not general work tools, active attach, cloud audio or always listening.
+  The subsequent complete-slice request permits actual mesh reads at every
+  launch and confirmed work in existing idle sessions, retaining permissions
+  and refusing busy targets. Push-to-talk is selected for this prototype.
   Default performance profile and selectable priorities preserve target/permission
   correctness; latency results are not substituted for processing accuracy.
 
@@ -46,7 +54,7 @@ Completion evidence:
   to select priorities. Accuracy remains important; actual inference/speech
   profile settings remain unqualified.
   The owner subsequently authorized a fixture prototype and approved Electron
-  for it. No final product-stack/provider or live connector proof exists.
+  for it. At that milestone no final stack/provider or live connector proof existed.
   Deeper research recommends Tauri 2/Rust + React/TypeScript/Three.js,
   native sherpa audio and SQLite; Electron is retained as a fallback.
   docs/technology-decisions.md and docs/research-sources.md explain rationale
@@ -54,13 +62,31 @@ Completion evidence:
   docs/performance-and-qualification.md define proposed behavior and gates.
   Windows endpoint AEC, resumed permissions and actual existing-session control
   remain explicit qualification risks, not completed proofs.
-  docs/prototype.md separates the implemented synthetic desktop UI, transparent
-  Floating Mesh and rendering profiles from the unimplemented integrated loop.
+  docs/prototype.md preserves that initial synthetic desktop milestone,
+  transparent Floating Mesh and rendering profiles as historical evidence.
   The owner additionally requested an EXE prerelease and microphone selection.
   An unsigned Windows x64 portable prerelease and saved input picker now exist;
   device checks do not select a speech provider or implement speech recognition.
+  Subsequently selected installed Windows en-US recognition and English local
+  playback, click-on/click-off input and one dedicated existing idle Copilot
+  session for the conversation prototype. Broader product/provider decisions
+  and performance/hardware/multilingual qualification remain open.
+  The later .4 prototype uses actual mesh startup, explicit session/task
+  confirmation and manual-policy ACP background work. The native source
+  acceptance test executed the exact approved Get-Location task and returned
+  "Hello world." with completed local playback. Saved grants meant no native
+  permission prompt; physical voice, human listening and speed SLOs remain
+  unqualified. Existing model retained, supported background effort maps
+  Speed/Balanced/Accuracy to low/medium/high. No automatic terminal dispatch,
+  active attach, durable queue/outbox or full-duplex claim. The current feature
+  matrix distinguishes coverage, implementation and qualified/deferred behavior.
 
 Completion log:
+  2026-11-11 - Recorded the owner's actual-mesh/full-slice request and explicit
+    push-to-talk/manual-approval/busy-refusal choices. Reconciled the bounded
+    .4 implementation and evidence without approving every full-product gate.
+  2026-11-11 - Recorded the owner's bounded live-voice selections and separated
+    prototype authority from the broader orchestration roadmap.
   2026-11-10 - Created as unstarted follow-on work, not an approved feature list.
   2026-11-10 - Began product definition from explicit voice/mesh requirements.
     User requested documentation before building. Recorded future qualification

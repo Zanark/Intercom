@@ -1,8 +1,8 @@
 {
   "name": "intercom-prototype",
-  "version": "0.1.0-prototype.1",
+  "version": "0.1.0-prototype.7",
   "private": true,
-  "description": "Fixture-only voice-workspace and transparent desktop mesh prototype",
+  "description": "Local push-to-talk, existing Copilot conversation and transparent desktop mesh prototype",
   "author": "Zanark",
   "license": "UNLICENSED",
   "repository": "https://github.com/Zanark/Intercom.git",
@@ -14,6 +14,8 @@
     "start": "npm run build && electron .",
     "desktop": "electron .",
     "test": "vitest run",
+    "test:voice": "node --test tests\\voice-host.unit.cjs",
+    "test:host": "node --test tests\\mesh-host.unit.cjs tests\\work-host.unit.cjs",
     "test:desktop": "node -p \"require('electron')\" && playwright test",
     "test:portable": "node tests\\portable-smoke.cjs",
     "package:win": "npm run build && electron-builder --win portable --x64 --publish never",
@@ -46,18 +48,40 @@
     "productName": "Intercom Prototype",
     "asar": true,
     "npmRebuild": false,
-    "directories": { "output": "release" },
-    "files": ["dist/**/*", "desktop/*.cjs", "package.json", "!node_modules/**/*"],
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "desktop/*.cjs",
+      "desktop/*.ps1",
+      "package.json",
+      "!node_modules/**/*"
+    ],
     "extraFiles": [
-      { "from": "node_modules/react/LICENSE", "to": "licenses/react.txt" },
-      { "from": "node_modules/react-dom/LICENSE", "to": "licenses/react-dom.txt" },
-      { "from": "node_modules/scheduler/LICENSE", "to": "licenses/scheduler.txt" },
-      { "from": "node_modules/three/LICENSE", "to": "licenses/three.txt" }
+      {
+        "from": "node_modules/react/LICENSE",
+        "to": "licenses/react.txt"
+      },
+      {
+        "from": "node_modules/react-dom/LICENSE",
+        "to": "licenses/react-dom.txt"
+      },
+      {
+        "from": "node_modules/scheduler/LICENSE",
+        "to": "licenses/scheduler.txt"
+      },
+      {
+        "from": "node_modules/three/LICENSE",
+        "to": "licenses/three.txt"
+      }
     ],
     "win": {
       "target": "portable",
       "executableName": "IntercomPrototype",
-      "signAndEditExecutable": false,
+      "icon": "public/intercom.ico",
+      "signAndEditExecutable": true,
+      "signExecutable": false,
       "artifactName": "Intercom-Prototype-${version}-win-${arch}.${ext}"
     }
   }

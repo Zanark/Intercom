@@ -8,6 +8,10 @@ export default tseslint.config(
   js.configs.recommended,
   ...tseslint.configs.recommended.map((config) => ({ ...config, files: ['**/*.{ts,tsx}'] })),
   {
+    files: ['public/pcm-worklet.js'],
+    languageOptions: { globals: { AudioWorkletProcessor: 'readonly', registerProcessor: 'readonly' } },
+  },
+  {
     files: ['src/**/*.{ts,tsx}', 'vite.config.ts'],
     languageOptions: { globals: globals.browser },
   },
