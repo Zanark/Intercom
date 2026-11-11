@@ -325,18 +325,43 @@ it is not part of public documentation or release packages.
 
 ## README artwork
 
+The README's single inspiration paragraph pairs a mid-century switchboard operator
+(listening and connecting existing sessions) with an opera-orchestra conductor
+(coordinating independent work and returning results). It describes product
+intent, not completed speech/orchestration qualification; no UI redesign is
+part of this documentation change.
+The photo occupies the larger right-hand column, with a 540px image limit.
+The accompanying unchanged photograph is
+`docs/assets/readme/kdd-telephone-exchange-1967.jpg`, supplied by the owner.
+[Wikimedia Commons provenance](https://commons.wikimedia.org/wiki/File:KDD_telephone_exchange_in_1960s.jpg)
+credits Asahi Shimbun and a 31 March 1967 source. It is not a 1950s photograph.
+Commons notes Japanese public-domain status and a possible U.S. copyright
+restriction; the owner explicitly confirmed permission to publish this photo.
+That permission is not a blanket public-domain or repository-license claim.
+
 The animated hero, reduced-motion still and static documentation mark use
 frosted sea glass: muted seafoam, milky diffuse shading, fine fixed grain and
 soft rim highlights rather than polished neon surfaces. The title, raised
 link buttons and gallery framing share that palette with dark readable text.
+The lowercase `intercom.` wordmark retains its original Segoe UI Bold typeface
+with grainy seafoam ink and soft violet pigment washes. The subtitle and
+navigation remain in legible Segoe UI.
+The animated and static documentation microphones use one smooth vertical
+violet-to-seafoam gradient, without the wordmark's streaked pigment washes.
+The animated capsule has no horizontal fill boundary: only its rim breathes
+with the illustrative voice level. The static mark retains its original silhouette,
+foreground node and crossing links. Runtime/EXE icons are not changed.
 GitHub controls the page itself; these are rendered images, not a custom CSS
 theme or a backdrop filter. Original screenshots are not recolored or retouched.
 
 The [visual README](../README.md) uses an original, looping 3D-projected mesh
-around a microphone with a vertically rising/falling seafoam fill. Its
+around a microphone with a smoothly blended violet/seafoam body. Its
 432 x 432 px central sphere is three times the previous 144 px logo. The
-transparent 936 x 432 px canvas adds dim, mirrored mint/cyan wave wings behind
-the center, flowing outward with the same illustrative voice envelope.
+transparent 936 x 432 px canvas adds mirrored cyan, mint, lavender, rose and
+amber wave ribbons behind the center. Layered rolling harmonics, breathing
+strand spacing and a broad, softly blurred colored glow give the wings a flowing, ethereal feel.
+Colors drift through the ribbons in a seamless cycle; their energy follows
+the same illustrative voice envelope without overpowering the frosted mesh.
 The voice level is **simulated**: a GitHub README cannot access your microphone,
 read your context activity, or run the desktop application. The animation
 does not change Intercom's runtime logo or microphone behavior.
@@ -354,24 +379,61 @@ The Intercom artwork is original, not a copied Teams icon.
 
 The README offers a still image when the renderer supports the reduced-motion
 media query. You can also [open the still directly](assets/readme/readme-logo-still.png).
-The workspace/voice gallery preserves the earlier packaged captures above,
-with explicit version/synthetic-context captions. The two floating showcases
-use the owner's supplied desktop and browser screenshots, resized without
-cropping. They demonstrate the transparent mesh over other surfaces, but show
-an earlier control layout, not the current .12 microphone placement. They are
-not fresh runtime captures or microphone-quality evidence.
+All four README GUI panels are now six-second recordings of the current
+source renderer: voice/tuning tabs, mesh orbit/zoom, the floating dock, and
+input-reactive microphone waves. Each has a reduced-motion PNG and a direct
+still link. Historical screenshots remain evidence in this guide; they are
+not substituted into the new recordings.
+
+The captures use an isolated build, disposable profile, 48 fictional contexts
+and 144 structural connections for a denser globe. This density applies only to
+the application demos; the logo keeps its original nine-node geometry.
+The captures use no real catalog,
+only an enveloped synthetic tone through Chromium's fake audio device.
+Recognition readiness is stubbed for recording the UI; no recognition,
+speech playback or Agency dispatch runs. The copied documentation host stays
+hidden/offscreen, disables background throttling and keeps rendering unpaused;
+the renderer/preload are unchanged. No actual user instance, private mesh,
+physical microphone, desktop or other application is recorded.
+Floating frames retain genuine native-window transparency and are enlarged
+over the **owner-supplied sea-glass wallpaper** (`assets/readme/sea-glass-wallpaper.png`),
+not presented as an on-desktop recording. Fictional node colors use saturated
+coral, amber, plum and indigo to contrast with the cool sea-glass palette.
+The caption identifies the wallpaper and compositing.
+These are source-build demonstrations, not a new release, proof of native
+overlay behavior on a human desktop, or speech-quality acceptance.
 
 Reproduce the documentation assets with Python and Pillow (rendered with
-Pillow 12.2.0 and Windows Segoe UI; neither is an application dependency):
+Pillow 12.2.0 and Windows Segoe UI;
+these are artwork tools, not application dependencies or bundled fonts):
 
 ```powershell
 python .\tools\docs\render_readme.py
 ```
 
-Run from the repository root. The generator uses no audio, network, session
+Run from the repository root. This command regenerates branding and link
+buttons, leaving the separately captured GUI assets untouched.
+The branding generator uses no audio, network, session
 connector or live app. Its fixed cyclic rotation and illustrative speech
 envelope produce a 144-frame, 20 fps, 7.2-second loop with a shared sea-glass
-palette. Fixed grain seeds keep the material reproducible without random
-frame-to-frame flicker. The original high-resolution static mark is retained
+palette with dedicated multicolor wave ramps. Fixed grain seeds keep the
+material reproducible without random frame-to-frame flicker.
+The original high-resolution static mark is retained
 in `tools/docs/sources/intercom-logo.png`; the generator changes its material,
 not its geometry or alpha silhouette. Runtime/EXE icons remain unchanged.
+
+Re-record the GUI gallery using the installed development dependencies:
+
+```powershell
+npm run build -- --outDir .local\readme-capture\app\dist
+node .\tools\docs\capture_readme.cjs
+```
+
+The capture tool launches only its copied, hidden documentation host, refuses
+changed host-patching assumptions, blocks transcription/playback/session
+dispatch, verifies input levels and floating alpha, cancels capture, closes
+its own app and removes its exact disposable profile. Intermediate frames
+remain ignored under `.local\readme-capture`; Pillow creates bounded 960px,
+10 fps looping GIFs with a shared palette per scene and delta frames.
+These opaque gallery composites keep prior frame contents; the transparent
+hero still uses clear-frame disposal.

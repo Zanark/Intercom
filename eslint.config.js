@@ -16,7 +16,7 @@ export default tseslint.config(
     languageOptions: { globals: globals.browser },
   },
   {
-    files: ['desktop/**/*.cjs', 'tests/**/*.cjs', '*.config.cjs', 'eslint.config.js'],
+    files: ['desktop/**/*.cjs', 'tests/**/*.cjs', 'tools/**/*.cjs', '*.config.cjs', 'eslint.config.js'],
     languageOptions: { globals: globals.node },
   },
   {

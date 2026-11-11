@@ -213,8 +213,31 @@ exact read-back; never refresh them merely to hide a remote edit.
 | ic-02 | `5fa92bc3e1d2f20a27fc5306664d4e4d599e704f8fc64208323afb19a9c894f6` |
 | ic-04 | `ac026513ad44f8548d9e3670037d5efcb2e94c9287728bf781e9f5e48efefd82` |
 | ic-05 | `01e29950e11e9e7ad3928d05a8363244955ea95c7ec68e952b57fbb644043e4c` |
-| ic-06 | `67b53e02fbcbe5f21bedcacd2434937b2fcff2c5ac300661797c29edef073c81` |
+| ic-06 | `ddd9aa5e5e4673981de54c4ed865159206deade994fe28d26e2747d1411c9304` |
 | ic-07 | `072c0916f6106438b8f32e2ae02415645056015a3049f36f12ec4cfca281fe33` |
+
+The final README refinement reconciliation matched all six saved baselines,
+then updated only #5 with the short inspiration/larger photo, smooth unbanded
+microphones, restored original logo geometry, glowing waves, dense fictional
+application demos and supplied wallpaper. Independent full-body readback
+verified all six issue identities/states and the unchanged complete Project.
+Unfinished speech/controller drafts remain outside the public projection;
+ic-06 stays OPEN / In Progress. No release or runtime switch is implied.
+
+The switchboard-inspiration reconciliation matched all six saved baselines
+before updating only existing #5's public-safe README task/evidence/log.
+Independent complete-body read-back verified all six original bodies (apart
+from #5's intended additions), issue/item identities, states and private
+Project membership/stages. No speech draft, new issue/item or release change.
+The owner separately authorized a coherent README/media push and explicitly
+confirmed permission to publish the supplied historical photograph.
+
+The GUI/microphone-artwork follow-up checked all six saved body/state/Project
+baselines, then updated only existing #5's artwork-only projection: restored
+wordmark font, matching microphone pigment and isolated GUI recordings.
+Independent full read-back verified all six bodies, original identities,
+states and Project membership/stages. No dirty speech draft was exported,
+issue/item created, state moved, commit pushed or release changed.
 
 These reconciliations used the same saved issue/item identities on
 read-back and confirmed no duplicates. Automated retry, reopening, and conflict
@@ -298,3 +321,10 @@ membership and status options remain unchanged. ic-06 stays In Progress.
 Unfinished local speech/orchestration drafts are intentionally excluded from
 this publication and remote projection; their qualification remains open.
 No new issue/item, runtime change, tag, release or user-app update.
+
+The ethereal-waves/brush-wordmark follow-up matched all six saved baselines
+before updating only existing #5's artwork-only projection. Independent full
+read-back verified its exact description and all six original issue/item
+identities, states, private Project membership and status options. Unfinished
+speech drafts remain excluded; ic-06 stays In Progress. Tracking is updated,
+but the follow-up artwork has not been committed, pushed or released.

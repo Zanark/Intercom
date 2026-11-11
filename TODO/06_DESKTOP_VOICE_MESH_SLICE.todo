@@ -19,6 +19,15 @@ Purpose:
   session work with retained permissions. Push-to-talk remains selected.
 
 Tasks:
+  [x] Keep original logo density, blend microphones without bands and add wave glow.
+  [x] Smooth both logo microphone gradients and condense inspiration to one paragraph.
+  [x] Increase documentation mesh density and move the local rebuild note to the end.
+  [x] Use supplied sea-glass wallpaper and contrasting fictional node colors in GIFs.
+  [x] Explain switchboard/conductor inspiration beside the attributed owner-supplied photo.
+  [x] Add multicolor ethereal wave ribbons to the README GIF and matching still.
+  [x] Texture lowercase intercom. in seafoam/violet while retaining its original typeface.
+  [x] Apply the same seafoam/violet pigment to animated and static logo microphones.
+  [x] Replace the README GUI screenshots with isolated source-GUI recordings.
   [x] Apply frosted sea-glass textures to README animated/static marks and framing.
   [x] Add dim mirrored wave wings to the transparent README logo and still.
   [x] Add original mirrored, center-outward input-reactive waves and liquid-glass mic fill.
@@ -105,6 +114,61 @@ Acceptance criteria:
   follow docs/architecture/runtime-contracts.md; browser mocks are not native-app evidence.
 
 Completion evidence:
+  Owner follow-up reduces the inspiration to one paragraph with a shorter
+  attributed photo caption and a larger 55%-width right-hand photo (540px cap).
+  Both logo microphones use one smooth vertical violet-to-seafoam gradient.
+  The animated capsule has no horizontal fill boundary; its rim breathes
+  instead. Dedicated shades and error-diffusion indexing prevent flat color
+  bands in the actual GIF. The original wordmark texture is retained.
+  Earlier multi-paragraph and matching-pigment entries describe prior iterations.
+  Documentation capture now uses 48 fictional contexts and 144 connections;
+  density applies only to application demos. The logo's original nine-node
+  geometry is restored exactly; adjacent waves gain a broader colored glow.
+  The unpublished-local rebuild caveat is last, not above the GUI gallery.
+  Floating GUI is enlarged over the supplied sea-glass wallpaper; warm coral,
+  amber and violet fixture nodes contrast with its cool tones. This remains
+  an explicitly staged composite, not a private-desktop recording.
+  All four dense capture scenes and safety guards pass; each GIF has 60 frames,
+  6 seconds and a matching still. Total GUI GIF size is 9,852,807 bytes.
+  Initial low-level synthetic input failed its retained assertion; a stronger
+  synthetic envelope floor fixes capture timing without lowering the check.
+  Smooth indexed microphone, unchanged logo geometry/wordmark/static silhouette,
+  symmetric glow, 144-frame/7.2s transparent loop and lint pass. Actual decoded
+  microphone crops, logo first frame and floating gallery still were inspected.
+  Historical moving-fill and six-context entries below are superseded.
+  README inspiration pairs a mid-century switchboard with an opera-orchestra
+  conductor. Text is left, the unchanged supplied KDD photograph/caption right.
+  Attribution identifies Asahi Shimbun and the 1967 source, separate from the
+  earlier aesthetic. Owner explicitly confirmed publication permission after
+  the Commons U.S. copyright warning was raised. Product intent is labelled;
+  app UI, runtime and published .12 remain unchanged.
+  Latest artwork follow-up restores the original Segoe UI Bold lowercase
+  wordmark while retaining its grainy seafoam/violet pigment. Animated and
+  static documentation microphones reuse that same material; the moving
+  level fill, static alpha silhouette and all pixels outside its mask remain
+  intact. Palette checks confirm violet survives animated GIF indexing.
+  Four actual offscreen source-GUI recordings now replace the README gallery:
+  Voice/Tune, orbit/zoom, floating dock and input-reactive microphone waves.
+  Each is 60 frames/6s/960px, with a matching reduced-motion still.
+  Six fictional contexts, synthetic audio, readiness stub and a staged
+  floating backdrop are explicitly disclosed. Dispatch/playback is blocked;
+  no physical input, private desktop or user instance is recorded.
+  Delta encoding reduces the four GIFs from 38.3 MB to 2.12 MB combined.
+  Isolated build, lint, capture guards, native transparent corner and actual
+  input levels pass. Decoded first-frame gallery/title/logo previews inspected.
+  Earlier brush-font and unchanged-gallery statements below describe history.
+  At the gallery-verification milestone these changes remained local;
+  published .12 and runtime icons were unchanged. README/media publication
+  is now separately authorized; older local-only entries retain history.
+  Follow-up artwork adds cyan/mint/lavender/rose/amber ribbons with rolling
+  harmonics, breathing spacing and exact mirrored pixels. The lowercase
+  intercom. title uses installed Brush Script MT with grainy seafoam ink and
+  violet pigment washes, following the supplied brush-lettering direction.
+  Verified all five hues in the decoded GIF, periodic waves, actual motion,
+  transparent edges, 144 frames/7.2s/disposal=2 and exact matching PNG still.
+  Final title and representative decoded GIF frame visually inspected;
+  unchanged static mark/buttons/gallery/screenshots remain byte-identical.
+  These follow-up assets are local, not a new source push or release.
   Sea-glass documentation artwork adds fixed-seed grain, milky seafoam nodes
   and diffuse layered connections to the transparent hero/still. Static mark
   geometry, runtime icons, original screenshots and published .12 are retained.
@@ -427,6 +491,26 @@ Completion evidence:
   actual portable smoke. Human/device/performance gates keep ic-06 active.
 
 Completion log:
+  2026-11-11 - Corrected the unintended dense logo: restored exact original
+    nine-node geometry while keeping only application demos dense.
+    Removed the mic's hard fill boundary; smooth blended bodies and a
+    breathing rim replace horizontal bands. Added the requested wave glow.
+    Four 48-context/144-connection captures pass with synthetic inputs only;
+    floating gallery uses the supplied wallpaper and contrasting fixture nodes.
+  2026-11-11 - Condensed README inspiration and removed streaked microphone
+    pigment from both documentation logos, keeping wordmark texture and UI.
+  2026-11-11 - Added the requested switchboard/conductor README passage with
+    right-hand historical photograph, source attribution and owner-confirmed
+    publication permission. Existing UI retained; no release requested.
+  2026-11-11 - Restored original lowercase wordmark font with its pigment
+    effect, matched both documentation microphones, and replaced four README
+    GUI panels with genuine isolated recordings and reduced-motion stills.
+    Verified synthetic input/transparent capture and compressed delta frames.
+    No user-instance automation, real session dispatch, new push or release.
+  2026-11-11 - Added more colorful ethereal mirrored waves and the lowercase
+    seafoam/violet brush wordmark. Regenerated GIF/still/title, checked actual
+    GIF palette, transparency, motion/loop and exact still, and inspected the
+    final title/frame preview. No runtime, static-icon or release change.
   2026-11-11 - Verified frosted sea-glass README GIF/still/static mark, matching
     title/buttons/gallery, transparency and screenshot fidelity. Asset-layout
     preview visually inspected; no runtime, speech or release change.

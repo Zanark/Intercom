@@ -1,16 +1,16 @@
-"""Render documentation artwork only; requires Pillow and Windows Segoe UI."""
+"""Render docs artwork; requires Pillow and Windows Segoe UI."""
 
 import math
 import random
+import argparse
 from functools import lru_cache
 from pathlib import Path
 
-from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
+from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont, ImageOps
 
 
 ROOT = Path(__file__).resolve().parents[2]
 ASSETS = ROOT / "docs" / "assets" / "readme"
-SCREENSHOTS = ROOT / "docs" / "assets" / "screenshots"
 SIZE = 432
 HERO_WIDTH = 936
 SCALE = 2
@@ -23,6 +23,10 @@ FROST = (221, 236, 230)
 TEAL = (104, 158, 158)
 INK = (25, 59, 66)
 MUTED = (54, 91, 96)
+WAVE_COLORS = (
+    (115, 214, 231), (143, 222, 190), (177, 160, 237),
+    (234, 162, 209), (239, 201, 151),
+)
 FONTS = Path(r"C:\Windows\Fonts")
 
 
@@ -73,31 +77,62 @@ def frosted_surface(size, top, bottom):
     )).convert("RGBA")
 
 
+@lru_cache(maxsize=8)
+def sea_glass_ink(size, region):
+    left, top, right, bottom = region
+    width, height = right - left, bottom - top
+    text_bounds = font(112, True).getbbox("intercom.")
+    scale_x = width / (text_bounds[2] - text_bounds[0])
+    scale_y = height / 160
+    ink = frosted_surface(size, (75, 125, 116), (91, 139, 125)).copy()
+    wash = Image.new("RGBA", size)
+    pigment = ImageDraw.Draw(wash)
+    for offset, y, radius in ((.04, 25, 88), (.40, 4, 110), (.79, 45, 80)):
+        x = left + width * offset
+        pigment.ellipse(
+            (x - radius * scale_x, top + (y - 40) * scale_y,
+             x + radius * scale_x, top + (y + 55) * scale_y),
+            fill=(75, 69, 101, 190),
+        )
+    ink.alpha_composite(wash.filter(ImageFilter.GaussianBlur(12 * min(scale_x, scale_y))))
+    return ink
+
+
+@lru_cache(maxsize=4)
+def microphone_gradient(size, top, bottom):
+    purple = (86, 80, 113)
+    seafoam = (91, 139, 125)
+    image = Image.new("RGBA", size, (*purple, 255))
+    image.paste(gradient((size[0], bottom - top), purple, seafoam), (0, top))
+    ImageDraw.Draw(image).rectangle((0, bottom, size[0], size[1]), fill=(*seafoam, 255))
+    return image
+
+
 def microphone(level):
     image = Image.new("RGBA", (SIZE * SCALE, SIZE * SCALE))
     draw = ImageDraw.Draw(image)
     draw.arc(box((158, 194, 274, 310)), 0, 180, fill=(5, 12, 19), width=20 * SCALE)
-    draw.arc(box((160, 192, 272, 304)), 0, 180, fill=SEAFOAM, width=13 * SCALE)
-    draw.rounded_rectangle(box((160, 223, 173, 252)), radius=6 * SCALE, fill=SEAFOAM)
-    draw.rounded_rectangle(box((259, 223, 272, 252)), radius=6 * SCALE, fill=SEAFOAM)
-    draw.rectangle(box((210, 300, 222, 326)), fill=SEAFOAM)
-    draw.rounded_rectangle(
-        box((187, 321, 245, 335)), radius=7 * SCALE, fill=TEAL
-    )
+    support = Image.new("L", image.size)
+    support_draw = ImageDraw.Draw(support)
+    support_draw.arc(box((160, 192, 272, 304)), 0, 180, fill=255, width=13 * SCALE)
+    support_draw.rounded_rectangle(box((160, 223, 173, 252)), radius=6 * SCALE, fill=255)
+    support_draw.rounded_rectangle(box((259, 223, 272, 252)), radius=6 * SCALE, fill=255)
+    support_draw.rectangle(box((210, 300, 222, 326)), fill=255)
+    support_draw.rounded_rectangle(box((187, 321, 245, 335)), radius=7 * SCALE, fill=255)
+    ink = microphone_gradient(image.size, 126 * SCALE, 335 * SCALE)
+    image.paste(ink, (0, 0), support)
+    draw = ImageDraw.Draw(image)
     capsule = (178, 126, 254, 277)
     draw.rounded_rectangle(
         box((180, 129, 258, 282)), radius=38 * SCALE, fill=(3, 10, 17)
     )
     mask = Image.new("L", image.size)
     ImageDraw.Draw(mask).rounded_rectangle(box(capsule), radius=38 * SCALE, fill=255)
-    body = frosted_surface(image.size, (54, 88, 91), (23, 48, 57)).copy()
-    fill = frosted_surface(image.size, FROST, TEAL)
-    top = round((277 - level * 151) * SCALE)
-    body.paste(fill.crop((0, top, image.width, image.height)), (0, top))
-    image.paste(body, (0, 0), mask)
+    image.paste(ink, (0, 0), mask)
     draw = ImageDraw.Draw(image)
     draw.rounded_rectangle(
-        box(capsule), radius=38 * SCALE, outline=SEAFOAM, width=2 * SCALE
+        box(capsule), radius=38 * SCALE,
+        outline=blend(SEAFOAM, WHITE, level * .65), width=2 * SCALE,
     )
     return image
 
@@ -138,29 +173,49 @@ def speech_level(phase):
 
 
 def logo_waves(phase):
-    image = Image.new("RGBA", (HERO_WIDTH * SCALE, SIZE * SCALE))
+    phase %= 1
+    half = HERO_WIDTH // 2
+    image = Image.new("RGBA", (half * SCALE, SIZE * SCALE))
+    halo = Image.new("RGBA", image.size)
     draw = ImageDraw.Draw(image)
-    half = HERO_WIDTH / 2
+    glow = ImageDraw.Draw(halo)
     energy = speech_level(phase)
-    for band in range(18):
+    for band in range(24):
         points = []
         for step in range(161):
             distance = step / 160
-            envelope = math.sin(math.pi * distance)
-            wave = math.sin(distance * 13 - TAU * phase * 2 + band * .13)
-            wave += .3 * math.sin(distance * 24 - TAU * phase * 3 + band * .08)
-            y = envelope * (wave * (16 + 28 * energy) + (band - 8.5) * energy)
-            points.append((distance * half, y))
-        for direction in (-1, 1):
-            for start, end in zip(points, points[1:]):
-                fade = math.sin(math.pi * start[0] / half) ** .5
-                brightness = fade * (.65 if band == 8 else .38 + .22 * energy)
-                color = blend((15, 33, 45), (67, 133, 147), brightness)
-                draw.line((
-                    (half + direction * start[0]) * SCALE, (214 + start[1]) * SCALE,
-                    (half + direction * end[0]) * SCALE, (214 + end[1]) * SCALE,
-                ), fill=color, width=(2 if band == 8 else 1) * SCALE)
-    return image.resize((HERO_WIDTH, SIZE), Image.Resampling.LANCZOS)
+            envelope = math.sin(math.pi * distance) ** .8
+            wave = math.sin(distance * TAU * 1.6 - TAU * phase * 2 + band * .16)
+            wave += .45 * math.sin(distance * TAU * 3 - TAU * phase * 3 + band * .09)
+            wave += .2 * math.sin(distance * TAU * .75 - TAU * phase + band * .25)
+            spread = (.45 + .55 * math.sin(distance * TAU - TAU * phase) ** 2)
+            y = envelope * (
+                wave * (25 + 34 * energy) + (band - 11.5) * (1 + energy) * spread
+            )
+            points.append((distance, y))
+        for start, end in zip(points, points[1:]):
+            distance = (start[0] + end[0]) / 2
+            fade = math.sin(math.pi * distance) ** .7
+            position = (band / 24 + distance * .7 - phase) % 1 * len(WAVE_COLORS)
+            index = math.floor(position)
+            tint = blend(WAVE_COLORS[index], WAVE_COLORS[(index + 1) % len(WAVE_COLORS)],
+                         position - index)
+            line = (
+                start[0] * (half - 12) * SCALE, (214 + start[1]) * SCALE,
+                end[0] * (half - 12) * SCALE, (214 + end[1]) * SCALE,
+            )
+            alpha = round(255 * min(1, fade * 3))
+            brightness = fade * (.3 + .35 * energy + (.13 if band == 12 else 0))
+            glow.line(line, fill=(*blend(NAVY, tint, fade * .42), alpha), width=12 * SCALE)
+            draw.line(line, fill=(*blend(NAVY, tint, brightness), alpha),
+                      width=(2 if band == 12 else 1) * SCALE)
+    halo = halo.filter(ImageFilter.GaussianBlur(6 * SCALE))
+    halo.alpha_composite(image)
+    wing = halo.resize((half, SIZE), Image.Resampling.LANCZOS)
+    image = Image.new("RGBA", (HERO_WIDTH, SIZE))
+    image.alpha_composite(ImageOps.mirror(wing))
+    image.alpha_composite(wing, (half, 0))
+    return image
 
 
 def render_frame(phase, base, node):
@@ -240,19 +295,46 @@ def render_frame(phase, base, node):
     return hero
 
 
+def static_microphone_mask(size):
+    if size != (1254, 1254):
+        raise ValueError("Static microphone mask requires the original 1254px mark.")
+    mask = Image.new("L", size)
+    draw = ImageDraw.Draw(mask)
+    draw.rounded_rectangle((519, 333, 727, 690), radius=104, fill=255)
+    draw.arc((450, 406, 798, 754), 0, 180, fill=255, width=45)
+    draw.rounded_rectangle((450, 505, 495, 600), radius=22, fill=255)
+    draw.rounded_rectangle((753, 505, 798, 600), radius=22, fill=255)
+    draw.rectangle((594, 737, 649, 822), fill=255)
+    draw.rounded_rectangle((519, 804, 725, 856), radius=26, fill=255)
+    # Retain the foreground node and the two links crossing in front of the mic.
+    draw.ellipse((625, 449, 800, 624), fill=0)
+    draw.line((432, 263, 713, 537), fill=0, width=14)
+    draw.line((399, 879, 713, 537), fill=0, width=14)
+    return mask
+
+
 def render_static_brand():
     # Keep the high-resolution mark's geometry and the runtime icon unchanged.
     with Image.open(Path(__file__).parent / "sources" / "intercom-logo.png") as source:
         image = source.convert("RGBA")
+    mic_mask = static_microphone_mask(image.size)
+    ink = microphone_gradient(image.size, 333, 856)
     rng = random.Random(71)
     pixels = []
-    for r, g, b, alpha in image.get_flattened_data():
+    for (r, g, b, alpha), microphone_coverage, pigment in zip(
+        image.get_flattened_data(), mic_mask.get_flattened_data(), ink.get_flattened_data()
+    ):
         coverage = min(1, max(0, (min(g, b) - 48) / 72))
         light = min(1, (r + g + b) / 765 + .08)
         tint = blend((75, 135, 141), FROST, light)
         grain = rng.randrange(-9, 10)
         tint = tuple(min(255, max(0, c + grain)) for c in tint)
-        pixels.append((*blend((r, g, b), tint, coverage), alpha))
+        color = blend((r, g, b), tint, coverage)
+        if microphone_coverage:
+            shading = .5 + .7 * sum(color) / 765
+            material = tuple(min(255, round(channel * shading)) for channel in pigment[:3])
+            color = blend(color, material, coverage * microphone_coverage / 255)
+        pixels.append((*color, alpha))
     image.putdata(pixels)
     image.save(ROOT / "docs" / "assets" / "branding" / "intercom-logo.png", optimize=True)
 
@@ -285,20 +367,81 @@ def panel(name, title, subtitle, width=480):
     image.save(ASSETS / name, optimize=True)
 
 
-def gallery(name, source, title, caption):
-    with Image.open(SCREENSHOTS / source) as screenshot:
-        screenshot = screenshot.convert("RGBA")
-        if screenshot.width > 1240:
-            screenshot = screenshot.resize(
-                (1240, round(screenshot.height * 1240 / screenshot.width)),
-                Image.Resampling.LANCZOS,
-            )
-        image = frosted_surface((1240, 148 + screenshot.height), FROST, SEAFOAM).copy()
-        draw = ImageDraw.Draw(image)
-        draw.text((40, 35), title, font=font(32, True), fill=INK)
-        draw.text((40, 90), caption, font=font(19), fill=MUTED)
-        image.paste(screenshot, ((1240 - screenshot.width) // 2, 148), screenshot)
-        image.save(ASSETS / name, optimize=True)
+def gallery(screenshot, title, caption):
+    image = frosted_surface((1240, 148 + screenshot.height), FROST, SEAFOAM).copy()
+    draw = ImageDraw.Draw(image)
+    draw.text((40, 35), title, font=font(32, True), fill=INK)
+    draw.text((40, 90), caption, font=font(19), fill=MUTED)
+    image.paste(screenshot, ((1240 - screenshot.width) // 2, 148), screenshot)
+    return image.resize((960, round(image.height * 960 / 1240)), Image.Resampling.LANCZOS)
+
+
+def staged_desktop():
+    with Image.open(ASSETS / "sea-glass-wallpaper.png") as source:
+        return ImageOps.fit(source.convert("RGBA"), (1240, 820), Image.Resampling.LANCZOS)
+
+
+def render_gui_galleries(directory):
+    scenes = (
+        ("voices", "A voice that fits your workflow.",
+         "Source GUI  /  fictional contexts  /  voice and tuning tabs  /  no playback"),
+        ("workspace", "Your contexts, in reach.",
+         "Source GUI  /  fictional contexts  /  real orbit, drift and zoom"),
+        ("floating", "Your mesh. Over your workspace.",
+         "Transparent source GUI  /  owner-supplied sea-glass wallpaper  /  staged composite"),
+        ("microphone", "A microphone that moves with you.",
+         "Source GUI  /  synthetic audio  /  actual input-reactive waves  /  no dispatch"),
+    )
+    backdrop = staged_desktop()
+    for scene, title, caption in scenes:
+        paths = sorted((directory / scene).glob("*.png"))
+        if len(paths) != 60:
+            raise ValueError(f"{scene}: expected 60 GUI captures, found {len(paths)}")
+
+        def compose(source):
+            with Image.open(source) as raw:
+                screenshot = raw.convert("RGBA")
+            if scene == "floating":
+                if screenshot.size != (540, 540) or screenshot.getpixel((0, 0))[3] != 0:
+                    raise ValueError("Floating capture must retain real window transparency.")
+                stage = backdrop.copy()
+                screenshot = screenshot.resize((740, 740), Image.Resampling.LANCZOS)
+                stage.alpha_composite(screenshot, (250, 40))
+                screenshot = stage
+            elif screenshot.size != (1240, 820):
+                raise ValueError(f"Unexpected GUI viewport: {screenshot.size}")
+            return gallery(screenshot, title, caption)
+
+        samples = Image.new("RGB", (240 * 6, 188))
+        for i in range(6):
+            sample = compose(paths[i * 10]).convert("RGB")
+            samples.paste(sample.resize((240, 188)), (i * 240, 0))
+        palette = samples.quantize(colors=256, method=Image.Quantize.MEDIANCUT)
+        frames = [compose(source).convert("RGB").quantize(palette=palette, dither=Image.Dither.NONE)
+                  for source in paths]
+        if not ImageChops.difference(frames[0].convert("RGB"), frames[30].convert("RGB")).getbbox():
+            raise ValueError(f"{scene}: GUI capture has no motion.")
+        name = f"readme-{scene}"
+        frames[0].save(
+            ASSETS / f"{name}.gif", save_all=True, append_images=frames[1:],
+            duration=100, loop=0, disposal=1, optimize=True,
+        )
+        with Image.open(ASSETS / f"{name}.gif") as result:
+            if result.n_frames < 2 or result.info.get("loop") != 0:
+                raise ValueError(f"{scene}: encoded GIF is not animated and looping.")
+            duration = 0
+            for frame in range(result.n_frames):
+                result.seek(frame)
+                expected = frames[duration // 100].convert("RGB")
+                if ImageChops.difference(result.convert("RGB"), expected).getbbox():
+                    raise ValueError(f"{scene}: delta encoding changed frame {frame}.")
+                duration += result.info["duration"]
+            if duration != 6000:
+                raise ValueError(f"{scene}: incorrect GIF playback duration.")
+            result.seek(0)
+            result.convert("RGBA").save(ASSETS / f"{name}.png", optimize=True)
+            print(f"{name}: {result.n_frames} frames, {result.size}, {duration}ms, "
+                  f"{(ASSETS / f'{name}.gif').stat().st_size:,} bytes")
 
 
 def render_logo():
@@ -306,15 +449,17 @@ def render_logo():
     # Reserve index zero for transparency; GIF cannot retain partial alpha.
     colors = [(255, 0, 255)]
     for count, a, b in (
-        (15, NAVY, (22, 65, 75)),
-        (48, (34, 70, 77), TEAL),
-        (80, (71, 126, 132), FROST),
-        (48, TEAL, SEAFOAM),
-        (24, (54, 88, 91), (23, 48, 57)),
+        (12, NAVY, (22, 65, 75)),
+        (16, (34, 70, 77), TEAL),
+        (32, (71, 126, 132), FROST),
+        (16, TEAL, SEAFOAM),
+        (12, (54, 88, 91), (23, 48, 57)),
         (8, SEAFOAM, WHITE),
-        (32, (15, 33, 45), (67, 133, 147)),
     ):
         colors.extend(blend(a, b, i / (count - 1)) for i in range(count))
+    colors.extend(blend((86, 80, 113), (91, 139, 125), i / 63) for i in range(64))
+    for tint in WAVE_COLORS:
+        colors.extend(blend(NAVY, tint, .8 * i / 18) for i in range(19))
     palette = Image.new("P", (1, 1))
     palette.putpalette([channel for color in colors for channel in color])
     frames = []
@@ -322,7 +467,7 @@ def render_logo():
         frame = render_frame(i / FRAMES, base, node)
         if i == 0:
             frame.save(ASSETS / "readme-logo-still.png", optimize=True)
-        indexed = frame.convert("RGB").quantize(palette=palette, dither=Image.Dither.NONE)
+        indexed = frame.convert("RGB").quantize(palette=palette, dither=Image.Dither.FLOYDSTEINBERG)
         indexed.paste(0, mask=frame.getchannel("A").point(lambda a: 255 if a < 128 else 0))
         frames.append(indexed)
     frames[0].save(
@@ -351,24 +496,28 @@ def main():
     draw.rounded_rectangle(
         (12, 4, 1347, 227), radius=36, outline=(238, 247, 241), width=2
     )
-    draw.text((680, 85), "intercom.", font=font(112, True), fill=INK, anchor="mm")
+    lettering = font(112, True)
+    bounds = draw.textbbox((680, 85), "intercom.", font=lettering, anchor="mm")
+    left, width = bounds[0], bounds[2] - bounds[0]
+    mask = Image.new("L", title.size)
+    ImageDraw.Draw(mask).text(
+        (680, 85), "intercom.", font=lettering, fill=255, anchor="mm",
+    )
+    title.paste(sea_glass_ink(title.size, (left, 0, left + width, 160)), (0, 0), mask)
+    draw = ImageDraw.Draw(title)
     draw.text((680, 200), "YOUR VOICE. YOUR CONTEXT. CONNECTED.",
               font=font(27), fill=MUTED, anchor="mm")
     title.save(ASSETS / "readme-title.png", optimize=True)
     panel("readme-download.png", "Download prototype .12", "Windows x64  /  unsigned")
     panel("readme-guide.png", "Project guide", "Setup  /  workflows  /  architecture")
     panel("readme-prototype.png", "Prototype .12", "Always-visible mic  /  release notes")
-    gallery("readme-voices.png", "prototype-voice-profiles.png",
-            "A voice that fits your workflow.", "Packaged .7  /  installed voice profiles  /  synthetic test contexts")
-    gallery("readme-workspace.png", "prototype-window-controls.png",
-            "Your contexts, in reach.", "Packaged .5  /  graph zoom + native window controls  /  synthetic test contexts")
-    gallery("readme-floating.png", "floating-over-desktop.png",
-            "Your mesh. Over your desktop.",
-            "Owner-provided screenshot  /  transparent Floating Mesh  /  earlier control layout")
-    gallery("readme-floating-browser.png", "floating-over-browser.png",
-            "Stay in your flow.",
-            "Owner-provided screenshot  /  floating above another app  /  earlier control layout")
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--gui-frames", type=Path, help="Encode disposable Electron GUI captures instead of branding.")
+    arguments = parser.parse_args()
+    if arguments.gui_frames:
+        render_gui_galleries(arguments.gui_frames)
+    else:
+        main()
