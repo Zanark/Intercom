@@ -1,18 +1,17 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const { spawnSync } = require('node:child_process');
-const { mkdtemp, rm, writeFile } = require('node:fs/promises');
+const { mkdtemp, mkdir, rm, writeFile, readFile } = require('node:fs/promises');
 const path = require('node:path');
-const os = require('node:os');
 const { VoiceHost, resultReader, waveBytes, eligibleSession } = require('../../desktop/services/voice.cjs');
 const { VoiceProfiles, WindowsSpeechProvider } = require('../../desktop/services/synthesis.cjs');
 
 const id = '11111111-1111-4111-8111-111111111111';
-function wave(pcm = Buffer.alloc(16000)) {
+function wave(pcm = Buffer.alloc(16000), rate = 16000) {
   const buffer = Buffer.alloc(44 + pcm.length);
   buffer.write('RIFF'); buffer.writeUInt32LE(buffer.length - 8, 4); buffer.write('WAVEfmt ', 8);
   buffer.writeUInt32LE(16, 16); buffer.writeUInt16LE(1, 20); buffer.writeUInt16LE(1, 22);
-  buffer.writeUInt32LE(16000, 24); buffer.writeUInt32LE(32000, 28);
+  buffer.writeUInt32LE(rate, 24); buffer.writeUInt32LE(rate * 2, 28);
   buffer.writeUInt16LE(2, 32); buffer.writeUInt16LE(16, 34); buffer.write('data', 36);
   buffer.writeUInt32LE(pcm.length, 40); pcm.copy(buffer, 44);
   return buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.length);
@@ -68,10 +67,41 @@ test('bounds and validates canonical PCM audio before starting recognition', () 
   assert.throws(() => waveBytes(new ArrayBuffer(45)), /Invalid/);
   const stereo = wave(); new DataView(stereo).setUint16(22, 2, true);
   assert.throws(() => waveBytes(stereo), /mono/);
-  assert.throws(() => waveBytes(wave(Buffer.alloc(16000 * 2 * 62))), /one-minute/);
+  assert.throws(() => waveBytes(wave(Buffer.alloc(16000 * 2 * 301))), /five-minute/);
+});
+test('accepts the exact five-minute boundary and rejects one additional PCM sample at representative supported rates', () => {
+  for (const rate of [8000, 16000, 44100, 48000]) {
+    assert.equal(waveBytes(wave(Buffer.alloc(rate * 2 * 300), rate)).length, 44 + rate * 2 * 300);
+    assert.throws(() => waveBytes(wave(Buffer.alloc(rate * 2 * 300 + 2), rate)), /five-minute|oversized/);
+  }
+});
+test('long audio extends recognition deadlines without weakening short-recording deadlines or request limits', async () => {
+  const host = new VoiceHost(process.cwd(), () => {});
+  const timeouts = [];
+  host.recognitionSettings = async () => ({ engine: 'whisper', language: 'en' });
+  host.localRecognizer = () => ({
+    transcribe: async (_work, input, _run, language, timeout) => {
+      assert.equal(language, 'en');
+      timeouts.push(timeout);
+      return { text: `${input.length} bytes`, reviewRequired: false };
+    },
+  });
+  await host.transcribe(id, wave());
+  await host.transcribe(id, wave(Buffer.alloc(16000 * 2 * 300)));
+  assert.deepEqual(timeouts, [180000, 900000]);
+  host.recognitionSettings = async () => ({ engine: 'windows' });
+  host.process = async (_work, _executable, _args, options) => {
+    timeouts.push(options.timeout);
+    return JSON.stringify({ text: 'Complete local transcript.', confidence: 0.9 });
+  };
+  await host.transcribe(id, wave());
+  await host.transcribe(id, wave(Buffer.alloc(16000 * 2 * 300)));
+  assert.deepEqual(timeouts.slice(2), [45000, 905000]);
+  assert.throws(() => host.send(id, 'x'.repeat(1001)), /1-1000/);
 });
 test('recognition preserves uncertain text for review without relaxing automatic-send confidence', async () => {
-  const host = new VoiceHost(os.tmpdir(), () => {});
+  const host = new VoiceHost(process.cwd(), () => {});
+  host.recognitionSettings = async () => ({ engine: 'windows' });
   for (const confidence of [0, 0.349, 0.35, 0.9]) {
     host.process = async () => JSON.stringify({ text: '  Review this recognized request.  ', confidence });
     assert.deepEqual(await host.transcribe(id, wave()), {
@@ -79,16 +109,18 @@ test('recognition preserves uncertain text for review without relaxing automatic
     });
   }
 });
-test('recognition retains a full over-limit transcript for shortening instead of discarding or splitting it', async () => {
-  const host = new VoiceHost(os.tmpdir(), () => {});
-  const text = 'x'.repeat(1001);
+test('recognition retains long clear transcripts so the destination can enforce its own request limit', async () => {
+  const host = new VoiceHost(process.cwd(), () => {});
+  host.recognitionSettings = async () => ({ engine: 'windows' });
+  const text = 'x'.repeat(50000);
   host.process = async () => JSON.stringify({ text, confidence: 0.9 });
-  assert.deepEqual(await host.transcribe(id, wave()), { text, confidence: 0.9, reviewRequired: true });
-  host.process = async () => JSON.stringify({ text: 'x'.repeat(10001), confidence: 0.9 });
+  assert.deepEqual(await host.transcribe(id, wave()), { text, confidence: 0.9, reviewRequired: false });
+  host.process = async () => JSON.stringify({ text: 'x'.repeat(50001), confidence: 0.9 });
   await assert.rejects(host.transcribe(id, wave()), /supported transcript size/);
 });
 test('recognition distinguishes missing speech and invalid confidence from reviewable uncertainty', async () => {
-  const host = new VoiceHost(os.tmpdir(), () => {});
+  const host = new VoiceHost(process.cwd(), () => {});
+  host.recognitionSettings = async () => ({ engine: 'windows' });
   for (const result of [null, { text: ' ', confidence: 0.9 }]) {
     host.process = async () => JSON.stringify(result);
     await assert.rejects(host.transcribe(id, wave()), /No English \(US\) speech/);
@@ -99,8 +131,193 @@ test('recognition distinguishes missing speech and invalid confidence from revie
   }
   assert.equal(host.work, null);
 });
+test('source profiles without a bundled engine require setup and never silently start Windows recognition', async () => {
+  const root = await mkdtemp(path.join(process.cwd(), '.intercom-speech-setup-'));
+  try {
+    const host = new VoiceHost(root, () => {});
+    host.process = async () => assert.fail('An unconfigured engine was executed.');
+    assert.equal((await host.recognitionSettings()).engine, 'whisper');
+    await assert.rejects(host.recognitionReady(id), /before recording/);
+    await assert.rejects(host.transcribe(id, wave()), /before recording/);
+    assert.equal(host.work, null);
+    await host.configureRecognition(id, 'windows', () => assert.fail('Legacy selection must not open a directory picker.'));
+    await host.recognitionReady(id);
+    const restarted = new VoiceHost(root, () => {});
+    assert.equal((await restarted.recognitionSettings()).engine, 'windows');
+    assert.throws(() => restarted.configureRecognition(id, 'unknown'), /Unsupported/);
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+test('bundled recognition is automatic and language preferences survive portable resource relocation', async () => {
+  const profile = await mkdtemp(path.join(process.cwd(), '.intercom-bundled-default-'));
+  try {
+    const bundledRoot = path.join(profile, 'extraction-one', 'speech');
+    const host = new VoiceHost(profile, () => {}, { bundledRoot });
+    assert.deepEqual(await host.recognitionSettings(), {
+      version: 1, engine: 'whisper', backend: 'vulkan', language: 'auto', source: 'bundled', root: bundledRoot, ready: true,
+    });
+    await assert.rejects(readFile(path.join(profile, 'recognition-settings.json')), { code: 'ENOENT' });
+    await host.setRecognitionLanguage(id, 'hi');
+    assert.deepEqual(JSON.parse(await readFile(path.join(profile, 'recognition-settings.json'), 'utf8')), {
+      version: 1, engine: 'whisper', source: 'bundled', backend: 'vulkan', language: 'hi',
+    });
+    const relocated = path.join(profile, 'extraction-two', 'speech');
+    const restarted = new VoiceHost(profile, () => {}, { bundledRoot: relocated });
+    const settings = await restarted.recognitionSettings();
+    assert.equal(settings.root, relocated);
+    assert.equal(settings.language, 'hi');
+    restarted.process = async () => assert.fail('Missing bundled resources must not execute a fallback.');
+    await assert.rejects(restarted.recognitionReady(id), /not ready/);
+    await assert.rejects(new VoiceHost(profile, () => {}).recognitionSettings(), /Bundled local speech is unavailable/);
+  } finally { await rm(profile, { recursive: true, force: true }); }
+});
+test('bundling preserves explicit custom and legacy choices and refuses corrupt settings without substitution', async () => {
+  const profile = await mkdtemp(path.join(process.cwd(), '.intercom-bundled-choice-'));
+  try {
+    const host = new VoiceHost(profile, () => {}, { bundledRoot: path.join(profile, 'included') });
+    const saved = path.join(profile, 'recognition-settings.json');
+    await host.configureRecognition(id, 'windows');
+    assert.equal((await host.recognitionSettings()).engine, 'windows');
+    const custom = { version: 1, engine: 'whisper', backend: 'cpu', root: path.join(profile, 'custom') };
+    await writeFile(saved, JSON.stringify(custom));
+    assert.deepEqual(await host.recognitionSettings(), { ...custom, language: 'auto', ready: true });
+    await writeFile(saved, JSON.stringify({ ...custom, root: 'relative' }));
+    await assert.rejects(host.recognitionReady(id), /Invalid speech recognition settings/);
+    assert.equal(JSON.parse(await readFile(saved, 'utf8')).root, 'relative');
+  } finally { await rm(profile, { recursive: true, force: true }); }
+});
+test('bundled preflight retains cancellation and never creates settings or starts a fallback', async () => {
+  const profile = await mkdtemp(path.join(process.cwd(), '.intercom-bundled-cancel-'));
+  try {
+    const host = new VoiceHost(profile, () => {}, { bundledRoot: path.join(profile, 'included') });
+    host.process = async () => assert.fail('A fallback must not execute.');
+    host.localRecognizer = (settings) => ({
+      ready: async (work) => {
+        assert.equal(settings.source, 'bundled');
+        await host.cancel(id);
+        assert.equal(work.cancelled, true);
+      },
+    });
+    await assert.rejects(host.recognitionReady(id), /cancelled/);
+    await assert.rejects(readFile(path.join(profile, 'recognition-settings.json')), { code: 'ENOENT' });
+    assert.equal(host.work, null);
+  } finally { await rm(profile, { recursive: true, force: true }); }
+});
+test('recording preflight loads reusable native state and returns only observed readiness', async () => {
+  const host = new VoiceHost(process.cwd(), () => {});
+  const status = { transport: 'warm-private-pipe', backend: 'vulkan', warm: true, pid: 123 };
+  host.recognitionSettings = async () => ({ engine: 'whisper', root: 'fixture', backend: 'vulkan' });
+  let preflights = 0;
+  host.localRecognizer = async () => ({ ready: async (work) => {
+    assert.equal(work.cancelled, false);
+    preflights++;
+    return status;
+  } });
+  assert.deepEqual(await host.recognitionReady(id), status);
+  assert.equal(preflights, 1);
+});
+test('voice cancellation awaits the owned warm worker without stopping an unrelated operation', async () => {
+  const host = new VoiceHost(process.cwd(), () => {});
+  let stopped = 0;
+  const work = { id, child: null, cancelled: false, controller: new AbortController(),
+    recognitionStop: async () => { await new Promise((resolve) => setTimeout(resolve, 5)); stopped++; } };
+  host.work = work;
+  await host.cancel('22222222-2222-4222-8222-222222222222');
+  assert.equal(stopped, 0);
+  await host.cancel(id);
+  assert.equal(stopped, 1);
+  assert.equal(work.controller.signal.aborted, true);
+});
+test('app shutdown closes an idle warm recognizer and changing engines retires it', async () => {
+  const profile = await mkdtemp(path.join(process.cwd(), '.intercom-warm-lifecycle-'));
+  try {
+    const host = new VoiceHost(profile, () => {});
+    let closed = 0;
+    host.recognizer = { root: 'fixture', backend: 'cpu', close: async () => { closed++; } };
+    await host.configureRecognition(id, 'windows');
+    assert.equal(closed, 1);
+    assert.equal(host.recognizer, null);
+    host.recognizer = { close: async () => { closed++; } };
+    await host.close();
+    assert.equal(closed, 2);
+  } finally { await rm(profile, { recursive: true, force: true }); }
+});
+test('corrupt local setup, malformed saved settings and cancelled setup never fall back or overwrite a working choice', async () => {
+  const root = await mkdtemp(path.join(process.cwd(), '.intercom-speech-setup-failure-'));
+  try {
+    const host = new VoiceHost(root, () => {});
+    await host.configureRecognition(id, 'windows');
+    const before = await readFile(path.join(root, 'recognition-settings.json'), 'utf8');
+    const candidate = path.join(root, 'candidate');
+    await mkdir(path.join(candidate, 'runtime'), { recursive: true });
+    await assert.rejects(host.configureRecognition(id, 'whisper', async () => candidate), /not ready/);
+    assert.equal(await readFile(path.join(root, 'recognition-settings.json'), 'utf8'), before);
+    await assert.rejects(host.configureRecognition(id, 'whisper', async () => {
+      await host.cancel(id);
+      return null;
+    }), /cancelled/);
+    assert.equal(await readFile(path.join(root, 'recognition-settings.json'), 'utf8'), before);
+    await writeFile(path.join(root, 'recognition-settings.json'), '{"version":1,"engine":"whisper","backend":"cpu","root":"relative"}');
+    host.process = async () => assert.fail('Malformed settings reached native execution.');
+    await assert.rejects(host.transcribe(id, wave()), /Invalid speech recognition settings/);
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+test('configured multilingual recognition receives validated audio, request cancellation and nullable confidence', async () => {
+  const host = new VoiceHost(process.cwd(), () => {});
+  host.recognitionSettings = async () => ({ engine: 'whisper', root: 'synthetic-root', backend: 'cpu', language: 'hi' });
+  let operation;
+  const expected = { text: 'Refresh X. Do not check Y.', confidence: null, tokenProbability: 0.9, reviewRequired: false };
+  host.localRecognizer = () => ({
+    transcribe: async (work, input, _run, language) => {
+      assert.equal(language, 'hi');
+      operation = work;
+      assert.equal(input.readUInt32LE(24), 16000);
+      assert.equal(work.id, id);
+      return expected;
+    },
+  });
+  host.process = async () => assert.fail('The legacy speech engine was invoked.');
+  assert.deepEqual(await host.transcribe(id, wave()), expected);
+  assert.equal(operation.controller.signal.aborted, false);
+  assert.equal(host.work, null);
+  assert.throws(() => host.transcribe(id, new ArrayBuffer(45)), /Invalid/);
+});
+test('recognition language persists across restart, defaults old settings to auto and rejects unsupported or legacy choices', async () => {
+  const root = await mkdtemp(path.join(process.cwd(), '.intercom-language-'));
+  try {
+    const host = new VoiceHost(root, () => {});
+    await assert.rejects(host.setRecognitionLanguage(id, 'en'), /Choose a local Whisper engine/);
+    await host.configureRecognition(id, 'windows');
+    await assert.rejects(host.setRecognitionLanguage(id, 'hi'), /Choose a local Whisper engine/);
+    await writeFile(path.join(root, 'recognition-settings.json'), JSON.stringify({ version: 1, engine: 'whisper', backend: 'vulkan', root }));
+    assert.equal((await host.recognitionSettings()).language, 'auto');
+    for (const language of ['en', 'hi', 'auto']) {
+      await host.setRecognitionLanguage(id, language);
+      assert.equal((await new VoiceHost(root, () => {}).recognitionSettings()).language, language);
+    }
+    const before = await readFile(path.join(root, 'recognition-settings.json'), 'utf8');
+    assert.throws(() => host.setRecognitionLanguage(id, '--translate'), /Unsupported/);
+    assert.equal(await readFile(path.join(root, 'recognition-settings.json'), 'utf8'), before);
+    await writeFile(path.join(root, 'recognition-settings.json'), before.replace('"auto"', '"fr"'));
+    await assert.rejects(host.recognitionReady(id), /Invalid speech recognition settings/);
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+test('low-resolution Whisper audio requires review even with a high token probability', async () => {
+  const host = new VoiceHost(process.cwd(), () => {});
+  host.recognitionSettings = async () => ({ engine: 'whisper', root: 'synthetic-root', backend: 'cpu' });
+  const recognized = { text: 'Do not check why.', confidence: null, tokenProbability: 0.852, reviewRequired: false };
+  host.localRecognizer = () => ({ transcribe: async () => recognized });
+  const input = wave();
+  const view = new DataView(input);
+  view.setUint32(24, 8000, true); view.setUint32(28, 16000, true);
+  const result = await host.transcribe(id, input);
+  assert.equal(result.text, recognized.text);
+  assert.equal(result.reviewRequired, true);
+  assert.match(result.warning, /below 16 kHz/);
+  assert.equal(result.tokenProbability, 0.852);
+  assert.deepEqual(await host.transcribe(id, wave()), recognized);
+});
 test('duplicate host work is rejected and cancellation does not affect a different request', async () => {
-  const host = new VoiceHost(os.tmpdir(), () => {});
+  const host = new VoiceHost(process.cwd(), () => {});
   let release;
   const pending = host.exclusive(id, () => new Promise((resolve) => { release = resolve; }));
   await assert.rejects(host.exclusive(id, async () => {}), /still running/);
@@ -108,12 +325,27 @@ test('duplicate host work is rejected and cancellation does not affect a differe
   assert.equal(host.work.cancelled, false);
   await host.cancel(id);
   assert.equal(host.work.cancelled, true);
+  assert.equal(host.work.controller.signal.aborted, true);
   release();
   await pending;
   assert.equal(host.work, null);
 });
+test('native execution can use an explicit environment instead of inheriting the parent', async () => {
+  const host = new VoiceHost(process.cwd(), () => {});
+  const previous = process.env.INTERCOM_TEST_PARENT;
+  process.env.INTERCOM_TEST_PARENT = 'synthetic-parent-value';
+  try {
+    const output = await host.exclusive(id, (work) => host.process(work, process.execPath, [
+      '-e', "console.log(JSON.stringify({ value: process.env.INTERCOM_TEST_CHILD, hasParent: process.env.INTERCOM_TEST_PARENT !== undefined }))",
+    ], { environment: { INTERCOM_TEST_CHILD: 'bounded' } }));
+    assert.deepEqual(JSON.parse(output), { value: 'bounded', hasParent: false });
+  } finally {
+    if (previous === undefined) delete process.env.INTERCOM_TEST_PARENT;
+    else process.env.INTERCOM_TEST_PARENT = previous;
+  }
+});
 test('cancellation stops only the host-owned native child and releases the work slot', { skip: process.platform !== 'win32', timeout: 15000 }, async () => {
-  const host = new VoiceHost(os.tmpdir(), () => {});
+  const host = new VoiceHost(process.cwd(), () => {});
   const running = host.exclusive(id, (work) => host.process(work, 'powershell.exe', ['-NoProfile', '-NonInteractive', '-Command', 'Start-Sleep -Seconds 30']));
   const rejected = assert.rejects(running, /Cancelled/);
   const pid = host.work.child.pid;
@@ -124,12 +356,13 @@ test('cancellation stops only the host-owned native child and releases the work 
   assert.throws(() => process.kill(pid, 0), /ESRCH/);
 });
 test('installed Windows recognition transcribes synthetic English audio without using a microphone', { skip: process.platform !== 'win32', timeout: 60000 }, async () => {
-  const profile = await mkdtemp(path.join(os.tmpdir(), 'intercom-speech-'));
+  const profile = await mkdtemp(path.join(process.cwd(), '.intercom-speech-'));
   try {
     const script = "$ProgressPreference='SilentlyContinue'; Add-Type -AssemblyName System.Speech; $s=[System.Speech.Synthesis.SpeechSynthesizer]::new(); $f=[System.Speech.AudioFormat.SpeechAudioFormatInfo]::new(16000,[System.Speech.AudioFormat.AudioBitsPerSample]::Sixteen,[System.Speech.AudioFormat.AudioChannel]::Mono); $m=[System.IO.MemoryStream]::new(); $s.SetOutputToAudioStream($m,$f); $s.Speak('Hello world. Please say hello world.'); $s.Dispose(); [Console]::OpenStandardOutput().Write($m.ToArray(),0,[int]$m.Length); $m.Dispose()";
     const generated = spawnSync('powershell.exe', ['-NoProfile', '-NonInteractive', '-EncodedCommand', Buffer.from(script, 'utf16le').toString('base64')], { timeout: 20000, windowsHide: true });
     assert.equal(generated.status, 0, generated.stderr.toString());
     const host = new VoiceHost(profile, () => {});
+    await host.configureRecognition(id, 'windows');
     const result = await host.transcribe(id, wave(generated.stdout));
     assert.match(result.text, /hello world/i);
     assert.match(result.text, /please/i);
@@ -139,7 +372,7 @@ test('installed Windows recognition transcribes synthetic English audio without 
 });
 
 test('voice profiles persist save/use/rename/delete atomically, serialize changes and reject corrupt recovery', async () => {
-  const directory = await mkdtemp(path.join(os.tmpdir(), 'intercom-profiles-'));
+  const directory = await mkdtemp(path.join(process.cwd(), '.intercom-profiles-'));
   try {
     const profiles = new VoiceProfiles(directory, [new WindowsSpeechProvider()]);
     const standard = (await profiles.read()).profiles[0];
@@ -169,7 +402,7 @@ test('voice profiles persist save/use/rename/delete atomically, serialize change
 });
 
 test('profile validation rejects unsupported providers/controls without fallback and a failed save does not poison later writes', async () => {
-  const directory = await mkdtemp(path.join(os.tmpdir(), 'intercom-profiles-'));
+  const directory = await mkdtemp(path.join(process.cwd(), '.intercom-profiles-'));
   try {
     const profiles = new VoiceProfiles(directory, [new WindowsSpeechProvider()]);
     const standard = (await profiles.read()).profiles[0];
@@ -185,7 +418,7 @@ test('profile validation rejects unsupported providers/controls without fallback
 });
 
 test('provider boundary snapshots each utterance, supports independent adapters and preview never changes active settings', async () => {
-  const directory = await mkdtemp(path.join(os.tmpdir(), 'intercom-profiles-'));
+  const directory = await mkdtemp(path.join(process.cwd(), '.intercom-profiles-'));
   try {
     const heard = [];
     let release;
@@ -220,8 +453,20 @@ test('provider boundary snapshots each utterance, supports independent adapters 
   } finally { await rm(directory, { recursive: true, force: true }); }
 });
 
+test('stopped speech cannot claim completion even when a provider resolves after cancellation', async () => {
+  const host = new VoiceHost(process.cwd(), () => {});
+  let release;
+  host.profiles.speak = () => new Promise((resolve) => { release = resolve; });
+  const speaking = host.speak('A clarification question.');
+  const outcome = assert.rejects(speaking, /Local speech operation cancelled/);
+  await host.stopSpeech();
+  release();
+  await outcome;
+  assert.equal(host.speech, null);
+});
+
 test('invalid previews preserve current playback and superseded queued speech rejects instead of claiming playback finished', async () => {
-  const directory = await mkdtemp(path.join(os.tmpdir(), 'intercom-speech-order-'));
+  const directory = await mkdtemp(path.join(process.cwd(), '.intercom-speech-order-'));
   try {
     const host = new VoiceHost(directory, () => {});
     const standard = (await host.profiles.read()).profiles[0];
@@ -238,7 +483,7 @@ test('invalid previews preserve current playback and superseded queued speech re
 });
 
 test('installed voice discovery and native pitch, speed, volume and exact voice selection affect actual PCM without playing audio', { skip: process.platform !== 'win32', timeout: 90000 }, async () => {
-  const directory = await mkdtemp(path.join(os.tmpdir(), 'intercom-voice-controls-'));
+  const directory = await mkdtemp(path.join(process.cwd(), '.intercom-voice-controls-'));
   try {
     const host = new VoiceHost(directory, () => {});
     const [catalog] = await host.voiceCatalog();

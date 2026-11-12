@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+<title>Intercom: the vision, the reality, and the missing connection</title>
+<style>
+:root{color-scheme:dark;--bg:#0b111a;--panel:#141f2b;--line:#304152;--text:#edf5fc;--muted:#b3c2d1;--mint:#9aefdc;--amber:#ffd28a;--red:#ffb5bd}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:17px/1.65 "Segoe UI",sans-serif}main{max-width:1120px;margin:auto;padding:52px 30px 60px}h1,h2,h3,p{margin-top:0}h1{font-size:clamp(34px,5vw,58px);line-height:1.12;letter-spacing:-1.6px;max-width:900px;margin:18px 0 24px}h2{font-size:30px;line-height:1.25;letter-spacing:-.6px}h3{font-size:20px;line-height:1.35;margin-bottom:12px}p{margin-bottom:16px}strong{font-weight:650}section{margin-top:58px}.eyebrow{font-size:12px;letter-spacing:1.8px;font-weight:700;color:var(--mint);text-transform:uppercase}.lead{max-width:880px;font-size:21px;color:var(--muted)}.muted,figcaption,small{color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.three{grid-template-columns:repeat(3,minmax(0,1fr))}.card{padding:24px;border:1px solid var(--line);border-radius:18px;background:var(--panel)}.card p:last-child{margin-bottom:0}.callout{border-left:4px solid var(--amber);padding:19px 24px;background:#28251f;border-radius:0 12px 12px 0}.callout p:last-child{margin:0}.badge{display:inline-block;font-size:11px;letter-spacing:.7px;font-weight:700;border-radius:6px;padding:4px 8px;margin-bottom:13px;border:1px solid currentColor}.good{color:var(--mint)}.partial{color:var(--amber)}.missing{color:var(--red)}figure{margin:20px 0 0;padding:20px;border:1px solid var(--line);border-radius:18px;background:#101b27}figure svg{display:block;width:100%;height:auto}figcaption{font-size:13px;margin-top:12px}svg text{font-family:"Segoe UI",sans-serif;fill:var(--text)}.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px}table{width:100%;border-collapse:collapse;min-width:630px;font-size:15px}th,td{text-align:left;vertical-align:top;padding:15px 18px;border-bottom:1px solid var(--line)}th{background:#1b2b3b}tr:last-child td{border-bottom:0}td:first-child{width:26%;font-weight:650}.steps{counter-reset:step;display:grid;gap:12px}.step{position:relative;padding:19px 22px 19px 68px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}.step:before{counter-increment:step;content:counter(step);position:absolute;left:20px;top:21px;border:1px solid var(--mint);color:var(--mint);border-radius:50%;width:30px;height:30px;text-align:center;line-height:28px}.step p{margin:3px 0 0;color:var(--muted)}.number{font-size:33px;line-height:1.2;color:var(--mint);font-weight:650;margin-bottom:12px}.foot{margin-top:40px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}details{padding:20px;border:1px solid var(--line);border-radius:14px}summary{cursor:pointer;font-weight:650}details p:first-of-type{margin-top:16px}code{overflow-wrap:anywhere;font:13px/1.7 Consolas,monospace;color:#d0e5f7}a{color:var(--mint)}.evidence{padding:15px 0;border-bottom:1px solid var(--line);font-size:14px}.evidence:last-child{border:0}.evidence strong{display:block}.evidence p{margin:4px 0}.check{margin:0 0 12px;padding:14px 18px;background:#142b29;border-radius:10px}.compact{font-size:15px}.nowrap{white-space:nowrap}
+@media(max-width:700px){main{padding:30px 18px 40px}.grid,.three{grid-template-columns:1fr}section{margin-top:40px}.card{padding:20px}figure{padding:10px;overflow-x:auto}figure svg{min-width:760px}figcaption:before{content:"Scroll the illustration sideways on a small screen. ";font-weight:650}h2{font-size:26px}.lead{font-size:19px}.step{padding-left:60px}.step:before{left:16px}}
+@media print{body{background:white;color:#111;font-size:11pt}main{max-width:none;padding:0}.card,figure,.step,th,.check,.callout{background:#f3f5f7;color:#111}svg text{fill:#111}.muted,figcaption,.lead,small,.foot{color:#444}.good,.partial,.missing,.eyebrow,.number,a,code{color:#234}section{break-inside:avoid}details{display:block}}
+</style>
+</head>
+<body>
+<main>
+<header>
+<div class="eyebrow">Intercom / honest product review / 12 November 2026</div>
+<h1>The pieces exist.<br>The experience is not there yet.</h1>
+<p class="lead">You wanted to talk to Copilot and watch it work through your contexts. We have built useful parts, but we have not delivered that as one consistently fast, convincing, shipped experience.</p>
+<div class="callout"><strong>Your criticism is fair.</strong><p>A longer recorder and an attractive sphere do not, by themselves, make a voice-first Copilot overlay. The next milestone should prove the complete interaction, not add another isolated setting.</p></div>
+</header>
+
+<section aria-labelledby="vision">
+<div class="eyebrow">01 / What you expected</div>
+<h2 id="vision">Speak. Copilot works. The mesh shows why.</h2>
+<figure tabindex="0">
+<svg viewBox="0 0 920 590" role="img" aria-labelledby="flow-title flow-description">
+<title id="flow-title">The intended Intercom interaction</title>
+<desc id="flow-description">A vertical flow from voice through fast local recognition and an existing Copilot session to observed context activity, a useful result and a spoken response. The diagram is conceptual, not a runtime capture.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0L6 3L0 6" fill="none" stroke="#9aefdc" stroke-width="1.5"/></marker></defs>
+<g fill="#172b35" stroke="#497b7d">
+<rect x="150" y="12" width="620" height="72" rx="14"/><rect x="150" y="118" width="620" height="72" rx="14"/>
+<rect x="150" y="224" width="620" height="72" rx="14"/><rect x="150" y="330" width="620" height="94" rx="14"/>
+<rect x="150" y="458" width="620" height="94" rx="14"/>
+</g>
+<g stroke="#9aefdc" stroke-width="2" marker-end="url(#arrow)"><path d="M460 84V111"/><path d="M460 190V217"/><path d="M460 296V323"/><path d="M460 424V451"/></g>
+<g text-anchor="middle" font-size="21" font-weight="600">
+<text x="460" y="42">You speak naturally</text><text x="460" y="148">Fast, accurate local transcription</text>
+<text x="460" y="254">An existing Copilot session understands and works</text>
+<text x="460" y="363">Contexts light up as access is observed</text><text x="460" y="491">A useful result, report and spoken explanation</text>
+</g>
+<g text-anchor="middle" font-size="15">
+<text x="460" y="65">Short commands or a longer, rambling request</text><text x="460" y="171">Voice is the front door, not a separate transcription exercise</text>
+<text x="460" y="277">Keep its identity, permissions and work ownership</text><text x="460" y="391">Context Mesh and saved offloads first; individual files later</text>
+<text x="460" y="519">You can continue the conversation without managing the plumbing</text>
+</g>
+</svg>
+<figcaption>Intended experience, not a recording of current behavior. A necessary permission or genuine ambiguity may still interrupt the flow.</figcaption>
+</figure>
+<p style="margin-top:20px"><strong>The sphere is not just decoration.</strong> It should help you understand what Copilot is actually using. Speech quality and response speed are the entry gate; the live mesh is the distinctive experience.</p>
+</section>
+
+<section aria-labelledby="reality">
+<div class="eyebrow">02 / What we actually have</div>
+<h2 id="reality">Real building blocks, unevenly connected.</h2>
+<div class="grid">
+<article class="card"><span class="badge good">BUILT, WITH LIMITS</span><h3>On-device recognition</h3><p>Included local Whisper/Vulkan recognition, microphone capture, editable transcripts, cancellation and optional live drafts exist. Your supplied recordings have exercised the actual native recognizer.</p><p class="muted">That establishes operation, not human-accepted English/Hinglish accuracy. Live drafts are repeated batches, not word-by-word streaming.</p></article>
+<article class="card"><span class="badge good">BOUNDED LIVE PROOF</span><h3>Existing-session dispatch</h3><p>Actual requests have reached a designated existing idle session. Responses, identity checks and owned transport cleanup are real. A separate approved read-only operation was also exercised.</p><p class="muted">This is not proof of arbitrary work across all sessions. Busy sessions remain protected; genuine permission prompting still needs broader live qualification.</p></article>
+<article class="card"><span class="badge partial">PARTIAL OBSERVABILITY</span><h3>A real mesh, not a full activity stream</h3><p>The app loads the actual local Context Mesh snapshot. Job messages and tool-reported file locations can light context spokes.</p><p class="muted">A snapshot is a map. It does not say which note Copilot is reading now, and the current projection does not tell that story in sequence.</p></article>
+<article class="card"><span class="badge partial">NEWER SOURCE ONLY</span><h3>Research reports and longer capture</h3><p>Saved-context discovery can read allowed notes and indexed histories, build a cited local report and open it. Five-minute recording support is also implemented.</p><p class="muted">Neither is in the retained .15 executable. Research summaries are extracted passages, not a Copilot-written explanation of the combined evidence.</p></article>
+</div>
+</section>
+
+<section aria-labelledby="graph-gap">
+<div class="eyebrow">03 / The biggest visual gap</div>
+<h2 id="graph-gap">We show activity membership, not the journey.</h2>
+<figure tabindex="0">
+<svg viewBox="0 0 960 420" role="img" aria-labelledby="mesh-title mesh-description">
+<title id="mesh-title">Current graph projection compared with the desired observed sequence</title>
+<desc id="mesh-description">On the left, bright spokes join the Intercom hub to contexts reported during an active job. On the right, a proposed sequence marks individual context accesses in time. Neither panel is live telemetry.</desc>
+<g fill="none" stroke="#304758" stroke-width="2"><ellipse cx="240" cy="210" rx="172" ry="130"/><ellipse cx="240" cy="210" rx="88" ry="130"/><path d="M68 210H412M98 140L361 291M111 290L368 139"/></g>
+<g fill="none" stroke="#9aefdc" stroke-width="3"><path d="M240 210L111 290M240 210L368 139"/></g>
+<g fill="#425e71"><circle cx="98" cy="140" r="8"/><circle cx="240" cy="80" r="8"/><circle cx="361" cy="291" r="8"/><circle cx="412" cy="210" r="8"/></g>
+<g fill="#9aefdc"><circle cx="240" cy="210" r="13"/><circle cx="111" cy="290" r="10"/><circle cx="368" cy="139" r="10"/></g>
+<g text-anchor="middle"><text x="240" y="29" font-size="22" font-weight="600">Current real mode</text><text x="240" y="365" font-size="17">Hub-to-context spokes</text><text x="240" y="390" font-size="14">Cumulative within active work; no real-mode tracer</text></g>
+<path d="M480 65V345" stroke="#304152" stroke-dasharray="5 7"/>
+<text x="720" y="29" text-anchor="middle" font-size="22" font-weight="600">Proposed observed story</text>
+<g fill="#172b35" stroke="#497b7d"><rect x="565" y="70" width="310" height="64" rx="10"/><rect x="565" y="166" width="310" height="64" rx="10"/><rect x="565" y="262" width="310" height="64" rx="10"/></g>
+<g stroke="#9aefdc" stroke-width="2" marker-end="url(#arrow)"><path d="M720 134V158"/><path d="M720 230V254"/></g>
+<g font-size="18" text-anchor="middle"><text x="720" y="96">1. Reading project notes</text><text x="720" y="192">2. Reading a related context</text><text x="720" y="288">3. Returning a grounded result</text></g>
+<g font-size="13" text-anchor="middle"><text x="720" y="118">Light the observed context; name the source</text><text x="720" y="214">Show the next observed access, not an inferred read</text><text x="720" y="310">Keep a short, attributable activity trail</text><text x="720" y="365" font-size="17">Time + provenance + useful feedback</text><text x="720" y="390" font-size="14">Unknown access stays unknown</text></g>
+</svg>
+<figcaption>Illustration derived from the current source, not a screenshot or observed project trace. Sequence links on the right would mean time order, not a newly invented relationship in the saved mesh.</figcaption>
+</figure>
+<div class="callout" style="margin-top:20px"><strong>A concrete missing wire:</strong><p>The saved-context reader currently sends its finished evidence back as one worker result. Those individual reads do not enter the graph's activity input. Meanwhile, the moving tracer is enabled only in explicit demo mode. So a real research request can read many sources while the sphere fails to tell that story.</p></div>
+<p style="margin-top:18px">Even where tool locations are available, a reported location is not automatically proof of a read. The current context set also accumulates during the job; it is not a timestamped read-by-read playback.</p>
+</section>
+
+<section aria-labelledby="release-gap">
+<div class="eyebrow">04 / A delivery gap, not just a feature gap</div>
+<h2 id="release-gap">The executable you open is behind the source.</h2>
+<div class="grid three">
+<article class="card"><span class="badge partial">LAST VERIFIED PUBLISHED</span><h3>Prototype .12</h3><p>Earlier public prerelease. It is not the latest source and does not contain the five-minute or research changes.</p></article>
+<article class="card"><span class="badge partial">RETAINED LOCAL EXE</span><h3>Prototype .15</h3><p>Includes the local speech/controller candidate and newer microphone experience. Still has the historical one-minute capture limit.</p></article>
+<article class="card"><span class="badge good">LATEST WORKING TREE</span><h3>Not yet packaged</h3><p>Adds five-minute capture and saved-context research. Those improvements cannot help your installed experience until a new candidate is built and qualified.</p></article>
+</div>
+<p style="margin-top:18px"><strong>Important:</strong> source changes and the retained EXE currently share the .15 package version in the manifest. The version label alone does not establish which features a particular build contains.</p>
+</section>
+
+<section aria-labelledby="voice">
+<div class="eyebrow">05 / Why voice still feels slow</div>
+<h2 id="voice">Longer recording is not faster conversation.</h2>
+<p>The current recognizer starts a native recognition process for a complete WAV request. Optional live drafts repeatedly recognize the accumulated buffer, one batch at a time. There is no persistent warm recognition worker or true incremental streaming in this implementation.</p>
+<div class="grid three">
+<article class="card"><div class="number">6.8-7.3 s</div><h3>Observed stop-to-final</h3><p class="compact">Individual recorded-input UI observations with the .15 speech path. A first live draft appeared around 8.29 seconds after capture began.</p></article>
+<article class="card"><div class="number">9.61 s</div><h3>82.9 seconds of audio</h3><p class="compact">Latest native Vulkan recognition of one supplied recording, submitted whole. This is recognition time, not total time to a useful Copilot answer.</p></article>
+<article class="card"><div class="number">20.94 s</div><h3>A 300-second composite</h3><p class="compact">Vulkan recognition of an artificial repeated/cropped test with a synthetic ending. It proves duration handling, not natural five-minute accuracy.</p></article>
+</div>
+<p class="muted" style="margin-top:18px">These are individual observations on this machine, not latency guarantees, controlled benchmarks or independent accuracy scores. Legacy Windows recognition completed the long test but badly garbled the recorded speech.</p>
+<div class="callout"><strong>The next optimization must attack the actual delay.</strong><p>Measure end-of-speech to useful response, distinguish recognition from routing and work, then qualify warm/incremental recognition and remove redundant processing. Switching desktop frameworks alone would not demonstrate a fix.</p></div>
+</section>
+
+<section aria-labelledby="feasible">
+<div class="eyebrow">06 / Possible, conditional, and unknowable</div>
+<h2 id="feasible">The core vision is feasible. Omniscience is not.</h2>
+<div class="table-wrap">
+<table>
+<thead><tr><th>What you want</th><th>Honest assessment</th></tr></thead>
+<tbody>
+<tr><td>Good local voice input</td><td><strong class="good">Feasible, not accepted yet.</strong> A native local path works. The speed/accuracy experience still needs tuning and human evaluation, especially mixed-language speech and project names.</td></tr>
+<tr><td>Copilot does real work</td><td><strong class="good">Boundedly proven.</strong> Existing idle-session dispatch works in narrow approved checks. Preserve that session's identity and actual permissions; broaden qualification rather than silently granting more access.</td></tr>
+<tr><td>Show context reads we own</td><td><strong class="good">Directly implementable.</strong> Emit begin/end/failure events from the host-owned reader, map them to registered contexts and drive the live mesh. This connection is missing today.</td></tr>
+<tr><td>Show Copilot's context access</td><td><strong class="partial">Conditional on telemetry.</strong> Project actual tool events and reported locations. Improve context-read instrumentation where the transport supports it. Clearly identify gaps and event meanings.</td></tr>
+<tr><td>A useful research report</td><td><strong class="partial">Partially implemented.</strong> Discovery, citations and automatic local opening exist in source. Coherent Copilot-written synthesis across the read evidence is not yet this research lane.</td></tr>
+<tr><td>Every thought and every read</td><td><strong class="missing">Cannot truthfully promise.</strong> The app cannot reconstruct unreported model-internal activity or claim a complete read history from a graph snapshot. Do not animate guesses as facts.</td></tr>
+<tr><td>Talk to any past session</td><td><strong class="partial">Not established.</strong> Reading saved notes is different from resuming a session. Missing histories, unavailable workspaces and busy writers remain real limits. Active attachment is not qualified here, not declared universally impossible.</td></tr>
+</tbody>
+</table>
+</div>
+<p style="margin-top:18px"><strong>One architectural distinction matters:</strong> the current tool-free interpretation controller sees bounded catalog/context metadata. It routes requests; it does not read all the project notes and reason over them itself. A separate host reader produces the research report. The existing working Copilot session should remain the place that performs authorized work, not be replaced by a routing helper.</p>
+</section>
+
+<section aria-labelledby="next-slice">
+<div class="eyebrow">07 / The smallest slice worth calling a success</div>
+<h2 id="next-slice">One compelling loop, in the EXE you actually use.</h2>
+<p>Suggested next acceptance scenario: ask by voice for a summary of one project's saved contexts, see the actual accesses, get a clear illustrated report and hear a useful explanation. Use one designated existing idle session where agent synthesis/work is required.</p>
+<div class="steps">
+<div class="step"><strong>Make speech the release gate.</strong><p>Use your consented recordings plus natural short/long and mixed-language cases. Check names, negations and intended tasks against an independently reviewed reference. Measure latency; do not infer accuracy from successful completion.</p></div>
+<div class="step"><strong>Connect real reads to the sphere.</strong><p>Show listening, transcribing, dispatching, observed context access and response as distinct states. Animate only supported events; explain unavailable telemetry instead of leaving a mysterious idle-looking graph.</p></div>
+<div class="step"><strong>Deliver an actual explanation.</strong><p>Use cited evidence for what each context contributed and how the work relates. Clearly distinguish saved claims, observed actions and unresolved sources. Open the report and speak a concise useful result.</p></div>
+<div class="step"><strong>Package and qualify that exact build.</strong><p>Use a distinct candidate identity and disposable profile. Verify the whole voice-to-result path, interruption, cancellation and busy/permission failures. Keep your running instance untouched until a coordinated switch.</p></div>
+</div>
+<p class="muted" style="margin-top:18px">This is a proposed recovery milestone, not completed implementation, human acceptance, an ETA or authorization for new session/tool access. Individual-file visualization, wake word, a host rewrite and richer voice styling are not prerequisites for this slice.</p>
+</section>
+
+<section aria-labelledby="bottom-line">
+<div class="eyebrow">08 / Bottom line</div>
+<h2 id="bottom-line">We optimized pieces before proving the feeling.</h2>
+<p>The safety, connector, recognition and rendering work is useful. But separate technical passes and visual polish were not a substitute for one fast, observable, delivered voice interaction. The integrated milestone is still open, and your experience is evidence that it should stay open.</p>
+<p class="check"><strong>Keep:</strong> local audio, existing-session identity, manual permissions, the real mesh and useful completion receipts.</p>
+<p class="check"><strong>Fix next:</strong> perceived speech latency, source-to-EXE delivery, context-access telemetry and a grounded result in one continuous interaction.</p>
+<p class="check"><strong>Do not fake:</strong> graph activity, session coverage, speech accuracy or task success.</p>
+</section>
+
+<section aria-label="Evidence appendix">
+<details>
+<summary>Evidence appendix: what supports this assessment</summary>
+<p>This review uses current working-tree source and previously recorded qualification. It did not send new prompts to live sessions, record your microphone, change the running app or create a release. Paths below are relative to the repository root.</p>
+<div class="evidence"><strong>Observed activity is a cumulative set</strong><code>desktop\services\work.cjs:170-198</code><p>Agent text adds the job's target context. In-progress/completed tool updates add that target plus contexts mapped from up to 20 absolute reported locations. This is not a semantic file-read detector.</p></div>
+<div class="evidence"><strong>Real mesh uses observed slots; the moving tracer is demo-only</strong><code>src\app\App.tsx:264-273, 320-322</code><br><code>src\components\Mesh.tsx:303-330</code><p>Active work IDs become slots. Real mode draws origin-to-context spokes; only demo mode enables the moving tracer and sequential illustrated path.</p></div>
+<div class="evidence"><strong>Saved research is extractive and returns a final result</strong><code>desktop\services\research.cjs:179-249, 340-378, 405-409</code><br><code>desktop\services\orchestration.cjs:146-183</code><p>The worker reads fixed notes/indexed histories and returns evidence at completion. The host writes/opens a report. That request does not submit a work plan or emit its individual reads to the mesh activity input.</p></div>
+<div class="evidence"><strong>Restricted controller is not the project-reading worker</strong><code>desktop\services\interpreter.cjs:21-32</code><p>Catalog interpretation deliberately omits paths, context bodies and transcripts. Current research output labels its summaries as source excerpts, not model synthesis.</p></div>
+<div class="evidence"><strong>Batch native recognition and the release boundary</strong><code>desktop\services\recognition.cjs:145-185</code><br><code>docs\guide.md:40-85</code><br><code>docs\prototype\prototype.md:12-58, 161-211</code><p>Documents distinguish source-only five-minute support, retained .15, last verified published .12 and the measured recorded-input/dispatch boundaries.</p></div>
+<div class="evidence"><strong>Five-minute qualification and remaining quality limits</strong><code>TODO\05_SPEECH_AND_WAKE_QUALIFICATION.todo</code><br><code>TODO\03_DEVELOPMENT_LEDGER.todo:22-45</code><p>Actual whole-input native observations support the duration figures. The 300-second test is artificial; the legacy recognizer's poor transcript is explicitly not an accuracy pass.</p></div>
+<div class="evidence"><strong>Existing-session proof is narrow; the integrated milestone stays open</strong><code>TODO\04_AGENCY_CONNECTOR_PROOF.todo:21-31, 65-77</code><br><code>TODO\06_DESKTOP_VOICE_MESH_SLICE.todo</code><p>Idle-session/read-only checks do not qualify general active attachment or all permissions. The desktop workstream remains IN_PROGRESS.</p></div>
+</details>
+</section>
+<footer class="foot">Local report. All diagrams are conceptual illustrations unless explicitly described otherwise. No external scripts, fonts, analytics or network assets. This assessment is not a release or a claim that the proposed fixes have been implemented.</footer>
+</main>
+</body>
+</html>

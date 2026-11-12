@@ -56,6 +56,11 @@ try {
         $completedSubscription = $null
         try {
             [Console]::OpenStandardInput().CopyTo($wave)
+            $wave.Position = 24
+            $reader = [System.IO.BinaryReader]::new($wave, [System.Text.Encoding]::UTF8, $true)
+            try { $sampleRate = $reader.ReadUInt32() }
+            finally { $reader.Dispose() }
+            $seconds = ($wave.Length - 44) / ($sampleRate * 2)
             $wave.Position = 0
             $engine.LoadGrammar([System.Speech.Recognition.DictationGrammar]::new())
             $engine.SetInputToWaveStream($wave)
@@ -64,7 +69,7 @@ try {
             $phraseSubscription = Register-ObjectEvent $engine SpeechRecognized -SourceIdentifier IntercomPhrase
             $completedSubscription = Register-ObjectEvent $engine RecognizeCompleted -SourceIdentifier IntercomCompleted
             $engine.RecognizeAsync([System.Speech.Recognition.RecognizeMode]::Multiple)
-            $deadline = [DateTime]::UtcNow.AddSeconds(40)
+            $deadline = [DateTime]::UtcNow.AddSeconds([Math]::Max(40, $seconds * 3))
             $completed = $false
             while (-not $completed) {
                 $event = Wait-Event -Timeout 1

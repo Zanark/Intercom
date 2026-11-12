@@ -21,27 +21,58 @@ CareerOS's mission/checkpoint graph is the visual reference, not its career data
 model. A context, a social persona, a saved session, and a live session are not
 interchangeable identities.
 
+### Latest vision clarification (2026-11-12)
+
+The owner clarified that Intercom is an overlay for working with Copilot:
+high-quality, fast local transcription is the most important entry capability,
+not an isolated dictation feature. An existing Copilot session understands and
+performs the authorized work; the mesh should make its observed use of contexts
+and saved offloads understandable as it happens. Context-level visualization is
+the current focus; individual-file visualization can follow later.
+
+A technically working recorder and a polished sphere do not satisfy that
+experience separately. Acceptance must cover one continuous voice-to-work-to-
+observed-context-to-grounded-spoken-result loop in the actual delivered build.
+The owner's current experience is not acceptance of that loop. The
+[illustrated vision/reality review](../reports/2026-11-12-vision-reality.html)
+separates implemented pieces, source-only improvements and missing connections.
+Its recovery milestone is proposed, not implemented or newly authorized.
+
 ## Confirmed scope choices
 
-- **Current deliverable:** Electron prototype with local-English push-to-talk,
-  actual local mesh every launch and separately confirmed background work in
-  existing idle sessions. Retain permission prompts and refuse busy writers.
-  Terminal opening requires manual task entry. No new sessions, active attach,
-  wake word or cloud audio.
+- **Functional-slice upgrade:** stronger local recognition for English and
+  Hindi/Hinglish, Roman-script output and meaning-preserving disfluency cleanup.
+  Runtime/model downloads are approved; cloud audio is not. Quality and latency
+  still require measurement, not an "impeccable" claim based on model selection.
+- **Orchestration:** the owner selected a separate restricted Copilot controller.
+  It receives transcript text and minimal session names/IDs, never audio, and
+  returns typed proposals only. The host resolves exact existing targets and
+  owns execution, dependencies, exclusions, permissions and durable outcomes.
+  Clear requests do not need a second target/task confirmation; genuine
+  ambiguity and tool permissions still need attention. Default focus is the
+  Intercom node, not an Intercom work session. TTS improvements can wait.
+- **Current implemented baseline:** Electron, push-to-talk, real local mesh and
+  separately confirmed existing-idle-session work. The functional-slice upgrade
+  above is authorized work in progress, not yet qualified end-to-end.
+  The new-session exception is the interpretation controller only. Busy-session
+  attachment, blanket approvals, wake word and cloud audio remain excluded.
 - **Floating Mesh:** a mesh-only mode with native transparent background, so
   the graph can appear to float on the desktop.
 - **Prototype distribution and microphone choice:** publish an unsigned Windows
   portable EXE prerelease; allow explicit input selection and brief device
   checks, without enabling wake word, transcription or cloud audio.
-- **Activation:** always available, but require a wake word before each
-  conversation. The phrase and conversation timeout are not chosen.
+- **Activation:** click-on/click-off push-to-talk is selected for the current
+  prototype. The original wake-word direction is deferred; it does not authorize
+  continuous ambient recording or replace the current activation contract.
 - **Integration priority:** existing Agency sessions are essential; prove that
   integration first. A plain-Copilot-only substitute is not sufficient.
 - **Speech:** installed local Windows voices are selected for the prototype.
   Richer arbitrary voice identity, timbre and emotional style are mandatory
   future requirements. Keep synthesis replaceable without rewriting the
   conversation/work workflow. No richer engine, cloud audio or model download
-  is approved; the final product provider still needs comparison/selection.
+  was approved by the earlier prototype choice. The functional-slice approval
+  above now permits a local recognition download, not cloud speech or a richer
+  synthesis engine. The final product provider still needs qualification.
 - **Processing priorities:** performance and speed come first and are the
   default. Provide options to choose what to prioritize; processing quality
   and accuracy remain important.
@@ -91,8 +122,18 @@ disposable session/workspace for real connector tests, not the user's active wor
 
 ## Current evidence limits
 
-A packaged .4 Electron candidate loads the real local snapshot; `npm start`
-also builds and launches it. A native source test captured synthetic speech,
+Current source connects the restricted controller, canonical real session
+catalog, durable multi-session scheduler and prepared-folder CPU/Vulkan Whisper
+setup. Clear commands avoid redundant task/target confirmation; manual tool
+permissions and busy refusal remain. Synthetic native execution/cancellation
+works, but an 8 kHz example misrecognized session "Y" as "why" despite high
+token probability. Human multilingual quality, consumer installation, portable
+GPU support and real multi-session execution remain unqualified. Published
+.12 and the user's running instance do not contain this uncommitted rebuild.
+
+Historically, the packaged .4 Electron candidate loaded the real local snapshot.
+`npm start` builds and launches current source, not that historical package.
+A native source test captured synthetic speech,
 ran the exact approved read-only command in the designated existing session,
 received the real response and completed local playback. Saved grants meant
 no native permission prompt occurred; fixtures separately cover mediation.

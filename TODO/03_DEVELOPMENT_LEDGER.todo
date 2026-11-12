@@ -19,23 +19,463 @@ Completion evidence:
   This ledger is ongoing, not a finite feature deliverable.
 
 Completion log:
-  2026-11-12 - Owner accepted subtle glass with water-surface refraction and
-    authorized the README showcase, all application GIF refreshes and push.
-    Isolated the visual-only source from unfinished recognition/controller/
-    scheduler drafts. Six reflection patches use one seeded 32-second
-    three-axis Web Animation. Existing RMS independently disturbs a damped
-    64x64 water field; local normal-derived offsets/light refract reflections
-    without changing the icon, rim, target or rotation. No jQuery, runtime
-    texture, dependency, external request or additional audio stream.
-    The exact publication source passes lint/build, five motion/physics cases
-    and three hidden offscreen desktop cases, including real pixel effects,
-    sustained input and pause/cancel/reduced-motion cleanup. Refreshed all
-    four six-second GUI pairs and a 14-second synthetic-speaking pair.
-    Encoding verifies every decoded frame and duration; still alternatives
-    and fictional/synthetic/staged provenance accompany the README gallery.
+  2026-11-13 - Owner acceptance failed; Intercom paused and accountability
+    publication explicitly requested.
+    Expected: speak naturally, have an existing Copilot session perform useful
+    authorized work, watch its observed context activity, and receive a
+    grounded spoken result without managing the integration manually.
+    Owner assessment: "the things that I wanted to achieve I have not been
+    able to achieve" and "you have generally disappointed me". The owner
+    chose to take a break and asked for this disappointment to be recorded
+    in the README/development journey and pushed to GitHub.
+    Read-only inspection of the owner's .18 run confirmed transcription and
+    clarification/rearm cycles, followed by dispatch to an existing session
+    for actual graph-animation investigation. At 03:28:02 IST one permission
+    was approved. At 03:28:25 IST the durable work receipt recorded:
+    "Invalid ACP stream: Concurrent permission requests are not supported."
+    Outcome is unknown, not completed; partial work may exist. Successful
+    approval IPC and voice idle were not evidence of work completion.
+    No automatic retry, app restart or new test dispatch was performed.
+    Accountability: the coding agent overstated readiness by presenting
+    separately tested pieces and packaged milestones as sufficient delivery
+    while the owner's core continuous workflow remained unreliable. Passing
+    fixture counts, a bounded live reply and attractive visuals did not
+    qualify real permission handling or establish owner acceptance.
+    Earlier technical receipts remain historical evidence, not erased and
+    not promoted into product success. The bounded ic09 implementation is
+    distinct from failed overall acceptance; ic06/ic07 remain incomplete.
+    README/guide now lead with the failure and pause. ic07 records the live
+    permission blocker; ic09 explicitly retains failed owner acceptance.
+    Implementation remains paused. A future owner-authorized resumption must
+    demonstrate the exact delivered voice-to-work-to-observed-context-to-result
+    loop, including permission overlap, cancellation, disconnect/partial-work
+    recovery and honest status, without weakening approvals or driving the
+    owner's active sessions for tests. This publication does not fix that
+    failure, qualify the product or authorize a new binary release.
+  2026-11-13 - Owner requested automatic microphone opening for clarification
+    replies. Added default-on bounded rearm after genuine unsuperseded local
+    playback, or written muted display; retains the visible question. Stop,
+    Cancel, opt-out, stale ownership/settings, readiness and actual host
+    visibility guard pending capture. Ordinary question-shaped results and
+    permission prompts never trigger it; no silence-based stop or continuous
+    listening. Host retains validated preceding unresolved request/question
+    for next accepted fresh restricted-controller turn only, not permission.
+    Provider completion after cancellation rejects instead of rearming.
+    Initial focused desktop13/14 exposed Electron hide not setting
+    document.hidden. Host state plus post-readiness generation checks fixes
+    it without weakening the assertion. Final focused source17/17 and exact
+    packaged16/16 desktop pass. Lint/build,19renderer,12controller,
+    28orchestration,twofocused voice-host cancellation cases pass.
+    Exact .18 portable native synthetic speech/drafts/final, duplicate-launch
+    model preservation, deliberate model-loss diagnostic/recovery and warm
+    helper reuse/shutdown pass.22runtime/renderer files,eight speech files,
+    13notices/native dependency/private exclusions audited.
+    EXE631125280bytes SHA256:
+    7d540997d394449bb7449214c0822d5f869476676fcf894522c01e1856acca85.
+    ASAR e1c05ed291ec8685e003b7ce30fcce24e727ee9513a86cee4157df4fd3daaf10.
+    Fresh process checks found no app before exact .17/latest unpacked/debug
+    cleanup; only .18 EXE/checksum remain. No owner stop/restart/focus/switch,
+    physical mic, audible playback, live provider/model or real-session work.
+    Full voice suite not rerun; prior strict51/52 legacy Windows failure
+    remains unwaived. Human speech/live semantic reply and broader hardware/
+    speed/multi-session acceptance remain open; ic05 stays active.
+    Published .12 unchanged; no commit/push/tag/remote release.
+    Existing ic05/#4 baseline/state/item/Project verified before public-safe
+    update. Independent full readback confirms exact body, same identities,
+    OPEN/In Progress, backlink/private Project13/sole repository. Other
+    tracking untouched; baseline advances only after that verification.
+  2026-11-12 - Owner's successful-first/failed-next mic report identified an
+    ENOENT model under portable extraction, unrelated to catalog warnings.
+    Read-only inspection found the old app alive but unlocked resources gone.
+    Pinned launcher shares extraction by default and recursively cleans it
+    before/after child execution: rejected duplicate launch is a reproducible
+    destructive lifecycle mechanism, not a witnessed owner action.
+    .17 uses unique NSIS plugin extraction. Installed builder26.18.0 requires
+    unpackDirName:true, contrary to its false-option documentation; no package
+    dependency source was patched. Actual duplicate refusal preserves primary
+    model size/mtime/helper PID, then synthetic speech/draft/final works again.
+    Added persistent allowlisted lifecycle/IPC/native/phase JSONL with bounded
+    rotation/queue, explicit storage failures and atomic process/resource
+    snapshots. No audio/transcript/prompt/result/raw error/argv/environment/
+    full memory dump. Native expected stop distinguishes normal close/cancel
+    from unexpected exit, including code0. Actual portable hidden-model test
+    produces ENOENT snapshot, then explicit readiness recovers with a new
+    helper after restoring only its disposable extraction file.
+    Final lint/build,19renderer/62host/11controller/54desktop pass;9packaged
+    cases pass. Voice51/52 retains unchanged strict legacy "please"/"police"
+    failure. Initial Windows-separated Playwright selector matched no tests;
+    corrected basename selector then passed, not counted as coverage.
+    22runtime/renderer source matches,eight speech files,13notices, native
+    dependency/private exclusions pass. EXE631124173bytes SHA256:
+    9e897ec1b9d322c4e1c50eb0513ada45553d48b91a5b2a71fe27f71118881bdb.
+    Fresh process check found owner had closed .16; only then exact .16 and
+    latest unpacked/debug paths removed. Only .17 EXE/checksum remain.
+    No forced stop/restart/focus, physical mic, audible playback, new real
+    session prompt, source commit/push/tag or remote release. ic07 remains
+    active for broader lifecycle qualification; no human acceptance claim.
+    Existing ic07/#6 body/state/item/baseline verified before public-safe
+    update; independent full readback confirms exact body, same identities,
+    OPEN/In Progress, backlink/private Project13/sole repository membership.
+    Other issues/items unchanged; baseline recorded only after verification.
+  2026-11-12 - Independently reconciled current public-safe tracking: existing
+    #4/#5 updated, In Progress preserved; new ic08/#7 and ic09/#8 are
+    CLOSED/completed/Done in existing private Project13. All six old baselines
+    matched before writes; exact bodies/states/items/status IDs and four
+    untouched originals read back. Existing gh project shorthand failed owner
+    resolution; explicit scoped GraphQL established the real configuration.
+    No credentials, source publication, visibility or permission changes.
+    GitHub body-size limit required lossless relocation of ic06's old20,016-
+    character Completion log to this ledger, with exact preservation hash and
+    retained current log/navigation. No evidence truncation or duplicate issue.
+  2026-11-12 - Delivered integrated local unsigned .16 after owner approval of
+    feasible vision-report work. Actual research worker emits bounded observed
+    path/status metadata; transient trail and finite mesh pulses never invent
+    hidden reads. Explicit exact idle selection enables cited synthesis through
+    ordinary durable scheduling, exclusions and manual permissions. Strict
+    response/location validation, escaped HTML, capability hashes, cancellation,
+    duplicate ownership and visible browser failure preserve report provenance.
+    Persistent pinned native recognition loads before capture and reuses the
+    model across drafts/full final audio via private anonymous pipes. Parent
+    death/cancel/close teardown is explicit; no network/audio-device listener.
+    Added pinned helper packaging and exact miniaudio MIT-0 notice/provenance.
+    Final lint/build,19renderer/57host/11controller/53desktop pass. Voice50/51:
+    unchanged legacy Windows recognizes "police" instead of "please"; assertion
+    retained honestly. Synthetic collection->natural intent->normal queue->
+    cited report integration passes without any real session prompt.
+    Exact portable native speech/live drafts/final preserves X/Y exclusion,
+    same helper PID is reused then gone on close. Eight packaged desktop
+    checks pass.21project runtime/renderer files,eight speech files,13notices,
+    native dependency/private exclusion checks pass. Initial receipt harness
+    assumed POSIX ASAR paths and incorrectly excluded upstream dependency
+    tests; corrected audit scope/path handling, not application packaging.
+    631115985byte EXE SHA256:
+    4c8d433b1bc1d6bab7b8a36943fedcfa4e048819ca8d5fa1f51534bd8af1a00e.
+    Verified no running Intercom/Electron/helper before exact old .15/latest
+    unpacked/debug cleanup. Only latest EXE/checksum remains. No owner restart,
+    physical mic, playback, new real session work, commit/push or remote release.
+    Human speech/experience, natural five-minute accuracy, generic hardware,
+    speed/RAM and real multi-session acceptance remain open; ic05/ic06 active.
+    ic09 technically complete, not full-product or human acceptance.
+  2026-11-12 - Reconciled the owner's clarified voice-overlay vision with
+    current working-tree evidence in a self-contained illustrated HTML review.
+    Local speech, existing-session dispatch and mesh projection are real but
+    incomplete as one delivered experience. Traced cumulative observed context
+    sets through active slots to real-mode hub spokes; moving tracer is
+    demo-only. Host research worker returns final evidence without per-read
+    mesh events; its report is extractive, not Copilot-written synthesis.
+    Distinguished last verified published .12, retained .15 and source-only
+    five-minute/research work. Latency observations retain their input/test
+    limits; no accuracy score, ETA or impossible-active-attach claim invented.
+    Proposed one compelling voice/context/report/result acceptance scenario,
+    not an architectural rewrite or expanded session authority. Product brief
+    records voice as core and context-level observation before files; stale
+    activation wording now reflects selected push-to-talk. ic06 stays active.
+    Offline disposable Edge desktop/narrow rendering checks pass with no
+    script/network/page overflow; representative screenshots inspected.
+    No app feature, provider prompt, physical mic, owner-app automation,
+    packaging, commit/push, tracking write or publication in this review.
+  2026-11-12 - Owner requested up to five minutes for longer spoken requests.
+    Extended renderer timer/sample budgets and independent canonical-WAV
+    validation to300s, including28,800,044bytes at48kHz. Final chunk is capped,
+    not discarded with the entire recording. Physical loss stays cancellation.
+    Single-owner finalization and post-flush duration review prevent duplicate
+    recognition/automatic dispatch when stop races the limit. Automatic
+    cutoff always requires review; ordinary manual-stop behavior is retained.
+    Native deadlines scale with audio duration without relaxing short-input
+    budgets. Legacy script now reads validated rate to budget complete
+    recognition. Speech text cap grows to50,000, not request limits: full
+    over-limit drafts require explicit shortening, never silent truncation.
+    Lint/build,19renderer/39voice/20targeted disposable desktop cases pass.
+    Exact300s/one-extra-sample8/16/44.1/48kHz, long cancellation, sample/timer/
+    flush cutoff, duplicate chunks, track release, live-preview ownership and
+    unchanged short/manual-send behavior are covered. Whole82.9s owner input
+    now transcribes without offline chunks in9.61s on Vulkan. A clearly
+    artificial300s repeated/cropped composite with distinct synthetic ending
+    passes actual Vulkan/legacy recognition in20.94/33.00s; ending survives.
+    Legacy badly garbles the repeated recording despite retaining the synthetic
+    ending: duration/completion pass, not useful accuracy. No independent reference,
+    natural five-minute speech, hardware or benchmark claim. No provider/
+    controller/work, physical mic, audible playback or owner-app automation.
+    Original audio, decoded source and retained .15 EXE hashes unchanged.
+    Documentation/workstream updated; source-only, no package, commit/push,
+    tracking write or release. .15/.12 retain their earlier one-minute cap.
+  2026-11-12 - Added the owner-requested read-only context research lane.
+    Strict controller intent carries a topic/history flag, not work actions.
+    Registered fixed notes and exact indexed histories become cited private
+    HTML/JSON with extractive summaries and saved-topology illustration.
+    Source hashes/canonical non-link checks, cancellation, output/read bounds
+    and generated-report-only reopening preserve the host boundary.
+    Windows freshly created-file ctime changed on open; exact BigInt identity/
+    size/mtime checks avoid that metadata-only false failure. Real histories
+    exceeded the old16MiB limit; streaming now bounds256MiB/source,512MiB
+    aggregate,64KiB chunks and4MiB event lines, disclosing parser gaps.
+    First2/latest10 topic messages retain omission counts. History-only topic
+    matches are eligible; attribution/reference is never completion proof.
+    Initial unbounded Talk feedback hid essential controls; independently
+    scrolling feedback resolves overflow and report reopening recovers visibly.
+    Owner82.9s recorded input was recognized locally in two overlapping chunks;
+    no long-live-capture or independently accepted accuracy claim.
+    One real restricted-controller turn and saved-source collection pass with
+    work transport prohibited:41contexts,173files,nine readable/four matching
+    histories,eight reference contexts,25unavailable/partial source checks.
+    Integrated22.31s; refined rerun9.55s reuses interpretation, not benchmarks.
+    Isolated desktop/mobile report checks/representative captures pass without
+    network requests/scripts/overflow. OS accepted exact unchanged HTML;
+    owner-browser visibility was not automated. Audio and .15EXE unchanged.
+    Final lint/build,16renderer/11controller/49host/47desktop pass after fixing
+    a newly unused classification variable. No physical microphone, playback,
+    session resume/work, owner-app restart, package, commit/push or upload.
+    Source-only; human acceptance, semantic synthesis and universal historical
+    discovery remain unclaimed. ic08 complete at this bounded technical scope;
+    remote tracking synchronization has not been performed.
+  2026-11-12 - Owner requested cleaning release to one version. Verified .15
+    launcher is the running instance, inspected old directory/link/runtime
+    ownership and removed only four explicit older release subdirectories:
+    mic-layout-candidate and prototype-12/13/14-candidate. Retained only
+    prototype-15-candidate; unchanged EXE SHA-256 and running launcher verified.
+    Removed3114900746bytes (~3.1GB). Updated current guides/retention evidence;
+    old milestone preservation claims remain historical. No app restart,
+    source/runtime change, rebuild, commit/push or remote-release modification.
+  2026-11-12 - Owner supplied38.8second recorded English and requested local
+    transcription, rigorous testing and safe unattended dispatch monitoring.
+    Chromium decoded/resampled locally; actual bundled native recognizer
+    supplied the provisional transcript shown in chat. No cloud audio or
+    assistant listening claim. Nine recorded-input cases pass through extracted
+    .15 renderer/services and original speech resources: defaults, complete
+    local check/live/final, draft preservation, cancellation/late results,
+    English hint,8kHz review, native concurrency/exact-ID retry, source-rate
+    auto-send refusal and malformed input/recovery. Max native ownership1;
+    no provider/work/playback attempts. First draft8.29s and stop-to-final
+    7.34/6.81s are individual observations, not accepted speed/accuracy.
+    Initial hidden harness failed because development Electron did not select
+    packaged resources; fixed only test resource-root/display mapping.
+    No production bug reproduced, runtime changed or new EXE needed.
+    Fresh dispatch authority then permitted three real-service checks.
+    Actual controller asks for the recording's unspecified target; no work.
+    A separately exact-target, reply-only request reaches the previously
+    designated existing idle test session via controller/scheduler/WorkHost/ACP.
+    Host-supplied time/date avoids shell/network; arithmetic checked separately.
+    Durable work is responded, not independently verified arbitrary success;
+    dependent host status succeeds with the same receipt. No model polling.
+    Test-only single-target/single-turn guards, completion-only tool allowlist,
+    shell/write denies and isolated hook-disabled configuration retain safety.
+    Temporary junction references exact original session history, not a clone;
+    expected resume metadata/history can change. Zero actual tool calls or
+    permissions;120repository files, original audio,ASAR,user settings/config
+    hash comparisons unchanged. Owned transport exits0, profiles/junction
+    removed, original session preserved. Not a machine-wide file audit.
+    Detailed audio/transcripts/receipts stay private. Updated public-safe
+    evidence without normal-app automation, audible playback, commit/push,
+    tracking write or upload. Physical/Hindi/Hinglish/human/reference-accuracy,
+    generic GPU, speed and multi-session/unrestricted-work gates remain open.
+  2026-11-12 - Owner reported missing catalog-name refusal, requested a
+    live-transcription toggle, then asked for unattended fixes/rigorous tests.
+    Missing/blank Agency summaries now show UUID labels/warnings rather
+    than blocking all requests. Non-string/malformed rows still fail.
+    Read-only real catalog50eligible/6unnamed/4busy, no provider work.
+    Talk live drafts are off-default/per-mount and use serialized local
+    batch snapshots, not streaming. Partial results never dispatch/speak.
+    Stop cancels/settles preview before final even on flush failure;
+    cancellation/unmount reject late results and preserve typed drafts.
+    Lint/build/package,16renderer/37voice/10controller/39host pass.
+    Initial full desktop44/45 found new test nested in evaluation; moved
+    it to top-level, final46/46pass. Final unpacked .15 focused9/9pass.
+    Actual portable synthetic local check/live preview/final recognition
+    preserveX/Yexclusion with auto-send disabled and no dispatch. First
+    run passed behavior but exceeded15second portable launcher cleanup;
+    final60second cleanup bound passes, success emits after cleanup.
+    Preview check also explicitly rejects the preexisting typed draft.
+    No claim of streaming, calibrated accuracy or startup/shutdown speed.
+    Native smoke verifies fresh defaults,41contexts/31relationships,
+    diagnostics, profiles, floating/window behavior and track/profile cleanup.
+    Packaging matches12desktop/7rendererfiles/12notices, exact bundled
+    speech/native module/private exclusions. .15EXE631003803bytes;
+    SHA-25622f6609895579284834fb3ea6af8c0d6b161bfb4ff363d2fbed3f5a8b6c2a1f0.
+    Retained.14/.13/.12/.11 hashes unchanged. No physical microphone,
+    audible playback, normal-profile app automation, real task, installation,
+    commit, push, tracking write or upload. Human multilingual/FDUCE,
+    measured performance, generic GPU and actual multi-session gates remain.
+  2026-11-12 - Owner required implemented features to work with defaults.
+    Acknowledged .13 still needed prepared speech-folder setup. Built a
+    separate .14 with the pinned model/six Vulkan binaries, MIT notices and
+    before-pack integrity verification; no download/fallback service.
+    Fresh profiles resolve resources automatically. Symbolic bundle settings
+    survive portable relocation; explicit custom/Windows choices remain.
+    Audited system mic/auto language/Standard local voice/speed/Intercom route.
+    Added local spoken progress/replies and once-only live-plan outcomes,
+    respecting opt-outs, recording and restored receipt no-replay. Progress
+    precedes interpretation to avoid superseding fast result speech.
+    Lint/build/package and15renderer/37voice/10controller/38host cases pass.
+    Latest source speech3/3 and final packaged targeted desktop9/9 pass.
+    Actual final portable fresh-profile smoke uses synthetic Windows PCM,
+    no seeded recognition settings/root/device discovery, and passes native
+    Vulkan X/Y/exclusion/draft checks. "Please" repeats; accuracy unaccepted.
+    Diagnostics/cancellation/voice/window/real mesh41contexts/31relationships
+    pass.19runtime resources/12notices/native module/private exclusions and
+    bundled speech hashes verified. EXE631007214bytes; SHA-256
+    826d5b1973cef9177da4258ff9b700c7a7209d4545707879013a291927156a28.
+    .13/.12/.11 hashes unchanged. Initial private inventory assertion also
+    matched SDK dependency docs/src; corrected it to exclude project-root
+    development paths while retaining legitimate packaged dependencies.
+    No physical input, audible playback, provider/real-session task, normal
+    profile launch, installation, commit, push, tracking write or upload.
+    Human multilingual/FDUCE/speed, generic GPU and live-session gates remain.
+  2026-11-12 - Owner requested an updated local release for personal testing.
+    Built unsigned .13 in release\prototype-13-candidate, preserving .12/.11.
+    Includes current speech/controller source and approved glass/refraction.
+    External prepared Whisper folder remains an explicit setup prerequisite.
+    Lint/build/package,15renderer,34voice,10controller,38host cases pass.
+    Packaged desktop36/39 initially; three graph tests matched both graph and
+    decorative mic canvases. Narrowed graph selectors; all six affected cases
+    pass without runtime changes. Actual portable launcher passes synthetic
+    speech/native Vulkan no-send check, exact X/Y/draft preservation, measured
+    diagnostics and capture/floating/window/profile cleanup. Phrase repeats
+    its start; no human accuracy claim.19runtime files/10notices/native module/
+    private exclusions match; candidate111985553bytes, SHA-256
+    89dc3056b96f98c1cd16829ffeabb4134816e4098347060681bb9f14b2f91dda.
+    Test processes exited and rollback hashes unchanged. No physical mic,
+    audible playback, live-session task, owner-profile launch, commit, push,
+    tracking write or release upload. Human multilingual/device/speed and
+    generic Vulkan qualification remain open.
+  2026-11-12 - Resumed microphone/local-recognition usability. The selected
+    device check now measures two seconds, browser source rate versus PCM,
+    peak/RMS and clipping. Persisted auto/English/Hindi hints; separate Speech
+    check transcribes locally without sending or replacing the working draft.
+    Exact request identity rejects cancelled late results. Below16kHz WAV or
+    reported source rate requires review even after16kHz resampling.
+    Initial desktop run found minimum-window overflow; fixed by separating
+    Recognition/Speech check, not weakening the fit assertion. Corrected test
+    nesting and verified actual execution. Cleanup errors now remain visible
+    without stranding UI ownership. Lint/build,3recording,34speech and
+    13targeted hidden disposable desktop cases pass. Actual synthetic-file
+    capture/native Vulkan round trip preserves X/Y/draft with no dispatch or
+    provider use, though the phrase start repeats. Native auto16/en16/en8
+    observations:6,645/3,546/3,354ms, uncontrolled, not a benchmark.8kHz
+    still yieldsY->"why"/p.852, now held for review, not fixed accuracy.
+    Consumer setup, generic Vulkan, human multilingual/FDUCE and speed gates
+    remain open. No physical mic, audible playback, real-session work,
+    user-app launch, commit, push or release for this milestone.
+  2026-11-12 - Owner accepted subtle glass and water-surface refraction and
+    authorized implementation, README showcase, all application GIF refreshes
+    and scoped push. Isolated the visual source from unfinished recognition/
+    controller/scheduler drafts in a detached publication worktree. Lint,
+    TypeScript/Vite build, five motion/physics and three hidden desktop cases
+    pass there, including real pixel effects, independent rotation and cleanup.
+    Regenerated four six-second GUI pairs and a 14-second synthetic-speaking
+    pair, with matching stills and every decoded pixel/timing checked.
     Inspected four GUI first frames and speaking frames 0/100, not full playback.
-    Original branding, published .12 and the closed user app remain untouched.
+    Added the approved speaking showcase and retained provenance/reduced-motion
+    alternatives. Original branding, published .12 and closed user app untouched.
     Human speech, hardware performance and hosted CI are not newly qualified.
+  2026-11-12 - Owner rejected thin concentric outlines and supplied a
+    jQuery-ripples reference. Inspected its height-update/normal-sampling
+    shaders; implemented an independent 64x64 damped height/velocity model,
+    local SVG reflection displacement and transparent normal-derived shading.
+    No jQuery, external asset/script, new stream or full WebGL scene.
+    A private intermediate draft distorted the glyph; final scope is glass
+    reflections only, leaving icon/rim/size and original rotation intact.
+    Painting is capped at30fps with90Hz steps/bounded100ms catch-up; input
+    impulses are separated by240ms and silence clears the1.6s tail.
+    Lint/type-check/build, five physics/motion unit cases and three focused
+    hidden desktop cases pass (21.2s), including actual pixel displacement,
+    same running glass animation, sustained input and lifecycle/track cleanup.
+    Corrected actual-app silent GIF:560x560,280frames,14seconds,4,831,597bytes.
+    Every decoded frame/timing verified; six decoded phases inspected, not
+    full playback. Rejected previews/README media preserved; acceptance held.
+    No physical input, provider/session work, user-app relaunch or publication.
+  2026-11-12 - Owner corrected whole-shell growth to water-like ripples from
+    the centre and required independent glass rotation. Added five reusable
+    Web Animation ring layers, input-dependent opacity and 1.05s outward fade,
+    with an audible-only 220ms timeout (including sustained saturation).
+    Glass/icon/hit area stay fixed; the glass animation is a separate sibling.
+    Lint/type-check/build and three focused offscreen cases pass: outward
+    progression/fade, input strength, saturation, identical running rotation
+    and advancing time, silence, reduced motion/native pause/hidden state,
+    floating continuity and cancelled input tracks. Two asynchronous test
+    assertions now await existing media/portal results; raw meter attributes
+    avoid the browser's property clamp during the saturation test.
+    Separate actual-app synthetic-speech GIF: 560x560, 260 frames, 13 seconds,
+    4,776,852 bytes. Encoder verifies every decoded frame/timing; six phases
+    inspected, not complete playback. Older previews and README media preserved.
+    No physical input/provider/dispatch/user-app relaunch or publication.
+  2026-11-12 - Added centre-origin radial input bloom and up-to-10% glass
+    shell expansion with 110ms transitions, driven by existing measured RMS.
+    No extra audio stream or frame loop; hit areas stay fixed. Lint/build and
+    three focused offscreen desktop cases pass: silence/soft/loud, symmetry,
+    reduced motion/hidden state, floating continuity and track cancellation.
+    Separate hidden synthetic-Windows-speech capture produces a 560x560,
+    260-frame, 13-second silent GIF (6,329,224 bytes). Decoded pixels/timing
+    verified; idle/peak/final phases inspected. Idle preview and README assets
+    preserved. No physical input, provider work, user-app relaunch or push.
+  2026-11-12 - Owner selected the earlier glass and requested changing 3D
+  directions, not clockwise spinning. Restored the original subtle material
+  without either thread; replaced the flat texture spin with six soft CSS-3D
+  reflections and a seeded, smooth-field 32-second orientation trajectory.
+  One Web Animation, no new renderer/frame loop/audio input. Native/document
+  pause, reduced motion, fixed icon and floating-scale depth are retained.
+  Lint/build, two motion and three focused offscreen desktop cases pass.
+  Captured the actual control as a 640-frame, 32-second, 560x560 GIF;
+  decoded frames/timing checked and eight phases inspected. Added bubble-only
+  tooling so README media need not change before visual acceptance.
+  User app remains closed; publication and README refresh remain held.
+  2026-11-12 - Owner rejected opaque rainbow film and requested a selectable
+  sprite sheet. Prepared eight original dimmer transparent glass studies:
+  Clear, Pearl, Ice, Prism, Frost, Soap, Lens and Midnight. All spin, with
+  upright icons and 60px previews. Hidden local design-study capture produced
+  a static sheet plus verified 100-frame, ten-second looping GIF. No candidate
+  applied, user-app relaunch, commit or push; await owner selection.
+  2026-11-12 - Owner supplied iridescent soap-bubble references and rejected
+    the golden inner loop and thin upper stroke. Replaced both with an original
+    offline-generated 256px film texture (78,348 bytes), continuously rotating
+    beneath fixed highlights and edge shading. Kept the microphone upright,
+    measured-input glow/fill, one transform-only loop and all pause/accessibility
+    safeguards. No new JS frame loop, canvas, dependency or audio stream.
+    This is an optical approximation, not physical/environmental ray tracing.
+    Removed the enlarged README showcase; retained a revised standalone GIF.
+    Refreshed four six-second GUI pairs and a ten-second, 200-frame, 560x560
+    bubble loop (5,173,526 bytes). Every decoded frame/timing/still is checked;
+    inspected the initial contact sheet and final brighter still. Nine branding/
+    reference assets remain byte-identical; README links decode. Working-source
+    lint/type-check/build, eight renderer and three isolated desktop cases pass.
+    User app remains intentionally closed; .12 and speech/hardware gates remain.
+  2026-11-12 - Refreshed all four README GUI GIFs and matching stills from the
+    current source, preserving the dense fictional globes and staged sea-glass
+    wallpaper. Every scene asserts the actual glass reflection is moving.
+    Added a 560x560 golden-bubble showcase with 200 deterministic idle CSS
+    samples over ten seconds at 20 fps (1,524,369 bytes). Captured a 3x crop
+    through the screenshot protocol after device metrics alone still produced
+    an 84px image; explicit 252x252 assertions now protect resolution.
+    Shared encoding validates every decoded frame against its indexed source,
+    exact duration and matching stills; all README image references decode.
+    Lint/type-check/build and capture safety checks pass; one compact contact
+    sheet inspected. All owned capture processes are closed; original branding,
+    published .12 and the intentionally closed user app remain untouched.
+    Existing #5's public-safe media projection is reconciled and read back with
+    its original Project 13 item OPEN / In Progress; no other issue is changed.
+    Local docs/media only, no commit, push, release or speech/hardware acceptance.
+  2026-11-12 - Owner requested a living golden reflection and a GIF. Added
+    one 10-second transform-only CSS rotation/tilt to the existing inner line;
+    outer glass, gradient/shadows, capture and control sizes stay unchanged.
+    Document/native pause suspends motion; reduced motion removes it.
+    React external-store visibility subscription avoids a missed initial
+    visibility transition. No new JS frame loop, renderer, dependency or input.
+    Final lint/type-check/build and three focused offscreen desktop cases pass,
+    including motion/pause/accessibility and existing synthetic capture.
+    Exported 200 deterministic actual-renderer samples as a 560x560, 20 fps,
+    10-second GIF (1,817,479 bytes); inspected its contact sheet. No recording,
+    provider action or visible window during capture. Actual native minimize
+    and hardware cost remain unqualified. Prior local app stays intentionally
+    closed; source only, no install, commit, push or release.
+  2026-11-12 - Added source-only glass-bubble depth around the application
+    microphone, inspired by the supplied close-up and sampled video frames.
+    Static CSS reflections/rim and a smooth bright lavender/mint SVG material
+    replace the flatter button and backdrop blur. A transform-scaled glow
+    follows existing input; no new renderer, asset, dependency or idle loop.
+    Existing capture semantics and 60/34 px layout remain. Lint/build, eight
+    renderer tests and two offscreen disposable desktop cases pass; inspected
+    actual idle/listening/floating captures. Accessibility check now recognizes
+    inherited aria-hidden. Hardware benchmarking/human acceptance stay open;
+    no physical microphone, provider work, publication or user-instance switch.
   2026-11-12 - Observed the first published Windows CI run, 43079370607,
     at source 22bb5b4d41628c664b8c9d9df3a6cdd53559f9cd.
     Locked installation, lint/build and renderer tests pass; native voice
@@ -138,6 +578,105 @@ Completion log:
       animation remains simulated. GitHub page styling, runtime/EXE icons,
       published .12 and the user's running instance are unchanged.
       Existing unfinished speech/controller source remains outside this commit.
+  2026-11-11 - Connected stronger local speech without claiming quality acceptance.
+    Action: prepared-folder picker, atomic saved CPU/GPU engine choice, pinned
+      artifact checks before capture, explicit legacy Windows selection and
+      actual VoiceHost transcription. Missing setup preserves drafts/no input.
+      No installer, bundled model or silent fallback.
+    Correction: upstream --no-prints suppresses the diagnostic required to
+      establish Vulkan use. Keep GPU diagnostics enabled and regress the flag.
+      Updated three engine-neutral uncertainty-copy assertions, not behavior.
+    Evidence:31speech,8renderer,38host,33desktop cases and lint/build pass.
+      Synthetic4.58s Vulkan wall observations8/16/44.1/48kHz:
+      7,041/7,085/5,161/5,412ms; CPU16kHz31,280ms. Native exact-child cancellation,
+      PID exit and settings restart verified without input/playback/provider.
+    Failed gate:8kHz "sessionY" becomes"session why", probability0.852 with
+      no review flag. Exact-name assertion remains failed. No impeccable/
+      human/Hinglish/SLO claim. Local GPU GGML_NATIVE=ON is not a portable build.
+    Boundary: current source only. Published.12, user instance and prior
+      dependency candidate unchanged; no new commit/push/release or live task.
+  2026-11-11 - Connected default orchestration and validated its full source UI.
+    Action: canonical Agency catalog names/roots, host-authoritative requests,
+      durable two-workspace scheduler, exclusions/dependencies, exact one-shot
+      permissions, recovery/cancellation, narrow IPC and observed graph events.
+      Intercom is the default node; no designated conversation session or
+      second clear-plan confirmation. Plans has fitted Activity/Permission/
+      Result tabs and complete bounded text fields.
+    Corrections: tests found catalog cleanup attached to sessions.push's
+      numeric return instead of the queued promise; moved finally to its
+      owning promise. Compacted permission layout without hiding controls
+      and stress-tested long names/details. Reject malformed nested receipts.
+    Evidence: 38 host and eight renderer tests, lint/build and all 32 source
+      desktop cases pass together. Desktop profiles/audio are disposable/
+      synthetic; no provider work or physical microphone was exercised.
+    Boundary: stronger multilingual recognizer still inactive. Older portable
+      controller candidate predates this wiring; published .12 unchanged.
+      No new commit/push/release, real task, user-app restart or switch.
+  2026-11-11 - Implemented and packaged the restricted interpretation adapter.
+    Action: exact SDK 1.0.31 dependency, owned empty-mode controller, strict
+      bounded plan/catalog validation, cancellation and cleanup ownership.
+      Exact catalog IDs, idle work, exclusions, dependency DAGs and Roman
+      output are host-validated; startup/post-turn tools/skills/MCP are audited.
+    Evidence: ten focused cases, lint and build pass. Actual repository CJS
+      adapter returns the fictional X/Y/Z refresh/conditional-status plan
+      in 8,593 ms complete lifecycle; no real catalog, audio or work task sent.
+    Packaging: separate .local\controller-candidate portable builds. Base SDK,
+      Koffi 3.3.6 and controller load inside its packaged Electron. Six added
+      dependency notices exist and the unused SDK platform CLI is excluded.
+      Disposable-profile portable smoke passes actual mesh startup, synthetic
+      microphone signal/cancel/track release, settings/profiles and both views.
+      Candidate SHA-256:
+      fc2233fb78fd8ae4a0309be477028409a89b1d4d5e4901c52eb34e14f20210ab.
+    Correction: omitting optional npm packages removed existing frontend native
+      bindings and broke the build. Restoring optionals with scripts disabled
+      repaired it; blanket optional omission is not suitable for this app.
+    Boundary: adapter remains unconnected to app IPC/UI; legacy recognition and
+      confirmation still run. Fresh real catalog, scheduler and speech setup
+      remain unfinished. Published .12 hash is unchanged; no app switch,
+      real task, physical microphone, commit/push/tag or new release.
+  2026-11-11 - Verified actual GPU inference and a narrower interpreter boundary.
+    Build: nested shader-generator MSBuild tracking paths failed under the long
+      root. Shorter ignored build root fixes unchanged pinned v1.9.2 source;
+      no global policy, driver, environment or upstream source modification.
+    Speech: first Vulkan synthetic wall observation 7,275 ms; subsequent
+      fresh-process diagnostic 4,064 ms for 12.615 seconds of synthetic input.
+      Actual Vulkan0 model allocation/backend selected on AMD 780M. Cache state
+      uncontrolled; no human/Hinglish/device quality or accepted latency claim.
+      Six compiled native hashes recorded; deployment dependencies/notices open.
+    Interpreter: pinned published SDK 1.0.31 and installed CLI 1.0.109 use empty
+      mode, no offered tools/skills/agents and disabled ambient discovery.
+      Preflight alone missed a built-in MCP connection at model initialization;
+      explicit session-level disable corrected it. Final fictional normalization
+      preserves exclusion, removes fillers and retains empty post-turn
+      inventories; 3,070 ms, no observed tools/custom-agent loads.
+    Hardening: unexpected backend inventory is checked before cached integrity
+      return; negative token IDs are rejected. Eight recognition plus 18
+      voice-host tests and repository lint pass.
+    Boundary: no production SDK dependency, activated recognizer/controller,
+      real catalog/task, user-app change, new commit/push/tag or release.
+  2026-11-11 - Pushed the completed glass milestone, then began the core rebuild.
+    Publication: explicit push-first request fulfilled with commit
+      feafb3309b7985685e61730ebcc6fb84c5b5de44; independent remote-main equality
+      verified. No release/tag/version, active-app restart or installation switch.
+    Speech: verified pinned whisper.cpp v1.9.2 CPU/BLAS and multilingual
+      large-v3-turbo-q5_0 artifacts. Located the Windows CON/stdout distinction
+      in the pinned source; added integrity-checked, bounded named-pipe JSON
+      transport, split-UTF-8 handling, explicit errors and cancellation.
+      Native execution now accepts an explicit environment and cancellation
+      aborts pre-process work as well as terminating only the owned child.
+    Evidence: seven new adapter cases and 18 existing/extended voice-host
+      cases pass; lint passes. The 12.615-second synthetic X/Y/Z request keeps
+      targets, dependency and negation. Cold BLAS observations are 19,382 ms
+      initially and 22,162 ms through the hardened adapter with verification.
+      The latter is not a controlled comparison or acceptable speed-first result.
+    Interpreter: fictional-only normalization authenticates without observed
+      tools and with MCP servers disabled. Removed incompatible session-id/
+      trust-folder flags. Despite an isolated disabled skill inventory,
+      prompt-mode events still advertise inherited enabled skills; strict
+      minimal-context isolation is not yet established.
+    Boundary: new ASR remains an unactivated foundation. No setup UI, Roman
+      normalization, typed scheduler, live catalog dispatch or human English/
+      Hinglish/microphone qualification. TTS improvements remain deferred.
   2026-11-11 - Added focused glass controls and original mirrored voice waves.
     Action: replaced stacked settings with category/subcategory tabs while
       preserving mounted capture, drafts and separate work confirmations.
@@ -738,3 +1277,269 @@ Completion log:
         durable jobs or broad lifecycle/resource/latency qualification.
         Queue recovery inspection found delivered requests, not unsaved queue
         contents; installed CLI documentation provides no queue recovery command.
+
+Historical ic-06 completion log preserved for GitHub issue-size compatibility
+  2026-11-12 - Owner clarified voice transcription is the essential front door
+    to existing Copilot work, with context/offload observability now and files
+    later. Supplied a simple visual report rather than another unsolicited
+    feature implementation. Confirmed source-only research/five-minute changes,
+    batch recognition latency and missing activity projection as separate gaps.
+    Corrected the brief's stale wake-word bullet to selected push-to-talk.
+    Integrated slice remains IN_PROGRESS; no acceptance or new authority inferred.
+  2026-11-12 - Owner requested only one local release. Checked runtime ownership
+    and links, removed exact .14/.13/.12/.11 release directories and retained
+    .15 unchanged. Reclaimed3114900746bytes; existing .15 launcher still runs.
+    Supersedes earlier local rollback-retention statements, not remote releases.
+  2026-11-12 - Qualified supplied recorded speech (nine cases) and, under fresh
+    owner authority, one safe monitored existing-session reply (three checks).
+    Unspecified target first clarifies with no dispatch. Exact target then
+    uses real interpretation/scheduling/ACP; completion is observed, not polled
+    through prompts. Responded work and successful host-status receipt stay
+    distinct. Tool allowlist/deny rules, hook-disabled isolated launch and
+    exact original history binding protect the unattended test. Zero tools/
+    permissions,120repository files/protected hashes unchanged and all owned
+    cleanup pass. Test-only resource mapping corrected after initial setup
+    failure. No product fix, replacement EXE, normal-app automation or upload.
+  2026-11-12 - Fixed the reported unnamed-session catalog refusal while
+    preserving exact identities, ambiguity and busy checks. Actual read-only
+    catalog succeeds (50eligible/6unnamed/4busy), no task dispatch.
+    Added Talk live drafts, off-default/per-mount, serialized local batches
+    with three-second waits, final-only sending and exact cancellation.
+    Final cleanup runs even on audio flush failure. Lint/build/package and
+    16renderer/37voice/10controller/39host pass; full desktop46/46, final
+    unpacked desktop9/9. Corrected initial misplaced test registration.
+    Actual portable .15 fresh-profile synthetic native draft/final smoke
+    passes X/Y exclusion/no-send/track release and launcher/profile cleanup.
+    Initial cleanup exceeded15seconds; final60second bound passes without
+    a performance claim. EXE631003803bytes, SHA-256
+    22f6609895579284834fb3ea6af8c0d6b161bfb4ff363d2fbed3f5a8b6c2a1f0.
+    12desktop/7renderer/12notice/native/speech integrity checks pass;
+    .14/.13/.12/.11 preserved. No physical input/playback/provider task,
+    normal-profile automation, commit/push/tracking/publication. Human
+    multilingual/device/speed and actual multi-session acceptance stay open.
+  2026-11-12 - Qualified separate local unsigned .14 with included pinned
+    recognition and usable fresh-profile defaults, without folder/discovery
+    setup. Added default local orchestration speech and live-only plan result
+    announcements; progress precedes interpretation so late acknowledgements
+    cannot interrupt fast completion. Opt-out/restored-receipt/cancellation
+    cases pass in final packaged9/9. Actual portable synthetic native smoke
+    and integrity/source/native/notices/exclusion checks pass; .13/.12/.11
+    preserved. No physical mic, playback, live task, owner-app launch or push.
+  2026-11-12 - Packaged owner-requested local unsigned .13 with current
+    speech/controller code and approved glass/water refraction. Actual portable
+    synthetic speech/native Vulkan check preserves X/Y/exclusion/draft with
+    no dispatch. Source units pass; packaged desktop36/39 initially, then six
+    graph cases pass after narrowing selectors to exclude the mic canvas.
+    Verified19runtime resources/10notices/native module/private exclusions.
+    EXE111985553bytes, SHA-256
+    89dc3056b96f98c1cd16829ffeabb4134816e4098347060681bb9f14b2f91dda,
+    release\prototype-13-candidate. Retained.12/.11 unchanged. Prepared external
+    engine selection remains explicit; no physical mic, live task, owner-app
+    launch, commit, push or upload. Human acceptance and broad ic-06 stay open.
+  2026-11-12 - Resumed speech usability under ic-05. Added measured mic test,
+    persisted language and independent no-send Speech check. Separated its
+    category to preserve minimum-size layout; cancelled and low-rate results
+    cannot auto-dispatch. Cleanup failure remains visible without locking
+    controls. Isolated synthetic/hidden checks pass; no physical input,
+    real-session task, user-app launch, commit, push or release.
+  2026-11-12 - Owner accepted the corrected water refraction and authorized
+    its implementation, README showcase, all refreshed application GIFs
+    and scoped push. Qualified the isolated visual-only candidate and five
+    refreshed GIF/still pairs; preserve unfinished controller/speech work
+    and the intentionally closed user application.
+  2026-11-12 - Replaced the owner-rejected ring outlines with a damped
+    water-height simulation, reflection refraction and soft normal lighting.
+    Inspected the supplied demo's shaders; retained an independent local
+    implementation without jQuery/external runtime requests. Restricted
+    distortion to the glass after a private intermediate preview also bent
+    the glyph. Original rotation remains independent and icon/rim stay fixed.
+    Focused numerical/native-renderer checks and revised silent speaking GIF
+    verified; no visual acceptance, README replacement or publication implied.
+  2026-11-12 - Corrected the owner-rejected expansion to outward water-like
+    microphone rings, explicitly independent of random-direction glass motion.
+    Verified unchanged rotation identity/time during input changes and fixed
+    shell size, sustained levels, silence and lifecycle/capture cleanup.
+    Delivered a separate synthetic-speech preview without touching the
+    intentionally closed user app, physical microphone or README media.
+    Human acceptance and publication remain pending.
+  2026-11-12 - Added the requested centre-out microphone-level pulse and
+    separate speaking GIF. Preserved original glass/3D motion, fixed targets,
+    reduced-motion support and capture ownership. Verified actual synthetic
+    speech input and silence through the hidden disposable app; no provider,
+    physical microphone or intentionally closed user-app interaction.
+  2026-11-12 - Restored the selected earlier glass, removed inner threads and
+  added seeded smooth-field X/Y/Z motion. Lint/build, ten renderer tests and
+  three focused offscreen desktop cases pass. Actual-control GIF spans the
+  full 32-second loop; decoded frames/timing and eight phases verified.
+  Visual acceptance, README media refresh and publication remain pending.
+  2026-11-12 - Recorded rejection of opaque rainbow film and prepared eight
+  dimmer transparent rotating studies. Await owner choice before integration;
+  no new commit/push, app relaunch or hardware-performance qualification.
+  2026-11-12 - Replaced the golden loop/upper stroke with original spinning
+    iridescent film and fixed lighting, following the owner's bubble references.
+    Removed the enlarged README panel while retaining its revised standalone
+    GIF. Regenerated every GUI media pair; verified motion/accessibility/capture
+    safeguards and decoded media. Kept the user app closed and rebuild separate.
+  2026-11-12 - Refreshed the four README GUI demos with the glass bubble and
+    added its enlarged golden-flow showcase, all with reduced-motion stills.
+    Extended the existing safe capture/encoding tools rather than the logo
+    generator. Verified motion, exact GIF pixels/timing, references, isolated
+    cleanup and the new contact sheet. No app relaunch, commit, push or release.
+  2026-11-12 - Animated the golden inner reflection at the owner's request,
+    retaining static outer glass and existing microphone/input behavior.
+    Added transform-only CSS motion with hidden/native-pause/reduced-motion
+    safeguards and focused desktop coverage. Lint/build and three isolated
+    cases pass. Exported the actual renderer's complete 10-second loop as a
+    local GIF, with no recording/provider activity or visible test window.
+    Owner intentionally closed the prior local app; left it closed. This
+    supersedes the earlier static-only reflection, not the performance gates.
+  2026-11-12 - Used the supplied close-up and four sampled local-video frames
+    as glass-shell reference, retaining Intercom's own microphone. Added
+    static pearlescent reflections, a restrained halo and input-driven glow;
+    no new idle animation or backdrop blur. Two isolated offscreen desktop
+    cases, eight renderer cases and lint/build pass. Decorative descendants
+    correctly inherit aria-hidden in the icon-only accessibility check.
+    No physical input, visible test window, provider task, publication or
+    user-instance switch. Hardware performance and visual acceptance remain open.
+  2026-11-11 - Restored the requested transparent rising/falling logo fill;
+    smooth color material and original sparse branding are retained. Replaced
+    the inspiration table with GitHub-compatible floating-image HTML.
+    Brightened both logo microphones without changing the wordmark or geometry.
+    Added the authorized Windows repository-test workflow, keeping the
+    unpublished speech/controller rebuild outside its published source.
+  2026-11-11 - Corrected the unintended dense logo: restored exact original
+    nine-node geometry while keeping only application demos dense.
+    Removed the mic's hard fill boundary; smooth blended bodies and a
+    breathing rim replace horizontal bands. Added the requested wave glow.
+    Four 48-context/144-connection captures pass with synthetic inputs only;
+    floating gallery uses the supplied wallpaper and contrasting fixture nodes.
+  2026-11-11 - Condensed README inspiration and removed streaked microphone
+    pigment from both documentation logos, keeping wordmark texture and UI.
+  2026-11-11 - Added the requested switchboard/conductor README passage with
+    right-hand historical photograph, source attribution and owner-confirmed
+    publication permission. Existing UI retained; no release requested.
+  2026-11-11 - Restored original lowercase wordmark font with its pigment
+    effect, matched both documentation microphones, and replaced four README
+    GUI panels with genuine isolated recordings and reduced-motion stills.
+    Verified synthetic input/transparent capture and compressed delta frames.
+    No user-instance automation, real session dispatch, new push or release.
+  2026-11-11 - Added more colorful ethereal mirrored waves and the lowercase
+    seafoam/violet brush wordmark. Regenerated GIF/still/title, checked actual
+    GIF palette, transparency, motion/loop and exact still, and inspected the
+    final title/frame preview. No runtime, static-icon or release change.
+  2026-11-11 - Verified frosted sea-glass README GIF/still/static mark, matching
+    title/buttons/gallery, transparency and screenshot fidelity. Asset-layout
+    preview visually inspected; no runtime, speech or release change.
+  2026-11-11 - Connected restricted interpretation, canonical catalog, durable
+    scheduler and compact Plans UI; complete source regression checks pass.
+    Real multi-session and stronger speech qualification remain open.
+  2026-11-11 - Qualified focused settings, icon-only glass microphones, fitted
+    floating dock and symmetric live waves; added dim transparent README wings.
+    Corrected minimum-size Voice spacing, intrinsic dock width and mirrored
+    canvas-gradient coordinates; updated older test navigation and bounded
+    startup-idle sampling. Local same-version candidate only, not a release.
+    Broader physical/human, permission and measured-performance gates stay open.
+  2026-11-11 - Published .12 after exact draft source/notes/assets checks.
+    Anonymous EXE/checksum downloads match local bytes; previous releases and
+    local .11 preserved. Fixed source tag remains separate from receipt commit.
+  2026-11-11 - Owner authorized pushing and updating the release. Qualified
+    separate unsigned .12 with current microphone/review/floating/node fixes
+    and reorganized source. Lint/type/build, 8 renderer units, 17 voice-host,
+    17 mesh/work-host and all 28 packaged desktop cases pass together.
+    Actual portable passes synthetic capture/cancel/cleanup, real 40-context/
+    30-link mesh, profiles and native controls. Fifteen runtime resources,
+    exact version, four notices and private/development exclusions verified.
+    EXE: 110679248 bytes, SHA-256
+    326129e8193fe2021c3fef988d4dc154aee362f02ed528a76fc37e9646c5699d.
+    README/guide now target .12. Publication/download verification pending;
+    retained .11 unchanged. No new live task or user-instance restart.
+    Broader human/device, native-permission and performance gates stay open.
+  2026-11-11 - Reorganized the entire repository on owner request; updated
+    application/resource/test/tooling paths, README, guide and contributors'
+    map. Separate qualification package verified; retained release untouched.
+  2026-11-11 - Refreshed README artwork on owner request: caption-free animated
+    logo with transparent exterior/circular glow, raised shadowed link buttons
+    and supplied desktop/browser floating showcases labelled earlier layout.
+  2026-11-11 - Updated the image-led README before pushing: latest local .11
+    card links directly to its path/checksum; published download stays .7.
+  2026-11-11 - Removed obsolete local release versions at the owner's request,
+    retaining only the qualified .11 candidate and its build support files.
+  2026-11-11 - Centered the permanent primary mic across the entire workspace
+    and floating view; grouped secondary setup/playback with explicit Settings.
+    Qualified separate .11 portable without restarting the user's application.
+  2026-11-11 - Made the actual live microphone available outside the floating
+    dock; removed inert guidance/footer space. Consolidated floating controls
+    into a default-collapsed single row and qualified a separate .10 portable.
+    Recording survives view changes; broader product/human gates remain open.
+  2026-11-11 - Preserved uncertain/over-limit recognition for explicit review,
+    retaining automatic-dispatch safeguards. Qualified separate .9 portable
+    and all three destinations; no replacement of the user's running build.
+  2026-11-11 - Fixed session-gated Speak and retained local transcripts until
+    explicit dispatch. Qualified a separate .8 portable candidate, preserving
+    the published .7 artifact and user-owned running instance.
+  2026-11-11 - Added on-demand node identification without permanent graph names.
+    Kept inspection separate from dispatch selection and retained floating/
+    speech Escape semantics. Qualified the bounded source update; no new
+    package, commit, push or release. Broader product criteria remain open.
+  2026-11-11 - Replaced the text-heavy README with centered visual navigation,
+    a 3x animated microphone/mesh hero and captioned packaged captures.
+    Preserved explanatory content in docs/guide.md. Voice-level animation is
+    illustrative, not microphone input; reduced-motion still is also linked.
+    Qualified the media and local responsive preview; full workstream stays open.
+  2026-11-11 - Published the requested unsigned .7 prerelease from the reviewed
+    qualified source, verified public bytes and preserved .1. Source/tag and
+    publication receipt are separate milestones; full workstream remains open.
+  2026-11-11 - Owner selected installed local voices for the prototype and made
+    richer arbitrary identity/timbre/emotion a required future engine boundary.
+    Added persistent profile controls and cancelled preview ownership safely.
+    Qualified non-audible native synthesis and separate .7 delivery. Human
+    listening, richer engine and existing device/permission/speed gates stay open.
+  2026-11-11 - Owner could not discover floating movement or resizing.
+    Replaced the invisible drag cap with a labelled native handle and added
+    always-visible size controls/readout, separate from graph zoom. Qualified
+    the separate .6 package and portable launcher, preserving .4/.5.
+    Broader human/device, native-permission and performance gates remain open.
+  2026-11-11 - Owner requested complete close graph zoom and a maximize option.
+    Added cursor-directed deep zoom, pan, +/-/reset and native maximize/restore
+    with synchronized events and reversible maximized/floating transitions.
+    Qualified the separate .5 package and portable launcher, preserving .4.
+    No live agent work, commit, push or publication; broader gates remain open.
+  2026-11-11 - Added actual-mesh startup and confirmed background work under
+    explicit expanded prototype authority. Fixed a cancel-during-save dispatch
+    race, bounded owned cleanup, validated recovery UI fields and retained
+    unknown outcomes. Larger bounded catalog pages avoid repeated native
+    rebuilds. Verified the exact approved Get-Location/Hello-world task once;
+    saved grants meant no native prompt. Qualified the separate .4 candidate
+    without another live work prompt or changing the user's existing runtime.
+  2026-11-11 - Fixed ordinary Copilot replies being rejected for not invoking
+    task_complete. Inspected the already-dispatched outcome before retesting;
+    retained matching terminal-result checks and explicit-failure rejection.
+    Rebuilt and verified the packaged live loop and portable launcher, preserving
+    .1/.2 artifacts. Header logo is 48 px; floating-control icon remains 20 px.
+  2026-11-11 - Owner reported FDUCE worked in Windows Recorder but old Load/Test
+    did not start a conversation. Clarified the access-only behavior and built
+    the selected push-to-talk workflow. Added explicit controls/meter/errors,
+    local multi-phrase recognition, restricted session dispatch, correlated
+    responses and speech. Corrected asynchronous fake-device tests with a
+    deterministic synthetic WAV. Enlarged the header logo as subsequently asked.
+  2026-11-10 - Recorded as gated future work, not authorized implementation.
+  2026-11-10 - Reconciled the researched shell recommendation and native boundary;
+    current deliverables remain documents, not a scaffold or runtime.
+  2026-11-10 - Owner requested a prototype after the research push and explicitly
+    selected Electron instead of installing native Rust prerequisites.
+    Implemented and locally verified the early synthetic UI, including native
+    transparent mesh-only mode. This is not completion of the full workstream
+    or evidence that ic-02/ic-04/ic-05 prerequisites passed.
+  2026-11-10 - Owner requested a published prototype EXE and microphone choice.
+    Implemented explicit selection/brief checks, packaged the unsigned portable
+    candidate and verified fake-device behavior plus the actual portable launcher.
+    No physical microphone, speech recognition or existing Agency session tested.
+  2026-11-11 - Committed/pushed the verified source/tag and published the requested
+    unsigned Windows x64 prerelease with EXE and SHA256SUMS.txt. Independently
+    verified nondraft/prerelease flags, uploaded asset metadata/digests, exact
+    source tag and downloaded public bytes. Full live-loop criteria remain open.
+  2026-11-11 - Owner requested application-wide branding, then refined the mic,
+    interconnected varied-size nodes, overlapping foreground node/shadowed links,
+    rounded outside links and straight inside links. Integrated the latest image
+    and verified a separate .2 candidate without replacing the .1 release.
+    Technical/visual inspection is not final user acceptance or publication.

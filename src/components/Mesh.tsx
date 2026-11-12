@@ -8,6 +8,7 @@ import type { MeshSnapshot, Profile } from '../domain/model';
 interface Props {
   graph: MeshSnapshot;
   activeSlots: number[];
+  observedAccess?: { key: string; at: string; slots: number[] };
   selectedId: string;
   profile: Profile;
   motion: boolean;
@@ -150,7 +151,7 @@ function Mesh(props: Props) {
     canvas.setAttribute('role', 'img');
     canvas.setAttribute('aria-label', demo
       ? 'Synthetic spherical context graph. Drag to orbit; scroll to zoom; right-drag to pan. Bright paths are demo events, not live reads.'
-      : `Actual local Context Mesh: ${contexts.length} contexts and ${edges.length} evidence-backed relationships. Drag to orbit; scroll to zoom; right-drag to pan. Bright spokes show observed job activity or tool-reported locations, not topology traversal.`);
+      : `Actual local Context Mesh: ${contexts.length} contexts and ${edges.length} evidence-backed relationships. Drag to orbit; scroll to zoom; right-drag to pan. Bright spokes show observed host source reads, job activity or tool-reported locations, not topology traversal. Finite pulses mark newly observed source reads.`);
     canvas.setAttribute('aria-describedby', helpId);
 
     function showInspection(index: number | null, pin = false) {
@@ -273,6 +274,8 @@ function Mesh(props: Props) {
     let timer: ReturnType<typeof setTimeout> | undefined;
     let last = 0;
     let previousPath = '';
+    let accessKey = '';
+    let accessStart = -Infinity;
     let currentRatio = 0;
     let lost = false;
     const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
@@ -283,7 +286,14 @@ function Mesh(props: Props) {
     function render(now: number) {
       frame = 0;
       if (settings.current.paused || document.hidden || lost) return;
-      const { activeSlots, selectedId, profile, motion } = settings.current;
+      const { activeSlots, observedAccess, selectedId, profile, motion } = settings.current;
+      if (observedAccess && observedAccess.key !== accessKey) {
+        accessKey = observedAccess.key;
+        accessStart = Math.abs(Date.now() - Date.parse(observedAccess.at)) < 2500 ? now : -Infinity;
+        canvas.dataset.observedAccess = accessKey;
+      }
+      const pulse = !demo && !!observedAccess?.slots.length && now - accessStart < 900;
+      canvas.dataset.observedPulse = String(pulse && !reducedMotion.matches);
       const budget = profile === 'Speed / performance' ? { ratio: 1, fps: 24 } : { ratio: 1.5, fps: 30 };
       const ratio = Math.min(devicePixelRatio, budget.ratio);
       const width = host.clientWidth;
@@ -296,7 +306,9 @@ function Mesh(props: Props) {
         camera.aspect = width / height;
         camera.updateProjectionMatrix();
       }
-      markers.forEach((marker, index) => marker.scale.setScalar(Math.max(contexts[index].id === selectedId ? 1.65 : 1, inspected === index ? 1.35 : 1)));
+      markers.forEach((marker, index) => marker.scale.setScalar(Math.max(contexts[index].id === selectedId ? 1.65 : 1,
+        inspected === index ? 1.35 : 1, pulse && !reducedMotion.matches && observedAccess?.slots.includes(index)
+          ? 1 + Math.sin((now - accessStart) / 900 * Math.PI) * 1.4 : 1)));
       core.scale.setScalar(inspected === contexts.length ? 1.2 : 1);
       const pathKey = activeSlots.join(':');
       if (pathKey !== previousPath) {
@@ -306,14 +318,16 @@ function Mesh(props: Props) {
         activeGeometry.computeBoundingSphere();
       }
       activeLine.visible = activeSlots.length > 0;
-      tracer.visible = demo && activeSlots.length > 0;
-      const animate = !reducedMotion.matches && (motion || (demo && activeSlots.length > 0));
+      tracer.visible = (demo && activeSlots.length > 0) || (pulse && !reducedMotion.matches);
+      const animate = !reducedMotion.matches && (motion || pulse || (demo && activeSlots.length > 0));
       if (animate && motion) world.rotation.y += Math.min((now - last) / 1000, 0.05) * 0.045;
       if (demo && activeSlots.length) {
         const points = [origin, ...activeSlots.map((slot) => positions[slot])];
         const progress = ((now / 1800) % 1) * (points.length - 1);
         const segment = Math.floor(progress);
         tracer.position.lerpVectors(points[segment], points[Math.min(segment + 1, points.length - 1)], progress - segment);
+      } else if (pulse && observedAccess) {
+        tracer.position.lerpVectors(origin, positions[observedAccess.slots[0]], Math.min(1, (now - accessStart) / 700));
       }
       last = now;
       renderer.render(scene, camera);

@@ -1,9 +1,12 @@
-const { app, BrowserWindow, ipcMain, Menu, session, Notification, screen } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu, session, Notification, screen, dialog, shell } = require('electron');
 const path = require('node:path');
 const { pathToFileURL } = require('node:url');
 const { VoiceHost } = require('./services/voice.cjs');
 const { loadMesh } = require('./services/mesh.cjs');
 const { WorkHost } = require('./services/work.cjs');
+const { OrchestrationHost } = require('./services/orchestration.cjs');
+const { overlapsWorkspace } = require('./services/session-catalog.cjs');
+const { Diagnostics } = require('./services/diagnostics.cjs');
 
 const profilePath = process.env.INTERCOM_PROFILE_DIR || path.join(app.getPath('appData'), 'IntercomVoicePrototype');
 app.setPath('userData', profilePath);
@@ -16,6 +19,32 @@ let fullMaximized = false;
 let floating = false;
 let onTop = false;
 let currentMesh;
+const diagnostics = new Diagnostics(profilePath, {
+  version: app.getVersion(), resourcesPath: app.isPackaged ? process.resourcesPath : '',
+  metrics: () => app.getAppMetrics(),
+  native: () => {
+    const worker = voice.recognizer?.native.worker;
+    return worker ? { pid: worker.child.pid, ready: worker.ready, closed: worker.closed, stopping: !!worker.stopping } : null;
+  },
+  onFailure: (status) => {
+    console.error(status.error);
+    if (window && !window.isDestroyed()) window.webContents.send('diagnostics:changed', status);
+  },
+});
+void diagnostics.record('app.start');
+app.on('second-instance', () => { void diagnostics.record('app.second-instance'); });
+app.on('child-process-gone', (_event, details) => {
+  void diagnostics.record(details.reason === 'clean-exit' ? 'process.exit' : 'process.failure',
+    { component: details.type, reason: details.reason, exitCode: details.exitCode },
+    details.reason === 'clean-exit' ? undefined : new Error('An application child process exited.'));
+});
+process.on('uncaughtExceptionMonitor', (error) => { void diagnostics.record('app.failure', {}, error); });
+function handle(channel, handler) {
+  ipcMain.handle(channel, (event, ...args) => diagnostics.run(channel, () => {
+    requireOwnFrame(event);
+    return handler(event, ...args);
+  }));
+}
 const page = pathToFileURL(path.join(__dirname, '..', 'dist', 'index.html')).href;
 const state = () => ({
   floating, onTop,
@@ -25,7 +54,7 @@ const state = () => ({
 });
 const voice = new VoiceHost(profilePath, (event) => {
   if (window && !window.isDestroyed()) window.webContents.send('voice:progress', event);
-});
+}, { bundledRoot: app.isPackaged ? path.join(process.resourcesPath, 'speech') : '', diagnostics });
 const work = new WorkHost(profilePath, () => currentMesh, (event) => {
   if (window && !window.isDestroyed()) window.webContents.send('work:progress', event);
 }, async (job) => {
@@ -43,11 +72,24 @@ const work = new WorkHost(profilePath, () => currentMesh, (event) => {
     notification.on('click', () => { if (window && !window.isDestroyed()) { window.show(); window.focus(); } });
     notification.show();
   });
-}, { assertAvailable: (id) => {
-  if (voice.work?.sessionId === id) throw new Error('That session is already owned by an Intercom conversation. Wait or cancel it first.');
+}, { assertAvailable: (id, workspace) => {
+  assertOwnerAvailable(voice.work, id, workspace);
+  orchestration.assertOwnedAvailable(id, workspace);
 } });
-voice.assertAvailable = (id) => {
-  if (work.active?.sessionId === id) throw new Error('That session is already owned by Intercom work. Choose a different idle conversation session or wait.');
+const orchestration = new OrchestrationHost(profilePath, () => currentMesh, (event) => {
+  if (window && !window.isDestroyed()) window.webContents.send('orchestration:progress', event);
+}, { openReport: (file) => shell.openPath(file), assertAvailable: (id, workspace) => {
+  assertOwnerAvailable(voice.work, id, workspace);
+  assertOwnerAvailable(work.active, id, workspace);
+} });
+function assertOwnerAvailable(owner, id, workspace) {
+  if (owner?.sessionId === id || (workspace && owner?.workspace && overlapsWorkspace(owner.workspace, workspace))) {
+    throw new Error('Intercom already owns that session or overlapping workspace. Wait or cancel the identified operation.');
+  }
+}
+voice.assertAvailable = (id, workspace) => {
+  assertOwnerAvailable(work.active, id, workspace);
+  orchestration.assertOwnedAvailable(id, workspace);
 };
 
 function publish() {
@@ -146,7 +188,30 @@ app.whenReady().then(async () => {
   window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
   window.webContents.on('will-navigate', (event) => event.preventDefault());
   window.webContents.on('will-attach-webview', (event) => event.preventDefault());
-  ipcMain.handle('window:action', (event, action) => {
+  window.webContents.on('render-process-gone', (_event, details) => {
+    void diagnostics.record('renderer.failure', { reason: details.reason, exitCode: details.exitCode },
+      new Error('The renderer exited.'));
+  });
+  window.webContents.on('preload-error', (_event, _file, error) => { void diagnostics.record('renderer.failure', {}, error); });
+  ipcMain.handle('diagnostics:status', (event) => { requireOwnFrame(event); return diagnostics.status(); });
+  ipcMain.handle('diagnostics:phase', (event, phase) => {
+    requireOwnFrame(event);
+    if (!['idle', 'connecting', 'setup', 'opening', 'listening', 'transcribing', 'checking', 'running'].includes(phase)) {
+      throw new Error('Unsupported diagnostic phase.');
+    }
+    return diagnostics.record('voice.phase', { phase });
+  });
+  ipcMain.handle('diagnostics:renderer-failure', (event, kind) => {
+    requireOwnFrame(event);
+    if (!['error', 'unhandled-rejection', 'microphone-failed'].includes(kind)) throw new Error('Unsupported renderer failure kind.');
+    return diagnostics.record('renderer.failure', { reason: kind }, new Error('Renderer operation failed.'));
+  });
+  handle('diagnostics:open', async () => {
+    await diagnostics.flush();
+    const error = await shell.openPath(diagnostics.directory);
+    if (error) throw new Error(`Diagnostics folder could not be opened: ${error}`);
+  });
+  handle('window:action', (event, action) => {
     requireOwnFrame(event);
     switch (action) {
       case 'state': return state();
@@ -170,7 +235,7 @@ app.whenReady().then(async () => {
     }
   });
   let meshLoad;
-  ipcMain.handle('mesh:load', (event) => {
+  handle('mesh:load', (event) => {
     requireOwnFrame(event);
     if (meshLoad) return meshLoad;
     currentMesh = undefined;
@@ -187,10 +252,20 @@ app.whenReady().then(async () => {
     cancel: (id) => work.cancel(id),
   };
   for (const [action, handler] of Object.entries(workHandlers)) {
-    ipcMain.handle(`work:${action}`, (event, ...args) => { requireOwnFrame(event); return handler(...args); });
+    handle(`work:${action}`, (_event, ...args) => handler(...args));
   }
   const voiceHandlers = {
     settings: () => voice.settings(),
+    'recognition-settings': () => voice.recognitionSettings(),
+    'recognition-ready': (id) => voice.recognitionReady(id),
+    'recognition-language': (id, language) => voice.setRecognitionLanguage(id, language),
+    'configure-recognition': (id, engine) => voice.configureRecognition(id, engine, async () => {
+      const choice = await dialog.showOpenDialog(window, {
+        title: 'Choose pinned local speech engine (model and runtime folder)',
+        properties: ['openDirectory'],
+      });
+      return choice.canceled ? null : choice.filePaths[0];
+    }),
     profiles: () => voice.profiles.read(),
     'voice-catalog': () => voice.voiceCatalog(),
     'save-profile': (profile) => voice.profiles.save(profile),
@@ -205,22 +280,42 @@ app.whenReady().then(async () => {
     'stop-speech': () => voice.stopSpeech(),
   };
   for (const [action, handler] of Object.entries(voiceHandlers)) {
-    ipcMain.handle(`voice:${action}`, (event, ...args) => { requireOwnFrame(event); return handler(...args); });
+    handle(`voice:${action}`, (_event, ...args) => handler(...args));
+  }
+  const orchestrationHandlers = {
+    state: async () => ({ plans: await orchestration.state(), requestActivity: structuredClone(orchestration.requestActivity), error: orchestration.failure?.message }),
+    request: (id, text, profile) => orchestration.request(id, text, profile),
+    'cancel-request': (id) => orchestration.cancelRequest(id),
+    'open-report': (id) => orchestration.research.open(id),
+    'research-targets': (id) => orchestration.researchTargets(id),
+    'synthesize-report': (...args) => orchestration.synthesize(...args),
+    cancel: (id) => orchestration.cancel(id),
+    approve: (...args) => orchestration.approve(...args),
+    acknowledge: (id) => orchestration.acknowledge(id),
+  };
+  for (const [action, handler] of Object.entries(orchestrationHandlers)) {
+    handle(`orchestration:${action}`, (_event, ...args) => handler(...args));
   }
   const ready = new Promise((resolve) => window.once('ready-to-show', resolve));
   await window.loadURL(page);
   await ready;
+  await diagnostics.record('app.ready');
   window.show();
   window.on('close', (event) => {
     event.preventDefault();
-    void Promise.all([voice.close(), work.close()]).then(() => window?.destroy()).catch((error) => {
+    void Promise.all([voice.close(), work.close(), orchestration.close()]).then(async () => {
+      await diagnostics.record('app.exit');
+      window?.destroy();
+    }).catch((error) => {
+      void diagnostics.record('app.failure', { component: 'shutdown' }, error);
       console.error('Intercom could not stop its voice processes:', error);
       if (window && !window.isDestroyed()) window.webContents.send('voice:progress', { phase: 'error', message: error.message });
     });
   });
   window.on('closed', () => { window = undefined; });
-}).catch((error) => {
+}).catch(async (error) => {
   console.error('Intercom failed to start:', error);
+  await diagnostics.record('app.failure', { component: 'startup' }, error);
   app.exit(1);
 });
 

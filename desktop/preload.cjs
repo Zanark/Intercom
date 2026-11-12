@@ -2,6 +2,29 @@ const { contextBridge, ipcRenderer } = require('electron');
 
 const allowed = new Set(['state', 'toggle-floating', 'toggle-top', 'toggle-maximize', 'shrink-floating', 'grow-floating', 'minimize', 'close']);
 contextBridge.exposeInMainWorld('intercom', {
+  diagnosticsStatus: () => ipcRenderer.invoke('diagnostics:status'),
+  diagnosticPhase: (phase) => ipcRenderer.invoke('diagnostics:phase', phase),
+  reportDiagnosticFailure: (kind) => ipcRenderer.invoke('diagnostics:renderer-failure', kind),
+  openDiagnostics: () => ipcRenderer.invoke('diagnostics:open'),
+  onDiagnosticsChanged: (callback) => {
+    const listener = (_event, status) => callback(status);
+    ipcRenderer.on('diagnostics:changed', listener);
+    return () => ipcRenderer.removeListener('diagnostics:changed', listener);
+  },
+  orchestrationState: () => ipcRenderer.invoke('orchestration:state'),
+  orchestrate: (id, text, profile) => ipcRenderer.invoke('orchestration:request', id, text, profile),
+  cancelInterpretation: (id) => ipcRenderer.invoke('orchestration:cancel-request', id),
+  openResearchReport: (id) => ipcRenderer.invoke('orchestration:open-report', id),
+  researchSynthesisTargets: (id) => ipcRenderer.invoke('orchestration:research-targets', id),
+  synthesizeResearchReport: (...args) => ipcRenderer.invoke('orchestration:synthesize-report', ...args),
+  cancelPlan: (id) => ipcRenderer.invoke('orchestration:cancel', id),
+  approvePlanAction: (...args) => ipcRenderer.invoke('orchestration:approve', ...args),
+  acknowledgePlan: (id) => ipcRenderer.invoke('orchestration:acknowledge', id),
+  onOrchestrationProgress: (callback) => {
+    const listener = (_event, state) => callback(state);
+    ipcRenderer.on('orchestration:progress', listener);
+    return () => ipcRenderer.removeListener('orchestration:progress', listener);
+  },
   loadContextMesh: () => ipcRenderer.invoke('mesh:load'),
   workState: () => ipcRenderer.invoke('work:state'),
   workSessions: (contextId) => ipcRenderer.invoke('work:sessions', contextId),
@@ -16,6 +39,10 @@ contextBridge.exposeInMainWorld('intercom', {
     return () => ipcRenderer.removeListener('work:progress', listener);
   },
   voiceSettings: () => ipcRenderer.invoke('voice:settings'),
+  recognitionSettings: () => ipcRenderer.invoke('voice:recognition-settings'),
+  recognitionReady: (id) => ipcRenderer.invoke('voice:recognition-ready', id),
+  setRecognitionLanguage: (id, language) => ipcRenderer.invoke('voice:recognition-language', id, language),
+  configureRecognition: (id, engine) => ipcRenderer.invoke('voice:configure-recognition', id, engine),
   voiceProfiles: () => ipcRenderer.invoke('voice:profiles'),
   voiceCatalog: () => ipcRenderer.invoke('voice:voice-catalog'),
   saveVoiceProfile: (profile) => ipcRenderer.invoke('voice:save-profile', profile),
@@ -43,3 +70,5 @@ contextBridge.exposeInMainWorld('intercom', {
     return () => ipcRenderer.removeListener('window:state', listener);
   },
 });
+globalThis.addEventListener('error', () => { void ipcRenderer.invoke('diagnostics:renderer-failure', 'error').catch(console.error); });
+globalThis.addEventListener('unhandledrejection', () => { void ipcRenderer.invoke('diagnostics:renderer-failure', 'unhandled-rejection').catch(console.error); });

@@ -32,6 +32,13 @@ They use disposable profiles/synthetic input; failure uploads are confined to
 the synthetic desktop-results directory for three days. This is not release,
 deployment, remote-secret or permission-change authority.
 
+On 2026-11-13, after failed owner acceptance and a pause, the owner explicitly
+requested pushing the changes and recording the disappointment in the README
+and development journey. This authorizes publication of the reviewed pending
+public source/tests/documentation and the accountability record. It does not
+authorize further runtime implementation, owner-app interaction, a binary
+release, deployment, broader permissions or private logs/context publication.
+
 ## Source of truth and operation
 
 Local numbered `.todo` files own descriptions, tasks, dependencies, criteria,
@@ -126,6 +133,8 @@ upload boundary.
 | ic-05 | `TODO/05_SPEECH_AND_WAKE_QUALIFICATION.todo` | [#4](https://github.com/Zanark/Intercom/issues/4) | `PVTI_lAHOAe2wCs4BrBRezhHjXsM` |
 | ic-06 | `TODO/06_DESKTOP_VOICE_MESH_SLICE.todo` | [#5](https://github.com/Zanark/Intercom/issues/5) | `PVTI_lAHOAe2wCs4BrBRezhHjXxs` |
 | ic-07 | `TODO/07_RELIABILITY_AND_LIFECYCLE.todo` | [#6](https://github.com/Zanark/Intercom/issues/6) | `PVTI_lAHOAe2wCs4BrBRezhHjX3c` |
+| ic-08 | `TODO/08_CONTEXT_RESEARCH.todo` | [#7](https://github.com/Zanark/Intercom/issues/7) | `PVTI_lAHOAe2wCs4BrBRezhINCpI` |
+| ic-09 | `TODO/09_INTEGRATED_VOICE_OVERLAY.todo` | [#8](https://github.com/Zanark/Intercom/issues/8) | `PVTI_lAHOAe2wCs4BrBRezhINCxs` |
 
 Project node: `PVT_kwHOAe2wCs4BrBRe`.
 Status field: `PVTSSF_lAHOAe2wCs4BrBRezhpVzH8`.
@@ -224,9 +233,56 @@ exact read-back; never refresh them merely to hide a remote edit.
 | ic-01 | `452fec62b3a05c01027a3d0af899ea9e3d3e85375ab383d9595934f24657b6a8` |
 | ic-02 | `5fa92bc3e1d2f20a27fc5306664d4e4d599e704f8fc64208323afb19a9c894f6` |
 | ic-04 | `ac026513ad44f8548d9e3670037d5efcb2e94c9287728bf781e9f5e48efefd82` |
-| ic-05 | `01e29950e11e9e7ad3928d05a8363244955ea95c7ec68e952b57fbb644043e4c` |
-| ic-06 | `89348962316ac7e1783ae10d506a78d5c76e617469a9dc014c04fd6baa6f6385` |
-| ic-07 | `072c0916f6106438b8f32e2ae02415645056015a3049f36f12ec4cfca281fe33` |
+| ic-05 | `a6124020b8f8ffc3dfb5f19b318f9a75da26ab52158b90216477e86be9ddcea7` |
+| ic-06 | `f6a7b7b302863c082e3230592d56795f5d3f5fd3c9faf66ad7838c6f4e51a86e` |
+| ic-07 | `599dd5c24fc3f41cc2b54c6844b32c145a99b7c57c5d9e36d4c38b88d9d6fe50` |
+| ic-08 | `1551c0bc9593a2b8775642c0a0824a99a9b94e936955c6d9e3d4678ba884465a` |
+| ic-09 | `677ba1c8df81bd7fd395e6c5cede096b5aef3894193373c522d5a1712f53e27d` |
+
+The 2026-11-13 accountability reconciliation compared the existing #6/#8 body
+hashes, states and original Project items before updating only those two
+descriptions. Independent complete-body/state/item/stage/backlink read-back
+verified #6 remains OPEN / In Progress and #8 remains CLOSED / Done for its
+bounded technical scope, explicitly not overall owner acceptance. Private
+Project visibility and sole Intercom repository linkage were verified.
+No new issue/item, comment rewrite, stage change or runtime fix was made.
+The updated baselines above include the failed acceptance and permission
+blocker. Index and perpetual ledger remain excluded from feature tracking.
+
+The 2026-11-13 clarification-reply reconciliation verified the existing ic05/#4
+body baseline, OPEN/In Progress state, issue/item identity, private Project13,
+status options and sole linked repository before updating its public-safe body.
+Independent full readback verified exact body, unchanged issue/item/stage and
+local backlink before recording the new baseline. No new issue, stage change,
+other item update, source publication or remote release was performed.
+
+The 2026-11-12 integrated .16 reconciliation first verified all six prior
+body/state/stage/identity baselines, the private Project and sole linked repo.
+It updated existing #4/#5 without changing their In Progress stages and created
+the public-safe ic08/#7 and ic09/#8 mirrors as CLOSED/completed/Done items.
+Independent complete body/state/Project readback verified all four changes
+and all four untouched originals. Local backlinks preserve those identities.
+This is bounded technical completion, not human acceptance or remote release.
+
+The subsequent .17 portable/diagnostic reconciliation compared ic07/#6's
+saved body, OPEN state, original issue/item identities and Todo stage before
+writing. Only that existing public-safe description and its existing Project
+item changed; the issue remains OPEN and its item is now In Progress.
+Independent full-body/state/item/status/backlink readback verifies the update,
+private Project visibility, exact status options and sole repository linkage.
+Two bounded tasks are technically complete; broader lifecycle acceptance stays
+open. No new issue/item, source publication, private log or remote release.
+
+The accumulated ic06 source exceeded GitHub's 65,536-character body limit.
+Before any writes, its 20,016-character historical completion log was moved
+verbatim into the existing perpetual ledger, retaining a current Completion
+log and explicit link in the stable workstream. Preserved text SHA-256:
+`490e86b6c3abd797d2fdbceab87caebe552b062795ef206eb3238c7f733e6830`.
+No evidence was truncated and no duplicate feature issue was created.
+The existing credential runner verified Zanark. Its `gh project` shorthand
+could not resolve the owner type; explicit read-only GraphQL established the
+actual configuration before trusted, scoped API writes. No auth settings,
+visibility, permissions, source commit/push/tag or hosted automation changed.
 
 The approved glass/water publication matched all six saved body/state/Project
 baselines before updating only #5 with the reviewed visual-only workstream
@@ -236,6 +292,14 @@ OPEN / In Progress. Owner visual acceptance, exact-source checks and five
 refreshed GIF/still pairs are recorded separately from human speech or release
 qualification. Unfinished speech/controller drafts remain outside this public
 projection. Earlier media milestones below are historical.
+
+The earlier glass-bubble README refresh matched #5's saved body baseline before
+adding only its two media tasks and public-safe capture evidence/log to the
+existing projection. Exact full-body read-back and the original Project-item
+node verified #5 remains OPEN / In Progress on private Project 13, with the
+same issue/item identities and unchanged stage. Other issues were not changed
+or requalified in this narrow update. At that milestone, source/media stayed local;
+unfinished runtime drafts are not exported, committed, pushed or released.
 
 The final README refinement reconciliation matched all six saved baselines,
 then updated only #5 with the short inspiration/larger photo, smooth unbanded

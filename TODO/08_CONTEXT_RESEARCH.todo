@@ -1,0 +1,63 @@
+Intercom read-only cross-context research
+
+Workstream ID: ic-08
+GitHub issue: https://github.com/Zanark/Intercom/issues/7
+Status: DONE (technical qualification; included in local .16, not human accepted)
+Milestone: Spoken discovery to an illustrated local evidence report
+Dependencies: ic-06
+
+Purpose:
+  Distinguish reading saved context/session evidence from contacting existing
+  work sessions. Resolve spoken project names from mesh metadata, inspect
+  available local evidence, explain relationships and open a private report.
+
+Tasks:
+  [x] Transcribe the owner's supplied recording locally before using its wording.
+  [x] Add a strictly validated research intent without work actions.
+  [x] Read registered continuity files and explicitly requested linked histories.
+  [x] Generate a cited, illustrated, self-contained local HTML report.
+  [x] Open only host-generated reports; surface opening and coverage failures.
+  [x] Keep catalog diagnostics available without a wall of routing warnings.
+  [x] Verify recorded wording, cancellation, access bounds and unchanged work safety.
+  [x] Update affected documentation and owned continuity.
+
+Acceptance criteria:
+  The owner-recorded discovery request produces an evidence-backed local report
+  without resuming or sending work to any existing session. Missing catalog
+  names, unavailable workspaces and busy sessions do not prevent saved research.
+  Notes, individual conversation evidence, indexed attribution and live
+  conversational access remain distinct. Incomplete coverage is explicit.
+  Audio and collected evidence stay local; only request text and minimal routing
+  metadata enter the restricted controller. Existing tool permissions remain.
+  The protected running .15 release is not restarted or overwritten.
+
+Completion evidence:
+  Superseding packaging milestone: integrated local .16 now includes this
+  collection lane; ic09 adds observed activity and optional cited synthesis.
+  Current57host/53desktop,8packaged cases and actual portable smoke pass.
+  Earlier source-only/no-package receipts below describe original qualification.
+  The supplied recording is 82.9 seconds. Bundled local recognition returned provisional
+  English text through two <=45-second segments with two seconds of overlap.
+  This is offline recorded-input preparation, not extended live capture support.
+  Detailed recording/transcript receipts remain private.
+  Real restricted-controller interpretation and saved-evidence collection pass
+  without constructing a work transport or requesting tool permission.
+  41 contexts inspected; 173 files read, nine readable histories, four matching
+  histories and eight contexts with references. Partial coverage is explicit,
+  including 25 unavailable/partial source checks. This is not universal history
+  coverage or proof that all reference contexts did project work.
+  Desktop/mobile report checks and OS handler acceptance pass. Original input
+  and retained .15 EXE hashes remain unchanged. Actual visible owner browser
+  state was not automated. Detailed reports/receipts remain private.
+  Final lint/build,16renderer/11controller/49host/47desktop cases pass.
+  No new package, publication, tracking write or human acceptance is claimed.
+
+Completion log:
+  2026-11-12: Implemented and technically verified the bounded research lane.
+  Fixed Windows file identity checks, streamed large histories with explicit
+  parser gaps, improved extractive paragraphs and prioritized direct matches.
+  Bounded feedback keeps essential Talk controls reachable. The initial UI
+  overflow and subsequent lint failure were corrected before final checks.
+  Source-only; running .15 and published .12 stay unchanged. Human report/
+  speech acceptance, broader history discovery and semantic synthesis are not
+  claimed. Remote issue/Project synchronization remains separately pending.

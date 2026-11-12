@@ -2,7 +2,7 @@ Intercom reliability and lifecycle qualification
 
 Workstream ID: ic-07
 GitHub issue: https://github.com/Zanark/Intercom/issues/6
-Status: NOT_STARTED
+Status: IN_PROGRESS
 Milestone: Recoverable background jobs and safe desktop/audio lifecycle
 Dependencies: ic-06
 
@@ -11,6 +11,13 @@ Purpose:
   a successful demo as a production-ready or publishable assistant.
 
 Tasks:
+  [x] Fix shared portable extraction deletion on second launch and qualify
+      repeated microphone turns after a duplicate launcher exits.
+  [x] Persist bounded metadata-only lifecycle/IPC/native logs and automatic
+      failure process/resource snapshots outside temporary extraction.
+      Expose their location and persistence failures without raw content.
+  [ ] Resolve and qualify overlapping live tool-permission requests without
+      bypassing approval or misreporting disconnected/partial work as done.
   [ ] Test restart/reconnect, lost acknowledgment and duplicate/out-of-order events.
   [ ] Verify per-session serialization and shared-workspace conflict handling.
   [ ] Qualify audio/device/provider failures and resource use with the live graph.
@@ -33,9 +40,44 @@ Acceptance criteria:
   DB migration failure and microphone loss never create empty success fallbacks.
 
 Completion evidence:
-  None. Qualification depends on a separately authorized implemented ic-06.
+  OWNER RUN, 2026-11-13: .18 dispatched actual work to an existing session,
+  then stopped at 03:28:25 IST with "Invalid ACP stream: Concurrent permission
+  requests are not supported." One prior approval completed at 03:28:02 IST.
+  Durable outcome is unknown; partial work is not ruled out. No retry or fix
+  is claimed. Owner acceptance failed and implementation is paused.
+  See the accountability entry in TODO/03_DEVELOPMENT_LEDGER.todo.
+  CURRENT: bounded .17 repair technically verified; broader criteria remain
+  IN_PROGRESS. Missing extracted model is distinct from catalog notices.
+  Pinned builder's shared before/after cleanup can remove a live instance's
+  resources after duplicate refusal. The actual owner duplicate was not seen.
+  Per-launch extraction passes actual portable duplicate/model-preservation/
+  same-helper-PID and subsequent synthetic speech/draft/final checks.
+  Metadata-only rotating logs, bounded queue, visible storage failure and
+  automatic process/resource snapshots persist outside temporary extraction;
+  no speech/request content, raw errors or full memory dumps are recorded.
+  Actual portable model removal yields ENOENT snapshot; restoring its own
+  disposable extracted file permits explicit new-helper recovery/shutdown.
+  Lint/build,19renderer/62host/11controller/54desktop and9packaged cases pass.
+  Voice51/52 retains the unchanged legacy Windows "please"/"police" failure.
+  22project runtime/renderer files,eight speech files,13notices/native/private
+  exclusions verified. .17 EXE631124173bytes SHA256:
+  9e897ec1b9d322c4e1c50eb0513ada45553d48b91a5b2a71fe27f71118881bdb.
+  Fresh check found no running Intercom before exact .16/intermediate cleanup;
+  only .17 EXE/checksum remain. No owner restart, physical mic, audible output,
+  real-session test prompt, source publication or remote release.
 
 Completion log:
+  2026-11-13 - Read-only live-run inspection exposed the unsupported
+    concurrent-permission boundary. Preserved unknown outcome and did not
+    restart, retry or inspect unrelated session history. Recorded the blocker
+    and failed owner acceptance; future implementation awaits resumption.
+  2026-11-12 - Completed two bounded portable/diagnostic tasks in local .17.
+    Installed builder26.18.0 implementation requires unpackDirName:true for
+    unique NSIS plugin directories despite false-option documentation.
+    Exact portable duplicate/missing-model/recovery and nine packaged checks
+    pass; full source suite results/legacy speech failure recorded above.
+    Privacy-safe snapshots are not full crash dumps; fatal durability is
+    best effort. Broader lifecycle/production/human qualification stays open.
   2026-11-10 - Added future qualification scope under architecture-only authority.
   2026-11-10 - Expanded failure matrix from documented runtime semantics;
     no fault injection, soak, privacy or lifecycle qualification has run.

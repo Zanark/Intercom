@@ -2,6 +2,19 @@
 
 [Visual home](../README.md) · [Prototype details](prototype/prototype.md)
 
+**Current status, 13 November 2026:** the owner has paused Intercom after
+rejecting the delivered experience. The live .18 work path stopped on concurrent
+tool-permission requests; its outcome is unknown. The capability inventory
+below is not an end-to-end acceptance claim. See the
+[README accountability statement](../README.md#project-status-paused-after-failed-owner-acceptance)
+and [development journey](../TODO/03_DEVELOPMENT_LEDGER.todo).
+
+For the owner's clarified voice-overlay vision, what currently works and the
+missing integrated experience, read the
+[illustrated vision/reality report](reports/2026-11-12-vision-reality.html).
+It records the pre-.16 gaps; the integrated local candidate below supersedes
+its source-versus-executable inventory, not its human-acceptance caveats.
+
 <img src="assets/branding/intercom-logo.png" alt="Intercom microphone and context-mesh logo with frosted sea-glass nodes and connections" width="144" height="144" />
 
 The microphone represents voice; varied-size connected nodes, rounded outer
@@ -21,12 +34,14 @@ background requests apply supported reasoning effort (low/medium/high) without
 changing the existing model. Speaking-voice settings are separate from processing
 priorities; measured speech quality and speed budgets remain unqualified.
 
-**Stage:** Windows push-to-talk and confirmed background-work prototype. Choose a microphone,
-click **Speak**, then **Stop & send**: installed local English recognition
-produces text, your designated existing idle Copilot session answers, and
-Intercom speaks progress and the actual response. Every launch reads the actual
-local Context Mesh snapshot. Background tasks require separate context/session/
-task confirmation, retain Copilot permissions and return a durable receipt.
+**Stage:** Windows push-to-talk prototype with a local .18 candidate and included
+on-device recognition, system microphone and local voice defaults. Click
+**Speak** / **Stop & send**, or use the no-send speech check first.
+The restricted Intercom controller interprets text
+and clear plans target existing idle sessions; ambiguity still needs clarification,
+real tools retain permissions and work returns durable receipts. Actual
+multi-session and human multilingual qualification remain open. Every launch
+reads the actual local Context Mesh snapshot.
 Terminal mode opens the existing session for manual task entry, not automatic
 handoff. No wake word, active-session attach or new sessions. Electron is approved
 for the prototype, not selected as the final product host.
@@ -38,12 +53,85 @@ gate selection.
 
 ## Run the prototype
 
-The current Windows x64 prototype is **unsigned**:
+**Included in local .18:** recordings support up to five minutes.
+Audio stays local and in memory. At the limit, capture stops automatically
+and the final transcript waits for review, never automatic dispatch. Stop
+earlier to retain the selected automatic-send behavior. Long transcripts stay
+intact, but requests still need to fit 10,000 characters for Intercom or 1,000
+for legacy/manual delivery. No automatic truncation or splitting.
+Published .12 still has its historical one-minute capture limit. See
+[qualification and limits](prototype/prototype.md#five-minute-recordings-source-only).
+
+The latest **local-only, unsigned Windows x64 candidate is .18**:
+`C:\devdesk\homedesk\Intercom\release\prototype-18-candidate\Intercom-Prototype-0.1.0-prototype.18-win-x64.exe`.
+It includes warm native speech, five-minute capture, observed source-read
+activity, cited research synthesis, approved glass/water visuals, isolated
+portable extraction, persistent privacy-safe failure diagnostics and bounded
+automatic clarification replies.
+It is not a published GitHub release or a claim of human speech accuracy.
+
+Open it and click the microphone: fresh profiles automatically use the included
+on-device Whisper model/Vulkan engine, system-default microphone, automatic
+language detection, Standard local Windows voice, speed-first processing and
+Intercom routing. No recognition-folder selection, microphone discovery or
+session-ID entry is required. Audio stays local. Initial capture starts on
+click; a structured Intercom clarification can automatically open the next
+bounded capture after the question finishes speaking.
+Tool permissions remain manual, and installed/authenticated Copilot plus its
+existing idle sessions remain environmental prerequisites for actual agent work.
+
+Click the mic to finish your clarification reply; silence does not stop it
+automatically. Muted questions remain written and can also start reply capture.
+**Advanced > General > Delivery behavior > Automatically listen for
+clarification replies** disables this default-on behavior. Stop playback,
+Cancel, opt-out and hidden/minimized windows suppress pending opening.
+Ordinary replies and tool-permission prompts never trigger it. The previous
+unresolved request/question accompanies only the next accepted controller turn;
+it does not approve tools. See [exact evidence and limits](prototype/prototype.md#local-18-clarification-replies).
+
+For a no-send trial, use **Input > Speech check > Test speech locally**; stop
+with the bubble. This check does not replace your draft. Existing explicit
+legacy/custom recognition and microphone choices remain unchanged. The included
+native-optimized Vulkan build is qualified on this development machine only,
+not as a generic Windows/GPU distribution.
+
+For optional previews while recording, enable **Talk > Live transcription
+(local draft)**. It starts off on each mount to preserve the speed-first default.
+These are serialized local batches using the same resident model, not
+word-by-word streaming; each completed
+preview is followed by a three-second wait. Previews never send requests.
+Stopping cancels/settles preview work before final recognition; cancelling
+discards previews and preserves your typed draft. This option uses more CPU/GPU.
+
+The latest **published** prototype remains the unsigned .12:
 [Download the .12 EXE](https://github.com/Zanark/Intercom/releases/download/v0.1.0-prototype.12/Intercom-Prototype-0.1.0-prototype.12-win-x64.exe)
 from the [prototype prerelease](https://github.com/Zanark/Intercom/releases/tag/v0.1.0-prototype.12).
-The new local artifact is:
-`C:\devdesk\homedesk\Intercom\release\prototype-12-candidate\Intercom-Prototype-0.1.0-prototype.12-win-x64.exe`.
-The earlier retained .11 and published .7 are preserved, not overwritten.
+Only the local .18 executable and its checksum remain in `release`, following
+owner-requested cleanup after exact portable verification on 2026-11-13.
+Superseded .17 and candidate unpacking/build intermediates were removed only
+after a fresh check found no running Intercom process;
+published GitHub releases were not changed.
+
+The duplicate-launch regression verifies that the primary model and resident
+helper survive the rejected second launcher, then transcribes again. Missing
+resources still refuse capture explicitly. Open **Advanced > Display > Local
+diagnostics** for the persistent directory and **Open diagnostics folder**.
+The default is
+`C:\Users\mishrad\AppData\Roaming\IntercomVoicePrototype\diagnostics`.
+Logs omit speech/request content; automatic failure snapshots contain process
+metadata and resource presence, not memory contents. Storage failures appear
+visibly. See [retention and recovery](prototype/prototype.md#local-diagnostics).
+Close an older build before launching .18; no running app is switched for you.
+
+Research now shows actual source checks, successful reads and failures in a
+bounded activity trail; successful reads trigger finite mesh pulses. This is
+observed host activity, not hidden model reasoning. Ordinary collection is
+read-only and opens an extractive report. For a model-written synthesis,
+explicitly select an existing idle session in the report controls, or clearly
+name that exact session in the request. The normal durable queue, workspace
+exclusions and manual tool approvals apply. Validated citations link retained
+evidence; they do not prove semantic correctness. See the
+[current .17 receipt](prototype/prototype.md#local-17-portable-lifecycle-repair).
 
 Prototype .12 includes the microphone fixes since .7: session-independent local
 capture/transcription, a stationary microphone in both views, a collapsed
@@ -79,11 +167,153 @@ npm start
 
 ## Current source: focused glass controls
 
+Current source defaults to the **Intercom node**, not a designated work session.
+Its restricted controller receives transcript text and minimal catalog metadata;
+the host validates and durably queues clear multi-session plans without a
+second target/task confirmation. Ambiguity still needs clarification and real
+tools retain exact one-shot approvals. Background work does not occupy the mic.
+**Work > Plans** offers request/action selectors and Activity / Permission /
+Result tabs. Full details remain accessible inside bounded text areas.
+An ordinary agent response is not independently verified task success.
+
+The host enforces dependencies, excluded status targets and at most two
+non-overlapping workspaces; recovery never automatically retries an uncertain
+dispatch. Current checks pass 62 host cases, 19
+renderer/recording cases and 11 controller cases. The full desktop suite passes
+54 cases; the .17 unpacked package also passes nine focused cases. Actual portable
+synthetic capture passes native local live-draft and final-recognition checks,
+including X/Y exclusion preservation, same native PID reuse, shutdown and no
+automatic send. The voice suite is 51/52: legacy Windows confuses synthetic
+"please" with "police"; the strict assertion is retained.
+These include exact permission routing and cancelled
+interpretation. Fixtures are not real multi-session execution evidence.
+Local Whisper recognition is now connected as described below. The older
+portable dependency candidate predates this wiring; local .17 includes it,
+and published .12 remains unchanged. See
+[runtime contracts](architecture/runtime-contracts.md) for the exact boundary.
+
+### Saved-context research
+
+In local .17, ask for a project/context research report from **Talk**.
+The controller receives the request and minimal mesh/catalog metadata, not
+collected file contents. A distinct read-only host lane reads the four fixed
+registered context notes and, when requested, exact indexed session histories.
+It saves an illustrated, cited HTML report and JSON evidence under the app
+profile's `research` directory and asks the OS to open the HTML default handler.
+The receipt shows its full path; **Open context report** retries an opening
+failure. Catalog notices stay collapsed and do not imply a context-read failure.
+
+The report distinguishes project-name matches, topic references, recorded
+requests, assistant statements, saved topology and unavailable sources.
+Extractive summaries are not model-written conclusions. This is not a census
+of all sessions ever or proof of live access. Ordinary collection sends no work.
+Actual successful source reads produce finite mesh pulses and an attributable
+trail. Explicit exact idle-session selection can request cited Copilot synthesis
+through the normal durable work queue and manual permissions; source excerpts
+then enter that session's provider context. Location validation is not proof
+that a model's conclusion follows from the source.
+Large histories stream within explicit limits; omissions and parser gaps are
+visible. Generated reports remain private, outside publication artifacts.
+This feature is included in local .17, **not in published .12**.
+See the [research qualification](prototype/prototype.md#saved-context-research-source-only)
+and [runtime contract](architecture/runtime-contracts.md#saved-context-research).
+
+### Included speech defaults and optional custom engines
+
+Packaged .17 resolves its included model and seven pinned native binaries from
+Electron's external `resources\speech` directory. Packaging verifies the exact
+hashes and retains whisper.cpp/OpenAI/miniaudio license notices. A private-pipe
+helper loads the model before capture and reuses it across drafts and final
+recognition. Cancellation shuts it down; the next operation reloads. Idle
+model RAM is not yet measured. Fresh profiles need no
+settings file. Saving a language hint records a symbolic bundle source, not a
+temporary portable extraction path; the current resource path resolves on each
+launch. Missing/corrupt resources refuse recording before opening a microphone.
+No Windows/CPU fallback, download service or automatic permission grant exists.
+
+For a custom engine, open **Input > Recognition > Choose local Whisper engine** and select a
+prepared directory containing `ggml-large-v3-turbo-q5_0.bin` and a `runtime`
+subdirectory. Only the exact pinned CPU/BLAS or development Vulkan file set is
+accepted. The host checks hashes before saving the selection and again before
+recording, with an unchanged-artifact cache. Configuration survives restart.
+This optional override is a prepared-folder picker, **not an automatic downloader or installer**.
+Source runs and historical .13 do not have the packaged bundle. See the
+[qualification record](research/speech-options.md#local-multilingual-candidate-connected-in-source)
+for the current artifacts and limitations.
+
+Source profiles without a bundle require setup. **Use legacy English recognition** explicitly
+selects the installed Windows engine instead; there is no silent fallback.
+Missing or corrupt local artifacts refuse capture before opening a microphone
+and preserve any unsent draft. Changing/cancelling setup never sends a request.
+Selected Vulkan must report actual Vulkan execution or transcription fails.
+
+Automatic detection is the included default; optionally choose **English** or **Hindi** in
+Recognition. The hint is saved across restarts; it is not translation or a
+promise of recognition accuracy.
+
+Default Intercom requests speak checking progress and conversational replies
+using the local voice. Work announcements include newly settled live plans,
+defer while recording and retain truthful per-action outcomes. Restored receipts
+are not replayed; a normal Copilot response is not proof of task success.
+
+**Input > Microphone > Test selected** measures two seconds of the selected
+input, reports peak/RMS and browser-reported source rate separately from the
+recognition PCM rate, and rejects silence or substantial clipping. These are
+browser/media measurements, not independently measured hardware resolution.
+**Input > Speech check > Test speech locally** records and transcribes without
+sending any request or replacing your working draft. Stop with the bubble;
+cancel discards late results. The separate result shows local text, capture
+format, duration, recognition time and detected language. Audio is not saved.
+Hindi may appear in its original script here; Roman cleanup happens during
+Intercom interpretation, not this raw diagnostic.
+
+Synthetic native execution, rate conversion, settings persistence and exact
+owned-process cancellation work. That does **not** establish speech quality:
+the 8 kHz test confused "Y" with "why" despite high token probability.
+Current source forces review when either WAV or browser-reported source rate
+is below 16 kHz, even if capture upsamples it. That blocks automatic sending;
+upsampling does not restore lost detail or fix the name-recognition failure.
+Human English/Hindi/Hinglish and FDUCE acceptance, speed budgets and a portable
+GPU distribution remain open. Roman normalization/filler cleanup occurs in the
+restricted Intercom interpreter; legacy destinations do not use that cleanup.
+
 The current source UI differs from the published .12 download below.
 The bottom of the workspace contains only a glass microphone icon. Its tooltip
 and accessible name describe **Speak**, **Stop & transcribe / send**, or
 **Cancel request**; recording level fills the button. Recording does not require
 a connected session.
+The earlier subtle pearlescent glass shell is restored around the smooth
+lavender/mint microphone; the opaque rainbow texture is no longer used.
+Six soft reflection patches turn in CSS 3D beneath fixed edge shading and
+lighting. A seeded, 32-second periodic trajectory changes direction on X, Y
+and Z without random-target snaps. One Web Animation interpolates dense
+50 ms orientation samples; the microphone stays upright. The internal golden
+loop and narrow upper reflection stroke remain removed.
+This is a lightweight optical approximation, not physical ray tracing or
+live environment capture. Motion pauses when the document
+is hidden or the native window reports paused, and reduced motion removes it.
+Gradients and shadows are not animated. The owner rejected both whole-shell
+expansion and drawn ring outlines. During capture, existing measured input
+instead disturbs a local 64x64 water-height/velocity field at the centre.
+A finite-difference wave update propagates the disturbance into a damped rim;
+stronger input injects stronger disturbances, no faster than once per 240 ms.
+Surface slopes become red/green sampling offsets in a local SVG displacement
+map that refracts the existing glass reflections. The same normals produce
+soft directional light and shade on a clipped transparent canvas. There are
+no stroked circles. The microphone glyph, rim, glass size and hit area remain
+undistorted; the capsule still fills vertically.
+The [owner's jQuery-ripples reference](https://www.jqueryscript.net/demo/jQuery-Plugin-For-Water-Ripple-Animation-ripples/)
+uses height updates and normal-based image sampling too. Its source was
+inspected, not imported: this implementation adds no jQuery, dependency,
+WebGL scene, external request or audio stream.
+Water painting is capped at 30 fps, with fixed 90 Hz numerical steps and at
+most 100 ms of catch-up. Silence stops disturbances, fades the residual waves
+and removes the filter/loop after 1.6 seconds. Hidden/native pause, reduced
+motion, cancellation and unmount clear both water buffers and the filter.
+The separate glass Web Animation is never restarted, steered or paused by
+input levels. The button has no backdrop blur; 60 px workspace and 34 px
+floating targets are unchanged.
+These are rendering-cost safeguards, not a measured hardware performance claim.
 During capture, original mint/cyan ribbons flow outward symmetrically from the
 microphone. Their height and the microphone capsule's vertical fill follow the
 same measured input level, not random animation. Floating mode keeps smaller
@@ -96,10 +326,10 @@ The right panel opens on **Talk**. Each category keeps its controls in view:
 | Tab | Controls |
 |---|---|
 | Talk | Transcript, explicit send, response and recording cancellation |
-| Input | Microphone selection, load and brief test |
-| Session | Existing session UUID, connection and request destination |
+| Input | Microphone: selection/load/measured test; Recognition: engine/language; Speech check: local-only transcription |
+| Session | Intercom orchestration destination; legacy chat/session connection choices |
 | Voice | Local playback; Voice / Tune / Profiles / Preview sub-tabs |
-| Work | Target / Task / Review / Receipt steps, with separate confirmation |
+| Work | Plans with Activity / Permission / Result; legacy Target / Task / Review / Receipt |
 | Advanced | General: automatic sending and processing priority; Display: drift; About: limits |
 
 Use Left/Right or Home/End on a tab to switch by keyboard. Draft text, session
@@ -399,35 +629,27 @@ The Intercom artwork is original, not a copied Teams icon.
 
 The README offers a still image when the renderer supports the reduced-motion
 media query. You can also [open the still directly](assets/readme/readme-logo-still.png).
-All four README GUI panels are six-second recordings of the current
+All four README GUI panels are six-second recordings of an earlier local
 source renderer: voice/tuning tabs, mesh orbit/zoom, the floating dock, and
-input-reactive microphone waves. Each has a reduced-motion PNG and a direct
+input-reactive microphone waves. They still show the rejected rotating rainbow
+film, not the latest restored glass/3D motion; their next refresh is held for
+visual acceptance of the local preview.
+Each has a reduced-motion PNG and a direct
 still link. Historical screenshots remain evidence in this guide; they are
 not substituted into the new recordings.
 
-The owner-approved microphone is subtle glass without inner threads or an
-opaque rainbow texture. Six soft reflection patches follow one seeded,
-32-second three-axis Web Animation with smooth direction changes. The icon,
-rim and 60/34px controls remain steady. Reduced motion removes rotation;
-document/native pause suspends it. This is an optical approximation, not
-physical ray tracing or a hardware performance qualification.
-
-Existing measured input independently disturbs the centre of a local 64x64
-damped height/velocity field. Its finite-difference wave propagation and
-surface slopes produce SVG sampling offsets and transparent directional
-light/shade on the glass reflections only. No circle outlines or shell
-expansion; input never restarts or steers rotation. Drops are bounded to one
-per 240ms, painting to 30fps and numerical steps to 90Hz with 100ms maximum
-catch-up. Silence fades/clears the effect within 1.6 seconds; hidden/native
-pause, reduced motion and cancellation clear the filter, buffers and loop.
-The [owner's jQuery-ripples reference](https://www.jqueryscript.net/demo/jQuery-Plugin-For-Water-Ripple-Animation-ripples/)
-informed the mechanism, not imported code: no jQuery, new dependency,
-remote runtime resource, WebGL scene or additional audio stream is used.
-
-The new silent speaking close-up captures actual Recording/RMS from offline
-synthetic Windows speech, not injected UI levels or a physical microphone.
-It is a 560x560, 280-frame/14-second GIF with a reduced-motion still.
-Its nominal 50ms real-time samples are not a performance benchmark.
+The standalone enlarged bubble showcase has been removed from the README.
+A separate 560 x 560 px GIF remains at `assets/readme/readme-bubble.gif`,
+with its matching PNG still, for inspecting the actual idle control.
+That documentation candidate still shows the superseded rainbow shell.
+The latest local preview is `.local/readme-capture/readme-bubble.gif`:
+560 x 560 px, 640 frames, 32 seconds at 20 fps, sampled deterministically
+from the actual control's Web Animation timeline. It is not live audio or
+a performance measurement. A 3x screenshot of the 84 px crop
+provides a 252 px source before enlargement. It has its own reduced-motion
+still and caption. No reference photograph is copied into the artwork.
+The original logo GIF, wordmark and button artwork are
+unchanged by this refresh.
 
 The captures use an isolated build, disposable profile, 48 fictional contexts
 and 144 structural connections for a denser globe. This density applies only to
@@ -473,26 +695,58 @@ npm run build -- --outDir .local\readme-capture\app\dist
 node .\tools\docs\capture_readme.cjs
 ```
 
-Refresh the approved speaking showcase in the README assets:
+Refresh the approved speaking showcase directly in the README assets:
 
 ```powershell
 npm run build -- --outDir .local\water-refraction-capture\app\dist
 node .\tools\docs\capture_readme.cjs --readme-speaking
 ```
 
-`--bubble-speaking` instead keeps the GIF/still private under
-`.local\water-refraction-capture`. `--bubble-only` captures the independent
-32-second idle glass loop under `.local\readme-capture`. The full GUI command
-also generates that idle pair; only the selected speaking pair is embedded.
-Both previews use 3x CDP crops with asserted 252px source dimensions.
-Every decoded output frame and its complete duration are checked against
-the palette-indexed source. A preview is not human speech qualification.
+This writes the speaking GIF and matching reduced-motion still under
+`docs\assets\readme`. The private modes below leave those assets unchanged.
+The full GUI command also creates a private idle bubble pair; only the
+selected speaking pair is embedded in the README.
+
+Capture only the current bubble preview, without replacing README media:
+
+```powershell
+npm run build -- --outDir .local\readme-capture\app\dist
+node .\tools\docs\capture_readme.cjs --bubble-only
+```
+
+This writes the preview GIF and still under `.local\readme-capture`.
+Capture the level-reactive bubble using locally synthesized Windows speech:
+
+```powershell
+npm run build -- --outDir .local\water-refraction-capture\app\dist
+node .\tools\docs\capture_readme.cjs --bubble-speaking
+```
+
+This writes `intercom-speaking-bubble.gif` and its PNG under
+`.local\water-refraction-capture`, preserving the rejected outlined-ring and
+expansion previews, the idle preview and README media.
+The 14-second, 280-frame example captures the actual recording/RMS pipeline
+with synthetic speech and pauses, not a physical microphone or injected UI level.
+The GIF is silent. The hidden disposable app checks measured input, active
+surface displacement, fixed shell size, final silence and released tracks; transcription,
+playback and work dispatch stay blocked. Desktop checks separately verify
+actual filtered/unfiltered pixel differences, sustained input, unchanged
+rotation identity/advancing time and lifecycle cleanup. Numerical tests cover
+outward propagation, signed slopes, input strength, damping and transparent
+lighting at rest. Six decoded GIF phases were inspected, not complete playback.
+The rejected film artwork generator has been removed; the current glass
+does not load a texture asset.
 
 The capture tool launches only its copied, hidden documentation host, refuses
 changed host-patching assumptions, blocks transcription/playback/session
-dispatch, verifies input levels and floating alpha, cancels capture, closes
+dispatch, verifies input levels, floating alpha and reflection motion, cancels capture, closes
 its own app and removes its exact disposable profile. Intermediate frames
 remain ignored under `.local\readme-capture`; Pillow creates bounded 960px,
 10 fps looping GIFs with a shared palette per scene and delta frames.
+The full command also captures 640 idle Web Animation samples and creates
+`readme-bubble.gif` plus its PNG still. Explicit screenshot scaling and PNG
+dimension assertions guard the close-up resolution; device-scale flags alone
+did not enlarge the hidden host's Playwright crop. Every decoded GIF frame
+is compared with its quantized source, including the complete loop duration.
 These opaque gallery composites keep prior frame contents; the transparent
 hero still uses clear-frame disposal.

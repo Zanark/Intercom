@@ -1,13 +1,481 @@
 # Desktop prototype
 
-**Local retention (2026-11-11):** `release\prototype-12-candidate` holds the new
-.12 package; `release\mic-layout-candidate` retains .11 for rollback. The earlier
-owner-requested cleanup removed older local builds. Their sections below are
-historical qualification records, not available local paths. Existing published
-releases are preserved. `release` is Git-ignored; binaries are release assets,
-not source commits.
+## Local .18 clarification replies
 
-## Unreleased source: focused glass settings
+Latest unsigned, local-only Windows x64 executable:
+`C:\devdesk\homedesk\Intercom\release\prototype-18-candidate\Intercom-Prototype-0.1.0-prototype.18-win-x64.exe`.
+Size: 631,125,280 bytes.
+SHA-256: `7d540997d394449bb7449214c0822d5f869476676fcf894522c01e1856acca85`.
+ASAR SHA-256: `e1c05ed291ec8685e003b7ce30fcce24e727ee9513a86cee4157df4fd3daaf10`.
+The adjacent `.exe.sha256` records the executable checksum.
+
+A structured Intercom clarification automatically opens the selected microphone
+after actual local playback completes. Muted questions use written display.
+The question remains visible; click the mic to finish the reply. Existing
+five-minute cutoff and uncertain-transcript review still prevent unsafe
+automatic sends. There is no silence-based automatic stopping or continuous
+listening. Arbitrary downstream-session questions, ordinary question-shaped
+responses, work results and tool-permission prompts are not triggers.
+
+Disable **Advanced > General > Delivery behavior > Automatically listen for
+clarification replies** to keep manual-only capture. Stop playback, Cancel,
+opt-out, stale ownership/settings, hidden/minimized windows and failed
+playback/readiness suppress pending capture. Failed microphone opening preserves
+the question and reports the failure. Options follow the existing per-mount
+delivery-setting behavior, not a new persisted preference.
+
+The host retains bounded preceding unresolved request/question context for the
+next accepted controller turn only. It is not approval, a saved chat or proof
+that a live model correctly understands every reply. Fresh discovery and
+ordinary permission checks remain required.
+
+Lint/build, 19 renderer, 12 controller, 28 orchestration and two focused
+voice-host cancellation cases pass. Seventeen focused source desktop cases
+and sixteen against the exact packaged code pass. Coverage includes delayed
+playback, muted/opt-out behavior, cancellation, hidden windows, readiness/
+microphone/playback failures, ordinary questions and uncertain reply review.
+An initial hidden-window failure exposed unreliable Electron DOM visibility;
+checking actual host state after readiness fixes it without weakening the test.
+
+The exact .18 portable also passes synthetic native speech/live drafts/final,
+warm-worker reuse/shutdown, duplicate-launch model preservation and intentional
+model-loss diagnostics/recovery. All 22 packaged project runtime/renderer files,
+eight speech files, 13 notices, native dependency and private-source exclusions
+are verified. No physical microphone, audible playback, live model/provider
+request, real-session prompt or owner-app automation was used for this slice.
+The full voice suite was not rerun: the prior strict legacy Windows
+**51/52** "please"/"police" failure remains unwaived. Human multilingual,
+natural five-minute, hardware, speed/RAM and real multi-session gates stay open.
+
+After a fresh no-live-process check, only the .18 EXE/checksum remain under
+`release`; old .17 and latest unpacked/debug intermediates were removed.
+No running instance was stopped or switched. Published .12 is unchanged.
+
+## Local .17 portable lifecycle repair
+
+Historical qualification receipt (.17 is superseded and no longer retained):
+`C:\devdesk\homedesk\Intercom\release\prototype-17-candidate\Intercom-Prototype-0.1.0-prototype.17-win-x64.exe`.
+Size: 631,124,173 bytes.
+SHA-256: `9e897ec1b9d322c4e1c50eb0513ada45553d48b91a5b2a71fe27f71118881bdb`.
+ASAR SHA-256: `340e3fc1d656936935c00c9429d2c606c335df19db4e7bf6082fef06a8427285`.
+The adjacent `.exe.sha256` records the executable checksum.
+
+The reported second-microphone failure was a missing extracted model, not the
+unrelated session-catalog notices. Read-only inspection found the old app
+running without its unlocked resources. The pinned portable builder used a
+shared extraction directory and recursively cleaned it before/after launch:
+a rejected duplicate could therefore remove the original app's model. This
+mechanism matches the evidence; the owner's actual duplicate-launch event
+was not observed. .17 uses per-launch NSIS plugin directories.
+
+In installed electron-builder 26.18.0, `portable.unpackDirName: true` selects
+that unique directory; its documentation incorrectly describes `false` as
+unique. The actual generated launcher and regression, not the option's prose,
+establish this setting. Do not copy that assumption to other versions unchecked.
+
+The exact .17 portable passes duplicate-launch refusal with unchanged primary
+model size/mtime and the same warm helper PID, followed by synthetic local
+speech/live-draft/final recognition. Deliberately hiding its own extracted
+model creates the expected ENOENT process/resource snapshot; restoring only
+that disposable test file permits explicit readiness recovery with a new
+helper. Owned helper shutdown also passes. No physical microphone, audible
+playback, real-session prompt or owner-app automation is used.
+
+Lint/build, 19 renderer, 62 host, 11 controller and 54 disposable desktop
+cases pass. Nine focused packaged desktop cases pass. The voice suite remains
+**51/52**, with the unchanged legacy Windows synthetic "please"/"police"
+failure; this is not an all-green or human-accuracy claim. All 22 packaged
+project runtime/renderer files match source, eight speech files and 13 notices
+match, and native dependency/private-source exclusions pass.
+
+After qualification, a fresh check found no Intercom process running. Only
+the .17 EXE/checksum remained under `release`; superseded .16 and .17 unpacked/
+debug intermediates were removed. No running instance was stopped or switched.
+Published .12 is unchanged. The integrated features and qualification limits
+in the historical .16 receipt below remain applicable.
+
+### Local diagnostics
+
+Open **Advanced > Display > Local diagnostics > Open diagnostics folder**.
+The default persistent directory is
+`C:\Users\mishrad\AppData\Roaming\IntercomVoicePrototype\diagnostics`;
+an explicitly isolated profile has its own directory. This is outside the
+portable extraction directory.
+
+`events.jsonl` and up to three rotated files hold allowlisted lifecycle,
+IPC span/duration, native subprocess and voice-phase metadata. Each event
+file is limited to approximately 1 MiB; the queue is capped at 128 events.
+`last-failure.json` is atomically replaced with the latest reported failure's
+process IDs, runtime versions, memory counters, helper status and resource
+presence/error codes. It contains paths and should remain private.
+
+No audio, transcript, prompt, response, raw error/stack, subprocess output,
+arguments, environment or full memory dump is persisted by this logger.
+This is a process/resource snapshot, not a minidump or a guarantee to capture
+every fatal crash. Failed persistence/dropped events produce a visible warning;
+the original operation still reports its actual success or failure.
+
+Diagnostics were introduced in .17; they cannot reconstruct old .16
+failures. Missing/corrupt speech resources continue to block recording before
+microphone access. Close an older app normally and launch the verified .18
+executable; no automatic restart, model download or silent fallback occurs.
+
+## Integrated local .16
+
+Historical qualification receipt (superseded by .17; .16 is no longer retained):
+`C:\devdesk\homedesk\Intercom\release\prototype-16-candidate\Intercom-Prototype-0.1.0-prototype.16-win-x64.exe`.
+It is unsigned, local-only and 631,115,985 bytes.
+SHA-256: `4c8d433b1bc1d6bab7b8a36943fedcfa4e048819ca8d5fa1f51534bd8af1a00e`.
+The adjacent `.exe.sha256` is the checksum file.
+Verified packaged ASAR:
+`2d3d961ee01e927d3287adf7029d82055ef9155e5bfb4a5f876061cf1aadd25c`.
+
+This integrates five-minute capture and saved-context research described below,
+plus reusable local native recognition, real source-read activity and optional
+cited Copilot synthesis. The pinned model loads before capture and remains in
+one private-pipe helper across drafts/final recognition. No audio listener,
+cloud audio or silent engine fallback is added. Cancellation discards the warm
+worker; the next explicit operation reloads it. Idle RAM cost is unmeasured.
+
+Research emits bounded path/status metadata, not source bodies, to a transient
+activity trail. Successful reads trigger finite attributed mesh pulses.
+Tool locations remain distinct from proven reads, and unreported model
+activity remains unknown. Ordinary research does not contact work sessions.
+Optional synthesis requires an explicitly selected exact idle session and
+uses the ordinary queue, exclusions, cancellation and manual tool permissions.
+Strict response/citation validation precedes illustrated HTML opening and
+spoken summary. A citation proves a retained source location, not entailment.
+Browser failures preserve the report with a visible error.
+
+Final lint/build, 19 renderer, 57 host, 11 controller and 53 disposable desktop
+cases pass. Eight focused cases also pass against the packaged executable.
+The actual portable passes fresh defaults, local synthetic speech check,
+live drafts/final transcription, exact X/Y exclusion preservation, controls,
+same-native-PID reuse and shutdown with no helper left running. No physical
+microphone, audible playback or real work session is used by these checks.
+All 21 project runtime/renderer files match source; eight model/runtime files,
+13 notices and unpacked native dependency are checked. Private context, audio,
+histories, reports, project tests and native development source are excluded;
+upstream dependency source/tests may remain in their normal packages.
+
+The voice suite is **50/51**, not green: installed legacy Windows recognition
+returns "police" for synthetic "please". The unchanged strict content assertion
+is retained. Bundled Vulkan portable recognition is qualified separately on
+this machine, not every Windows/GPU environment. Natural five-minute accuracy,
+independent multilingual references, physical devices, controlled performance,
+real multi-session acceptance and owner experience acceptance remain open.
+
+After qualification, no Intercom/Electron/native-recognition process was
+running. Exact superseded .15 and latest unpacked/debug paths were removed.
+Only the .16 EXE and checksum remain under `release`; no owner application
+was restarted. Published .12 and other remote releases remain unchanged.
+`release` is Git-ignored; this is not remote publication.
+Earlier version receipts below are historical, not retained local packages.
+
+## Five-minute recordings (source only)
+
+Historical heading retained for links: this behavior is now included in local
+.16; the qualification observations below predate that package.
+
+Push-to-talk and the no-send Speech check now accept up to 300 seconds.
+The wall-clock deadline and independent sample budget stop capture; a final
+chunk crossing the sample boundary retains only the remaining audio. One
+finalization owns flush/transcription, including a manual stop racing cutoff.
+Device disconnection is still cancellation, not successful recognition.
+
+At automatic cutoff, the final transcript waits for review even when automatic
+sending is enabled: the sentence may be unfinished. Earlier manual stopping
+retains existing send settings and quality safeguards. Recognition preserves
+up to 50,000 characters; Intercom's 10,000-character and legacy/manual
+1,000-character request limits remain unchanged. Oversized requests stay
+intact for explicit shortening, not automatic splitting/truncation.
+
+The host independently accepts at most 300 seconds of canonical mono PCM16
+at 8-48kHz (maximum 28,800,044 bytes). Native processing budgets grow with
+duration, without changing short-input budgets or exact-request cancellation.
+Whisper has up to 15 minutes; legacy Windows has a five-second host margin.
+Those are failure deadlines, not latency promises. Audio stays in memory and
+on-device. Optional live drafts remain off by default and serialized; they
+reprocess accumulated audio and cost more on longer recordings.
+
+Lint/build, 19 renderer, 39 voice/native and 20 targeted disposable desktop
+cases pass. Boundary/one-extra-sample cases cover 8/16/44.1/48kHz. Renderer
+fixtures cover long-buffer cancellation, sample/wall-clock cutoff, duplicate
+chunks, flush-boundary races, track cleanup and complete over-limit drafts
+without controller invocation or automatic dispatch.
+
+Actual local Vulkan recognition now processes the supplied 82.9-second
+recording whole, in 9.61 seconds, without the prior offline segmentation.
+A separate exact-300-second composite repeats/crops that recording and appends
+a distinctive locally synthesized ending plus one second of silence. Vulkan
+and legacy Windows both retain the ending, taking 20.94 and 33.00 seconds.
+These are individual observations, not benchmarks. The composite is not a
+natural five-minute recording, independent transcription reference or physical
+microphone test. Legacy Windows badly garbles the repeated recorded speech
+despite recognizing the synthetic ending; that check proves duration/completion,
+not useful accuracy. The recognition-quality gate remains open.
+No provider/controller/work request, audible playback or owner-app automation
+occurred. Original recording, decoded source and retained .15 EXE hashes
+remain unchanged.
+
+**Local .16 now includes this behavior; published .12 does not.** Earlier .15
+was unchanged during the source qualification. Human acceptance and existing
+multilingual accuracy/GPU/performance gates remain open.
+
+## Saved-context research (source only)
+
+Historical heading retained for links: local .16 now includes this collection
+lane and the optional cited synthesis described above. The original qualification
+below deliberately ran collection without contacting a work session.
+
+The source now separates research from live session work. A spoken project
+discovery request can inspect registered context notes and requested local
+conversation histories, save an illustrated HTML/JSON evidence report and
+open it through the system default HTML handler. The Talk receipt retains
+the report path and an exact-report reopen control. Catalog notices are
+collapsed rather than obscuring the conversation.
+
+An owner-supplied 82.9-second recording was recognized locally using two
+at-most-45-second segments with two seconds overlap. Only the exact repeated
+overlap phrase was removed before controller qualification. This was offline
+preparation, not continuous 83-second app capture or independent accuracy
+ground truth. The later source milestone above verifies whole-input native
+recognition and longer capture fixtures; retained .15 still has its one-minute
+bound.
+
+One real restricted-controller turn identified the intended project and
+read-only research intent. Real local collection inspected 41 registered
+contexts, read 173 source files including nine available conversation
+histories, and found eight contexts with references and four histories with
+topic passages. These are references, not eight proven project-work sessions.
+The report explicitly discloses 25 unavailable/partial source checks, including
+a skipped oversized event line. Current mesh attribution is not every session
+ever, and saved assistant statements do not independently establish completion.
+Summaries are extractive rather than model-written synthesis.
+
+The integrated controller/report trial took 22.31 seconds; a refined-report
+rerun reused the same interpretation and took 9.55 seconds. These are single
+observations, not benchmarks or latency promises. The refined report preserves
+line citations, source hashes and a saved-topology diagram. Isolated headless
+Edge checks passed at desktop and mobile widths without horizontal overflow,
+scripts or external requests; representative captures were inspected. Windows
+accepted opening the exact verified HTML through its default handler; no
+visible owner-browser state was automated.
+
+Work-transport creation was hard-refused in qualification. No existing session
+was resumed, no work or tool permission request occurred, and original audio
+and the retained .15 EXE hashes stayed unchanged. Audio and collected evidence
+remain private and local; only request text/minimal metadata entered the
+restricted controller. Real live catalog discovery was deliberately disabled
+in this integrated research trial; catalog-failure separation is also covered
+by fixtures.
+
+Final lint/build, 16 renderer, 11 controller, 49 host (including nine research)
+and 47 disposable desktop cases pass. Checks cover invalid/missing/changed/
+linked/oversized sources, history-only discovery, long-line streaming,
+unsupported message schemas, omission counts, cancellation, report tampering,
+opening failure/recovery and bounded Talk feedback. No physical microphone,
+audible playback, owner-app restart, packaging, commit, push or upload occurred.
+Human acceptance remains open. **Retained .15 and published .12 do not contain
+this source-only feature.**
+
+## Local prototype 0.1.0-prototype.15
+
+Unsigned, local-only Windows x64 portable:
+`C:\devdesk\homedesk\Intercom\release\prototype-15-candidate\Intercom-Prototype-0.1.0-prototype.15-win-x64.exe`
+
+631,003,803 bytes; SHA-256:
+`22f6609895579284834fb3ea6af8c0d6b161bfb4ff363d2fbed3f5a8b6c2a1f0`.
+The sibling `SHA256SUMS.txt` records the checksum. Included speech and ready
+defaults are retained from .14. This is working-tree code, not a tagged or
+published release. Older local rollback builds were subsequently removed at
+the owner's request.
+
+Fixes the reported catalog-name error: resumable sessions with absent/blank
+summaries receive explicit `Unnamed session (UUID)` labels and warnings.
+Named sessions remain usable; exact identity, busy refusal and ambiguity
+checks remain enforced. Actual read-only discovery succeeded with 50 eligible
+sessions, six unnamed and four busy; no real work was sent.
+
+**Talk > Live transcription (local draft)** enables optional serialized local
+batch previews during ordinary recording. It is off by default on mount,
+not word-by-word streaming, and adds CPU/GPU work. Partial text never sends
+or speaks. Stopping settles/cancels previews before final recognition,
+including failed audio flushes; cancellation/unmount reject late results.
+Final quality/review/length and permission gates remain unchanged.
+
+Lint/build/package pass, as do 16 renderer/recording, 37 voice, ten controller
+and 39 host cases. The complete desktop suite passes 46/46; nine focused
+cases also pass against the unpacked .15 host. These cover live serialization,
+final-only dispatch, cancellation, flush failure, unmount, preview failure
+recovery, minimum/floating layouts, default routing and broken-engine refusal.
+An initial full run found an incorrectly nested new test; its top-level
+registration was corrected before the 46-case passing run.
+
+Actual portable-EXE smoke passes with synthetic Windows PCM, a fresh disposable
+profile and no recognition settings seeding. Both local diagnostics and live
+preview/final recognition preserve X and the Y exclusion; repeated phrase starts
+remain visible, not hidden. Auto-send is disabled for this trial, no real request
+is dispatched, and tracks plus launcher exit/profile cleanup are checked.
+The first run passed behavior but exceeded the old 15-second launcher cleanup
+bound; the rerun passes a 60-second bound. Success prints only after cleanup.
+This is not a startup/shutdown performance benchmark.
+
+All twelve desktop runtime and seven built-renderer files match source;
+twelve notices, unpacked Koffi, exact model/six native hashes, version and
+private/development exclusions pass integrity checks. No physical microphone,
+audible playback, normal-profile app automation, provider work, installation,
+commit, push or upload. Human multilingual/FDUCE recognition, generic GPU
+compatibility, measured speed and real multi-session execution remain open.
+
+### Recorded-speech and bounded dispatch qualification
+
+The owner supplied a 38.8-second English recording and subsequently authorized
+unattended, safe dispatch testing. Audio was decoded and recognized locally;
+only text entered Copilot. The original recording, transcript and detailed
+receipts stay private.
+
+Nine additional recorded-input cases pass using extracted .15 renderer/services,
+the original bundled speech resources and a disposable hidden app profile:
+fresh defaults; complete local Speech check with draft preservation; complete
+live-preview/final recognition; cancellation and late-result rejection; explicit
+English recognition; below-16kHz host review; concurrency and exact-ID
+cancellation/retry; low-source-rate automatic-send refusal; malformed input
+followed by recovery. Native recognition ownership never exceeded one operation,
+and there were no provider, work-dispatch or playback attempts in this lane.
+The host entry was adjusted only for hidden display and the original packaged
+resource root: this is not an untouched portable-launcher run.
+
+Observed first live draft: 8.29 seconds from starting capture. Stop-to-final
+observations: 7.34 seconds for Speech check and 6.81 seconds with live drafts.
+These single observations are not an SLO or controlled benchmark. Native
+transcripts differ around the date question; the provisional machine transcript
+is not an independent reference, calibrated accuracy score or human approval.
+The initial test attempt failed to map packaged resources in development
+Electron; the corrected harness passes without a production change.
+
+Three service-level dispatch checks also pass: real catalog/idle-target
+verification; genuine restricted-controller clarification of the recording's
+unspecified session without dispatch; and one exact-target request through the
+real controller, scheduler, WorkHost and ACP into the previously designated
+existing test session. Its arithmetic response is independently checked. Date
+and time quote an explicitly supplied host timestamp, not a model clock lookup.
+The work receipt ends `responded`; a dependent host-only status action ends
+`succeeded` and contains that exact durable response. No model is polled for
+completion, and the owned transport confirms exit.
+
+This dispatch lane adds test-only target/single-task guards, a completion-only
+tool allowlist, explicit shell/write denies and an isolated hook-disabled launch
+configuration. A temporary junction binds the exact original session history;
+no history is copied and no replacement work session is created. All unexpected
+permissions are rejected. The observed turn made zero tool calls and requested
+zero permissions. Hash comparisons preserve 120 enumerated repository files,
+the original recording, .15 ASAR and user settings/config. Existing session
+history/metadata can change as a normal consequence of its authorized resume;
+this is not a machine-wide file audit or unrestricted-work qualification.
+
+Both lanes clean up their owned processes/profiles; the temporary history
+junction is removed and the original session remains intact. No physical
+microphone, audible playback, Hindi/Hinglish reference, human acceptance,
+multi-session execution, normal-profile app automation, package replacement or
+publication is claimed. The .15 package is unchanged.
+
+## Local prototype 0.1.0-prototype.14
+
+Unsigned, local-only Windows x64 portable:
+`C:\devdesk\homedesk\Intercom\release\prototype-14-candidate\Intercom-Prototype-0.1.0-prototype.14-win-x64.exe`
+
+631,007,214 bytes; SHA-256:
+`826d5b1973cef9177da4258ff9b700c7a7209d4545707879013a291927156a28`.
+The sibling `SHA256SUMS.txt` records the checksum. This packages the current
+working-tree runtime, not a clean tagged public release. Retained .13/.12/.11
+are unchanged; published .12 remains the latest remote release.
+
+Fresh profiles automatically use the included pinned multilingual Whisper
+model and Vulkan runtime, automatic language detection, system microphone,
+Standard local Windows voice, speed-first processing and Intercom routing.
+No engine-folder selection or microphone discovery is required. Audio stays
+on-device; capture starts only on click. Existing explicit custom/Windows
+recognition and microphone choices are preserved, not silently migrated.
+Language preferences retain a symbolic bundle source across portable extraction
+locations. Missing/corrupt resources refuse capture; there is no CPU/Windows
+fallback or automatic permission grant.
+
+Default orchestration now speaks local progress and conversation replies.
+Live plans announce their actual settled responses/errors once, without
+replaying completed receipts at startup. Voice opt-outs and recording
+suppression are retained. An agent response is not independent proof that the
+requested work succeeded. Installed/authenticated Copilot and eligible existing
+idle sessions remain prerequisites; this package does not create work sessions.
+
+Lint/build/package, 15 renderer/recording, 37 voice, ten controller and 38 host
+cases pass. The final unpacked host passes nine focused desktop cases, including
+default spoken results, opt-out, restored-receipt no-replay, cancellation and
+broken explicit configuration. Latest source speech cases also pass 3/3.
+Actual portable-EXE smoke passes on a fresh disposable profile with no seeded
+recognition settings, engine-root override or device discovery. Synthetic
+Windows PCM traverses Chromium capture and the included native Vulkan engine,
+preserving X, the Y exclusion and the unsent draft; it repeats "please".
+Diagnostics, capture cancellation/track release, voice persistence, window
+controls and actual mesh startup (41 contexts, 31 relationships) also pass.
+
+All 19 runtime resources match source. Exact version, twelve notices, unpacked
+native module, private/development exclusions and the model plus six native
+hashes are verified. No physical input, audible playback, live-session work,
+normal-profile launch, installation, commit, push or upload was performed.
+Human English/Hindi/Hinglish/FDUCE quality, measured speed and real-session
+orchestration remain open. The included native-optimized Vulkan build is
+qualified on this development machine, not generic Windows/GPU hardware.
+
+## Local prototype 0.1.0-prototype.13
+
+Unsigned, local-only Windows x64 portable:
+`C:\devdesk\homedesk\Intercom\release\prototype-13-candidate\Intercom-Prototype-0.1.0-prototype.13-win-x64.exe`
+
+111,985,553 bytes; SHA-256:
+`89dc3056b96f98c1cd16829ffeabb4134816e4098347060681bb9f14b2f91dda`.
+The sibling `SHA256SUMS.txt` records the checksum. This packages the current
+working-tree runtime, not a clean tagged public release. Published .12 is unchanged.
+
+Includes the approved three-axis glass rotation and independent water-surface
+refraction; measured selected-device diagnostics; saved Auto/English/Hindi
+recognition hints; separate no-send, draft-preserving local Speech check;
+low-source-rate review; and the restricted controller/host scheduler.
+Human recognition accuracy and real multi-session execution remain unqualified.
+
+Select **Input > Recognition > Choose local Whisper engine** and choose
+`C:\devdesk\homedesk\Intercom\.local\speech-qualification\vulkan-engine`.
+Then use **Input > Speech check > Test speech locally**, stopping with the bubble.
+Existing profiles may still select legacy Windows recognition. The prepared
+model/runtime are external and not bundled; the development Vulkan runtime is
+not a qualified generic GPU distribution. The raw Hindi diagnostic may use its
+original script; Roman normalization belongs to Intercom interpretation.
+
+Lint/build/package and 15 renderer/recording, 34 voice, ten controller and 38
+host cases pass. The packaged desktop suite initially passed 36/39: three
+strict-mode failures came from graph tests matching the new decorative mic
+canvas. Narrowed all graph selectors; all six affected graph cases then pass.
+This is not a claim that all 39 passed together after the selector correction.
+Actual portable-launcher smoke passes with disposable settings and synthetic
+Windows speech through Chromium capture and native Vulkan transcription.
+It preserves session X, the session Y exclusion and the unsent draft, although
+the phrase start repeats. It also checks microphone diagnostics, workspace/
+floating signal, cancellation/track release, voice persistence, window/graph
+controls and actual mesh startup (41 contexts, 31 relationships).
+
+Nineteen packaged runtime resources match source; exact .13 version, ten
+license notices, unpacked native module and private/development exclusions
+are verified. Retained .12/.11 hashes are unchanged. No physical microphone,
+audible playback, real-session work, normal-profile launch, installation,
+commit, push or release upload was performed. Human English/Hindi/Hinglish/
+FDUCE acceptance and measured speed remain open; the existing Vite chunk-size
+warning remains.
+
+## Earlier glass-only source qualification (historical)
+
+The following same-version .12 candidate predates local .13 and its speech
+checks. Its mirrored ribbons and explicit target/task review describe that
+earlier source, not the current glass/refraction and restricted-controller UI.
 
 The source now separates Talk, Input, Session, Voice, Work and Advanced.
 Voice has Voice/Tune/Profiles/Preview categories; work has Target/Task/Review/

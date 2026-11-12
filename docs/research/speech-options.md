@@ -1,5 +1,13 @@
 # Speech options: research before selection
 
+**Functional-slice supersession (2026-11-11):** the owner now approves a stronger
+local recognition runtime/model download for English and Hindi/Hinglish, with
+Roman-script output. A separately restricted Copilot controller may normalize
+transcript text and interpret requests; audio remains on-device. TTS improvement
+is deferred. The Windows-only prototype and its confidence score below are
+historical baseline evidence, not the desired final speech quality. Exact model,
+human code-switching accuracy and local latency remain qualification work.
+
 **Final product decision pending.** The user subsequently selected a bounded
 prototype using installed Windows en-US `System.Speech` recognition and local
 English playback, with click-on/click-off capture and no model download.
@@ -11,6 +19,229 @@ pricing and data terms must be rechecked at final selection.
 
 **Product priority:** performance/speed first and default, with user-selectable
 priorities. Neither local nor cloud speech is presumed faster without evidence.
+
+## Local multilingual candidate: connected in source
+
+The approved investigation has downloaded and SHA-256 verified whisper.cpp
+v1.9.2 CPU/BLAS binaries and the multilingual `large-v3-turbo-q5_0` model.
+`desktop/services/recognition.cjs` supplies the integrity-checked adapter now
+wired into `VoiceHost.transcribe`. **Input > Recognition** selects an external
+prepared model/runtime folder through a native host dialog; configuration is
+atomic and survives restart. Local .14 packages the model and six pinned Vulkan
+binaries with whisper.cpp/OpenAI notices. Fresh packaged profiles select the
+included engine and automatic language detection without a folder picker;
+symbolic bundle preferences survive changing portable extraction paths.
+Source runs without a bundle still need a prepared folder. The historical
+Windows engine is available through explicit legacy selection. There is no
+automatic installer or silent Windows/CPU fallback. Setup failures
+preserve the draft and refuse recording before opening the microphone.
+Intercom interpretation handles Roman output/filler cleanup; legacy destinations
+do not. Human code-switching acceptance remains unfinished.
+
+On Windows, the pinned CLI's `--output-file -` opens `CON`, not redirected
+stdout. Consequently, exit zero plus empty captured stdout did not qualify
+transcription. The adapter instead feeds WAV through stdin and receives bounded
+JSON through a unique owned named pipe. It handles split UTF-8, output completion,
+malformed/empty results, artifact mismatch and cancellation without saving audio
+or transcript files. Native execution retains owned-process cleanup; four-thread
+BLAS settings are explicit. It reports token probability separately, never
+pretending it is calibrated recognition confidence or consuming the CLI's
+unqualified segment timestamps.
+
+Synthetic evidence on the development machine: a 12.615-second English
+X/Y/Z orchestration example preserved targets, the conditional follow-up and
+“do not check Y,” with punctuation differences and fillers still present.
+The initial BLAS run took 19,382 ms; the hardened adapter run, including artifact
+verification, took 22,162 ms. These are individual cold observations, not a
+controlled performance comparison, human microphone result or acceptable
+speed-first qualification. These are historical adapter observations, before
+source activation.
+
+### Warm recognition in local .16
+
+Normal recording now uses `desktop/services/native-recognition.cjs` and the
+owned `intercom-recognition.exe` helper, not a fresh CLI/model process per
+draft. Preflight verifies the model and exact runtime hashes, starts a private
+inherited-pipe worker, and waits for actual model readiness before opening the
+microphone. Drafts and complete final recordings reuse that same process/model.
+The pinned CLI/named-pipe path above remains an explicit diagnostic path.
+
+The helper dynamically resolves whisper.cpp v1.9.2 APIs from its exact pinned
+DLL set and uses upstream miniaudio v0.11.24 for complete memory decoding/
+resampling. Language is auto/English/Hindi without translation; decoding
+context resets between requests. Four recognition threads remain explicit.
+Vulkan readiness requires the pinned runtime's actual Vulkan initialization
+diagnostic; a CPU fallback is an error. CPU is a separate explicit configuration.
+The model stays resident until shutdown, engine change or cancellation.
+This trades idle memory for avoiding repeated initialization; idle RAM and
+controlled cold/warm performance comparisons are not yet qualified.
+
+There is no network listener, audio-device access or helper file-loading API
+beyond its host-supplied startup model path. Audio/results travel over anonymous
+pipes and memory, not application audio/transcript files. Buffers are not
+securely zeroized; OS paging/crash dumps are not prevented. Request IDs, bounded
+output, startup/recognition deadlines and exact cancellation reject late data.
+Cancellation stops this exact worker, waits up to five seconds and blocks reuse
+if cleanup fails; the next explicit request reloads without replay. Unexpected
+idle exit is surfaced before retry. The helper also exits if its parent dies;
+ordinary shutdown awaits `VoiceHost.close()`.
+
+Observed once on the development machine: Vulkan readiness 2,337 ms, two
+eight-second drafts 1,685/1,606 ms, and a complete 300-second repeated consented
+input 17,222 ms with 4,800,000 decoded samples. The same PID served drafts and
+complete input. Cancellation took 192 ms, its exact PID exited, and replacement
+readiness took 1,293 ms. CPU readiness was 2,235 ms. These are individual native
+observations, not a controlled comparison, natural five-minute accuracy test,
+human microphone acceptance or generic GPU qualification.
+
+The complete voice suite passes 50/51: the unchanged installed-Windows test
+recognizes synthetic "please" as "police". This legacy-engine accuracy failure
+is retained, not hidden by weakening the assertion or substituting another
+engine. Warm-worker, integrity, timeout, cancellation, stale-output, engine
+change and shutdown cases pass. The bundled engine is qualified separately
+through the exact portable build.
+
+Helper SHA-256:
+`301beb02a6b303cd0344810c00d507ffdeca7536e4495c2b40772b7013f5c48b`
+(588,288 bytes). It was built from `desktop/services/native-recognition.cpp`
+against unmodified source commit
+`306c88f4d1286aec1bf96e544632897886af5501`. Miniaudio uses its MIT-0 alternative;
+its notice accompanies the independent required whisper/model notices.
+The actual build invocation from the repository root was:
+
+```powershell
+& $env:ComSpec /c 'call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat" >nul && cl /nologo /std:c++17 /O2 /MT /EHsc /DNDEBUG /Brepro /I ".local\speech-qualification\source\whisper.cpp-306c88f4d1286aec1bf96e544632897886af5501\include" /I ".local\speech-qualification\source\whisper.cpp-306c88f4d1286aec1bf96e544632897886af5501\ggml\include" /I ".local\speech-qualification\source\whisper.cpp-306c88f4d1286aec1bf96e544632897886af5501\examples" desktop\services\native-recognition.cpp /Fo.local\speech-qualification\native-recognition.obj /Fe.local\speech-qualification\vulkan-engine\runtime\intercom-recognition.exe /link /INCREMENTAL:NO /Brepro'
+```
+
+This records the build procedure, not a byte-reproducibility claim: the exact
+compiler/toolchain version was not captured.
+
+### Microphone diagnostics and local-only speech check
+
+Current source now exposes a measured two-second selected-device check,
+saved `auto` / `en` / `hi` recognition hints, and a separate **Input > Speech
+check**. The microphone check reports browser source rate, AudioContext PCM
+rate, RMS and peak; silence and substantial clipping are explicit failures.
+It cannot establish the physical microphone's ADC resolution or audio quality.
+Speech check runs actual local recognition but never sends work or replaces
+the working draft. It shows raw text and measured capture/recognition details;
+Hindi may remain in original script until normal Intercom interpretation.
+
+Three recording cases, all 34 speech cases, lint/build and 13 targeted
+offscreen desktop cases pass. Coverage includes no-send/draft retention,
+cancelled late output, visible cleanup failure with released UI ownership,
+persisted language and a browser-reported 8kHz source
+resampled to 16kHz that still cannot bypass review. Disposable synthetic media
+and hidden windows are not physical-device or visible-window qualification.
+A separate synthetic-file capture traversed the actual renderer/native Vulkan
+route with no dispatch, provider call or draft replacement. Its transcript
+preserved X/Y but repeated the start of the phrase; this is not perfect accuracy.
+
+Fresh synthetic native observations for the same 4.58-second phrase:
+auto/16kHz 6,645ms, English/16kHz 3,546ms, English/8kHz 3,354ms.
+Both 16kHz transcripts preserved X/Y. At 8kHz, Y still became "why" with
+token probability about .852, **now requiring review with an explicit warning**.
+The host guards low-rate WAV; the renderer independently guards low reported
+source rate even after resampling. This safety mitigation supersedes the
+initial no-review behavior below, not the failed exact-name quality gate.
+These uncontrolled observations are not a language-hint speed benchmark or
+speed-first acceptance. Prepared-folder installation, portable Vulkan,
+human English/Hindi/Hinglish and FDUCE qualification remain open.
+
+### Activated native evidence and failed quality gate
+
+Actual `VoiceHost` setup, restart persistence and transcription now run against
+both pinned CPU/BLAS and the six-file development Vulkan runtime. A 4.58-second
+synthetic English request was exercised at 8,000 / 16,000 / 44,100 / 48,000 Hz
+through Vulkan; the CLI's in-memory decoder performed conversion. Observed
+wall times were 7,041 / 7,085 / 5,161 / 5,412 ms respectively. CPU at 16,000 Hz
+took 31,280 ms. These individual, uncontrolled-cache observations include host
+work; they are not latency distributions or a speed-first pass.
+
+The 16 / 44.1 / 48 kHz Vulkan and 16 kHz CPU transcripts preserved "refresh
+session X" and "do not check session Y". **The 8 kHz transcript instead said
+"do not check session why", with token probability 0.852 and no review flag
+in that initial activation run.**
+The exact-name assertion remains failed. This directly demonstrates why token
+probability is not a reliable accuracy guarantee; do not claim impeccable
+recognition or silently rewrite uncertain targets. Actual request cancellation
+terminated only the observed owned Vulkan child, verified its PID exited and
+released the host slot. No microphone, playback or provider task was involved.
+
+The first activation attempt also found that `--no-prints` suppresses the GPU
+diagnostic itself. GPU execution now leaves that diagnostic enabled; a unit
+regression checks this argument and split diagnostic handling. Absence of the
+required Vulkan backend report still rejects the result, not a CPU fallback.
+All 31 speech cases, eight renderer cases, 38 host cases, lint/build and all
+33 desktop cases pass (30 in the full run, then the three corrected uncertainty
+copy assertions). These do not override the failed native exact-name gate.
+
+`npm run test:voice` covers the new transport, integrity and uncertainty cases
+alongside the existing native voice suite. A separate fictional-text Copilot
+interpreter can authenticate and remove fillers while retaining an exclusion,
+without observed tool execution. However, prompt-mode startup still reports
+inherited enabled skill metadata despite the isolated profile's disabled
+inventory. That CLI-only path remains unqualified. The separate SDK qualification
+below supersedes this blocker for the tested configuration; neither path has
+received a real session catalog or orchestration task.
+
+### AMD Vulkan and restricted SDK qualification
+
+The same pinned whisper.cpp source was built unchanged with Vulkan enabled.
+A nested MSBuild tracking-file path failed under the original long build root;
+shortening the project-owned build path fixed it without changing upstream
+source, global long-path policy, drivers or the user's running application.
+The verified LunarG SDK was copied into ignored local storage using its
+documented copy-only installation; the checked user/machine environment values
+remained unchanged.
+
+The first Vulkan synthetic observation took 7,275 ms. A subsequent fresh-process
+diagnostic run took 4,064 ms for the same 12.615-second input. Initialization
+explicitly reported `using Vulkan0 backend` on the AMD Radeon 780M and allocated
+the 573.40 MB model there. This establishes actual accelerated inference, not
+just device enumeration. The later observation may benefit from driver/file
+caches; neither result is a controlled comparison, latency distribution or
+human English/Hinglish acceptance. Fillers remain in the recognized text.
+The six compiled native files have recorded SHA-256 values, but their runtime
+dependency/redistribution and portable deployment checks are still pending.
+The source adapter now selects and verifies either pinned manifest. The local
+Vulkan build has `GGML_NATIVE=ON`, so it is machine-optimized, **not qualified
+as a generic Windows x64 redistributable**. Dependency/license review,
+`GGML_NATIVE=OFF` distribution work and other-machine checks remain open.
+
+Published `@github/copilot-sdk@1.0.31` was installed only in a private qualification
+workspace, without install scripts or optional bundled runtimes. Its metadata
+targets the already installed Copilot CLI 1.0.109. Against that executable,
+`mode: "empty"`, an owned home/workspace, explicit empty tool/agent/skill lists,
+disabled discovery/hooks/memory/session-store features and denied permissions
+authenticated without copying credentials. A model-free inventory returned no
+skills, configured MCP servers or offered tools.
+
+The first fictional model turn exposed an important additional gate: the
+built-in GitHub MCP connected during model initialization despite the startup
+CLI flag and empty preflight inventory. Explicit session-level
+`disabledMcpServers: ["github-mcp-server"]` fixed the observed path. A new
+fictional-only turn removed “Um/Uh,” retained “Do not check Y,” took 3,070 ms,
+reported that MCP disabled, and retained empty skills/tools/MCP inventories
+after model completion. There were no observed tool executions or custom-agent
+loads. Qualification must inspect model-startup events and post-turn state,
+not infer isolation from preflight alone.
+
+This is a qualified narrow interpretation candidate, not an OS sandbox, a
+production controller, a typed orchestration plan or proof that arbitrary
+provider/managed context is absent. No audio, real catalog or work request was
+sent. At that qualification milestone, repository dependencies and packaging
+were unchanged.
+
+The subsequent repository adapter now uses the exact SDK dependency and
+host-validates typed plans, exclusions, DAGs and Roman output. Ten focused
+cases pass; an actual fictional-only X/Y/Z plan took 8,593 ms through its full
+lifecycle. A separate portable candidate verifies SDK/native loading and
+synthetic UI paths. The adapter is now connected in source through canonical catalog discovery,
+a durable host scheduler and Plans UI; disposable fixtures verify execution
+boundaries, not real multi-session work. Prepared-folder speech activation is
+connected; installation, performance and human multilingual quality remain unfinished. See
+[runtime contracts](../architecture/runtime-contracts.md).
 
 ## Prototype voice profiles and the required future engine
 
@@ -35,8 +266,9 @@ Gender selection filters voices; it does not transform a voice's identity.
 Profiles save the exact voice, requested pitch (-12 to +12 semitones), Windows
 rate (-10 to +10) and volume (0-100). Pitch response is voice/engine-dependent,
 not a promise of calibrated acoustic intervals. Rate is not a measured
-playback-speed multiplier. Volume 0 is silent. Recognition remains en-US
-regardless of the speaking voice's culture.
+playback-speed multiplier. Volume 0 is silent. Speaking profiles never change
+the selected recognition engine/language: legacy Windows remains en-US,
+whereas the connected local Whisper candidate uses automatic language detection.
 
 Create a profile with **Duplicate profile**, edit its name/controls and
 **Save & use profile**. Rename an existing profile through the same save action.

@@ -1,6 +1,6 @@
 {
   "name": "intercom-prototype",
-  "version": "0.1.0-prototype.12",
+  "version": "0.1.0-prototype.18",
   "private": true,
   "description": "Local push-to-talk, existing Copilot conversation and transparent desktop mesh prototype",
   "author": "Zanark",
@@ -14,14 +14,16 @@
     "start": "npm run build && electron .",
     "desktop": "electron .",
     "test": "vitest run",
-    "test:voice": "node --test tests\\unit\\voice-host.unit.cjs",
-    "test:host": "node --test tests\\unit\\mesh-host.unit.cjs tests\\unit\\work-host.unit.cjs",
+    "test:voice": "node --test tests\\unit\\voice-host.unit.cjs tests\\unit\\recognition.unit.cjs",
+    "test:controller": "node --test tests\\unit\\interpreter.unit.cjs",
+    "test:host": "node --test tests\\unit\\mesh-host.unit.cjs tests\\unit\\work-host.unit.cjs tests\\unit\\orchestration.unit.cjs tests\\unit\\research.unit.cjs tests\\unit\\diagnostics.unit.cjs",
     "test:desktop": "node -p \"require('electron')\" && playwright test",
     "test:portable": "node tests\\smoke\\portable-smoke.cjs",
     "package:win": "npm run build && electron-builder --win portable --x64 --publish never",
     "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
+    "@github/copilot-sdk": "1.0.31",
     "react": "19.3.1",
     "react-dom": "19.3.1",
     "three": "0.187.0"
@@ -47,6 +49,7 @@
     "appId": "io.github.zanark.intercom.prototype",
     "productName": "Intercom Prototype",
     "asar": true,
+    "beforePack": "tools/verify-speech-bundle.cjs",
     "npmRebuild": false,
     "directories": {
       "output": "release"
@@ -56,9 +59,53 @@
       "desktop/**/*.cjs",
       "desktop/speech/*.ps1",
       "package.json",
-      "!node_modules/**/*"
+      "!node_modules/react/**/*",
+      "!node_modules/react-dom/**/*",
+      "!node_modules/scheduler/**/*",
+      "!node_modules/three/**/*",
+      "!node_modules/@github/copilot-sdk-*/**/*"
+    ],
+    "asarUnpack": [
+      "node_modules/koffi/**/*",
+      "node_modules/@koromix/koffi-win32-x64/**/*"
     ],
     "extraFiles": [
+      {
+        "from": "desktop/licenses/miniaudio.txt",
+        "to": "licenses/miniaudio.txt"
+      },
+      {
+        "from": "desktop/licenses/whisper-cpp.txt",
+        "to": "licenses/whisper-cpp.txt"
+      },
+      {
+        "from": "desktop/licenses/whisper-model.txt",
+        "to": "licenses/whisper-model.txt"
+      },
+      {
+        "from": "desktop/licenses/copilot-sdk.txt",
+        "to": "licenses/copilot-sdk.txt"
+      },
+      {
+        "from": "node_modules/koffi/LICENSE.txt",
+        "to": "licenses/koffi.txt"
+      },
+      {
+        "from": "node_modules/lossless-json/LICENSE.md",
+        "to": "licenses/lossless-json.txt"
+      },
+      {
+        "from": "node_modules/vscode-jsonrpc/License.txt",
+        "to": "licenses/vscode-jsonrpc.txt"
+      },
+      {
+        "from": "node_modules/vscode-jsonrpc/thirdpartynotices.txt",
+        "to": "licenses/vscode-jsonrpc-thirdparty.txt"
+      },
+      {
+        "from": "node_modules/zod/LICENSE",
+        "to": "licenses/zod.txt"
+      },
       {
         "from": "node_modules/react/LICENSE",
         "to": "licenses/react.txt"
@@ -76,6 +123,18 @@
         "to": "licenses/three.txt"
       }
     ],
+    "extraResources": [
+      {
+        "from": ".local/speech-qualification/vulkan-engine",
+        "to": "speech",
+        "filter": [
+          "ggml-large-v3-turbo-q5_0.bin",
+          "runtime/*.dll",
+          "runtime/whisper-cli.exe",
+          "runtime/intercom-recognition.exe"
+        ]
+      }
+    ],
     "win": {
       "target": "portable",
       "executableName": "IntercomPrototype",
@@ -83,6 +142,9 @@
       "signAndEditExecutable": true,
       "signExecutable": false,
       "artifactName": "Intercom-Prototype-${version}-win-${arch}.${ext}"
+    },
+    "portable": {
+      "unpackDirName": true
     }
   }
 }

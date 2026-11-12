@@ -2,6 +2,27 @@
   <img src="docs/assets/readme/readme-title.png" alt="intercom. Original lowercase typeface in seafoam and washed violet on frosted sea glass. Your voice. Your context. Connected." width="680" />
 </p>
 
+## Project status: paused after failed owner acceptance
+
+On **13 November 2026**, the owner stopped using Intercom because it had not
+delivered the requested experience: speak naturally, have existing Copilot
+sessions do useful work, and see their observed context activity in the mesh.
+The owner's assessment was explicit: **"the things that I wanted to achieve
+I have not been able to achieve"** and **"you have generally disappointed me"**.
+
+The latest live .18 run reached an existing session, but stopped when the
+connector rejected concurrent tool-permission requests. Its outcome is
+**unknown**, not completed; any partial work needs inspection before a retry.
+Successful transcription, clarification capture, isolated tests and attractive
+visuals did not establish a reliable end-to-end product. The coding agent
+overstated readiness by treating those milestones as sufficient delivery.
+
+**Implementation is paused at the owner's request.** This source push records
+the work and the failure; it is not a fix, a new binary release or human
+acceptance. Any future resumption must prove the complete delivered workflow,
+including real permission handling and truthful failure recovery, before
+claiming success. See the [development journey and accountability record](TODO/03_DEVELOPMENT_LEDGER.todo).
+
 <p align="center">
   <a href="docs/guide.md#readme-artwork">
     <picture>
@@ -87,14 +108,62 @@
   <br /><sub><a href="docs/assets/readme/readme-microphone.png">Microphone still</a></sub>
 </p>
 
-**Functional rebuild in progress (unpublished local work):** local development
+**Integrated local .18 (not published):** local development
 connects the restricted controller to a durable multi-session scheduler, with
 Intercom-node default focus, conditional checks, exclusions and manual tool
 approvals. Clear requests need no second target/task confirmation. Disposable
-fixtures verify this flow; real multi-session work and human speech quality
-remain unqualified. Local multilingual Whisper uses explicit prepared-folder
-setup and integrity checks, without silent Windows/CPU fallback. An 8 kHz
+fixtures verify this flow. Recorded English input and one strictly bounded
+existing-session reply also pass in separate protected test lanes; real
+multi-session work and human speech accuracy remain unqualified. See the
+[recorded-input qualification](docs/prototype/prototype.md#recorded-speech-and-bounded-dispatch-qualification).
+Local candidate .18 includes integrity-checked multilingual
+Whisper, automatically selected on fresh profiles with the system microphone,
+auto language, local voice and speed-first routing. Existing explicit engine
+choices stay unchanged; permissions remain manual. It also tolerates unnamed
+catalog sessions without guessing targets and offers optional **Talk > Live
+transcription (local draft)**: periodic on-device previews, off by default,
+never automatic partial sends. Recognition now keeps one native model loaded
+across drafts and final transcription through private pipes, without a network
+listener. There is no silent Windows/CPU fallback. An 8 kHz
 synthetic example confused session "Y" with "why": speech accuracy is not
-accepted. Installer and portable GPU qualification remain unfinished. The
-published .12 build is unchanged; the implementation and qualification notes
-remain local and are not included in this README/media update.
+accepted. The exact .18 portable passes synthetic local speech, warm-worker
+reuse and shutdown checks on this machine; broader GPU and human speech
+qualification remain open. The published .12 build is unchanged.
+
+**Clarification replies (local .18):** after Intercom asks a structured
+clarification, the mic opens automatically when local playback finishes, or
+after written display when muted. Click the mic to finish your reply.
+Stop playback, Cancel, opt-out and hidden/minimized windows suppress pending
+listening. Disable **Automatically listen for clarification replies** under
+Advanced delivery settings. This is bounded capture, not continuous listening
+or automatic detection of arbitrary downstream questions.
+
+**Five-minute recordings (local .18):** capture and transcribe up to five
+minutes locally. Automatic cutoff preserves the transcript for review and
+never sends an unfinished request; ordinary manual stopping retains existing
+send settings. This is **not included in published .12**.
+See [long-recording behavior and evidence](docs/prototype/prototype.md#five-minute-recordings-source-only).
+
+**Observed context research (local .18):** ask Intercom to find a project's
+contexts and session history. A separate read-only lane inspects registered
+notes and requested, exactly attributed local histories, then saves and opens
+a private illustrated HTML report with citations and a coverage audit. No
+existing session is resumed for ordinary collection. Actual source reads now
+drive finite mesh pulses and an attributable activity trail. Optionally select
+an exact existing idle session for cited Copilot synthesis through the normal
+permission-controlled queue. Citation locations are validated, not the truth
+of every conclusion. Topic references are not proof of ownership, completion
+or live access. These features are **not included in published .12**.
+See [current candidate and limits](docs/prototype/prototype.md#local-18-clarification-replies).
+
+Latest unsigned executable:
+`C:\devdesk\homedesk\Intercom\release\prototype-18-candidate\Intercom-Prototype-0.1.0-prototype.18-win-x64.exe`.
+Only this executable and its checksum remain in the local release folder;
+existing published GitHub releases have not been changed.
+
+**Portable recovery and diagnostics:** .17 isolates each launch's extracted
+files so a rejected duplicate cannot remove the first instance's speech model.
+Persistent metadata-only logs and automatic process/resource failure snapshots
+are available under **Advanced > Display > Local diagnostics**. No audio,
+transcripts, prompts, responses or full memory dumps are logged. See
+[diagnostic location and limits](docs/prototype/prototype.md#local-diagnostics).

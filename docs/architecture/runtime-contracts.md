@@ -1,6 +1,293 @@
 # Runtime contracts and failure behavior
 
-Proposed application contracts, not implemented APIs. Read with
+**Functional-slice authorization (2026-11-11):** local multilingual recognition
+downloads and a separate restricted Copilot interpretation controller are now
+approved. Default focus is the Intercom context node. Clear spoken requests
+replace redundant target/task confirmation; ambiguity and real tool permissions
+remain explicit. The host must validate typed plans, exact existing sessions,
+dependencies and exclusions. Controller proposals are not observations, grants
+or work completion. Audio stays local; the controller receives transcript text
+and minimal session metadata. No replacement work session or busy attachment.
+These requirements are implemented in source as described below; real
+multi-session and human speech qualification remain open.
+
+**Current source:** `desktop/services/interpreter.cjs` creates
+an ephemeral, tool-free SDK controller, projects only bounded session IDs/names/
+context names/idle status, and validates a versioned response before returning
+it to the host dispatcher. Up to 16 work/status actions reference exact catalog
+IDs. Status exclusions, dependency identity/uniqueness, cycles, idle work targets,
+request lengths, Roman output and unknown fields are checked in the host.
+The speed profile selects low reasoning effort. Input recognition text may
+contain Hindi script; normalization output must be Roman.
+
+SDK 1.0.31 and installed CLI 1.0.109 are deliberately pinned to the qualified
+boundary. Startup events and post-model inventories are checked, permissions
+are denied, and a connected built-in MCP, enabled skill/agent or tool attempt
+invalidates the entire result. A fresh controller is not a replacement work
+session. Successful ephemeral session state is deleted through the SDK; aborted
+or failed sessions may retain local diagnostics under the owned interpreter
+profile. Exact cancellation discards late results; cleanup failure suppresses
+the plan and failed forced cleanup blocks another request. These controls are
+not an OS sandbox or proof about provider-side context/telemetry.
+
+The interpreter itself does not dispatch or discover sessions. Main-frame IPC
+accepts only a request UUID, text and priority, never an authoritative renderer
+catalog or proposal. `session-catalog.cjs` reads Agency's actual `summary` names
+and binds exact IDs to canonical registered mesh roots. Busy/unknown states do
+not become idle; duplicate identities or ambiguous root ownership fail.
+Missing or blank names use the explicit `Unnamed session (UUID)` label and a
+warning, not a fabricated friendly name or rejection of unrelated requests.
+Non-string names remain invalid. The interpreter must not guess among unnamed
+sessions; exact IDs or unambiguous context bindings are still required.
+
+`orchestration.cjs` persists a bounded atomic JSON queue before dispatch.
+Up to two jobs may run in distinct, non-overlapping canonical workspaces.
+Exact original context/workspace bindings are rechecked after interpretation,
+then existing WorkHost policy checks and one-shot approvals govern execution.
+Explicit exclusions and dependency outcomes are host-enforced. Ordinary work
+answers are `responded`, not proven `succeeded`. Status captures are snapshots,
+not model-based polling. Voice remains available while jobs run.
+
+Cancellation owns the exact request and its children; late controller output
+cannot dispatch. Cleanup errors remain explicit. Recovery never retries or
+stops prior-launch work; unknown unacknowledged work reserves its session/root.
+Nested saved outcomes are validated before renderer delivery. Plans retain
+full Activity / Permission / Result text in fitted controls. Only observed
+owned child activity lights graph paths, never model-proposed reads.
+Fifty-seven host cases pass, including exact
+approval identity, cancellation, recovery and long permission content. This
+is fixture evidence, not real provider/work qualification. Read-only actual
+catalog enumeration also succeeds with unnamed sessions; it dispatches no work.
+
+Status is limited to host-owned receipts/catalog snapshots; an external
+session becoming idle is not verified task completion. Waiting on an unowned
+external session is explicitly unsupported by this interpretation contract.
+
+## Bounded clarification replies
+
+Only a validated `clarify` intent can automatically reopen the selected mic.
+Wait for actual unsuperseded local playback completion; muted questions use
+written display. Stop playback, cancellation, opt-out, changed settings, stale
+ownership, failed readiness/playback and hidden/minimized host windows suppress
+pending capture. Check the actual host window state after readiness:
+Electron hiding is not reliably reflected by `document.hidden` alone.
+Cancelled provider playback resolving successfully is still cancellation.
+
+Automatic reply capture retains the visible question and reuses the ordinary
+selected-device, five-minute, explicit-stop and uncertain-transcript review
+path. It has no silence-based automatic stopping or continuous-listening loop.
+Ordinary question-shaped prose, work results and permission prompts do not arm
+the microphone. The default-on control is **Advanced > General > Delivery
+behavior > Automatically listen for clarification replies**.
+
+The host retains the preceding validated unresolved request and question in
+memory for the next accepted request only. The fresh restricted interpreter
+receives exactly `{ request, question }`, bounded to 10,000/4,000 Roman-script
+characters; unknown fields fail validation. Further clarifications retain the
+unresolved request; new user corrections take precedence. Context is not a
+permission grant, persisted conversation or renderer-authoritative proposal.
+Every turn still discovers a fresh catalog and uses normal dispatcher checks.
+
+## Saved-context research
+
+The validated `research` intent carries only a bounded topic and an explicit
+session-history boolean, never work actions or arbitrary file paths. An optional
+exact existing idle synthesis-session UUID is allowed only when the owner
+explicitly requests that session, not inferred from a project name. The interpreter
+additionally receives bounded context IDs/names/aliases, not source bodies.
+Catalog failure is visible but does not prevent saved research; executable
+plans still require fresh live discovery. Ordinary collection never constructs
+a work transport or resumes an existing session. Explicit synthesis uses the
+normal work queue described below.
+
+`research.cjs` uses an owned, cancellable worker with a 60-second read bound.
+Only registered `.agent-context` STATE/MEMORY/JOURNAL/README files and requested
+`events.jsonl` files under exact indexed session UUIDs are eligible. No recursive
+search, social-message reading or inbox ingestion occurs. Sources must be
+canonical regular non-link children of their approved directories. Exact
+BigInt device/inode/size/mtime identity is checked before and after reads;
+SHA-256 and source-line citations accompany available evidence. This is not
+an OS sandbox or a universal secret detector.
+
+Notes are bounded to 2 MiB each and 64 MiB total. Histories stream in 64 KiB
+chunks, up to 256 MiB each and 512 MiB total across at most 256 unique sessions.
+Direct project matches and note matches receive history-budget priority.
+Only topic-bearing user/assistant messages become evidence; embedded runtime
+reminders and notifications are removed. A line above 4 MiB is skipped with
+explicit partial coverage; malformed JSON or unsupported message schemas make
+that history unavailable. The first two and latest ten matching messages are
+retained, with omission counts. Topic discovery includes attributed histories
+whose context names/notes do not match. Attribution alone is never work proof.
+
+Reports contain source-labelled extractive summaries, escaped passages and
+saved high-confidence topology, never invented activity. HTML is self-contained
+with a no-network/script CSP, at most 8 MiB; JSON evidence is at most 16 MiB.
+Private files use exclusive creation under the app profile's `research`
+directory. Mode 0600 is not encryption or a Windows ACL guarantee.
+Main-frame IPC reopens only a generated report UUID in this app instance's
+bounded capability map, after verifying the original HTML hash. No arbitrary
+renderer path or URL is accepted. `shell.openPath` uses the OS HTML handler;
+acceptance is not proof of a visibly displayed browser. Opening failure keeps
+the report and exposes its path/error. Cancellation prevents later opening
+when observed, but cannot undo an OS open already initiated.
+
+The renderer keeps catalog diagnostics collapsed and report/error feedback in
+an independently bounded scrolling region. Source qualification includes real
+recorded-request interpretation and private-source reading with all work
+transport creation prohibited. That earlier qualification does not establish
+real-session semantic synthesis.
+
+### Observed context activity
+
+The research worker emits source metadata only: sequence, timestamp, attributed
+context IDs, source kind/path, checking/read/unavailable status, counts and
+explicit partial-read errors. It never publishes source bodies over this
+progress channel. Shared histories are read once and identify all indexed
+owners; attribution is not proof every owner authored the topic work.
+Worker batches flush at 32 events or 75 milliseconds and before completion.
+The host retains the last 128 events plus cumulative observed context IDs,
+coalesces progress publications, and rejects late cancelled-request events.
+This transient trail is not persisted in the work queue.
+
+The renderer shows listening, local transcription, interpretation, source
+collection, report creation and work/manual-permission phases. Successful
+recent research reads trigger one finite graph pulse; checking or unavailable
+sources cannot create a read pulse. Reduced motion suppresses the tracer.
+Earlier evidence stays explicitly labelled during a new recording. Host
+research reads, work-tool locations, saved topology and model proposals are
+different evidence classes; none exposes hidden Copilot reasoning.
+
+### Explicit cited synthesis
+
+After collection, Talk can load eligible existing sessions without dispatch.
+The selector starts empty; busy/host-reserved targets are disabled. The narrow
+bridge accepts report UUID, exact session UUID and priority, never an arbitrary
+prompt or source path. An explicitly named synthesis target can also arrive
+through validated interpretation. Fresh discovery and original canonical
+context/workspace binding precede the normal durable queue, workspace exclusion
+and exact manual tool-approval mechanism. No spare session is chosen.
+
+Only this instance's generated, unchanged evidence JSON is eligible. A fixed
+host prompt supplies its owned path and treats source text as untrusted data,
+not instructions. Reading that JSON supplies the collected text to the
+selected Copilot session under its provider/tool policy; local audio is never
+sent. This is intentionally distinct from the tool-free interpretation controller.
+
+The response must be bounded versioned JSON with a summary, 1-24 findings and
+up to eight next steps. Every finding needs 1-8 exact path/line citations inside
+retained collected passages. Unknown fields, malformed output, unsupported
+script and forged citations fail explicitly. A location check is not semantic
+entailment or independent verification of saved claims. The escaped illustrated
+HTML labels model synthesis and retains original extracts/coverage. Opening
+uses the same owned hash-checked capability, with cancellation checked directly
+before OS handoff. Browser failure preserves the artifact and explicit error.
+
+Plan/action receipts retain report provenance, validated summary or explicit
+synthesis error. Finalization remains active until validation/opening settles;
+cancelled late output cannot announce completion. Voice reads the validated
+summary and next-action question, not raw JSON. Malformed output preserves the
+original response and evidence for inspection. Duplicate unacknowledged
+synthesis ownership is refused; restart does not reconstruct report capabilities
+from arbitrary persisted paths. Synthetic integrated collection/queue/response/
+report and manual-permission fixtures pass; no additional real-session work
+was performed to qualify this path.
+
+## Current source recognition
+
+Host-owned `voice:configure-recognition` accepts
+only a UUID and engine enum. Main selects the local directory using a native
+dialog; the renderer cannot supply an arbitrary path. The host canonicalizes
+and hash-verifies one pinned CPU/BLAS or Vulkan manifest before atomic settings
+save. `voice:recognition-ready` verifies before capture; `voice:transcribe`
+validates WAV and routes the selected engine. Packaged .15 supplies a trusted
+`resources\speech` bundle root to VoiceHost; a fresh profile selects pinned
+Vulkan/auto without a settings file. A saved `source: bundled` resolves through
+that host-owned root, never a renderer path. Language persistence strips the
+resolved extraction path, so portable relocation does not break the preference.
+Explicit custom/legacy choices are preserved. Source runs without a supplied
+bundle still require setup; Windows recognition is never an implicit fallback.
+Cancellation owns the setup/preflight/native request. Failed preflight preserves
+draft text and never opens a microphone.
+
+`voice:recognition-language` accepts only a UUID and `auto` / `en` / `hi`,
+requires configured Whisper and atomically saves the hint under the same
+exclusive voice-request owner. Older valid settings without a hint normalize
+to `auto`; invalid hints fail explicitly. Native transcription receives the
+saved language, without translation.
+
+**Five-minute source capture:** the renderer's wall-clock timer and PCM sample
+budget both stop at 300 seconds. A boundary-crossing worklet chunk retains only
+the remaining samples; repeated/tardy chunks cannot extend the buffer or
+finalize twice. Physical disconnection remains a distinct cancellation.
+Finalization rechecks the recorded sample duration after flush, so a manual
+stop racing the sample limit still requires review. Automatic cutoff preserves
+final recognized text without dispatch, regardless of automatic-send settings.
+Ordinary earlier stops retain existing quality/length/send gates.
+
+The host independently validates canonical mono PCM16: 8-48kHz, at most
+300 seconds and 28,800,044 bytes, including the header at 48kHz. One extra
+sample fails. Whole WAV input reaches native recognition without truncation
+or audio upload. Whisper's timeout is max(180 seconds, three times audio
+duration), bounded at 900 seconds. Legacy Windows uses max(40 seconds, three
+times audio duration) internally and a host deadline five seconds longer.
+These are cancellation/failure bounds, not expected latency. Short-recording
+budgets remain unchanged; exact-request native cancellation is retained.
+Recognition text is bounded at 50,000 characters; destination limits remain
+10,000 for Intercom and 1,000 for legacy/manual requests. Over-limit drafts
+are preserved for explicit shortening, never silently truncated or sent.
+This contract is packaged into local .16, not published .12.
+
+The renderer's measured microphone check uses the existing selected-device
+recorder for two seconds, then releases it without transcription or dispatch.
+Source rate is browser-reported metadata, distinct from AudioContext/canonical
+PCM rate. Aggregate RMS/peak/clipping checks do not qualify hardware acoustics.
+The separate Speech check uses the same capture/native route but retains raw
+text in a separate in-memory result and returns before sending/orchestration.
+It preserves the working draft and rejects cancelled late output; original
+Hindi script in this diagnostic is not represented as Roman normalization.
+Below-16kHz WAV input forces host review regardless of token probability.
+The renderer also requires review for below-16kHz reported source input,
+including input resampled to 16kHz. This mitigates automatic dispatch, not
+recognition accuracy or missing acoustic detail.
+
+**Optional live drafts:** Talk's Live transcription toggle defaults off to
+preserve the speed-first profile and lasts for the mounted conversation, not
+across reloads. Ordinary capture snapshots the non-consuming PCM buffer after
+three seconds, then waits for each local batch result plus three seconds before
+the next preview. This is not word-by-word streaming; local .16 reuses a
+persistent native model across these batches.
+Snapshots need at least one second of usable signal; source capture is bounded
+to five minutes (historical .15 retained one minute). Previews reprocess the complete
+buffer so far, increasing optional inference cost as recording grows.
+One unique preview UUID owns each native request. Stop waits for
+its cancellation/settlement before final recognition, including worklet-flush
+failure. Cancellation/unmount invalidate late previews and release the stream.
+Preview failure is visible and pauses previews without disabling final
+recognition. Drafts never dispatch, speak or replace the underlying typed
+draft; only the final full recording enters existing length/quality/auto-send
+gates. Extra inference consumes CPU/GPU; latency and human multilingual quality
+are not qualified. Raw previews, like Speech check, may retain Hindi script.
+
+The .16 private helper receives in-memory WAV through inherited anonymous pipes
+and returns bounded, request-correlated JSON. It loads the pinned model once
+before microphone capture and keeps it resident across drafts/final recognition.
+It opens no network listener or audio device. Exact native cancellation loses
+the warm state; next explicit use reloads. Parent-death monitoring and awaited
+host close stop the owned worker. Idle RAM cost is unmeasured; memory/paging/
+crash-dump protection and secure buffer zeroization are not promised.
+The historical CLI diagnostic path remains separate.
+GPU output requires an observed Vulkan backend report. No audio/transcript file
+is persisted by recognition; its nullable confidence and separate token
+probability do not establish accuracy. Native synthetic rate/cancellation
+checks passed, but the 8 kHz exact-session-name assertion failed ("Y" became
+"why" with high probability). Neither human multilingual quality nor speed-first
+acceptance is qualified. Local .16 includes the exact model and machine-qualified
+native runtime with license notices; this is not a generic portable GPU
+redistribution or automatic installer. Optional custom selection and source runs
+still use prepared folders. See
+[speech evidence](../research/speech-options.md#activated-native-evidence-and-failed-quality-gate).
+
+The numbered product contracts below remain proposals, not implemented APIs. Read with
 [architecture](architecture.md), [technology decisions](technology-decisions.md)
 and [qualification](../research/performance-and-qualification.md).
 
@@ -252,6 +539,39 @@ not make "it's done" ambiguous. Do not read private results aloud on a locked
 machine; respect mute and notification settings.
 
 ## 7. Storage, lifecycle and recovery
+
+### Implemented local .17 portable/diagnostic boundary
+
+Each portable launcher extracts into its own NSIS plugin directory, not a
+build-shared temporary directory. In pinned builder 26.18.0 this requires
+`portable.unpackDirName: true`, contrary to its `false` documentation. Exact
+portable regression proves a rejected duplicate cannot delete the first
+instance's model, and subsequent speech uses the same resident helper.
+Single-instance refusal does not focus or restart the owner app.
+
+`desktop/services/diagnostics.cjs` stores allowlisted JSONL events beneath the
+existing app profile's `diagnostics` directory, outside temporary extraction.
+The main-frame IPC wrapper correlates starts/results/failures and preserves
+original handler results/errors. App/renderer/native-child failures and fixed
+voice phases are recorded without payloads. Normal cancel/close is distinct
+from an unexpected native exit, including unexpected code zero.
+
+Four approximately 1 MiB event files and a 128-event queue bound retention.
+Each reported failure atomically replaces `last-failure.json` with resource
+stats, process IDs/types/memory counters, runtime and owned-helper metadata.
+Collector failures are explicitly unavailable. No audio, transcripts, prompts,
+responses, raw errors/stacks, argv, environment or memory contents are logged.
+Paths remain private. This is not a full memory dump, guaranteed fatal-crash
+capture, encryption or an OS access-control boundary.
+
+Storage failure/overflow stays visible independently of the actual operation
+outcome; a successful operation is not relabelled failed merely because logging
+failed. Renderer APIs accept fixed phases/failure kinds and can open only the
+fixed diagnostics directory, never an arbitrary path. Missing/corrupt model
+readiness still refuses recording before opening a microphone. The actual
+portable missing-model snapshot/recovery test uses only disposable extraction.
+
+### Proposed broader production recovery
 
 Proposed local data is under the current Windows user's application-data
 directory, never a repository or network share. Names/retention require approval.

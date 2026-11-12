@@ -99,7 +99,8 @@ class WorkHost {
     const row = await this.discovery.exclusive(randomUUID(), (work) => this.discovery.discover(work, requireId(sessionId)));
     const [contextPath, sessionPath] = await Promise.all([fs.realpath(context.basePath), fs.realpath(row.folder)]);
     if (!sameWorkspace(contextPath, sessionPath)) throw new Error('This session does not belong to the selected context workspace.');
-    return { context, row };
+    this.assertAvailable(sessionId, sessionPath);
+    return { context, row, workspace: sessionPath };
   }
 
   async list(contextId) {
@@ -123,10 +124,10 @@ class WorkHost {
     if (typeof request !== 'string' || !request.trim() || request.length > 1000 ||
         !['background', 'terminal'].includes(mode) || !Object.hasOwn(priorities, profile)) throw new Error('Invalid work proposal.');
     this.proposal = null;
-    const { context, row } = await this.target(contextId, sessionId);
+    const { context, workspace } = await this.target(contextId, sessionId);
     this.proposal = {
       id: randomUUID(), contextId, contextName: context.name, sessionId: requireId(sessionId),
-      workspace: row.folder, request: request.trim(), mode, profile, expiresAt: Date.now() + 300000,
+      workspace, request: request.trim(), mode, profile, expiresAt: Date.now() + 300000,
     };
     return { ...this.proposal };
   }
@@ -137,11 +138,11 @@ class WorkHost {
     this.proposal = null;
     if (!proposal || proposal.id !== id || proposal.expiresAt < Date.now()) throw new Error('Confirmation expired or changed. Prepare it again.');
     if (this.active) throw new Error('Work is already active.');
-    const active = { id, sessionId: proposal.sessionId, client: null, cancelled: false, dispatched: false, receivedTerminal: false };
+    const active = { id, sessionId: proposal.sessionId, workspace: proposal.workspace, client: null, cancelled: false, dispatched: false, receivedTerminal: false };
     this.active = active;
     try {
-      const { row } = await this.target(proposal.contextId, proposal.sessionId);
-      if (!sameWorkspace(row.folder, proposal.workspace)) throw new Error('Session workspace changed. Confirm a fresh proposal.');
+      const { workspace } = await this.target(proposal.contextId, proposal.sessionId);
+      if (!sameWorkspace(workspace, proposal.workspace)) throw new Error('Session workspace changed. Confirm a fresh proposal.');
       if (active.cancelled) throw new Error('Confirmation cancelled before dispatch.');
       this.job = { ...proposal, phase: 'starting', text: '', activity: 'Connecting to the confirmed existing session...',
         observedContextIds: [], permission: null, acknowledged: false, startedAt: new Date().toISOString() };

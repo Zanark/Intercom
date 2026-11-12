@@ -1,0 +1,72 @@
+ic-09 | Integrated voice, observed context activity and grounded research
+
+Workstream ID: ic-09
+GitHub issue: https://github.com/Zanark/Intercom/issues/8
+Status: DONE (bounded implementation and technical qualification only; owner acceptance failed)
+Milestone: Runnable integrated local candidate
+Dependencies: ic-06, ic-08
+
+Purpose:
+  Close the feasible source-to-product gaps identified in the owner-reviewed
+  vision/reality report without inventing agent telemetry or bypassing permissions.
+
+Tasks:
+  [x] Emit source-read metadata from the actual research worker and expose a
+      correlated, bounded activity trail and finite graph pulses.
+  [x] Support evidence-grounded synthesis through an explicitly selected
+      existing idle session, retaining manual tool permissions and provenance.
+  [x] Improve local speech responsiveness with reusable native recognition;
+      preserve full-input final recognition, cancellation and five-minute review.
+  [x] Verify normal, unavailable, partial, busy, cancellation and late-result
+      behavior with disposable profiles and consented local audio.
+  [x] Package the latest unsigned candidate; retain one release executable
+      after exact candidate verification, without restarting the owner's app.
+
+Acceptance criteria:
+  Actual research reads, failed checks and job/tool locations stay distinct.
+  The graph never loops guessed real traversal or turns proposals into evidence.
+  Research output distinguishes local extracts from Copilot synthesis and
+  independently verified work. Session selection never guesses an idle target.
+  Audio remains on-device. No test creates/resumes a real work session, enables
+  blanket approvals, records the physical microphone or touches owner app state.
+  The resulting executable includes the integrated source; old executable
+  cleanup is exact-path scoped and separate from promotion/restart/publication.
+
+Completion evidence:
+  OWNER ASSESSMENT, 2026-11-13: the overall experience was rejected and
+  implementation paused. A live .18 work request stopped on unsupported
+  concurrent tool-permission requests with unknown outcome. The bounded
+  technical completion below does not establish a usable end-to-end product.
+  ic06/ic07 remain incomplete; see TODO/03_DEVELOPMENT_LEDGER.todo for the
+  public accountability record. Source publication is not a fix or release.
+  Final lint/build,19renderer,57host,11controller and53disposable desktop
+  cases pass. Eight focused packaged desktop cases and actual portable smoke
+  pass: fresh defaults, local synthetic speech, X/Y exclusion preservation,
+  live drafts/final, same native PID reuse, controls and helper shutdown.
+  Voice suite50/51: legacy Windows confuses synthetic "please" with "police";
+  strict content assertion retained, bundled Vulkan qualified separately.
+  Actual research-worker progress, unavailable/partial sources, exact idle
+  selection, duplicate ownership, cancellation/late results, malformed
+  synthesis/citations and browser failure are covered. A synthetic integrated
+  trial crosses actual collection, natural intent, ordinary queue and report.
+  .16 EXE631115985bytes, SHA256:
+  4c8d433b1bc1d6bab7b8a36943fedcfa4e048819ca8d5fa1f51534bd8af1a00e.
+  All21project runtime/renderer files,eight speech files,13notices, native
+  dependency and private-file exclusions verified. One EXE plus checksum
+  remains after exact-path old/intermediate cleanup; no running app touched.
+  Human multilingual/natural-five-minute accuracy, generic GPU distribution,
+  controlled speed/RAM and real multi-session acceptance remain unqualified.
+  Citation locations are validated, not semantic truth. No new real session
+  prompt, physical mic, audible playback or remote release in this milestone.
+
+Completion log:
+  2026-11-13: Owner explicitly reported disappointment and paused Intercom.
+  Retain earlier implementation evidence, but do not describe it as accepted
+  delivery. Record the failure publicly and publish source only as requested.
+  2026-11-12: Completed the bounded integrated local .16 candidate. Warm
+  private-pipe speech, actual source-read trail/finite pulses and explicit
+  cited synthesis are packaged together. Qualification does not establish
+  owner acceptance or full-product completion; ic05/ic06 remain active.
+  Owner approved all feasible vision-report items, autonomous implementation,
+  and keeping only the latest local release file. No remote publication,
+  arbitrary real-session testing or interruption of the running app is inferred.

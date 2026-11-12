@@ -13,6 +13,33 @@ Purpose:
   standby is authorized by that exception.
 
 Tasks:
+  [x] Reopen the selected mic once after a structured Intercom clarification,
+      only after local question playback completes (or written display when
+      muted). Keep the question and bounded follow-up context, cancellation,
+      playback-stop/opt-out/stale guards, readiness checks and transcript review.
+      Ordinary replies and permission prompts must not start capture.
+  [x] Package reusable native recognition and verify the same resident model
+      across local check, live drafts and final audio, with awaited shutdown.
+  [x] Support up to five minutes of local push-to-talk audio across capture,
+      validated PCM transport and both recognition engines. Auto-cutoff must
+      preserve a reviewable transcript without dispatch; retain cancellation,
+      request-size guards and the running portable. Qualify boundary/overrun
+      cases, long recorded input and disposable desktop finalization.
+  [x] Qualify owner-recorded English input through local check/live/final paths,
+      cancellation, low-rate review and recovery without cloud audio.
+  [x] Bundle pinned local recognition for the owner's next candidate and verify
+      a fresh profile works without choosing folders or seeding engine settings.
+  [x] Record approval for local multilingual downloads and Roman Hinglish output.
+  [x] Add and synthetically exercise pinned artifact checks and disk-free CLI JSON transport.
+  [x] Build the pinned source unchanged and verify actual AMD Vulkan inference.
+  [x] Connect explicit pinned local model setup and recognition; retain Windows only by choice.
+  [x] Add measured microphone format/signal checks and a strictly local speech
+      test that preserves the working draft and cannot dispatch requests.
+  [x] Persist explicit English/Hindi/auto language selection and force review
+      for below-16kHz audio; this mitigates, not fixes, the failed8kHz name gate.
+  [ ] Provide a qualified install/distribution path beyond prepared-folder selection.
+  [ ] Qualify disfluencies, negations, corrections and technical/session names.
+  [ ] Preserve raw meaning through Roman-script normalization without cloud audio.
   [x] Implement the selected installed-Windows English push-to-talk prototype.
   [x] Verify local recognition retains multiple phrases through stream completion.
   [ ] Select test hardware, languages, phrase, datasets and resource/latency budgets.
@@ -25,6 +52,13 @@ Tasks:
   [ ] Record human listening results and an explicit provider/privacy decision.
 
 Acceptance criteria:
+  Clarification replies use bounded capture, not continuous listening. Stop,
+  cancellation, hidden windows and failed playback cannot arm a pending mic;
+  no listening before readiness or automatic permission approval.
+  Bounded long-capture slice: up to300s is accepted across renderer/host/native;
+  one extra sample is rejected at the host. Cutoff preserves a reviewable
+  transcript without automatic dispatch; cancellation and destination-size
+  guards remain. Full-input completion is not recognition-quality acceptance.
   Same-scenario comparison distinguishes facts, measurements and user preference.
   Wake standby stays local; the chosen phrase and timeout are documented.
   No silent cloud failover or raw-audio persistence by default.
@@ -36,6 +70,104 @@ Acceptance criteria:
   Native binding support is not exact model/license/device qualification.
 
 Completion evidence:
+  CURRENT .18: structured clarification waits for completed local playback
+  (or written muted question), then opens one bounded selected-device capture.
+  Host-owned preceding request/question is consumed on the next accepted turn;
+  no renderer authority, persisted chat or tool-approval bypass.
+  Stop/Cancel/opt-out/settings/stale/actual-host-visibility/readiness guards
+  prevent pending opening; failed playback/mic preserves the written question.
+  Ordinary replies/permission prompts do not arm capture. Click to finish;
+  no silence detector or continuous listening. Default-on per-mount opt-out.
+  Lint/build,19renderer,12controller,28orchestration,twofocused voice-host,
+  17focused source desktop and16exact packaged desktop cases pass.
+  Actual .18 portable synthetic speech/drafts/final, duplicate-launch model
+  preservation, intentional model-loss snapshot/recovery and warm reuse/exit
+  pass.22runtime/renderer files,eight speech files,13notices/native/privacy
+  audited. Only .18 EXE/checksum retained after no-live-process check.
+  No physical mic, audible playback, live provider/model or real-session work.
+  Full voice suite not rerun: prior strict legacy51/52 failure remains unwaived.
+  Human multilingual/natural-five-minute/hardware/speed and live semantic
+  follow-up acceptance remain open. Local-only; published .12 unchanged.
+  HISTORICAL .16 includes five-minute capture and warm private-pipe speech.
+  Final bundled portable synthetic check/live/final preserves X/Y exclusion;
+  actual same PID reuse and process exit on close pass. Helper/model/runtime
+  hashes and13notices verified. Native readiness/draft/full-input measurements
+  are individual observations in speech-options, not controlled benchmarks.
+  Current voice suite50/51 retains the legacy Windows "please"/"police"
+  content failure; no assertion weakened or silent fallback added.
+  This supersedes earlier source-only/.15 retention wording, not human
+  accuracy, natural-five-minute, generic GPU, speed/RAM or device qualification.
+  Five-minute source milestone: both sample and wall-clock capture bounds are
+  300s; host validates up to28,800,044bytes at48kHz. Cutoff/flush races preserve
+  final audio and require review, never auto-send. Native budgets scale with
+  duration; recognition retains up to50,000characters while destination
+  limits stay unchanged. Lint/build,19renderer,39voice/native,20targeted desktop
+  cases pass, including exact boundary/one-extra-sample at8/16/44.1/48kHz,
+  cancellation, duplicate cutoff, flush races and over-limit draft preservation.
+  Actual whole82.9s owner recording transcribes through native Vulkan in9.61s;
+  exact300s repeated/cropped composite with synthetic ending passes Vulkan
+  and legacy in20.94/33.00s, preserving that ending. Legacy badly garbles the
+  recorded speech: duration/completion pass, not useful accuracy. Not natural five-minute
+  speech, independent accuracy or physical-mic acceptance. No provider/work,
+  audio upload, audible playback or owner-instance automation. Audio/package
+  hashes unchanged. Source-only, not in retained .15/published .12; broader
+  workstream remains IN_PROGRESS with existing qualification gates open.
+  Nine additional owner-recorded-input cases pass against extracted .15 code
+  and original speech resources in a disposable hidden app lane. Complete38.8s
+  input, drafts/finalization, cancellation, English hint,8kHz review, native
+  concurrency/exact-ID retry, source-rate send blocking and invalid-input
+  recovery pass; max one native owner and no provider/work/playback attempts.
+  Original audio and ASAR unchanged. First draft8.29s, stop-to-final7.34/6.81s
+  are observations, not SLOs. Machine variants of the date question remain
+  visible; no independent reference/WER, physical mic, multilingual or human
+  acceptance claim. See prototype guide for harness adjustments and limits.
+  Local .14 satisfies the bounded out-of-box recognition requirement: pinned
+  model/six Vulkan binaries are included and selected automatically on fresh
+  profiles. Actual portable synthetic capture/native transcription passes
+  without seeded recognition settings, engine-root override or device discovery;
+  X/Y/exclusion/draft are preserved, though "please" repeats.37voice cases and
+  nine final packaged targeted desktop cases pass with lint/build/package.
+  Symbolic preferences survive extraction-root relocation; explicit existing
+  choices/permissions remain authoritative. Twelve notices and exact speech
+  hashes verified. This supersedes historical no-bundle/source-only statements
+  below, not human quality, speed or generic GPU distribution gates.
+  Current input-usability milestone: two-second selected-device signal/format
+  check, saved auto/en/hi hints and separate no-send Speech check. Preserves
+  working drafts; cancelled output cannot appear or dispatch. Low WAV rate
+  and browser-reported source rate independently require review, including
+  source resampled to16kHz. Lint/build,3recording,34speech and13targeted
+  hidden desktop cases pass. Actual synthetic microphone->renderer->native
+  Vulkan test preserves X/Y/draft with no provider call or dispatch, but
+  repeats the phrase start. Native auto16/en16/en8 observations are
+  6,645/3,546/3,354ms, not comparative benchmarks.8kHz still changesY to"why",
+  now reviewRequired:true. This supersedes the initial no-review behavior
+  below, not the failed quality gate. Physical/Hinglish, consumer installation
+  and portable Vulkan remain open. No new release or human acceptance.
+  Current source activation: persisted native folder selection, exact CPU/GPU
+  manifests, pre-capture verification, draft preservation and explicit legacy
+  choice. No automatic download/installer or bundled runtime. All 31 speech
+  tests, lint/build and 33 desktop cases pass across full/targeted runs.
+  Real synthetic VoiceHost setup/restart/native cancellation succeeds. For
+  4.58s synthetic audio, Vulkan 8/16/44.1/48kHz wall observations are
+  7,041/7,085/5,161/5,412ms; CPU16kHz 31,280ms. These are not accepted SLOs.
+  Exact names/exclusion pass except at8kHz: "Y" becomes "why" despite token
+  probability0.852/no review flag. The exact-name quality gate remains failed,
+  not waived. Physical/Hinglish acceptance stays open. Local Vulkan is built
+  GGML_NATIVE=ON, not a generic Windows x64 distribution. These current facts
+  supersede the following historical inactive/CPU-only adapter statements.
+  Candidate-only adapter verifies 16 pinned model/runtime artifacts and receives
+  bounded named-pipe JSON with UTF-8 decoding and cancellation/error handling.
+  Eight focused adapter cases plus 18 existing/extended voice-host cases pass;
+  repository lint passes. A 12.615-second synthetic X/Y/Z command preserves
+  targets, dependency and exclusion; the BLAS cold observation is 19,382 ms,
+  or 22,162 ms through the hardened adapter including verification. Neither
+  observation qualifies speed-first acceptance, human audio or Hindi/Hinglish.
+  The separately built Vulkan CLI processes the same synthetic input in
+  7,275 ms initially and 4,064 ms in a later fresh process; initialization
+  explicitly selects Vulkan0 and places the model on the AMD 780M. Cache
+  conditions are uncontrolled. GPU deployment/dependency/license and human
+  quality gates remain open; the application adapter is still CPU/BLAS-only.
+  The new adapter is not yet selected, installed or wired into app recognition.
   Installed en-US System.Speech recognizer transcribes locally synthesized
   "Hello world. Please say hello world." as
   "Hello world please say hello world", confidence 0.9176309108734131.
@@ -60,6 +192,64 @@ Completion evidence:
   docs/architecture/technology-decisions.md and docs/research/performance-and-qualification.md.
 
 Completion log:
+  2026-11-13 - Implemented owner's automatic clarification-reply request with
+    playback completion, bounded next-turn context and cancellation/visibility
+    guards. Initial hidden-window regression exposed Electron DOM visibility;
+    actual host-state recheck fixes it. Source17/17 and packaged16/16 focused
+    desktop cases pass with the targeted evidence above. Exact .18 portable
+    lifecycle/native speech and source/resource/privacy audits pass; retained
+    only latest EXE/checksum without touching a running app. No publication,
+    real-session work, physical-mic or human-acceptance claim. Broad workstream
+    remains IN_PROGRESS; prior qualification history below is preserved.
+  2026-11-12 - Extended local capture/PCM validation and both recognizers to
+    five-minute input. Separated physical disconnection from sample cutoff;
+    cap finalization is single-owner and rechecks duration after flush so
+    unfinished speech cannot auto-dispatch. Kept destination limits while
+    preserving longer recognized drafts; bounded long native processing.
+    Focused boundary/lifecycle/desktop and actual whole/composite native
+    checks pass as recorded above. Private test artifacts remain outside
+    public source. No running-portable change, packaging or publication.
+  2026-11-12 - Owner supplied recorded speech and requested rigorous testing.
+    Decoded/resampled locally and showed a provisional native transcript,
+    explicitly not an independently heard reference. All nine additional
+    application/native cases pass; no cloud audio, physical capture, playback
+    or dispatch in this lane. Corrected test-only packaged-root mapping after
+    an initial setup failure; no runtime defect reproduced or EXE replaced.
+    Private audio/transcripts/receipts retained outside public artifacts.
+  2026-11-12 - Bundled pinned speech/model and MIT notices in local .14.
+    Before-pack integrity checks refuse invalid inputs; fresh profiles resolve
+    the trusted resource path without setup. Persisted bundle source is
+    symbolic, with explicit legacy/custom choices preserved. Actual portable
+    fresh-profile synthetic native check passes without settings/device seeding.
+    No physical input, audible playback, provider/work call or publication.
+  2026-11-12 - Resumed speech usability without changing approved visuals.
+    Added measured mic diagnostics, persisted language and local-only speech
+    test; retained low-rate names/exclusion failure and blocked automatic send.
+    Separated Speech check into its own Input category after the first desktop
+    run exposed minimum-window overflow. Corrected accidental test nesting;
+    reran the actual cases. Fixed visible cleanup failure releasing UI
+    ownership. Final3recording/34speech/13targeted desktop pass,
+    plus actual synthetic native/local-UI round trip. No physical input,
+    playback, provider/session work, user-app launch or publication.
+  2026-11-11 - Connected prepared-folder speech setup, persistence and actual
+    VoiceHost CPU/GPU routing. Preflight refuses missing setup before opening
+    input and preserves drafts. Actual rate/cancellation tests exposed an8kHz
+    target-name error; retained failed quality evidence. Removed --no-prints
+    only for GPU because upstream suppresses its required diagnostic.31speech,
+    8renderer,38host and33desktop cases pass; no human/portable/SLO claim.
+  2026-11-11 - Resolved nested MSBuild long-path failure with a shorter owned
+    build directory; unchanged pinned source now performs actual Vulkan GPU
+    inference. Recorded two synthetic observations, not a quality/SLO verdict.
+    Added regressions rejecting negative token IDs and an extra backend added
+    after successful artifact-cache verification; all 26 voice cases/lint pass.
+  2026-11-11 - Verified the pinned multilingual artifacts and recovered structured
+    output through a named pipe: Windows output-file "-" uses CON rather than
+    redirected stdout. Added bounded integrity/transport foundation and tests.
+    Cold latency remains unacceptable; no default-engine switch or quality claim.
+  2026-11-11 - Owner rejected legacy recognition quality and approved stronger
+    local speech downloads for English/Hindi/Hinglish with Roman output.
+    TTS improvements may wait. Evaluating a pinned multilingual Whisper
+    candidate on the actual AMD Windows machine; no human-quality claim yet.
   2026-11-11 - Extended voice destinations to reviewed background/terminal
     proposals without allowing a spoken proposal alone to dispatch work.
     Verified synthetic speech through one explicitly approved real background

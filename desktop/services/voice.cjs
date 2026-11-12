@@ -3,6 +3,7 @@ const fs = require('node:fs/promises');
 const path = require('node:path');
 const { StringDecoder } = require('node:string_decoder');
 const { VoiceProfiles, WindowsSpeechProvider } = require('./synthesis.cjs');
+const { WhisperRecognizer } = require('./recognition.cjs');
 
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 function requireId(value) {
@@ -19,7 +20,7 @@ function eligibleSession(catalog, id) {
 }
 
 function waveBytes(value) {
-  if (!(value instanceof ArrayBuffer) || value.byteLength < 46 || value.byteLength > 6000044) throw new Error('Invalid or oversized recording.');
+  if (!(value instanceof ArrayBuffer) || value.byteLength < 46 || value.byteLength > 28800044) throw new Error('Invalid or oversized recording.');
   const wave = Buffer.from(value);
   if (wave.toString('ascii', 0, 4) !== 'RIFF' || wave.toString('ascii', 8, 12) !== 'WAVE' ||
       wave.toString('ascii', 12, 16) !== 'fmt ' || wave.readUInt32LE(16) !== 16 ||
@@ -29,7 +30,7 @@ function waveBytes(value) {
       (wave.length - 44) % 2 !== 0) throw new Error('Expected mono 16-bit PCM WAV audio.');
   const rate = wave.readUInt32LE(24);
   if (rate < 8000 || rate > 48000 || wave.readUInt32LE(28) !== rate * 2 ||
-      wave.readUInt16LE(32) !== 2 || (wave.length - 44) / (rate * 2) > 61) throw new Error('Recording exceeds the supported sample rate or one-minute limit.');
+      wave.readUInt16LE(32) !== 2 || (wave.length - 44) / (rate * 2) > 300) throw new Error('Recording exceeds the supported sample rate or five-minute limit.');
   return wave;
 }
 
@@ -79,14 +80,17 @@ function stopTree(child) {
 }
 
 class VoiceHost {
-  constructor(profile, publish) {
+  constructor(profile, publish, { bundledRoot = '', diagnostics } = {}) {
     this.profile = profile;
     this.publish = publish;
+    this.bundledRoot = bundledRoot;
+    this.diagnostics = diagnostics;
     this.work = null;
     this.speech = null;
     this.speechEpoch = 0;
     this.catalogPending = null;
     this.catalogWork = null;
+    this.recognizer = null;
     this.profiles = new VoiceProfiles(profile, [new WindowsSpeechProvider(async (operation, mode, input) =>
       this.process(operation, 'powershell.exe', await this.speechCommand(), { input, mode, timeout: mode === 'voices' ? 20000 : 180000 }))]);
   }
@@ -102,20 +106,21 @@ class VoiceHost {
   async exclusive(id, operation) {
     requireId(id);
     if (this.work) throw new Error('Another voice operation is still running.');
-    const work = { id, child: null, cancelled: false };
+    const work = { id, child: null, cancelled: false, controller: new AbortController() };
     this.work = work;
     try { return await operation(work); }
     finally { if (this.work === work) this.work = null; }
   }
 
-  async process(work, executable, args, { input, cwd, mode, onEvent, timeout = 45000 } = {}) {
+  async process(work, executable, args, { input, cwd, mode, onEvent, onDiagnostic, environment = process.env, timeout = 45000 } = {}) {
     if (work.cancelled) throw new Error('Operation cancelled.');
     return new Promise((resolve, reject) => {
       const child = spawn(executable, args, {
         cwd, windowsHide: true, shell: false,
-        env: mode ? { ...process.env, INTERCOM_SPEECH_MODE: mode } : process.env,
+        env: mode ? { ...environment, INTERCOM_SPEECH_MODE: mode } : environment,
         stdio: ['pipe', 'pipe', 'pipe'],
       });
+      void this.diagnostics?.record('process.start', { component: mode ? 'speech' : 'agency', pid: child.pid });
       work.child = child;
       let output = '';
       let stderr = '';
@@ -129,7 +134,10 @@ class VoiceHost {
         void stopTree(child).catch((reason) => { failure = new Error(`${error.message} ${reason.message}`); });
       };
       const timer = setTimeout(() => terminate(new Error(mode ? 'Local speech operation timed out.' : 'Operation timed out. Dispatch outcome is unverified; inspect the session before retrying.')), timeout);
-      child.on('error', (error) => { failure = new Error(`${path.basename(executable)} could not start: ${error.message}`); });
+      child.on('error', (error) => {
+        void this.diagnostics?.record('process.failure', { component: mode ? 'speech' : 'agency', pid: child.pid }, error);
+        failure = new Error(`${path.basename(executable)} could not start: ${error.message}`);
+      });
       child.stdin.on('error', (error) => { if (error.code !== 'EPIPE') terminate(error); });
       child.stdout.on('data', (chunk) => {
         bytes += chunk.length;
@@ -142,8 +150,13 @@ class VoiceHost {
         try { for (const line of lines) if (line.trim()) onEvent(JSON.parse(line)); }
         catch (error) { terminate(new Error(`Invalid Copilot event stream: ${error.message}`)); }
       });
-      child.stderr.on('data', (chunk) => { stderr = (stderr + chunk.toString('utf8')).slice(-4000); });
+      child.stderr.on('data', (chunk) => {
+        const text = chunk.toString('utf8');
+        stderr = (stderr + text).slice(-4000);
+        onDiagnostic?.(text);
+      });
       child.on('close', (code) => {
+        void this.diagnostics?.record('process.exit', { component: mode ? 'speech' : 'agency', pid: child.pid, exitCode: code });
         clearTimeout(timer);
         if (work.child === child) work.child = null;
         if (work.cancelled) { reject(new Error(mode ? 'Local speech operation cancelled.' : 'Cancelled. A dispatched prompt may remain in Copilot history; no automatic retry was made.')); return; }
@@ -192,6 +205,8 @@ class VoiceHost {
       work.sessionId = sessionId;
       this.assertAvailable?.(sessionId);
       const found = await this.discover(work, sessionId);
+      work.workspace = await fs.realpath(found.folder);
+      this.assertAvailable?.(sessionId, work.workspace);
       if (work.cancelled) throw new Error('Connection cancelled.');
       await fs.mkdir(this.profile, { recursive: true });
       await fs.writeFile(path.join(this.profile, 'voice-settings.json'), JSON.stringify({ sessionId }) + '\n', 'utf8');
@@ -204,15 +219,115 @@ class VoiceHost {
     return ['-NoLogo', '-NoProfile', '-NonInteractive', '-EncodedCommand', Buffer.from(script, 'utf16le').toString('base64')];
   }
 
+  async recognitionSettings() {
+    let settings;
+    try { settings = JSON.parse(await fs.readFile(path.join(this.profile, 'recognition-settings.json'), 'utf8')); }
+    catch (error) {
+      if (error.code !== 'ENOENT') throw new Error(`Speech recognition settings could not be read: ${error.message}`, { cause: error });
+      if (!this.bundledRoot) return { version: 1, engine: 'whisper', backend: 'vulkan', language: 'auto', root: '', ready: false };
+      settings = { version: 1, engine: 'whisper', backend: 'vulkan', language: 'auto', source: 'bundled' };
+    }
+    const bundled = settings?.engine === 'whisper' && settings.source === 'bundled';
+    if (settings?.version !== 1 || !['windows', 'whisper'].includes(settings.engine) ||
+        (settings.source !== undefined && !bundled) ||
+        (settings.engine === 'whisper' && (!['cpu', 'vulkan'].includes(settings.backend) ||
+          (bundled ? settings.backend !== 'vulkan' : typeof settings.root !== 'string' || !path.isAbsolute(settings.root)) ||
+          (settings.language !== undefined && !['auto', 'en', 'hi'].includes(settings.language))))) {
+      throw new Error('Invalid speech recognition settings. Choose the engine again in Input / Recognition.');
+    }
+    if (bundled && !this.bundledRoot) throw new Error('Bundled local speech is unavailable. Open the complete packaged application, or explicitly choose a prepared engine in Input / Recognition.');
+    return { ...settings, ...(settings.engine === 'whisper' ? { language: settings.language ?? 'auto' } : {}),
+      ...(bundled ? { root: this.bundledRoot } : {}), ready: true };
+  }
+
+  async localRecognizer(settings) {
+    if (!settings.root) throw new Error('Set up local multilingual speech in Input / Recognition before recording. The microphone was not opened.');
+    if (this.recognizer?.root !== settings.root || this.recognizer.backend !== settings.backend) {
+      await this.recognizer?.close();
+      this.recognizer = new WhisperRecognizer(settings.root, settings.backend, { diagnostics: this.diagnostics });
+    }
+    return this.recognizer;
+  }
+
+  recognitionReady(id) {
+    return this.exclusive(id, async (work) => {
+      const settings = await this.recognitionSettings();
+      const status = settings.engine === 'whisper' ? await (await this.localRecognizer(settings)).ready(work) : undefined;
+      if (work.cancelled) throw new Error('Speech input cancelled.');
+      return status;
+    });
+  }
+
+  configureRecognition(id, engine, chooseDirectory) {
+    if (engine !== 'whisper' && engine !== 'windows') throw new Error('Unsupported recognition engine.');
+    return this.exclusive(id, async (work) => {
+      let settings = { version: 1, engine };
+      if (engine === 'whisper') {
+        const selected = await chooseDirectory();
+        if (work.cancelled) throw new Error('Speech setup cancelled. Settings were not changed.');
+        if (!selected) return this.recognitionSettings();
+        const root = await fs.realpath(selected);
+        const files = await fs.readdir(path.join(root, 'runtime'));
+        const backend = files.includes('ggml-vulkan.dll') ? 'vulkan' : 'cpu';
+        const recognizer = new WhisperRecognizer(root, backend);
+        await recognizer.verify(work);
+        settings = { ...settings, root, backend, language: 'auto' };
+      }
+      await this.saveRecognition(work, settings);
+      return this.recognitionSettings();
+    });
+  }
+
+  setRecognitionLanguage(id, language) {
+    if (!['auto', 'en', 'hi'].includes(language)) throw new Error('Unsupported recognition language.');
+    return this.exclusive(id, async (work) => {
+      const { ready, ...settings } = await this.recognitionSettings();
+      if (!ready || settings.engine !== 'whisper') throw new Error('Choose a local Whisper engine before changing its language.');
+      await this.saveRecognition(work, { ...settings, language });
+      return this.recognitionSettings();
+    });
+  }
+
+  async saveRecognition(work, settings) {
+    if (work.cancelled) throw new Error('Speech setup cancelled. Settings were not changed.');
+    // Portable extraction paths change; persist the bundle identity, not its resolved location.
+    const saved = settings.source === 'bundled'
+      ? { version: 1, engine: 'whisper', source: 'bundled', backend: 'vulkan', language: settings.language }
+      : settings;
+    await fs.mkdir(this.profile, { recursive: true });
+    const temporary = path.join(this.profile, `recognition-settings.${work.id}.tmp`);
+    try {
+      await fs.writeFile(temporary, JSON.stringify(saved) + '\n', { flag: 'wx' });
+      if (work.cancelled) throw new Error('Speech setup cancelled. Settings were not changed.');
+      await fs.rename(temporary, path.join(this.profile, 'recognition-settings.json'));
+    } finally { await fs.rm(temporary, { force: true }); }
+    if (work.cancelled) throw new Error('Speech setup was cancelled during saving. Recheck Input / Recognition before retrying.');
+    if (this.recognizer && (settings.engine !== 'whisper' || settings.root !== this.recognizer.root ||
+        settings.backend !== this.recognizer.backend)) {
+      await this.recognizer.close();
+      this.recognizer = null;
+    }
+  }
+
   transcribe(id, audio) {
     const input = waveBytes(audio);
+    const seconds = (input.length - 44) / input.readUInt32LE(28);
     return this.exclusive(id, async (work) => {
-      const result = JSON.parse(await this.process(work, 'powershell.exe', await this.speechCommand(), { input, mode: 'recognize' }));
+      const settings = await this.recognitionSettings();
+      if (settings.engine === 'whisper') {
+        const result = await (await this.localRecognizer(settings)).transcribe(work, input, this.process.bind(this), settings.language, Math.max(180000, seconds * 3000));
+        if (input.readUInt32LE(24) < 16000) return { ...result, reviewRequired: true,
+          warning: 'Low-resolution audio (below 16 kHz) can confuse names and exclusions. Review the transcript before sending; nothing was sent automatically.' };
+        return result;
+      }
+      const result = JSON.parse(await this.process(work, 'powershell.exe', await this.speechCommand(), {
+        input, mode: 'recognize', timeout: Math.max(45000, seconds * 3000 + 5000),
+      }));
       if (typeof result?.text !== 'string' || !result.text.trim()) throw new Error('No English (US) speech was recognized. Nothing was sent. Check the input meter and try again.');
-      if (result.text.length > 10000) throw new Error('Recognition returned more than 10,000 characters, exceeding the supported transcript size. Nothing was sent.');
+      if (result.text.length > 50000) throw new Error('Recognition returned more than 50,000 characters, exceeding the supported transcript size. Nothing was sent.');
       if (!Number.isFinite(result.confidence) || result.confidence < 0 || result.confidence > 1) throw new Error('Local recognition returned an invalid confidence score. Nothing was sent.');
       const text = result.text.trim();
-      return { text, confidence: result.confidence, reviewRequired: result.confidence < 0.35 || text.length > 1000 };
+      return { text, confidence: result.confidence, reviewRequired: result.confidence < 0.35 };
     });
   }
 
@@ -225,6 +340,8 @@ class VoiceHost {
       this.assertAvailable?.(sessionId);
       this.publish({ requestId: id, phase: 'checking', message: 'Checking that your existing session is idle...' });
       const found = await this.discover(work, sessionId);
+      work.workspace = await fs.realpath(found.folder);
+      this.assertAvailable?.(sessionId, work.workspace);
       const reader = resultReader(sessionId);
       this.publish({ requestId: id, phase: 'running', message: 'Copilot is responding in your existing session...' });
       await this.process(work, 'copilot.exe', [
@@ -232,7 +349,7 @@ class VoiceHost {
         '--available-tools', 'task_complete', '--deny-tool', 'shell', 'write',
         '--disable-builtin-mcps', '--no-ask-user', '--output-format=json',
         '-p', `Intercom voice conversation. Reply briefly in English. Do not use any work tools. User request:\n${text}`,
-      ], { cwd: found.folder, onEvent: (event) => reader.accept(event), timeout: 180000 });
+      ], { cwd: work.workspace, onEvent: (event) => reader.accept(event), timeout: 180000 });
       const response = { requestId: id, sessionId, text: reader.finish(), completedAt: new Date().toISOString() };
       try { await fs.writeFile(path.join(this.profile, 'last-response.json'), JSON.stringify(response) + '\n', 'utf8'); }
       catch (error) { response.warning = `Response received, but it could not be saved: ${error.message}`; }
@@ -245,7 +362,8 @@ class VoiceHost {
     const work = this.work;
     if (work?.id !== id) return;
     work.cancelled = true;
-    await stopTree(work.child);
+    work.controller.abort();
+    await Promise.all([stopTree(work.child), work.recognitionStop?.()]);
   }
 
   async stopSpeech() {
@@ -283,13 +401,16 @@ class VoiceHost {
     if (epoch !== this.speechEpoch) throw new Error('Local speech operation cancelled.');
     const speech = { child: null, cancelled: false, controller: new AbortController() };
     this.speech = speech;
-    try { await this.profiles.speak(text, profile, speech); }
+    try {
+      await this.profiles.speak(text, profile, speech);
+      if (speech.cancelled || epoch !== this.speechEpoch) throw new Error('Local speech operation cancelled.');
+    }
     finally { if (this.speech === speech) this.speech = null; }
   }
 
   async close() {
     if (this.catalogWork) { this.catalogWork.cancelled = true; this.catalogWork.controller.abort(); }
-    await Promise.all([this.work ? this.cancel(this.work.id) : undefined, this.stopSpeech(), stopTree(this.catalogWork?.child)]);
+    await Promise.all([this.work ? this.cancel(this.work.id) : undefined, this.stopSpeech(), stopTree(this.catalogWork?.child), this.recognizer?.close()]);
   }
 }
 

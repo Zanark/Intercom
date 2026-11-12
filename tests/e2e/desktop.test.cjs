@@ -1,6 +1,6 @@
 const { test, expect, _electron } = require('@playwright/test');
 const path = require('node:path');
-const { mkdtemp, rm, writeFile } = require('node:fs/promises');
+const { mkdtemp, rm, writeFile, readFile } = require('node:fs/promises');
 const os = require('node:os');
 const { syntheticTone } = require('../helpers/synthetic-audio.cjs');
 
@@ -33,7 +33,7 @@ function testMesh(name = 'Test Context') {
 
 async function nodePoint(slot, capacity = 2) {
   const THREE = await import('three');
-  const bounds = await page.locator('canvas').boundingBox();
+  const bounds = await page.locator('canvas[role="img"]').boundingBox();
   const y = 1 - 2 * (slot + 0.5) / capacity;
   const radius = Math.sqrt(1 - y * y);
   const theta = slot * Math.PI * (3 - Math.sqrt(5));
@@ -49,6 +49,7 @@ async function nodePoint(slot, capacity = 2) {
 
 test.beforeEach(async () => {
   profile = await mkdtemp(path.join(os.tmpdir(), 'intercom-test-'));
+  await writeFile(path.join(profile, 'recognition-settings.json'), JSON.stringify({ version: 1, engine: 'windows' }));
   const fakeAudio = path.join(profile, 'synthetic-tone.wav');
   await writeFile(fakeAudio, syntheticTone());
   meshFile = path.join(profile, 'context-index.json');
@@ -72,6 +73,51 @@ test.afterEach(async () => {
   await application?.close();
   await rm(profile, { recursive: true, force: true, maxRetries: 3, retryDelay: 200 });
   expect(errors).toEqual([]);
+});
+
+test('a broken explicit speech engine preserves the draft and refuses recording before opening any microphone', async () => {
+  await page.getByRole('button', { name: 'Use live voice', exact: true }).click();
+  await settings('Talk');
+  await page.getByLabel('Transcript / typed fallback').fill('Keep this unsent draft.');
+  await writeFile(path.join(profile, 'recognition-settings.json'), JSON.stringify({
+    version: 1, engine: 'whisper', backend: 'vulkan', root: path.join(profile, 'missing-custom-engine'),
+  }));
+  await page.evaluate(() => {
+    navigator.mediaDevices.getUserMedia = async () => { throw new Error('The microphone must not be opened before setup.'); };
+  });
+  await page.getByRole('button', { name: 'Speak', exact: true }).click();
+  await expect(page.getByRole('alert')).toContainText('Local multilingual recognition is not ready');
+  const snapshot = JSON.parse(await readFile(path.join(profile, 'diagnostics', 'last-failure.json'), 'utf8'));
+  expect(snapshot.operation).toBe('voice:recognition-ready');
+  expect(snapshot.error.code).toBe('ENOENT');
+  const log = await readFile(path.join(profile, 'diagnostics', 'events.jsonl'), 'utf8');
+  expect(log).not.toContain('Keep this unsent draft.');
+  expect(log).toContain('"phase":"setup"');
+  await settings('Advanced');
+  await page.getByText('Local diagnostics', { exact: true }).click();
+  await expect(page.getByLabel('Diagnostics directory')).toHaveText(path.join(profile, 'diagnostics'));
+  await expect(page.getByRole('button', { name: 'Open diagnostics folder', exact: true })).toBeVisible();
+  await settings('Talk');
+  await expect(page.getByLabel('Transcript / typed fallback')).toHaveValue('Keep this unsent draft.');
+  await settings('Input');
+  await page.getByRole('tab', { name: 'Recognition', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Choose local Whisper engine', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Use legacy English recognition', exact: true }).click();
+  await expect(page.getByRole('status').filter({ hasText: 'Legacy Windows English (US)' })).toBeVisible();
+  await expectSettingsFit();
+});
+
+test('diagnostic storage failure stays visible and preserves the unsent draft', async () => {
+  await page.getByRole('button', { name: 'Use live voice', exact: true }).click();
+  await settings('Talk');
+  await page.getByLabel('Transcript / typed fallback').fill('Keep this private unsent draft.');
+  const directory = path.join(profile, 'diagnostics');
+  await rm(directory, { recursive: true, force: true });
+  await writeFile(directory, 'Controlled storage failure.');
+  await page.evaluate(() => window.intercom.recognitionReady(crypto.randomUUID()));
+  await expect(page.getByRole('alert').filter({ hasText: 'Diagnostic persistence failed' })).toContainText(directory);
+  await expect(page.getByLabel('Transcript / typed fallback')).toHaveValue('Keep this private unsent draft.');
+  expect((await page.evaluate(() => window.intercom.diagnosticsStatus())).error).toContain('Diagnostic persistence failed');
 });
 
 test('minimal glass settings fit their categories, retain drafts and support keyboard tabs', async () => {
@@ -111,6 +157,7 @@ test('minimal glass settings fit their categories, retain drafts and support key
   await voiceTab('Profiles');
   await expect(page.getByLabel('Voice profile name', { exact: true })).toHaveValue('Unpublished draft');
   await settings('Session');
+  await page.getByLabel('Voice request destination').selectOption('chat');
   await page.getByLabel('Existing session ID', { exact: true }).fill('11111111-1111-4111-8111-111111111111');
   await settings('Talk');
   await page.getByLabel('Transcript / typed fallback').fill('Keep this draft.');
@@ -120,7 +167,7 @@ test('minimal glass settings fit their categories, retain drafts and support key
   await settings('Session');
   await expect(page.getByLabel('Existing session ID', { exact: true })).toHaveValue('11111111-1111-4111-8111-111111111111');
   await settings('Work');
-  for (const step of ['Target', 'Task', 'Review', 'Receipt']) {
+  for (const step of ['Plans', 'Target', 'Task', 'Review', 'Receipt']) {
     await page.getByRole('tablist', { name: 'Work steps' }).getByRole('tab', { name: step, exact: true }).click();
     await expectSettingsFit();
   }
@@ -213,6 +260,7 @@ test('real work UI binds confirmation, keeps voice and floating available during
     });
   }, process.cwd());
   await settings('Work');
+  await page.getByRole('tab', { name: 'Target', exact: true }).click();
   await page.getByLabel('Target context', { exact: true }).selectOption('ctx-test');
   await page.getByRole('button', { name: 'Find existing sessions', exact: true }).click();
   await expect(page.getByLabel('Choose an existing session').locator('option[value="22222222-2222-4222-8222-222222222222"]')).toBeDisabled();
@@ -247,6 +295,452 @@ test('real work UI binds confirmation, keeps voice and floating available during
   await expect(page.getByRole('button', { name: 'Acknowledge receipt', exact: true })).toHaveCount(0);
 });
 
+test('default Intercom routing needs no designated session or second confirmation and preserves exact tool approvals', async () => {
+  await page.getByRole('button', { name: 'Use live voice', exact: true }).click();
+  await application.evaluate(({ ipcMain }, workspace) => {
+    globalThis.__plansUI = { requests: [], approvals: [], acknowledged: [], speech: [] };
+    ipcMain.removeHandler('voice:speak');
+    ipcMain.handle('voice:speak', (_event, text) => { globalThis.__plansUI.speech.push(text); });
+    for (const action of ['request', 'approve', 'acknowledge', 'state']) ipcMain.removeHandler(`orchestration:${action}`);
+    ipcMain.handle('orchestration:state', () => ({ plans: globalThis.__plansUI.plan ? [globalThis.__plansUI.plan] : [] }));
+    ipcMain.handle('orchestration:request', (event, ...args) => {
+      globalThis.__plansUI.requests.push(args);
+      const [id, , processing] = args;
+      const sessionId = '11111111-1111-4111-8111-111111111111';
+      const interpretation = { version: 1, intent: 'plan', normalizedText: 'Refresh Fictional X.',
+        message: 'Refresh Fictional X in its existing session.', excludedStatusSessionIds: [],
+        actions: [{ id: 'refresh-x', kind: 'work', sessionId, request: 'Refresh context.', after: [] }] };
+      const job = { id: '22222222-2222-4222-8222-222222222222', sessionId, contextId: 'ctx-test',
+        contextName: 'Test Context', workspace, request: 'Refresh context.', mode: 'background', profile: processing,
+        phase: 'awaiting-approval', activity: 'Fixture operation awaiting manual permission.', text: '',
+        observedContextIds: [], acknowledged: false, startedAt: new Date().toISOString(),
+        permission: { id: 'fixture-permission', details: '{"command":"fixture-only-operation"}',
+          options: [{ optionId: 'yes', kind: 'allow_once', name: 'Yes' }, { optionId: 'no', kind: 'reject_once', name: 'No' }] } };
+      const plan = { id, profile: processing, interpretation,
+        targets: [{ id: sessionId, name: 'Fictional X', contextId: 'ctx-test', contextName: 'Test Context', workspace }],
+        createdAt: new Date().toISOString(), phase: 'active', cancelled: false, acknowledged: false,
+        actions: [{ id: 'refresh-x', phase: 'awaiting-approval', job }] };
+      globalThis.__plansUI.plan = plan;
+      event.sender.send('orchestration:progress', { plans: [plan] });
+      return { interpretation, planId: id, warnings: [] };
+    });
+    ipcMain.handle('orchestration:approve', (event, ...args) => {
+      globalThis.__plansUI.approvals.push(args);
+      const plan = globalThis.__plansUI.plan;
+      plan.phase = 'finished'; plan.actions[0].phase = 'responded';
+      Object.assign(plan.actions[0].job, { phase: 'responded', permission: null, text: 'Fixture response. No live agent ran.' });
+      event.sender.send('orchestration:progress', { plans: [plan] });
+    });
+    ipcMain.handle('orchestration:acknowledge', (event, id) => {
+      globalThis.__plansUI.acknowledged.push(id);
+      globalThis.__plansUI.plan.acknowledged = true;
+      event.sender.send('orchestration:progress', { plans: [globalThis.__plansUI.plan] });
+    });
+  }, process.cwd());
+  await settings('Talk');
+  await expect(page.getByLabel('Transcript / typed fallback')).toHaveAttribute('maxlength', '10000');
+  await page.getByLabel('Transcript / typed fallback').fill('Uh, refresh Fictional X.');
+  await page.getByRole('button', { name: 'Send to Intercom', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Speak', exact: true })).toBeEnabled();
+  await expect.poll(() => application.evaluate(() => globalThis.__plansUI.speech)).toEqual(['I am checking your request and existing sessions.']);
+  const requests = await application.evaluate(() => globalThis.__plansUI.requests);
+  expect(requests).toHaveLength(1);
+  expect(requests[0]).toHaveLength(3);
+  expect(requests[0].slice(1)).toEqual(['Uh, refresh Fictional X.', 'Speed / performance']);
+  await expect(page.getByRole('region', { name: 'Real work confirmation' })).toBeHidden();
+  await settings('Talk');
+  await expect(page.getByLabel('Transcript / typed fallback')).toHaveValue('Refresh Fictional X.');
+  await settings('Work');
+  await expect(page.getByRole('region', { name: 'Orchestrated tool permission' })).toBeVisible();
+  await expect(page.getByLabel('Review the full operation before deciding')).toHaveValue('{"command":"fixture-only-operation"}');
+  await expectSettingsFit();
+  const details = 'Full fixture permission detail, not an executed command.\n'.repeat(1000);
+  await application.evaluate(({ BrowserWindow }, text) => {
+    const plan = globalThis.__plansUI.plan;
+    plan.targets[0].name = 'Long fixture target name '.repeat(40);
+    plan.actions[0].job.permission.details = text;
+    BrowserWindow.getAllWindows()[0].webContents.send('orchestration:progress', { plans: [plan] });
+  }, details);
+  await expect(page.getByLabel('Review the full operation before deciding')).toHaveValue(details);
+  await expectSettingsFit();
+  await page.screenshot({ path: test.info().outputPath('orchestration-permission.png') });
+  await page.getByRole('button', { name: 'Allow this operation once', exact: true }).click();
+  const [id] = requests[0];
+  expect(await application.evaluate(() => globalThis.__plansUI.approvals)).toEqual([
+    [id, 'refresh-x', '22222222-2222-4222-8222-222222222222', 'fixture-permission', 'yes'],
+  ]);
+  await expect(page.getByText('Agent responded; task success unverified', { exact: true })).toBeVisible();
+  await page.getByRole('tab', { name: 'Result', exact: true }).click();
+  await expect(page.getByLabel('Response / outcome details')).toHaveValue('Fixture response. No live agent ran.');
+  await expect.poll(() => application.evaluate(() => globalThis.__plansUI.speech.length)).toBe(2);
+  expect((await application.evaluate(() => globalThis.__plansUI.speech))[1]).toContain('Task success is not independently verified.');
+  await expectSettingsFit();
+  await page.reload();
+  await settings('Work');
+  await expect(page.getByRole('button', { name: 'Acknowledge this receipt', exact: true })).toBeVisible();
+  expect(await application.evaluate(() => globalThis.__plansUI.speech.length)).toBe(2);
+  await page.getByRole('button', { name: 'Acknowledge this receipt', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Acknowledge this receipt', exact: true })).toBeHidden();
+  expect(await application.evaluate(() => globalThis.__plansUI.acknowledged)).toEqual([id]);
+  await application.evaluate(({ BrowserWindow }) => {
+    BrowserWindow.getAllWindows()[0].webContents.send('orchestration:progress', { plans: [globalThis.__plansUI.plan] });
+  });
+  await page.reload();
+  await expect(page.getByRole('heading', { name: 'Everything has a connection.' })).toBeVisible();
+  expect(await application.evaluate(() => globalThis.__plansUI.speech.length)).toBe(2);
+});
+
+test('default Intercom conversation speaks progress and replies locally while respecting voice opt-out', async () => {
+  await page.getByRole('button', { name: 'Use live voice', exact: true }).click();
+  await application.evaluate(({ ipcMain }) => {
+    globalThis.__replySpeech = [];
+    ipcMain.removeHandler('voice:speak');
+    ipcMain.handle('voice:speak', (_event, text) => { globalThis.__replySpeech.push(text); });
+    ipcMain.removeHandler('orchestration:request');
+    ipcMain.handle('orchestration:request', () => ({
+      interpretation: { normalizedText: 'Fixture question.', message: 'Fixture reply. No session work was sent.' },
+      planId: null, warnings: [],
+    }));
+  });
+  await settings('Talk');
+  await page.getByLabel('Transcript / typed fallback').fill('Fixture question.');
+  await page.getByRole('button', { name: 'Send to Intercom', exact: true }).click();
+  await expect.poll(() => application.evaluate(() => globalThis.__replySpeech)).toEqual([
+    'I am checking your request and existing sessions.', 'Fixture reply. No session work was sent.',
+  ]);
+  await settings('Voice');
+  await page.getByRole('checkbox', { name: 'Speak progress and responses (local Windows voice)' }).uncheck();
+  await settings('Talk');
+  await page.getByRole('button', { name: 'Send to Intercom', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Speak', exact: true })).toBeEnabled();
+  expect(await application.evaluate(() => globalThis.__replySpeech.length)).toBe(2);
+});
+
+async function prepareClarificationMock({ muted = false, intent = 'clarify', readinessError = false, speechError = false, microphoneError = false } = {}) {
+  await page.getByRole('button', { name: 'Use live voice', exact: true }).click();
+  await application.evaluate(({ ipcMain }, options) => {
+    globalThis.__clarification = { requests: [], ready: 0 };
+    for (const channel of ['voice:speak', 'voice:stop-speech', 'voice:recognition-ready', 'voice:transcribe',
+      'voice:cancel', 'orchestration:request', 'orchestration:cancel-request']) ipcMain.removeHandler(channel);
+    ipcMain.handle('voice:speak', (_event, text) => {
+      if (text !== 'Which project should receive this request?') return;
+      if (options.speechError) throw new Error('Fixture question playback failed');
+      return new Promise((resolve) => { globalThis.__clarification.finishSpeech = resolve; });
+    });
+    ipcMain.handle('voice:stop-speech', () => {});
+    ipcMain.handle('voice:cancel', () => {});
+    ipcMain.handle('orchestration:cancel-request', () => {});
+    ipcMain.handle('voice:recognition-ready', () => {
+      globalThis.__clarification.ready++;
+      if (options.readinessError) throw new Error('Fixture engine unavailable');
+    });
+    ipcMain.handle('voice:transcribe', () => ({ text: 'Intercom.', reviewRequired: !!globalThis.__clarification.reviewRequired }));
+    ipcMain.handle('orchestration:request', (_event, id, text) => {
+      globalThis.__clarification.requests.push({ id, text });
+      const clarifying = globalThis.__clarification.requests.length === 1 || globalThis.__clarification.clarifyAgain;
+      return {
+        interpretation: { version: 1, intent: clarifying ? options.intent : 'reply',
+          normalizedText: text, message: clarifying
+            ? 'Which project should receive this request?' : 'Reply received. No work was sent.',
+          actions: [], excludedStatusSessionIds: [] },
+        planId: null, warnings: [],
+      };
+    });
+  }, { intent, readinessError, speechError });
+  await page.evaluate((microphoneError) => {
+    window.__replyTracks = [];
+    window.__replyMicCalls = 0;
+    const original = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
+    navigator.mediaDevices.getUserMedia = async (constraints) => {
+      window.__replyMicCalls++;
+      if (microphoneError) throw new Error('Fixture microphone unavailable');
+      const stream = await original(constraints);
+      window.__replyTracks.push(...stream.getTracks());
+      return stream;
+    };
+  }, microphoneError);
+  if (muted) {
+    await settings('Voice');
+    await page.getByLabel('Speak progress and responses (local Windows voice)').uncheck();
+  }
+  await settings('Talk');
+}
+
+async function askClarification() {
+  await page.getByLabel('Transcript / typed fallback').fill('Send this request to my project.');
+  await page.getByRole('button', { name: 'Send to Intercom', exact: true }).click();
+  await expect(page.getByText('Which project should receive this request?', { exact: true })).toBeVisible();
+}
+
+for (const input of ['typed', 'voice']) {
+test(`clarification after ${input} input waits for playback and opens exactly one reply mic`, async () => {
+  await prepareClarificationMock();
+  if (input === 'typed') await askClarification();
+  else {
+    await page.getByRole('button', { name: 'Speak', exact: true }).click();
+    await expect(page.getByRole('button', { name: 'Stop & send', exact: true })).toBeVisible();
+    await page.waitForTimeout(600);
+    await page.getByRole('button', { name: 'Stop & send', exact: true }).click();
+    await expect(page.getByText('Which project should receive this request?', { exact: true })).toBeVisible();
+  }
+  const initialCaptures = input === 'typed' ? 0 : 1;
+  await expect.poll(() => application.evaluate(() => !!globalThis.__clarification.finishSpeech)).toBe(true);
+  expect(await page.evaluate(() => window.__replyMicCalls)).toBe(initialCaptures);
+  await application.evaluate(() => globalThis.__clarification.finishSpeech());
+  await expect(page.getByRole('button', { name: 'Stop & send', exact: true })).toBeVisible();
+  await expect(page.getByText('Which project should receive this request?', { exact: true })).toBeVisible();
+  expect(await page.evaluate(() => window.__replyMicCalls)).toBe(initialCaptures + 1);
+  await page.waitForTimeout(600);
+  await page.getByRole('button', { name: 'Stop & send', exact: true }).click();
+  await expect(page.getByText('Reply received. No work was sent.', { exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Speak', exact: true })).toBeVisible();
+  expect(await application.evaluate(() => globalThis.__clarification.requests.map(({ text }) => text)))
+    .toEqual([input === 'typed' ? 'Send this request to my project.' : 'Intercom.', 'Intercom.']);
+  expect(await page.evaluate(() => window.__replyMicCalls)).toBe(initialCaptures + 1);
+  expect(await page.evaluate(() => window.__replyTracks.every((track) => track.readyState === 'ended'))).toBe(true);
+});
+}
+
+for (const action of ['Stop voice playback', 'Cancel request', 'Disable automatic replies', 'Hide window']) {
+  test(`clarification never opens a late reply mic after ${action}`, async () => {
+    await prepareClarificationMock();
+    await askClarification();
+    await expect.poll(() => application.evaluate(() => !!globalThis.__clarification.finishSpeech)).toBe(true);
+    if (action === 'Disable automatic replies') {
+      await settings('Advanced');
+      await page.getByLabel('Automatically listen for clarification replies').uncheck();
+    } else if (action === 'Hide window') {
+      await application.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].hide());
+      await expect.poll(() => page.evaluate(async () => (await window.intercom.windowAction('state')).paused)).toBe(true);
+    } else await page.getByRole('button', { name: action, exact: true }).click();
+    await application.evaluate(() => globalThis.__clarification.finishSpeech());
+    await expect.poll(() => page.locator('.record-button').getAttribute('aria-busy')).toBe('false');
+    expect(await page.evaluate(() => window.__replyMicCalls)).toBe(0);
+    expect(await application.evaluate(() => globalThis.__clarification.requests.length)).toBe(1);
+  });
+}
+
+test('muted clarification can capture a reply but opt-out prevents another clarification capture', async () => {
+  await prepareClarificationMock({ muted: true });
+  await askClarification();
+  await expect(page.getByRole('button', { name: 'Stop & send', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Cancel recording', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Speak', exact: true })).toBeVisible();
+  expect(await page.evaluate(() => window.__replyMicCalls)).toBe(1);
+  await settings('Advanced');
+  await page.getByLabel('Automatically listen for clarification replies').uncheck();
+  await application.evaluate(() => { globalThis.__clarification.clarifyAgain = true; });
+  await settings('Talk');
+  await page.getByRole('button', { name: 'Send to Intercom', exact: true }).click();
+  await expect(page.getByText('Which project should receive this request?', { exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Speak', exact: true })).toBeVisible();
+  expect(await application.evaluate(() => globalThis.__clarification.requests.length)).toBe(2);
+  expect(await page.evaluate(() => window.__replyMicCalls)).toBe(1);
+});
+
+for (const failure of ['readiness', 'playback', 'microphone']) {
+  test(`clarification ${failure} failure preserves the question without opening the mic`, async () => {
+    await prepareClarificationMock({ muted: failure !== 'playback', readinessError: failure === 'readiness',
+      speechError: failure === 'playback', microphoneError: failure === 'microphone' });
+    await askClarification();
+    await expect(page.getByRole('alert').filter({ hasText: failure === 'readiness' ? 'Fixture engine unavailable'
+      : failure === 'playback' ? 'Fixture question playback failed' : 'Fixture microphone unavailable' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Speak', exact: true })).toBeVisible();
+    expect(await page.evaluate(() => window.__replyMicCalls)).toBe(failure === 'microphone' ? 1 : 0);
+    expect(await application.evaluate(() => globalThis.__clarification.requests.length)).toBe(1);
+  });
+}
+
+test('ordinary question-shaped replies never automatically open a microphone', async () => {
+  await prepareClarificationMock({ muted: true, intent: 'reply' });
+  await askClarification();
+  await expect(page.getByRole('button', { name: 'Speak', exact: true })).toBeVisible();
+  expect(await page.evaluate(() => window.__replyMicCalls)).toBe(0);
+});
+
+test('clarification opt-out during pending readiness prevents microphone access', async () => {
+  await prepareClarificationMock({ muted: true });
+  await application.evaluate(({ ipcMain }) => {
+    ipcMain.removeHandler('voice:recognition-ready');
+    ipcMain.handle('voice:recognition-ready', () => new Promise((resolve) => {
+      globalThis.__clarification.finishReadiness = resolve;
+    }));
+  });
+  await askClarification();
+  await expect.poll(() => application.evaluate(() => !!globalThis.__clarification.finishReadiness)).toBe(true);
+  await settings('Advanced');
+  await page.getByLabel('Automatically listen for clarification replies').uncheck();
+  await application.evaluate(() => globalThis.__clarification.finishReadiness());
+  await expect(page.getByRole('button', { name: 'Speak', exact: true })).toBeVisible();
+  expect(await page.evaluate(() => window.__replyMicCalls)).toBe(0);
+});
+
+test('clarification reply with uncertain recognition stays reviewable and never auto-sends', async () => {
+  await prepareClarificationMock({ muted: true });
+  await application.evaluate(() => { globalThis.__clarification.reviewRequired = true; });
+  await askClarification();
+  await expect(page.getByRole('button', { name: 'Stop & send', exact: true })).toBeVisible();
+  await page.waitForTimeout(600);
+  await page.getByRole('button', { name: 'Stop & send', exact: true }).click();
+  await expect(page.getByRole('alert')).toContainText('Nothing was sent');
+  await expect(page.getByLabel('Transcript / typed fallback')).toHaveValue('Intercom.');
+  expect(await application.evaluate(() => globalThis.__clarification.requests.length)).toBe(1);
+  expect(await page.evaluate(() => window.__replyMicCalls)).toBe(1);
+});
+
+test('research shows a saved report and collapses live catalog diagnostics, with explicit reopen failure and recovery', async () => {
+  await observeSpeechWithoutPlayback();
+  await page.getByRole('button', { name: 'Use live voice', exact: true }).click();
+  await application.evaluate(({ ipcMain }) => {
+    globalThis.__reportUI = { opened: [], fail: true };
+    ipcMain.removeHandler('orchestration:request');
+    ipcMain.removeHandler('orchestration:open-report');
+    ipcMain.handle('orchestration:request', (_event, id) => ({
+      interpretation: { normalizedText: 'Find AzRetroFit session history.', message: 'A partial private report was saved. No session work was sent.' },
+      planId: null, warnings: ['Mock unnamed catalog warning', 'Mock unavailable live workspace'],
+      researchReport: { id, path: `C:\\private\\research\\${id}.html`, contexts: 2, filesRead: 7,
+        readableHistories: 1, matchingHistories: 1, partial: true, opened: false, openError: 'Mock browser unavailable' },
+    }));
+    ipcMain.handle('orchestration:open-report', (_event, id) => {
+      globalThis.__reportUI.opened.push(id);
+      if (globalThis.__reportUI.fail) throw new Error('Mock reopen refused');
+    });
+  });
+  await settings('Talk');
+  await page.getByLabel('Transcript / typed fallback').fill('Find AZ Retrofit sessions.');
+  await page.getByRole('button', { name: 'Send to Intercom', exact: true }).click();
+  await expect(page.getByText('A partial private report was saved. No session work was sent.')).toBeVisible();
+  await expect(page.getByText('Mock unnamed catalog warning', { exact: true })).toBeHidden();
+  await expect(page.getByText('Mock browser unavailable', { exact: true })).toBeVisible();
+  await page.locator('.catalog-diagnostics summary').click();
+  await expect(page.getByText('Mock unnamed catalog warning', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Open context report', exact: true }).click();
+  await expect(page.getByRole('alert').filter({ hasText: 'Mock reopen refused' })).toBeVisible();
+  await application.evaluate(() => { globalThis.__reportUI.fail = false; });
+  await page.getByRole('button', { name: 'Open context report', exact: true }).click();
+  await expect(page.getByText('Mock browser unavailable', { exact: true })).toBeHidden();
+  await expect(page.getByRole('alert').filter({ hasText: 'Mock reopen refused' })).toBeHidden();
+  await expect.poll(() => application.evaluate(() => globalThis.__reportUI.opened.length)).toBe(2);
+  await expectSettingsFit();
+});
+
+test('real-mode source activity is attributable, finite, reduced-motion aware and usable in floating mode', async () => {
+  await page.getByRole('button', { name: 'Use live voice', exact: true }).click();
+  const activity = {
+    id: '11111111-1111-4111-8111-111111111111', phase: 'researching', startedAt: new Date().toISOString(),
+    topic: 'Fixture research', filesRead: 0, unavailableSources: 0, observedContextIds: [],
+    events: [{ sequence: 1, at: new Date().toISOString(), contextIds: ['ctx-test'], kind: 'continuity notes',
+      path: 'C:\\fixture-only\\STATE.md', status: 'checking', filesRead: 0, unavailableSources: 0 }],
+  };
+  const send = async () => application.evaluate(({ BrowserWindow }, requestActivity) => {
+    BrowserWindow.getAllWindows()[0].webContents.send('orchestration:progress', { plans: [], requestActivity });
+  }, activity);
+  await send();
+  const panel = page.getByRole('region', { name: 'Observed context activity' });
+  await expect(panel).toContainText('0 files read');
+  await panel.getByText('Observed sources (1 recent events)', { exact: true }).click();
+  await expect(panel).toContainText('CHECKING');
+  const canvas = page.locator('canvas[role="img"]');
+  await expect(canvas).toHaveAttribute('data-observed-pulse', 'false');
+  activity.events.push({ ...activity.events[0], sequence: 2, at: new Date().toISOString(), status: 'read', filesRead: 1 });
+  activity.observedContextIds = ['ctx-test']; activity.filesRead = 1;
+  await send();
+  await expect(canvas).toHaveAttribute('data-observed-access', `${activity.id}:2`);
+  await expect(canvas).toHaveAttribute('data-observed-pulse', 'true');
+  await expect(panel).toContainText('1 files read');
+  await page.screenshot({ path: test.info().outputPath('observed-context-activity.png') });
+  await expect(canvas).toHaveAttribute('data-observed-pulse', 'false');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  activity.events.push({ ...activity.events[0], sequence: 3, at: new Date().toISOString(),
+    contextIds: ['ctx-other'], path: 'C:\\fixture-only\\missing.md', status: 'unavailable', filesRead: 1,
+    unavailableSources: 1, error: 'Fixture source unavailable' });
+  activity.unavailableSources = 1;
+  await send();
+  await expect(panel).toContainText('Fixture source unavailable');
+  await expect(canvas).toHaveAttribute('data-observed-access', `${activity.id}:2`);
+  activity.events.push({ ...activity.events[1], sequence: 4, at: new Date().toISOString(), contextIds: ['ctx-other'], filesRead: 2 });
+  activity.observedContextIds.push('ctx-other'); activity.filesRead = 2;
+  await send();
+  await expect(canvas).toHaveAttribute('data-observed-access', `${activity.id}:4`);
+  await expect(canvas).toHaveAttribute('data-observed-pulse', 'false');
+  activity.phase = 'cancelled';
+  await send();
+  await expect(panel).toContainText('Request cancelled');
+  await page.getByRole('button', { name: 'Floating mesh', exact: true }).click();
+  await expect(panel).toBeVisible();
+  await expect(panel.locator('details')).toBeHidden();
+  expect(await panel.evaluate((element) => {
+    const bounds = element.getBoundingClientRect();
+    return bounds.left >= 0 && bounds.right <= innerWidth && bounds.bottom <= innerHeight;
+  })).toBe(true);
+});
+
+test('research synthesis requires an explicit idle session choice and queues only its report capability', async () => {
+  await observeSpeechWithoutPlayback();
+  await page.getByRole('button', { name: 'Use live voice', exact: true }).click();
+  await application.evaluate(({ ipcMain }) => {
+    globalThis.__synthesisUI = { queued: [] };
+    for (const name of ['request', 'research-targets', 'synthesize-report']) ipcMain.removeHandler(`orchestration:${name}`);
+    ipcMain.handle('orchestration:request', (_event, id) => {
+      globalThis.__synthesisUI.reportId = id;
+      return { interpretation: { normalizedText: 'Fixture research', message: 'Fixture report ready.' }, planId: null, warnings: [],
+        researchReport: { id, path: `C:\\fixture-only\\${id}.html`, contexts: 1, filesRead: 4, readableHistories: 0,
+          matchingHistories: 0, partial: false, opened: true } };
+    });
+    ipcMain.handle('orchestration:research-targets', () => ({ warnings: [], sessions: [
+      { id: '22222222-2222-4222-8222-222222222222', name: 'Fixture idle', contextName: 'Fixture', status: 'idle' },
+      { id: '33333333-3333-4333-8333-333333333333', name: 'Fixture busy', contextName: 'Fixture', status: 'busy' },
+    ] }));
+    ipcMain.handle('orchestration:synthesize-report', (_event, ...args) => { globalThis.__synthesisUI.queued.push(args); return { planId: args[0] }; });
+  });
+  await settings('Talk');
+  await page.getByLabel('Transcript / typed fallback').fill('Collect fixture research.');
+  await page.getByRole('button', { name: 'Send to Intercom', exact: true }).click();
+  await page.getByRole('button', { name: 'Choose synthesis session', exact: true }).click();
+  const selected = page.getByLabel('Existing synthesis session', { exact: true });
+  await expect(selected).toHaveValue('');
+  const queue = page.getByRole('button', { name: 'Synthesize with selected Copilot session', exact: true });
+  await expect(queue).toBeDisabled();
+  await expect(selected.locator('option[value="33333333-3333-4333-8333-333333333333"]')).toBeDisabled();
+  await selected.selectOption('22222222-2222-4222-8222-222222222222');
+  await queue.click();
+  await expect(page.getByRole('tab', { name: 'Work', exact: true })).toHaveAttribute('aria-selected', 'true');
+  const result = await application.evaluate(() => globalThis.__synthesisUI);
+  expect(result.queued).toHaveLength(1);
+  expect(result.queued[0].slice(1)).toEqual([result.reportId, '22222222-2222-4222-8222-222222222222', 'Speed / performance']);
+});
+
+test('cancelling default interpretation preserves the request and ignores a late controller response', async () => {
+  await observeSpeechWithoutPlayback();
+  await page.getByRole('button', { name: 'Use live voice', exact: true }).click();
+  await application.evaluate(({ ipcMain }) => {
+    globalThis.__interpretationUI = { ids: [], cancelled: [] };
+    ipcMain.removeHandler('orchestration:request');
+    ipcMain.removeHandler('orchestration:cancel-request');
+    ipcMain.handle('orchestration:request', (_event, id) => {
+      globalThis.__interpretationUI.ids.push(id);
+      return new Promise((resolve) => { globalThis.__interpretationUI.resolve = resolve; });
+    });
+    ipcMain.handle('orchestration:cancel-request', (_event, id) => {
+      globalThis.__interpretationUI.cancelled.push(id);
+      globalThis.__interpretationUI.resolve({
+        interpretation: { normalizedText: 'Must not replace the cancelled draft.', message: 'Late answer must not appear.' },
+        planId: null, warnings: [],
+      });
+    });
+  });
+  await settings('Talk');
+  await page.getByLabel('Transcript / typed fallback').fill('Keep this cancelled request.');
+  await page.getByRole('button', { name: 'Send to Intercom', exact: true }).click();
+  await expect.poll(() => application.evaluate(() => globalThis.__interpretationUI.ids.length)).toBe(1);
+  await page.getByRole('button', { name: 'Cancel request', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Speak', exact: true })).toBeEnabled();
+  await expect(page.getByLabel('Transcript / typed fallback')).toHaveValue('Keep this cancelled request.');
+  await expect(page.getByText('Late answer must not appear.', { exact: true })).toBeHidden();
+  expect(await application.evaluate(() => globalThis.__interpretationUI.cancelled)).toEqual(
+    await application.evaluate(() => globalThis.__interpretationUI.ids));
+});
+
 test('real desktop transparency, reversible floating controls and narrow IPC', async () => {
   const logo = page.getByRole('img', { name: 'Intercom logo', exact: true });
   await expect(logo).toBeVisible();
@@ -260,7 +754,7 @@ test('real desktop transparency, reversible floating controls and narrow IPC', a
     await image.decode();
     return image.naturalWidth > 0 && image.naturalHeight > 0;
   })).toBe(true);
-  await expect(page.locator('canvas')).toBeVisible();
+  await expect(page.locator('canvas[role="img"]')).toBeVisible();
   await expect(page.getByRole('alert')).toHaveCount(0);
   expect(await application.evaluate(({ BrowserWindow }) => {
     const window = BrowserWindow.getAllWindows()[0];
@@ -277,7 +771,7 @@ test('real desktop transparency, reversible floating controls and narrow IPC', a
   await expect(page.locator('.composer')).toBeHidden();
   await expect(page.locator('.titlebar .brand-logo')).toBeHidden();
   expect(await page.locator('main').evaluate((element) => getComputedStyle(element).backgroundColor)).toBe('rgba(0, 0, 0, 0)');
-  expect(await page.locator('canvas').evaluate((canvas) => canvas.getContext('webgl2').getContextAttributes().alpha)).toBe(true);
+  expect(await page.locator('canvas[role="img"]').evaluate((canvas) => canvas.getContext('webgl2').getContextAttributes().alpha)).toBe(true);
   const capture = await application.evaluate(async ({ BrowserWindow }) => {
     const image = await BrowserWindow.getAllWindows()[0].capturePage();
     const bitmap = image.toBitmap();
@@ -424,7 +918,7 @@ test('floating dock starts collapsed, fits every control without scrolling at mi
 });
 
 test('graph zoom enters the sphere, supports cursor zoom and pan, and resets the view', async () => {
-  const canvas = page.locator('canvas');
+  const canvas = page.locator('canvas[role="img"]');
   const zoom = page.getByLabel('Graph zoom', { exact: true });
   await expect(zoom).toHaveText('100%');
   const initial = await canvas.screenshot();
@@ -463,7 +957,7 @@ test('mesh nodes reveal names on hover and pin independently of the work target,
   await page.mouse.move(decorative.x, decorative.y);
   await expect(page.locator('.mesh-node-label')).toHaveCount(0);
   await page.getByRole('button', { name: 'Use live voice', exact: true }).click();
-  const canvas = page.locator('canvas');
+  const canvas = page.locator('canvas[role="img"]');
   await expect(canvas).toBeVisible();
   await expect(page.locator('.mesh-node-label')).toHaveCount(0);
   const selected = await page.locator('.context-row.selected').textContent();
@@ -507,7 +1001,7 @@ test('keyboard node inspection fits the smallest floating view and Escape dismis
     window.speechSynthesis.cancel = () => { window.__speechStops++; cancel(); };
   });
   await page.getByRole('button', { name: 'Use live voice', exact: true }).click();
-  const canvas = page.locator('canvas');
+  const canvas = page.locator('canvas[role="img"]');
   await canvas.focus();
   await expect(page.getByRole('tooltip')).toContainText('Alternate Context');
   await page.keyboard.press('ArrowRight');
@@ -581,10 +1075,10 @@ test('ambiguity never guesses and context loss retains accessible controls', asy
   await expect(page.getByRole('button', { name: 'Run simulation' })).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(page.getByRole('region', { name: 'Demo request confirmation' })).toHaveCount(0);
-  await page.locator('canvas').focus();
+  await page.locator('canvas[role="img"]').focus();
   await page.keyboard.press('Enter');
   await expect(page.getByRole('region', { name: 'Pinned node details' })).toBeVisible();
-  await page.locator('canvas').evaluate((canvas) => {
+  await page.locator('canvas[role="img"]').evaluate((canvas) => {
     const context = canvas.getContext('webgl2');
     context.getExtension('WEBGL_lose_context').loseContext();
   });
@@ -605,7 +1099,7 @@ test('idle rendering stays on demand and animation pauses while minimized', asyn
     };
   });
   await page.reload();
-  await expect(page.locator('canvas')).toBeVisible();
+  await expect(page.locator('canvas[role="img"]')).toBeVisible();
   await expect(page.locator('.fixture-badge')).toHaveText('ACTUAL LOCAL MESH');
   await expect.poll(async () => {
     const before = await page.evaluate(() => window.__frameRequests);
@@ -615,7 +1109,7 @@ test('idle rendering stays on demand and animation pauses while minimized', asyn
   const idle = await page.evaluate(() => window.__frameRequests);
   await page.waitForTimeout(300);
   expect(await page.evaluate(() => window.__frameRequests)).toBe(idle);
-  await page.locator('canvas').focus();
+  await page.locator('canvas[role="img"]').focus();
   await page.keyboard.press('ArrowRight');
   await page.keyboard.press('Enter');
   const details = page.getByRole('region', { name: 'Pinned node details' });
@@ -661,7 +1155,11 @@ test('microphone choice persists, opens only on request, stops tracks and never 
   await page.getByLabel('Microphone device', { exact: true }).selectOption(device);
   await page.getByRole('button', { name: 'Test selected', exact: true }).click();
   await expect(microphone.getByRole('status')).toContainText('Selected microphone opens successfully.');
-  expect(await page.evaluate(() => window.__microphoneRequests.at(-1))).toEqual({ audio: { deviceId: { exact: device } }, video: false });
+  expect(await page.evaluate(() => window.__microphoneRequests.at(-1))).toEqual({
+    audio: { deviceId: { exact: device }, channelCount: 1, echoCancellation: false, noiseSuppression: false, autoGainControl: false }, video: false,
+  });
+  await expect(page.getByLabel('Microphone diagnostics')).toContainText('Recognition: 16000 Hz, mono PCM16.');
+  await expect(page.getByLabel('Microphone diagnostics')).not.toContainText('Peak 0.0%');
   expect(await page.evaluate(() => window.__microphoneTracks.every((track) => track.readyState === 'ended'))).toBe(true);
   expect(await page.evaluate(async () => {
     try {
@@ -736,6 +1234,8 @@ test('microphone denial and enumeration failure are visible and acquired tracks 
     }, { delayed, recognitionError, recognition });
     await settings('Voice');
     await page.getByLabel('Speak progress and responses (local Windows voice)').uncheck();
+    await settings('Session');
+    await page.getByLabel('Voice request destination').selectOption('chat');
     if (connect) {
       await settings('Session');
       await page.getByLabel('Existing session ID', { exact: true }).fill('11111111-1111-4111-8111-111111111111');
@@ -1144,6 +1644,143 @@ test('floating recognition failures open visible feedback and leave the outside 
   await page.screenshot({ path: test.info().outputPath('floating-microphone-error-minimum.png'), omitBackground: true });
 });
 
+test('live transcription shows local drafts, serializes previews and sends only the final recording', async () => {
+  await prepareVoiceMock();
+  await settings('Talk');
+  const toggle = page.getByRole('checkbox', { name: 'Live transcription (local draft)', exact: true });
+  await expect(toggle).not.toBeChecked();
+  await toggle.check();
+  await application.evaluate(({ ipcMain }) => {
+    globalThis.__live = { ids: [], pending: false };
+    ipcMain.removeHandler('voice:transcribe');
+    ipcMain.handle('voice:transcribe', (_event, id) => {
+      globalThis.__live.ids.push(id);
+      if (globalThis.__live.ids.length === 2) {
+        globalThis.__live.pending = true;
+        return new Promise((resolve) => {
+          globalThis.__live.resolve = () => {
+            globalThis.__live.pending = false;
+            resolve({ text: 'Late partial must not send.', reviewRequired: false });
+          };
+        });
+      }
+      if (globalThis.__live.pending) throw new Error('Overlapping recognition is forbidden.');
+      return { text: globalThis.__live.ids.length === 1 ? 'Partial local draft.' : 'Final corrected request.', reviewRequired: false };
+    });
+    ipcMain.removeHandler('voice:cancel');
+    ipcMain.handle('voice:cancel', (_event, id) => {
+      globalThis.__voiceReceipt.cancelled.push(id);
+      if (id === globalThis.__live.ids[1]) globalThis.__live.resolve();
+    });
+  });
+  await page.getByRole('button', { name: 'Speak', exact: true }).click();
+  await expect(toggle).toBeDisabled();
+  await expect(page.getByLabel('Transcript / typed fallback')).toHaveValue('Partial local draft.', { timeout: 10000 });
+  expect(await application.evaluate(() => globalThis.__voiceReceipt.sent)).toEqual([]);
+  await expect.poll(() => application.evaluate(() => globalThis.__live.pending), { timeout: 10000 }).toBe(true);
+  await page.waitForTimeout(3300);
+  expect(await application.evaluate(() => globalThis.__live.ids.length)).toBe(2);
+  await page.getByRole('button', { name: 'Stop & send', exact: true }).click();
+  await expect(page.getByLabel('Transcript / typed fallback')).toHaveValue('Final corrected request.');
+  expect(await application.evaluate(() => globalThis.__voiceReceipt.sent.map((entry) => entry.text))).toEqual(['Final corrected request.']);
+  const ids = await application.evaluate(() => globalThis.__live.ids);
+  expect(new Set(ids).size).toBe(3);
+  expect(await application.evaluate(() => globalThis.__voiceReceipt.cancelled)).toContain(ids[1]);
+  await expect(toggle).toBeEnabled();
+});
+
+for (const ending of ['cancel', 'flush failure', 'unmount']) test(`live transcription ${ending} discards late drafts, preserves typed text and releases the microphone`, async () => {
+  await prepareVoiceMock();
+  await settings('Talk');
+  await page.getByLabel('Transcript / typed fallback').fill('Keep my typed draft.');
+  await page.getByRole('checkbox', { name: 'Live transcription (local draft)', exact: true }).check();
+  await page.evaluate((ending) => {
+    window.__liveTracks = [];
+    const original = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
+    navigator.mediaDevices.getUserMedia = async (constraints) => {
+      const stream = await original(constraints);
+      window.__liveTracks.push(...stream.getTracks());
+      return stream;
+    };
+    if (ending === 'flush failure') {
+      const NativeWorklet = window.AudioWorkletNode;
+      window.AudioWorkletNode = class extends NativeWorklet {
+        constructor(...args) {
+          super(...args);
+          const send = this.port.postMessage.bind(this.port);
+          this.port.postMessage = (message, ...args) => { if (message !== 'stop') send(message, ...args); };
+        }
+      };
+    }
+  }, ending);
+  await application.evaluate(({ ipcMain }) => {
+    globalThis.__live = { ids: [] };
+    ipcMain.removeHandler('voice:transcribe');
+    ipcMain.handle('voice:transcribe', (_event, id) => {
+      globalThis.__live.ids.push(id);
+      return new Promise((resolve) => { globalThis.__live.resolve = () => resolve({ text: 'Cancelled partial.', reviewRequired: false }); });
+    });
+    ipcMain.removeHandler('voice:cancel');
+    ipcMain.handle('voice:cancel', (_event, id) => {
+      globalThis.__voiceReceipt.cancelled.push(id);
+      if (id === globalThis.__live.ids[0]) globalThis.__live.resolve();
+    });
+  });
+  await page.getByRole('button', { name: 'Speak', exact: true }).click();
+  await expect.poll(() => application.evaluate(() => globalThis.__live.ids.length), { timeout: 10000 }).toBe(1);
+  if (ending === 'unmount') {
+    await settings('Advanced');
+    await page.getByRole('button', { name: 'Show fixture demo', exact: true }).click();
+  } else {
+    await page.getByRole('button', { name: ending === 'cancel' ? 'Cancel recording' : 'Stop & send', exact: true }).click();
+    await expect(page.getByRole('button', { name: 'Speak', exact: true })).toBeEnabled();
+    await expect(page.getByLabel('Transcript / typed fallback')).toHaveValue('Keep my typed draft.');
+    if (ending === 'flush failure') await expect(page.getByRole('alert')).toContainText('The audio worker did not finish.');
+  }
+  await expect.poll(() => page.evaluate(() => window.__liveTracks.length > 0 && window.__liveTracks.every((track) => track.readyState === 'ended'))).toBe(true);
+  expect(await application.evaluate(() => globalThis.__voiceReceipt.sent)).toEqual([]);
+  expect(await application.evaluate(() => globalThis.__voiceReceipt.cancelled)).toContain(
+    (await application.evaluate(() => globalThis.__live.ids))[0]);
+});
+
+test('live transcription failure is explicit while final recognition remains available', async () => {
+  await prepareVoiceMock();
+  await settings('Talk');
+  await page.getByRole('checkbox', { name: 'Live transcription (local draft)', exact: true }).check();
+  await application.evaluate(({ ipcMain }) => {
+    globalThis.__liveCalls = 0;
+    ipcMain.removeHandler('voice:transcribe');
+    ipcMain.handle('voice:transcribe', () => {
+      if (++globalThis.__liveCalls === 1) throw new Error('Synthetic preview failure.');
+      return { text: 'Final after preview failure.', reviewRequired: false };
+    });
+
+  });
+  await page.getByRole('button', { name: 'Speak', exact: true }).click();
+  await expect(page.getByRole('alert')).toContainText('Live transcription paused:', { timeout: 10000 });
+  await expect(page.getByRole('alert')).toContainText('Synthetic preview failure.');
+  await expect(page.getByRole('button', { name: 'Stop & send', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  expect(await application.evaluate(() => globalThis.__voiceReceipt.sent)).toEqual([]);
+  await page.getByRole('button', { name: 'Stop & send', exact: true }).click();
+  await expect(page.getByLabel('Transcript / typed fallback')).toHaveValue('Final after preview failure.');
+  expect(await application.evaluate(() => globalThis.__voiceReceipt.sent.map((entry) => entry.text))).toEqual(['Final after preview failure.']);
+});
+
+test('live transcription controls fit the minimum workspace and floating conversation without changing drafts', async () => {
+  await prepareVoiceMock({ connect: false });
+  await application.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].setSize(960, 680));
+  await settings('Talk');
+  await page.getByLabel('Transcript / typed fallback').fill('Keep this layout draft.');
+  await page.getByRole('checkbox', { name: 'Live transcription (local draft)', exact: true }).check();
+  await expectSettingsFit();
+  await page.getByRole('button', { name: 'Floating mesh', exact: true }).click();
+  await page.getByRole('button', { name: 'Expand floating controls', exact: true }).click();
+  await page.getByRole('button', { name: 'Conversation and transcript', exact: true }).click();
+  await expect(page.getByRole('checkbox', { name: 'Live transcription (local draft)', exact: true })).toBeInViewport({ ratio: 1 });
+  await expect(page.getByRole('button', { name: 'Send text to Copilot', exact: true })).toBeInViewport({ ratio: 1 });
+  await expect(page.getByLabel('Transcript / typed fallback')).toHaveValue('Keep this layout draft.');
+});
+
 test('selected microphone records and transcribes without a connected session, preserving text until explicit send', async () => {
   await prepareVoiceMock({ connect: false });
   await page.evaluate(() => {
@@ -1157,6 +1794,7 @@ test('selected microphone records and transcribes without a connected session, p
       return stream;
     };
   });
+
   await page.getByRole('button', { name: 'Load microphones', exact: true }).click();
   await expect(page.getByLabel('Microphone device', { exact: true })).toBeEnabled();
   const device = await page.getByLabel('Microphone device', { exact: true }).locator('option').evaluateAll((options) =>
@@ -1192,6 +1830,119 @@ test('selected microphone records and transcribes without a connected session, p
   expect(await application.evaluate(() => globalThis.__voiceReceipt.sent.map((entry) => entry.text))).toEqual(['Say hello world.']);
 });
 
+test('local speech check never auto-sends even when connected and preserves the working draft', async () => {
+  await prepareVoiceMock();
+  await settings('Talk');
+  await page.getByLabel('Transcript / typed fallback').fill('Keep my original working draft.');
+  await settings('Input');
+  await page.getByRole('tab', { name: 'Speech check', exact: true }).click();
+  await page.getByRole('button', { name: 'Test speech locally', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Stop & transcribe', exact: true })).toBeVisible();
+  await expect.poll(() => page.getByRole('meter', { name: 'Microphone input level' }).evaluate((meter) => meter.value)).toBeGreaterThan(0);
+  await page.waitForTimeout(600);
+  await page.getByRole('button', { name: 'Stop & transcribe', exact: true }).click();
+  await expect(page.getByLabel('Local test transcript')).toHaveValue('Say hello world.');
+  await expect(page.locator('.speech-check')).toContainText('16000 Hz mono PCM16');
+  await expect(page.locator('.speech-check')).toContainText('No request sent.');
+  expect(await application.evaluate(() => globalThis.__voiceReceipt.sent)).toEqual([]);
+  await application.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].setSize(960, 680));
+  await expectSettingsFit();
+  await settings('Talk');
+  await expect(page.getByLabel('Transcript / typed fallback')).toHaveValue('Keep my original working draft.');
+});
+
+test('cancelled local speech checks ignore late recognition without replacing drafts or sending', async () => {
+  await prepareVoiceMock();
+  await application.evaluate(({ ipcMain }) => {
+    ipcMain.removeHandler('voice:transcribe');
+    ipcMain.handle('voice:transcribe', () => new Promise((resolve) => {
+      globalThis.__finishSpeechCheck = () => resolve({ text: 'Late speech check', reviewRequired: false });
+    }));
+  });
+  await settings('Talk');
+  await page.getByLabel('Transcript / typed fallback').fill('Keep the draft after cancellation.');
+  await settings('Input');
+  await page.getByRole('tab', { name: 'Speech check', exact: true }).click();
+  await page.getByRole('button', { name: 'Test speech locally', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Stop & transcribe', exact: true })).toBeVisible();
+  await page.waitForTimeout(600);
+  await page.getByRole('button', { name: 'Stop & transcribe', exact: true }).click();
+  await expect.poll(() => application.evaluate(() => !!globalThis.__finishSpeechCheck)).toBe(true);
+  await page.getByRole('button', { name: 'Cancel request', exact: true }).click();
+  await application.evaluate(() => globalThis.__finishSpeechCheck());
+  await expect(page.getByLabel('Transcript / typed fallback')).toHaveValue('Keep the draft after cancellation.');
+  await settings('Input');
+  await page.getByRole('tab', { name: 'Speech check', exact: true }).click();
+  await expect(page.getByLabel('Local test transcript')).toHaveCount(0);
+  expect(await application.evaluate(() => globalThis.__voiceReceipt.sent)).toEqual([]);
+});
+
+test('recognition language changes use host persistence and low-resolution results wait for explicit send', async () => {
+  await writeFile(path.join(profile, 'recognition-settings.json'), JSON.stringify({ version: 1, engine: 'whisper', backend: 'vulkan', root: profile }));
+  await prepareVoiceMock({ recognition: { text: 'Do not check why.', confidence: null, tokenProbability: 0.852, reviewRequired: true,
+    warning: 'Low-resolution audio (below 16 kHz) can confuse names and exclusions.' } });
+  await application.evaluate(({ ipcMain }) => {
+    ipcMain.removeHandler('voice:recognition-ready');
+    ipcMain.handle('voice:recognition-ready', () => {});
+  });
+  await settings('Input');
+  await page.getByRole('tab', { name: 'Recognition', exact: true }).click();
+  await page.getByLabel('Recognition language', { exact: true }).selectOption('en');
+  await expect(page.getByLabel('Recognition language', { exact: true })).toBeEnabled();
+  expect(JSON.parse(await readFile(path.join(profile, 'recognition-settings.json'), 'utf8')).language).toBe('en');
+  await page.getByRole('button', { name: 'Speak', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Stop & send', exact: true })).toBeVisible();
+  await page.waitForTimeout(600);
+  await page.getByRole('button', { name: 'Stop & send', exact: true }).click();
+  await expect(page.getByRole('alert')).toContainText('below 16 kHz');
+  await expect(page.getByLabel('Transcript / typed fallback')).toHaveValue('Do not check why.');
+  expect(await application.evaluate(() => globalThis.__voiceReceipt.sent)).toEqual([]);
+});
+
+test('failed microphone-check cleanup surfaces the error and releases UI ownership', async () => {
+  await prepareVoiceMock();
+  await page.evaluate(() => {
+    const original = AudioContext.prototype.close;
+    let attempts = 0;
+    AudioContext.prototype.close = async function () {
+      if (++attempts <= 2) throw new Error('Synthetic context-close failure');
+      return original.call(this);
+    };
+  });
+  await page.getByRole('tab', { name: 'Input', exact: true }).click();
+  await page.getByRole('button', { name: 'Load microphones', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Test selected', exact: true })).toBeEnabled();
+  await page.getByRole('button', { name: 'Test selected', exact: true }).click();
+  await expect(page.getByRole('alert')).toContainText('Microphone cleanup failed: Synthetic context-close failure');
+  await expect(page.getByRole('button', { name: 'Test selected', exact: true })).toBeEnabled();
+  await expect(page.getByRole('button', { name: 'Speak', exact: true })).toBeEnabled();
+  expect((await application.evaluate(() => globalThis.__voiceReceipt)).sent).toEqual([]);
+});
+
+test('upsampling a browser-reported low-resolution input never bypasses transcript review', async () => {
+  await prepareVoiceMock();
+  await page.evaluate(() => {
+    const original = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
+    navigator.mediaDevices.getUserMedia = async (constraints) => {
+      const stream = await original(constraints);
+      for (const track of stream.getAudioTracks()) {
+        const settings = track.getSettings();
+        track.getSettings = () => ({ ...settings, sampleRate: 8000 });
+      }
+      return stream;
+    };
+  });
+  await page.getByRole('button', { name: 'Speak', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Stop & send', exact: true })).toBeVisible();
+  await page.waitForTimeout(600);
+  await page.getByRole('button', { name: 'Stop & send', exact: true }).click();
+  await expect(page.getByRole('alert')).toContainText('Upsampling cannot recover missing detail');
+  await expect(page.getByLabel('Transcript / typed fallback')).toHaveValue('Say hello world.');
+  const receipt = await application.evaluate(() => globalThis.__voiceReceipt);
+  expect(receipt.recordings[0].rate).toBe(16000);
+  expect(receipt.sent).toEqual([]);
+});
+
 for (const delivery of ['chat', 'background', 'terminal']) {
   test(`low-confidence speech in ${delivery} is retained for review and never automatically sent`, async () => {
     await prepareVoiceMock({ connect: delivery === 'chat',
@@ -1203,7 +1954,7 @@ for (const delivery of ['chat', 'background', 'terminal']) {
     await page.waitForTimeout(650);
     await page.getByRole('button', { name: 'Stop & send', exact: true }).click();
     await expect(page.getByLabel('Transcript / typed fallback')).toHaveValue('Please review these uncertain words.');
-    await expect(page.getByRole('alert')).toContainText('low confidence');
+    await expect(page.getByRole('alert')).toContainText('recognition is uncertain');
     const send = page.getByRole('button', { name: delivery === 'chat' ? 'Send text to Copilot' : 'Prepare work from text', exact: true });
     await expect(send).toBeEnabled();
     expect(await application.evaluate(() => globalThis.__voiceReceipt.sent)).toEqual([]);
@@ -1218,6 +1969,71 @@ for (const delivery of ['chat', 'background', 'terminal']) {
       expect(await application.evaluate(() => globalThis.__voiceReceipt.sent)).toEqual([]);
       await expect(page.getByRole('region', { name: 'Real work confirmation' })).toHaveCount(0);
     }
+  });
+}
+
+for (const cutoff of ['sample bound', 'wall clock', 'flush bound']) {
+  test(`five-minute ${cutoff} preserves capped audio for review and never auto-sends an unfinished request`, async () => {
+    await prepareVoiceMock();
+    if (cutoff === 'wall clock') await page.clock.install();
+    await page.evaluate((cutoff) => {
+      window.__longInput = { tracks: [], port: null, rate: 0 };
+      const original = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
+      navigator.mediaDevices.getUserMedia = async (constraints) => {
+        const stream = await original(constraints);
+        window.__longInput.tracks.push(...stream.getTracks());
+        return stream;
+      };
+      const NativeWorklet = window.AudioWorkletNode;
+      window.AudioWorkletNode = class extends NativeWorklet {
+        constructor(context, ...args) {
+          super(context, ...args);
+          window.__longInput.port = this.port;
+          window.__longInput.rate = context.sampleRate;
+          const send = this.port.postMessage.bind(this.port);
+          this.port.postMessage = (message, ...args) => {
+            if (cutoff === 'flush bound' && message === 'stop') {
+              this.port.onmessage(new MessageEvent('message', { data: new Float32Array(context.sampleRate * 2).fill(-0.5) }));
+            }
+            send(message, ...args);
+          };
+        }
+      };
+    }, cutoff);
+    await page.getByRole('button', { name: 'Speak', exact: true }).click();
+    await expect(page.getByRole('button', { name: 'Stop & send', exact: true })).toBeVisible();
+    await expect(page.locator('#voice-recording-help')).toContainText('maximum 5 minutes');
+    await page.evaluate((seconds) => {
+      const { port, rate } = window.__longInput;
+      port.onmessage(new MessageEvent('message', { data: new Float32Array(rate * seconds).fill(0.5) }));
+    }, cutoff === 'wall clock' ? 61 : 299);
+    await expect(page.getByRole('button', { name: 'Stop & send', exact: true })).toBeVisible();
+    expect(await application.evaluate(() => globalThis.__voiceReceipt.recordings)).toEqual([]);
+    if (cutoff === 'wall clock') {
+      await page.clock.fastForward(61000);
+      await expect(page.getByRole('button', { name: 'Stop & send', exact: true })).toBeVisible();
+      await page.clock.fastForward(239000);
+    } else if (cutoff === 'sample bound') {
+      await page.evaluate(() => {
+        const { port, rate } = window.__longInput;
+        const data = new Float32Array(rate * 2).fill(-0.5);
+        port.onmessage(new MessageEvent('message', { data }));
+        port.onmessage(new MessageEvent('message', { data }));
+      });
+    } else await page.getByRole('button', { name: 'Stop & send', exact: true }).click();
+    await expect(page.getByLabel('Transcript / typed fallback')).toHaveValue('Say hello world.');
+    await expect(page.getByRole('alert')).toContainText('Five-minute recording limit reached');
+    const receipt = await application.evaluate(() => globalThis.__voiceReceipt);
+    expect(receipt.recordings).toHaveLength(1);
+    const seconds = (receipt.recordings[0].bytes - 44) / (receipt.recordings[0].rate * 2);
+    if (cutoff === 'wall clock') expect(seconds).toBeGreaterThanOrEqual(61);
+    else expect(seconds).toBe(300);
+    expect(receipt.sent).toEqual([]);
+    expect(await page.evaluate(() => window.__longInput.tracks.every((track) => track.readyState === 'ended'))).toBe(true);
+    await expect(page.getByRole('button', { name: 'Send text to Copilot', exact: true })).toBeEnabled();
+    await page.getByRole('button', { name: 'Send text to Copilot', exact: true }).click();
+    await expect(page.locator('.live-result')).toContainText('Hello world.');
+    expect(await application.evaluate(() => globalThis.__voiceReceipt.sent)).toHaveLength(1);
   });
 }
 
@@ -1238,6 +2054,25 @@ test('over-limit speech stays intact and cannot be sent until explicitly shorten
   await page.getByRole('button', { name: 'Send text to Copilot', exact: true }).click();
   await expect(page.locator('.live-result')).toContainText('Hello world.');
   expect(await application.evaluate(() => globalThis.__voiceReceipt.sent.map((entry) => entry.text))).toEqual(['Shortened request.']);
+});
+
+test('a long orchestration transcript remains intact above the request limit without calling a controller', async () => {
+  const text = 'Preserve every word in this long recording. '.repeat(300);
+  await prepareVoiceMock({ recognition: { text, confidence: 0.9, reviewRequired: false } });
+  await application.evaluate(({ ipcMain }) => {
+    ipcMain.removeHandler('orchestration:request');
+    ipcMain.handle('orchestration:request', () => { throw new Error('Over-limit speech must not reach the controller.'); });
+  });
+  await settings('Session');
+  await page.getByLabel('Voice request destination').selectOption('orchestrate');
+  await page.getByRole('button', { name: 'Speak', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Stop & send', exact: true })).toBeVisible();
+  await page.waitForTimeout(650);
+  await page.getByRole('button', { name: 'Stop & send', exact: true }).click();
+  await expect(page.getByLabel('Transcript / typed fallback')).toHaveValue(text);
+  await expect(page.getByRole('alert')).toContainText('request limit is 10,000');
+  await expect(page.getByRole('button', { name: 'Send to Intercom', exact: true })).toBeDisabled();
+  expect(await application.evaluate(() => globalThis.__voiceReceipt.sent)).toEqual([]);
 });
 
 test('microphone recording denial without a session stays visible and allows a clean retry', async () => {

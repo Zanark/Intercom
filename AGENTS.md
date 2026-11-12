@@ -13,6 +13,17 @@ Sibling context stores are read-only.
 
 ## Current contract
 
+- The functional-slice request supersedes the older speech/controller limits:
+  download a stronger local recognition runtime/model for English and
+  Hindi/Hinglish, returning Roman-script text. Audio must remain on-device.
+  A separate restricted Copilot interpretation controller is approved; it is
+  not a replacement work session and may not execute work or load work tools.
+  Default focus is the Intercom context node, not an existing work session.
+  Clear requests should execute without redundant target/task confirmations;
+  clarify genuine ambiguity and retain actual tool permissions, busy refusal
+  and existing-session identity. Multi-session dependencies and exclusions
+  must be enforced by the host. TTS improvement can wait. Illustrative session
+  names do not authorize this agent to test work in real sessions.
 - This is a voice-first desktop assistant coordinating existing Agency/Copilot
   sessions, with a spherical 3D Context Mesh activity display.
 - The owner authorized a bounded desktop prototype after the research push.
@@ -31,6 +42,12 @@ Sibling context stores are read-only.
   renderer, not a black browser page. Keep movement and restoration accessible.
 - Wake-word activation remains a later product choice, not this prototype's
   activation contract. Continuous unconditional transcription is not authorized.
+- The owner's clarification-reply request authorizes one bounded automatic mic
+  opening after a structured Intercom clarification finishes local playback
+  (or appears in writing when muted). Keep selected-device readiness, five-minute
+  bounds, review, Stop/Cancel/opt-out and actual host visibility guards.
+  Ordinary replies and permission prompts must not trigger recording. This is
+  not continuous listening or permission to test the physical microphone.
 - Existing Agency sessions are essential; validate that connector first.
 - The bounded Windows speech prototype is selected, not the final product engine.
   Broader local/cloud and multilingual quality comparisons remain unqualified.

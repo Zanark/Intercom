@@ -32,6 +32,11 @@ function projectMesh(data, source, loadedAt = new Date().toISOString()) {
       id: context.id, name: context.name, basePath: context.basePath,
       subtitle: ['fresh', 'aging', 'stale', 'unknown'].includes(context.freshness?.label) ? context.freshness.label : 'unknown',
       aliases: [...new Set([context.name, readable, path.basename(context.basePath)])],
+      sessionIds: [...new Set((Array.isArray(context.social) ? context.social : [])
+        .filter((persona) => persona?.contextId === context.id &&
+          /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/.test(persona.sessionId))
+        .map((persona) => persona.sessionId))].slice(0, 256),
+      sessionAttributionLimited: Array.isArray(context.social) && context.social.length > 256,
       color: /^#[0-9a-f]{6}$/i.test(node.outlineColor) ? node.outlineColor : '#85dec5',
     };
   }).sort((a, b) => a.id.localeCompare(b.id)).map((context, slot) => ({ ...context, slot }));

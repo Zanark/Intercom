@@ -5,6 +5,7 @@ import { MicrophonePicker } from '../components/MicrophonePicker';
 import { VoiceConversation } from '../components/VoiceConversation';
 import { WorkPanel } from '../components/WorkPanel';
 import { SettingsTabs } from '../components/SettingsTabs';
+import { ContextActivity } from '../components/ContextActivity';
 import type { SettingsTab } from '../components/SettingsTabs';
 
 const profileKey = 'intercom.prototype.profile';
@@ -55,6 +56,7 @@ export function App() {
   const [search, setSearch] = useState('');
   const [workProposal, setWorkProposal] = useState<WorkVoiceProposal | null>(null);
   const [realJob, setRealJob] = useState<WorkJob | null>(null);
+  const [orchestration, setOrchestration] = useState<IntercomOrchestration>({ plans: [] });
   const [routeChoices, setRouteChoices] = useState<Context[] | null>(null);
   const [dockExpanded, setDockExpanded] = useState(false);
   const [navigationHost, setNavigationHost] = useState<HTMLDivElement | null>(null);
@@ -66,6 +68,7 @@ export function App() {
   const meshRequest = useRef(0);
   const invalidateMesh = useCallback(() => { meshRequest.current++; }, []);
   const [recording, setRecording] = useState(false);
+  const [voicePhase, setVoicePhase] = useState<string | null>(null);
   const onRecordingChange = useCallback((value: boolean) => setRecording(value), []);
   const utterance = useRef<SpeechSynthesisUtterance | null>(null);
   const nativeSpeech = useRef(false);
@@ -248,11 +251,36 @@ export function App() {
   const selected = contexts.find((context) => context.id === selectedId) ?? contexts.find((context) => context.name.toLowerCase() === 'intercom') ?? contexts[0];
   const actualSelected = actualContexts.find((context) => context.id === selectedId) ?? actualContexts.find((context) => context.name.toLowerCase() === 'intercom') ?? actualContexts[0];
   const workActive = !!realJob && ['starting', 'running', 'awaiting-approval'].includes(realJob.phase);
+  const planPermission = orchestration.plans.some((plan) => plan.actions.some((action) => !!action.job?.permission));
+  const permissionNeeded = realJob?.phase === 'awaiting-approval' || planPermission;
   const openTab = useCallback((value: SettingsTab) => setTab(value), []);
   useEffect(() => {
-    if (realJob?.phase === 'awaiting-approval') setTab('Work');
-  }, [realJob?.phase]);
-  const observedSlots = useMemo(() => workActive ? actualContexts.filter((context) => realJob?.observedContextIds.includes(context.id)).map((context) => context.slot) : [], [workActive, actualContexts, realJob]);
+    if (permissionNeeded) setTab('Work');
+  }, [permissionNeeded]);
+  useEffect(() => {
+    let mounted = true; let received = false;
+    const remove = window.intercom?.onOrchestrationProgress((current) => { received = true; setOrchestration(current); });
+    void window.intercom?.orchestrationState().then((current) => { if (mounted && !received) setOrchestration(current); })
+      .catch((reason: unknown) => { if (mounted) setOrchestration({ plans: [], error: String(reason) }); });
+    return () => { mounted = false; remove?.(); };
+  }, []);
+  const observedSlots = useMemo(() => {
+    const ids = new Set(workActive ? realJob?.observedContextIds : []);
+    for (const id of orchestration.requestActivity?.observedContextIds ?? []) ids.add(id);
+    for (const plan of orchestration.plans) for (const action of plan.actions) {
+      if (['starting', 'running', 'awaiting-approval'].includes(action.phase)) {
+        for (const id of action.job?.observedContextIds ?? []) ids.add(id);
+      }
+    }
+    return actualContexts.filter((context) => ids.has(context.id)).map((context) => context.slot);
+  }, [workActive, actualContexts, realJob, orchestration]);
+  const observedAccess = useMemo(() => {
+    const activity = orchestration.requestActivity;
+    const event = activity?.events.slice().reverse().find((entry) => entry.status === 'read');
+    if (!activity || !event) return undefined;
+    return { key: `${activity.id}:${event.sequence}`, at: event.at,
+      slots: actualContexts.filter((context) => event.contextIds.includes(context.id)).map((context) => context.slot) };
+  }, [orchestration.requestActivity, actualContexts]);
   function workFromVoice(text: string, mode: WorkMode) {
     const matches = resolveTarget(text, actualContexts);
     setRouteChoices(matches.length > 1 ? matches : null);
@@ -296,14 +324,18 @@ export function App() {
     <section className="center" aria-label="Context mesh">
       <div className="mesh-heading chrome"><div><div className="eyebrow">CONTEXT MESH</div><h2>Everything has a connection.</h2></div><span className="fixture-badge">{demo ? 'FIXTURE DATA' : meshLoading ? 'LOADING LOCAL MESH' : snapshot ? 'ACTUAL LOCAL MESH' : 'MESH UNAVAILABLE'}</span></div>
       <Suspense fallback={<p className="mesh-loading" role="status">Loading the mesh renderer...</p>}>
-        <Mesh key={demo ? 'fixture' : snapshot?.loadedAt ?? 'empty'} graph={graph} activeSlots={demo ? slots : observedSlots} selectedId={selected?.id ?? ''} profile={busy && job ? job.profile : profile} motion={motion} paused={desktop.paused} navigationHost={desktop.floating ? navigationHost : null} />
+        <Mesh key={demo ? 'fixture' : snapshot?.loadedAt ?? 'empty'} graph={graph} activeSlots={demo ? slots : observedSlots} observedAccess={demo ? undefined : observedAccess} selectedId={selected?.id ?? ''} profile={busy && job ? job.profile : profile} motion={motion} paused={desktop.paused} navigationHost={desktop.floating ? navigationHost : null} />
       </Suspense>
+      {!demo && <ContextActivity activity={orchestration.requestActivity} voicePhase={voicePhase}
+        workPhase={permissionNeeded ? 'Copilot needs your manual tool permission - open Work' :
+          orchestration.plans.some((plan) => plan.phase === 'active') || workActive ? 'Copilot working in an existing session' : null}
+        contexts={actualContexts} onInspect={setSelectedId} />}
       {!demo && meshError && <p className="mesh-error" role="alert">{meshError}</p>}
       {!demo && meshLoading && <p className="mesh-loading" role="status">Reading the current local snapshot...</p>}
       {!demo && snapshot && contexts.length === 0 && <p className="mesh-loading" role="status">The real snapshot has no registered contexts.</p>}
       <div className="mesh-caption chrome"><span className="selected-context" style={{ color: selected?.color }}>{selected?.name ?? 'No context loaded'}</span><span>Hover nodes for names / Click to pin</span><span>Drag to orbit / Right-drag to pan / Scroll to zoom</span></div>
       <div className="mesh-toolbar chrome">
-        <span className="legend"><i />{demo ? 'Demo path' : 'Observed job / tool locations'} <i className="dim" />Topology</span>
+        <span className="legend"><i />{demo ? 'Demo path' : 'Observed reads / tool locations'} <i className="dim" />Topology</span>
         <button className="quiet-button float-button" disabled={!desktopAvailable} onClick={() => void windowAction('toggle-floating')}><Icon name="float" />Floating mesh</button>
       </div>
       <div className="floating-tools" role="group" aria-label="Floating controls dock">
@@ -311,13 +343,13 @@ export function App() {
           <Icon name="move" /><span className="sr-only">Drag to move</span>
         </div>
         {!demo && <div className="floating-microphone" ref={setFloatingVoiceHost} />}
-        <button aria-label={dockExpanded ? 'Collapse floating controls' : 'Expand floating controls'} title={realJob?.phase === 'awaiting-approval' ? 'Work needs permission - expand controls' : dockExpanded ? 'Collapse controls' : 'Expand controls'} className={realJob?.phase === 'awaiting-approval' ? 'needs-attention' : ''} aria-expanded={dockExpanded} aria-controls="floating-dock-controls" onClick={() => setDockExpanded(!dockExpanded)}>{dockExpanded ? '\u2039' : '\u203a'}</button>
+        <button aria-label={dockExpanded ? 'Collapse floating controls' : 'Expand floating controls'} title={permissionNeeded ? 'Work needs permission - expand controls' : dockExpanded ? 'Collapse controls' : 'Expand controls'} className={permissionNeeded ? 'needs-attention' : ''} aria-expanded={dockExpanded} aria-controls="floating-dock-controls" onClick={() => setDockExpanded(!dockExpanded)}>{dockExpanded ? '\u2039' : '\u203a'}</button>
         <div className="floating-dock-controls" id="floating-dock-controls" hidden={!dockExpanded}>
         {demo && <span className="floating-demo">DEMO</span>}
         <div className="floating-zoom" ref={setNavigationHost} />
         <button title="Settings" aria-label="Voice settings and transcript" onClick={() => { setTab('Input'); void windowAction('toggle-floating'); }}><Icon name="settings" /></button>
         <button title="Conversation and transcript" aria-label="Conversation and transcript" aria-expanded={voicePanelOpen} onClick={() => setVoicePanelOpen(!voicePanelOpen)}><Icon name="message" /></button>
-        <button title={realJob?.phase === 'awaiting-approval' ? 'Work needs permission' : 'Work and receipts'} aria-label="Work and receipts" className={realJob?.phase === 'awaiting-approval' ? 'needs-attention' : ''} onClick={() => { setTab('Work'); void windowAction('toggle-floating'); }}><Icon name="arrow" /></button>
+        <button title={permissionNeeded ? 'Work needs permission' : 'Work and receipts'} aria-label="Work and receipts" className={permissionNeeded ? 'needs-attention' : ''} onClick={() => { setTab('Work'); void windowAction('toggle-floating'); }}><Icon name="arrow" /></button>
         <button title="Restore workspace (Escape)" aria-label="Restore workspace" onClick={() => void windowAction('toggle-floating')}><Icon name="restore" /></button>
         <button title="Always on top" aria-label="Always on top" aria-pressed={desktop.onTop} onClick={() => void windowAction('toggle-top')}><Icon name="pin" /></button>
         <button title="Close" aria-label="Close floating mesh" onClick={() => void windowAction('close')}><Icon name="close" /></button>
@@ -337,7 +369,7 @@ export function App() {
       {!demo && <SettingsTabs tabs={['Talk', 'Input', 'Session', 'Voice', 'Work', 'Advanced'] as const} value={tab} onChange={setTab} label="Workspace settings" />}
       <div className="settings-content" data-settings-tab={tab}>
       {!demo && tab === 'Advanced' && <SettingsTabs tabs={['General', 'Display', 'About'] as const} value={advancedTab} onChange={setAdvancedTab} label="Advanced categories" />}
-      {!demo ? <VoiceConversation onRecordingChange={onRecordingChange} onWorkRequest={workFromVoice} floating={desktop.floating} paused={desktop.paused} controlsHost={desktop.floating ? floatingVoiceHost : voiceHost} tab={tab} advancedGeneral={advancedTab === 'General'} onOpenTab={openTab} panelOpen={voicePanelOpen} setPanelOpen={setVoicePanelOpen} /> : <>
+      {!demo ? <VoiceConversation profile={profile} onRecordingChange={onRecordingChange} onPhaseChange={setVoicePhase} onWorkRequest={workFromVoice} floating={desktop.floating} paused={desktop.paused} controlsHost={desktop.floating ? floatingVoiceHost : voiceHost} tab={tab} advancedGeneral={advancedTab === 'General'} onOpenTab={openTab} panelOpen={voicePanelOpen} setPanelOpen={setVoicePanelOpen} /> : <>
       <button className="quiet-button" onClick={() => { stopSpeech(); setJob(null); setProposal(null); setCandidates(null); setVoiceEnabled(false); setDemo(false); setTab('Talk'); }}>Use live voice</button>
       <div className="activity-title"><span className="status-dot" /><span>{busy ? 'Demo in progress' : 'Ready when you are'}</span></div>
       <div className="message assistant"><span className="message-label">INTERCOM / DEMO</span><p>Your workspace, without the window shuffle.</p><p className="muted">Try a synthetic request below. I&apos;ll show the route, not run a real agent.</p></div>
@@ -356,12 +388,12 @@ export function App() {
       {routeChoices && !demo && tab === 'Work' && <div role="region" aria-label="Choose voice task context"><p>Multiple contexts were mentioned. Choose the target before preparing work.</p>{routeChoices.map((context) =>
         <button className="quiet-button" key={context.id} onClick={() => { setSelectedId(context.id); setRouteChoices(null); }}>{context.name}</button>)}</div>}
       <WorkPanel contexts={actualContexts} contextId={routeChoices ? '' : actualSelected?.id ?? ''} profile={profile} voiceProposal={workProposal}
-        onSelect={(id) => { setSelectedId(id); setRouteChoices(null); }} onJob={setRealJob} recording={recording} hidden={demo || tab !== 'Work'} />
+        onSelect={(id) => { setSelectedId(id); setRouteChoices(null); }} onJob={setRealJob} recording={recording} hidden={demo || tab !== 'Work'} orchestration={orchestration} />
       <section hidden={!demo && tab !== 'Advanced'} aria-label="Advanced settings">
       <div hidden={advancedTab !== 'About'}>
       <details className="prototype-coverage"><summary>Prototype coverage</summary>
         <p>Push-to-talk and mic selection; local English transcription and spoken replies; real mesh on every launch; explicit context/session routing; confirmed background work or terminal handoff; manual tool prompts; event-driven receipts and desktop notifications; floating mesh; selectable speed-first priorities; application branding.</p>
-        <p>No wake word (push-to-talk chosen), simultaneous multi-job execution, unattended approvals, or inferred live retrieval paths. Bright spokes mean observed job output or tool-reported locations, not traversal of topology links. A returned answer is not independent task verification.</p>
+        <p>Intercom routes clear commands through a restricted interpreter and up to two non-overlapping existing-session jobs, with durable receipts and manual tool permissions. Stronger multilingual recognition is not active yet. No wake word, unattended approvals, or inferred live retrieval paths. Bright spokes mean observed job output or tool-reported locations, not traversal of topology links. A returned answer is not independent task verification.</p>
       </details>
       </div>
       <div hidden={advancedTab !== 'General'}>

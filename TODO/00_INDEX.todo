@@ -1,7 +1,7 @@
 Intercom workstream index
 
 Status: ACTIVE
-Milestone: Voice/mesh architecture, qualification, then authorized implementation
+Milestone: Owner acceptance failed; implementation paused, accountability publication authorized
 Dependencies: None
 
 Purpose:
@@ -13,7 +13,9 @@ Tasks:
   ic-04 | IN_PROGRESS | 04_AGENCY_CONNECTOR_PROOF.todo
   ic-05 | IN_PROGRESS | 05_SPEECH_AND_WAKE_QUALIFICATION.todo
   ic-06 | IN_PROGRESS | 06_DESKTOP_VOICE_MESH_SLICE.todo
-  ic-07 | NOT_STARTED | 07_RELIABILITY_AND_LIFECYCLE.todo
+  ic-07 | IN_PROGRESS | 07_RELIABILITY_AND_LIFECYCLE.todo
+  ic-08 | DONE (technically verified; packaged in .16) | 08_CONTEXT_RESEARCH.todo
+  ic-09 | DONE (bounded technical scope only; owner acceptance failed) | 09_INTEGRATED_VOICE_OVERLAY.todo
   History | ACTIVE | 03_DEVELOPMENT_LEDGER.todo
 
 Acceptance criteria:
@@ -21,13 +23,169 @@ Acceptance criteria:
   Issues and Project items track actual workstreams, not this index or ledger.
 
 Completion evidence:
-  ic-06: owner accepted the thread-free, smooth three-axis glass microphone
-  and independent centre-out water refraction; requested scoped source push.
+  CURRENT OWNER ASSESSMENT, 2026-11-13: the core voice/Copilot/observed-mesh
+  experience was not achieved to the owner's satisfaction. Implementation is
+  paused. Live .18 work stopped on unsupported concurrent permission
+  requests with unknown outcome; partial work needs inspection before retry.
+  Earlier technical passes below do not establish end-to-end acceptance.
+  README and perpetual ledger record the disappointment and agent
+  accountability. Source publication is authorized, not a repair or release.
+  CURRENT: local .18 opens one bounded selected-device capture after structured
+  Intercom clarification playback or muted written display. Stop/Cancel/
+  opt-out/actual host visibility/readiness/stale guards remain; ordinary
+  replies/permissions never trigger capture. One-turn host-owned context keeps
+  the unresolved request without granting tool approval. Click to finish.
+  Lint/build,19renderer,12controller,28orchestration,twofocused voice-host,
+  17focused source desktop and16exact packaged desktop cases pass.
+  Exact portable native speech/lifecycle/recovery,22source/eight speech/
+  13notice/native/privacy audits pass. Only .18 EXE/checksum retained after
+  fresh no-live-process check. Full voice suite not rerun; strict prior51/52
+  legacy Windows failure remains. No human acceptance, app switch, physical
+  mic, live provider/work, source publication or remote release. ic05 active.
+  HISTORICAL .17 repairs shared portable extraction and adds persistent
+  metadata-only diagnostics with automatic process/resource failure snapshots.
+  Actual duplicate refusal preserves model/helper; subsequent synthetic speech,
+  model-loss ENOENT snapshot, explicit recovery and shutdown pass.
+  Lint/build,19renderer/62host/11controller/54desktop and9packaged cases pass.
+  Voice51/52 retains the strict legacy Windows "please"/"police" failure.
+  22runtime/renderer files,eight speech files,13notices/native/privacy checked.
+  Only .17 EXE/checksum remained after no-live-process ownership check; no owner
+  restart or remote publication. ic07's two bounded tasks complete, broader
+  lifecycle qualification remains active. Prior .16 receipt below is historical.
+  HISTORICAL .16: integrated local .16 includes five-minute capture, saved research,
+  warm private-pipe native speech, actual source-read trail/finite graph pulses
+  and explicit existing-idle-session cited synthesis through normal permissions.
+  Final lint/build,19renderer/57host/11controller/53desktop and8packaged cases
+  pass; actual portable synthetic speech verifies warm PID reuse and shutdown.
+  Voice50/51 retains legacy Windows "please"/"police" recognition failure.
+  21runtime/renderer files,eight speech files,13notices/private exclusions pass.
+  Only .16 EXE/checksum remains; exact old/intermediate cleanup touched no
+  running app. Published .12 unchanged. Earlier source-only/.15 retention
+  entries below are historical. ic05/ic06 broader qualification stays active:
+  natural/human multilingual accuracy, devices, generic GPU, speed/RAM and
+  real multi-session acceptance remain open. ic08/#7 and ic09/#8 are verified
+  CLOSED/completed/Done in Project13; existing #4/#5 updated and still active.
+  ic-06: owner-requested visual vision/reality review delivered in
+  docs/reports/2026-11-12-vision-reality.html. Fast/good voice is the entry gate;
+  observed context/offload interactions are current scope, files later.
+  Real-mode graph/research event gaps and source-versus-EXE delivery remain
+  explicit; proposed recovery is not completed work or human acceptance.
+  ic-05: five-minute capture/recognition is technically verified in source.
+  Lint/build,19renderer/39voice/20targeted desktop pass; whole82.9s recorded
+  input and exact300s composite pass actual native recognition. Cutoff requires
+  review, request limits/cancellation remain, protected audio/package unchanged.
+  Retained .15/published .12 still have one-minute capture; no package or
+  publication. Natural five-minute/human multilingual acceptance remains open.
+  ic-08: recorded project discovery produces a cited private illustrated
+  report without session work. Real source reading and restricted-controller
+  interpretation qualify the lane; coverage/attribution limits stay explicit.
+  Final lint/build,16renderer/11controller/49host/47desktop pass.
+  Report generation/opening is source-only, not in retained .15/published .12;
+  human acceptance and remote issue/Project synchronization are not claimed.
+  Owner-requested release cleanup retains only local .15, unchanged, without
+  restarting its running instance; four older directories removed (~3.1GB).
+  Earlier local rollback-retention records are historical; remote releases unchanged.
+  ic-05/ic-06: owner-recorded English qualification9/9 and protected real
+  session dispatch3/3 pass. Ambiguous recording clarifies without work;
+  exact previously designated idle target returns an independently checked
+  reply with durable responded and dependent host-status evidence. Zero tool
+  calls/permissions;120repository files/original/package/settings unchanged.
+  Test-only launch restrictions and hidden resource mapping are disclosed.
+  .15 stays unchanged; physical/multilingual/reference-accuracy, multi-session,
+  unrestricted work and speed acceptance remain open. No remote sync.
+  ic-06: local unsigned .15 fixes missing session names with UUID labels
+  and adds optional off-default serialized live drafts, never partial sends.
+  Full desktop46/46, packaged focused9/9 and102unit/native cases pass.
+  Actual portable synthetic native draft/final/no-send/cleanup smoke and
+  packaging integrity pass; .14/.13/.12/.11 unchanged. Initial misplaced
+  test and15second launcher-cleanup failure are recorded in the ledger.
+  Current candidate is release\prototype-15-candidate; published.12 unchanged.
+  Human multilingual/hardware/speed and real multi-session gates stay open.
+  ic-05/ic-06: local unsigned .14 bundles pinned recognition and requires no
+  engine-folder/device setup on a fresh profile. System mic, auto language,
+  local voice and speed-first Intercom routing are defaults. Actual portable
+  native synthetic X/Y/exclusion/draft smoke passes without settings seeding.
+  Default progress/replies/live plan speech and no-replay/opt-out are covered.
+  Lint/build/package,15renderer/37voice/10controller/38host pass; final packaged
+  targeted desktop9/9,19runtime/12notice/native/speech-integrity checks pass.
+  Retained.13/.12/.11 unchanged. Historical no-bundle/source-only statements
+  below are superseded; human quality, speed, generic GPU and live work remain
+  unqualified. Local-only; workstreams remain IN_PROGRESS, no remote sync.
+  ic-06: local unsigned .13 speech-input candidate is packaged and verified
+  under release\prototype-13-candidate; published.12 and retained.11 unchanged.
+  Actual portable synthetic capture/native Vulkan check preserves X/Y/draft;
+  no provider/session dispatch.15renderer,34voice,10controller,38host pass.
+  Packaged desktop36/39 initially; decorative-canvas selector correction then
+  passes all six affected graph cases.19runtime/10notice packaging checks pass.
+  This supersedes the source-only/no-new-EXE status below, not the outstanding
+  human multilingual/device, generic GPU distribution or live-session gates.
+  ic-05/ic-06 input usability: measured selected-device signal/format test,
+  persisted auto/English/Hindi and a separate local-only transcription check.
+  Draft/no-send/cancellation and below16kHz review, including resampled source,
+  pass targeted checks. Native8kHz still confusesY with"why", now held for
+  review; exact-name/human/portable/distribution gates stay open. Published.12
+  and approved visuals unchanged; this is unpublished source, not a new EXE.
+  ic-06: owner accepted thread-free, smooth three-axis glass and independent
+  centre-out water refraction; authorized the README showcase and scoped push.
   Exact publication-source lint/build, five focused unit cases and three
-  hidden disposable desktop cases pass. Four application GIF/still pairs
-  are refreshed, with an additional approved synthetic-speaking showcase.
-  Existing .12, branding, human speech and unfinished controller gates stay
-  separate; ic-06 remains IN_PROGRESS.
+  hidden desktop cases pass. Four application GIF/still pairs are refreshed
+  with an additional synthetic-speaking showcase; representative frames
+  inspected and all decoded pixels/timing checked. Original branding and .12
+  stay unchanged; speech/controller qualification remains IN_PROGRESS.
+  Earlier preview/publication holds below are historical and superseded.
+  ic-06's outlined rings were rejected by the owner. Actual water-height
+  propagation now drives glass reflection refraction and soft normal shading,
+  without distorting the icon/rim or affecting independent 3D rotation.
+  Lint/build, five motion/physics unit cases and three focused offscreen cases
+  pass, including actual refracted pixels and cleanup. New synthetic-speaking
+  GIF: 280 frames, 14 seconds, 560x560; decoded frames/timing verified and six
+  decoded phases inspected. Earlier previews preserved; acceptance/publication held.
+  Historical outlined-ring evidence below was superseded by that correction.
+  ic-06's earlier whole-shell expansion is superseded by measured-input
+  concentric water ripples; glass size and independent 3D rotation stay intact.
+  Lint/build and three focused offscreen cases pass, including sustained
+  saturation, rotation identity/time continuity and cleanup. Separate revised
+  speaking GIF: 260 frames, 13 seconds, 560x560; decoded timing/frames verified,
+  six phases inspected. Previous previews preserved; publication remains held.
+  ic-06 now includes a centre-out measured-input bloom and glass expansion.
+  Lint/build and three focused offscreen desktop cases pass; a separate
+  13-second actual-app GIF uses local synthetic speech, not physical input.
+  Reduced motion, silence, fixed hit areas and cancellation are preserved.
+  Idle preview and README media remain unchanged; publication stays held.
+  ic-06 restores the owner-selected earlier glass, without internal threads.
+  Seeded X/Y/Z motion now changes direction through one 32-second Web Animation,
+  not a clockwise 2D spin. Lint/build, two motion unit cases and three focused
+  offscreen desktop cases pass. Actual-app preview GIF: 640 frames, 32 seconds,
+  560x560; decoded frames/timing and eight sampled phases inspected.
+  Visual acceptance and README media refresh/publication remain held.
+  This supersedes the pending numbered-selection direction below.
+  ic-06's opaque rainbow-film look was rejected. Eight rotating transparent
+  glass studies are available for selection; integration and real-app media
+  updates await owner choice. Publication remains held.
+  ic-06 now replaces the golden loop and upper stroke with a continuously
+  rotating rainbow film under fixed lighting. The enlarged README panel is
+  removed; its revised standalone GIF and all four GUI pairs are regenerated.
+  Working-source lint/build, eight renderer and three focused offscreen cases
+  pass; decoded media/timing and unchanged branding are verified. No app relaunch,
+  physical lighting simulation, hardware benchmark or new release is implied.
+  This supersedes the golden-look descriptions immediately below.
+  ic-06 README now has four refreshed current-source glass-microphone GUI
+  GIFs and a separate ten-second golden-flow close-up. All five have matching
+  reduced-motion stills. Isolated capture, motion/pixel/timing/link checks and
+  lint/build pass; contact sheet inspected. Original branding is unchanged.
+  This is local documentation/media, not a release or speech qualification.
+  ic-06 golden inner reflection now has one transform-only CSS drift/tilt
+  loop, paused by document/native visibility and disabled for reduced motion.
+  Outer glass remains static; no added JS frame loop, renderer or audio stream.
+  Lint/build and three focused offscreen desktop cases pass. Actual enlarged
+  renderer GIF: 200 frames, 10 seconds, 560x560. This supersedes the earlier
+  static-only choice below; app remains closed, source remains unpublished.
+  No hardware performance or visible-window lifecycle qualification is claimed.
+  ic-06 source microphone now has a lightweight pearlescent glass shell and
+  input-scaled glow, with no new idle animation or button backdrop blur.
+  Lint/build, eight renderer cases and two isolated offscreen desktop cases
+  pass; actual idle/listening/floating captures reviewed. No human acceptance,
+  hardware benchmark, publication or change to .12/hosted CI is implied.
   Initial hosted Test run 43079370607 correctly fails native recognition:
   synthetic "Please" is transcribed as "police"; 16/17 native cases pass.
   Hosted lint/build and renderer tests pass. Independent native/host/desktop
@@ -56,10 +214,38 @@ Completion evidence:
   microphones. Four actual source-GUI GIFs replace the README screenshot
   gallery with reduced-motion stills and explicit fictional/synthetic/staged
   provenance. Isolated capture/build/lint and media checks pass.
-  Runtime/.12 are unchanged; earlier local-only entries retain milestone history.
+  This follow-up has not been committed or pushed; runtime/.12 are unchanged.
   ic-06 includes the requested frosted sea-glass README GIF/static logos and
   matching title/buttons/gallery framing. This is documentation artwork only;
   no runtime/release change or speech-quality acceptance is implied.
+  Local speech source activation now adds explicit prepared-folder selection,
+  pinned CPU/GPU verification and pre-capture draft-preserving failure.31speech,
+  8renderer,38host and33desktop cases pass; lint/build pass. Native rates/
+  persistence/cancellation work, but8kHz misrecognizes sessionY as"why"; exact
+  target quality failed. Installer/portable GPU/human speech and live multi-
+  session qualification remain open. This supersedes older inactive-source
+  statements below. Published.12/user instance unchanged;ic-05/ic-06 incomplete.
+  Current source now connects the controller, canonical catalog, durable
+  scheduler and Plans UI. Host enforces exact workspace/session bindings,
+  dependencies/exclusions, manual tools, cancellation and uncertain recovery.
+  Clear plans need no second confirmation. All 38 host, eight renderer and
+  32 disposable desktop cases pass with lint/build. This supersedes older
+  source integration statements below; stronger speech, real multi-session
+  qualification and a newly packaged candidate remain open. Published .12
+  and the user's running instance are unchanged; ic-05/ic-06 stay IN_PROGRESS.
+  The repository restricted controller/schema now passes ten focused cases and
+  an actual fictional-only SDK turn. A separate controller candidate packages
+  the SDK/native dependencies and notices, loads them inside packaged Electron,
+  and passes disposable-profile portable smoke. Neither the controller nor
+  stronger speech is activated in the UI; published .12 remains unchanged.
+  The glass milestone is now pushed as feafb3309b7985685e61730ebcc6fb84c5b5de44
+  under the owner's push-first instruction; no new release or running-app switch.
+  The functional rebuild has an independently tested local speech adapter
+  foundation, not an activated replacement recognizer. Separate AMD Vulkan
+  inference is observed; an empty SDK controller passes a fictional-only
+  post-model inventory check after explicitly disabling the built-in MCP.
+  Production speech/controller integration remains open; ic-05/ic-06 stay
+  IN_PROGRESS. No new live task or human multilingual acceptance is claimed.
   ic-01 foundation is complete locally; Project 13 tracks six issue-backed items.
   Verified read-back: #1 CLOSED/COMPLETED/Done; #2/#3/#4/#5 OPEN/In Progress;
   #6 OPEN/Todo. Fresh conflict check and independent complete-body
@@ -165,6 +351,11 @@ Completion evidence:
   technical qualification does not close human/device/performance gates.
 
 Completion log:
+  2026-11-11 - Verified the repository controller, typed plan validation and
+    separate portable dependency candidate without dispatching real work.
+  2026-11-11 - Qualified actual synthetic Vulkan inference and the narrowly
+    restricted SDK candidate; hardened artifact-cache/token validation.
+    No app-engine switch, live session dispatch, release or human acceptance.
   2026-11-11 - Qualified local glass-controls/waves candidate and transparent
     README wings; preserved publication, existing-session and hardware boundaries.
   2026-11-11 - Published and independently download-verified .12; source tag,

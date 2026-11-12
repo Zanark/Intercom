@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Context, Profile } from '../domain/model';
 import { SettingsTabs } from './SettingsTabs';
+import { PlanReceipts } from './PlanReceipts';
 
 const finished = new Set<WorkJob['phase']>(['responded', 'failed', 'unknown', 'cancelled', 'terminal-opened']);
 const labels: Record<WorkJob['phase'], string> = {
@@ -19,9 +20,10 @@ interface Props {
   onJob: (job: WorkJob | null) => void;
   recording: boolean;
   hidden: boolean;
+  orchestration: IntercomOrchestration;
 }
 
-export function WorkPanel({ contexts, contextId, profile, voiceProposal, onSelect, onJob, recording, hidden }: Props) {
+export function WorkPanel({ contexts, contextId, profile, voiceProposal, onSelect, onJob, recording, hidden, orchestration }: Props) {
   const [request, setRequest] = useState('');
   const [mode, setMode] = useState<WorkMode>('background');
   const [sessions, setSessions] = useState<{ id: string; status: string }[]>([]);
@@ -31,13 +33,17 @@ export function WorkPanel({ contexts, contextId, profile, voiceProposal, onSelec
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
   const [announce, setAnnounce] = useState(true);
-  const [tab, setTab] = useState<'Target' | 'Task' | 'Review' | 'Receipt'>('Target');
+  const [tab, setTab] = useState<'Plans' | 'Target' | 'Task' | 'Review' | 'Receipt'>('Plans');
   const version = useRef(0);
   const received = useRef(0);
   const announced = useRef(new Set<string>());
   const liveCompletions = useRef(new Set<string>());
+  const livePlans = useRef(new Set<string>());
+  const announcedPlans = useRef(new Set<string>());
   const context = contexts.find((item) => item.id === contextId);
   const working = !!job && !finished.has(job.phase);
+  const pendingPermission = orchestration.plans.flatMap((plan) =>
+    plan.actions.filter((action) => action.job?.permission).map((action) => `${plan.id}:${action.id}:${action.job!.permission!.id}`)).join('|');
   const report = (reason: unknown) => reason instanceof Error ? reason.message : String(reason);
 
   useEffect(() => {
@@ -51,7 +57,10 @@ export function WorkPanel({ contexts, contextId, profile, voiceProposal, onSelec
       received.current++; setJob(current); onJob(current);
       setTab('Receipt');
     });
-    return () => { mounted = false; remove?.(); };
+    const removePlans = window.intercom?.onOrchestrationProgress((current) => {
+      for (const plan of current.plans) if (plan.phase === 'active') livePlans.current.add(plan.id);
+    });
+    return () => { mounted = false; remove?.(); removePlans?.(); };
   }, [onJob]);
 
   useEffect(() => {
@@ -63,6 +72,7 @@ export function WorkPanel({ contexts, contextId, profile, voiceProposal, onSelec
     version.current++; setProposal(null); setRequest(voiceProposal.text); setMode(voiceProposal.mode);
     setTab('Task');
   }, [voiceProposal]);
+  useEffect(() => { if (pendingPermission) setTab('Plans'); }, [pendingPermission]);
   useEffect(() => {
     if (!job?.completedAt || !finished.has(job.phase) || !announce || recording || job.acknowledged ||
         announced.current.has(job.id) || !liveCompletions.current.has(job.id) || !window.intercom) return;
@@ -73,6 +83,23 @@ export function WorkPanel({ contexts, contextId, profile, voiceProposal, onSelec
       : `${job.contextName}. ${labels[job.phase]}. ${job.error ?? job.text.slice(0, 1000)}`;
     void window.intercom.speakVoice(value.slice(0, 4400)).catch((reason: unknown) => setError(`Work speech failed: ${report(reason)}`));
   }, [job, announce, recording]);
+  useEffect(() => {
+    if (!announce || recording || !window.intercom) return;
+    const pending = orchestration.plans.filter((plan) => plan.phase !== 'active' && !plan.acknowledged &&
+      livePlans.current.has(plan.id) && !announcedPlans.current.has(plan.id));
+    if (!pending.length) return;
+    for (const plan of pending) announcedPlans.current.add(plan.id);
+    const value = pending.flatMap((plan) => plan.actions.map((action) => {
+      const definition = plan.interpretation.actions.find((item) => item.id === action.id);
+      const target = plan.targets.find((item) => item.id === definition?.sessionId)?.name ?? 'Existing session';
+      if (action.researchReport) return `${target}: the cited research synthesis is saved. ${action.researchReport.summary ?? ''} ${action.researchReport.opened ? 'The report was handed to your default browser.' : 'Opening failed; the saved report remains available.'} Source claims are not independently verified. What would you like to do with these contexts?`;
+      if (action.researchError) return `${target}: Copilot responded, but the cited synthesis report was not completed. ${action.researchError} Review the source report and response.`;
+      if (action.phase === 'responded') return `${target}: Copilot responded. ${action.job?.text.slice(0, 1500) ?? ''} Task success is not independently verified.`;
+      if (action.status) return `${target}: observed ${action.status.availability}. ${action.status.receipt ? `Last owned work: ${action.status.receipt.phase}. ${action.status.receipt.text.slice(0, 1000)}` : 'No owned work receipt. Idle is not proof of completion.'}`;
+      return `${target}: ${action.phase}. ${action.error ?? action.job?.error ?? ''} Review the written receipt.`;
+    })).join(' ');
+    void window.intercom.speakVoice(value.slice(0, 4400)).catch((reason: unknown) => setError(`Work speech failed: ${report(reason)}`));
+  }, [orchestration, announce, recording]);
 
   async function act(operation: () => Promise<unknown>) {
     if (busy) return;
@@ -83,7 +110,8 @@ export function WorkPanel({ contexts, contextId, profile, voiceProposal, onSelec
   function invalidate() { version.current++; setProposal(null); }
   return <section className="work-panel" aria-label="Confirmed existing-session work" hidden={hidden}>
     <h3>Existing-session work</h3>
-    <SettingsTabs tabs={['Target', 'Task', 'Review', 'Receipt'] as const} value={tab} onChange={setTab} label="Work steps" />
+    <SettingsTabs tabs={['Plans', 'Target', 'Task', 'Review', 'Receipt'] as const} value={tab} onChange={setTab} label="Work steps" />
+    <div hidden={tab !== 'Plans'}><PlanReceipts state={orchestration} /></div>
     <div hidden={tab !== 'Target'}>
       <label htmlFor="work-context">Target context</label>
       <select id="work-context" value={contextId} disabled={busy || recording} onChange={(event) => onSelect(event.target.value)}>
